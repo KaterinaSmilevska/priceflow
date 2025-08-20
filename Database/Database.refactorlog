@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="4af37830-ad28-4593-be72-6686bd20e9da" ChangeDateTime="08/06/2025 21:34:42">
+    <Property Name="ElementName" Value="[dbo].[FinansiskiPokazateli].[DividendaPoAkcija]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[FinansiskiPokazateli]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DividendaPoAkci" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e8959019-5daa-4b28-ac63-2bd927d07fd7" ChangeDateTime="08/06/2025 21:34:45">
+    <Property Name="ElementName" Value="[dbo].[FinansiskiPokazateli].[DividendaPoAkci]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[FinansiskiPokazateli]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DividendaPoAkcija" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="811d8059-9985-41ed-8a23-1b1f6abe12a1" ChangeDateTime="08/07/2025 15:01:15">
+    <Property Name="ElementName" Value="[dbo].[DnevenPromet].[PrometBEST_Denari]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DnevenPromet]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PrometBESTDenari" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b28ee120-d1dc-4a90-a536-269c409858d1" ChangeDateTime="08/07/2025 15:01:17">
+    <Property Name="ElementName" Value="[dbo].[DnevenPromet].[VkupenPromet_Denari]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DnevenPromet]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VkupenPrometDenari" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4cd81f5d-4b1b-4687-b67d-9a4413016e61" ChangeDateTime="08/07/2025 15:05:43">
+    <Property Name="ElementName" Value="[dbo].[FinansiskiPokazateli].[NetoDobivkaPoAkcija]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[FinansiskiPokazateli]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NetoDobivkaAkcija" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="75c95efc-dffa-4770-a954-52c4e4a2d20f" ChangeDateTime="08/07/2025 15:06:07">
+    <Property Name="ElementName" Value="[dbo].[FinansiskiPokazateli].[Koeficient_CenaDobivka_PoAkcija]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[FinansiskiPokazateli]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="KoefCenaDobivkaPoAkcija" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="640fd70f-7e30-4916-b06e-c83b98ed4929" ChangeDateTime="08/07/2025 15:06:12">
+    <Property Name="ElementName" Value="[dbo].[FinansiskiPokazateli].[NetoDobivkaAkcija]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[FinansiskiPokazateli]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NetoDobivkaPoAkcija" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2ebd87c9-b576-43a8-969a-fdd8c55ab4d5" ChangeDateTime="08/07/2025 15:06:51">
+    <Property Name="ElementName" Value="[dbo].[FinansiskiPokazateli].[Koeficient_CenaKnigovodstvenaVrednost_PoAkcija]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[FinansiskiPokazateli]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="KoefCenaKnigovodstvenaVrednostPoAkcija" />
+  </Operation>
+</Operations>

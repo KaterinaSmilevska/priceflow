@@ -1,0 +1,40 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Create
+       [dbo].[AplikativniParametri] (Table)
+       [dbo].[Broker] (Table)
+       [dbo].[DnevenPromet] (Table)
+       [dbo].[FinansiskiPokazateli] (Table)
+       [dbo].[HartiiOdVrednost] (Table)
+       [dbo].[Izdavac] (Table)
+       [dbo].[Korisnik] (Table)
+       [dbo].[Portfolio] (Table)
+       [dbo].[PortfolioPrinosi] (Table)
+       [dbo].[Sektor] (Table)
+       [dbo].[TipHV] (Table)
+       [dbo].[Transakcii] (Table)
+       [dbo].[fk_DnevenPromet_HartiiOdVrednost] (Foreign Key)
+       [dbo].[fk_FinansiskiPokazateli_Izdavac] (Foreign Key)
+       [dbo].[fk_HartiiOdVrednost_TipHV] (Foreign Key)
+       [dbo].[fk_HartiiOdVrednost_Izdavac] (Foreign Key)
+       [dbo].[fk_Izdavac_Sektor] (Foreign Key)
+       [dbo].[fk_Portfolio_Korisnik] (Foreign Key)
+       [dbo].[fk_PortfolioPrinosi_Portfolio] (Foreign Key)
+       [dbo].[fk_PortfolioPrinosi_HartiiOdVrednost] (Foreign Key)
+       [dbo].[fk_Transakcii_Portfolio] (Foreign Key)
+       [dbo].[fk_Transakcii_HartiiOdVrednost] (Foreign Key)
+       [dbo].[ck_AplikativniParametri_Id] (Check Constraint)
+
+** Supporting actions
+
+The compatibility level of the target schema 160 is not supported, which may result in undefined behavior. Please upgrade to a later version which supports this compatibility level.
+
