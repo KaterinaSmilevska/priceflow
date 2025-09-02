@@ -26,7 +26,7 @@
           <SSIS:Property SSIS:Name="CreatorComputerName">DESKTOP-E4P9EFJ</SSIS:Property>
           <SSIS:Property SSIS:Name="Description">
           </SSIS:Property>
-          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAc0JeAM1C6Eq8VLUFp79GEQAAAAACAAAAAAAQZgAAAAEAACAAAABfwrjl+JZHCeQUbAh6QNmJmb/l0iVUMn0pcqqneMqMJQAAAAAOgAAAAAIAACAAAAAFpqhw0jcIJxCMbt5mtR38wpDnzPMJzGbRoDdDab9+/JAAAACgKb6sNEA+CTCWSos8yeFZ0F2SSlxJDDKIb12/kDmuwwDuWNAMDbh3L+Frz0MIZpI+dv49lzBHvZOu5PcvRim4bTCRRejHdn9WpmkiuxFyZlikYeTCTre6H0fmw3NbgNtsu4Ijqqk/aHF+9gtKvfUw53hPAs7B2rqU9V1kYd9W8JA8K9hb9ZwsBzSUvw+hhI5AAAAAItp7YxAYwL3qmTi6Ew4jISr3pjp2Y20HNCm1mED16RxThqwitwvJH1JnI+tAWBLLF81f2viKJgS8zJ+RMmrYJA==</SSIS:Property>
+          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAc0JeAM1C6Eq8VLUFp79GEQAAAAACAAAAAAAQZgAAAAEAACAAAADJFHtQse5Yo3aRh5UGtIg6qevfivsgTTY5u0tsgbhZFwAAAAAOgAAAAAIAACAAAACNMWTJMcyeqHOT+U6RsFKPydz7NMVeQ5wuYQDJXdV5SZAAAACpGeIau35JX/K8nvYmluHv9w2trPTeyjBhF1wkTS6/04yB7td3EhWA+L1jSaGlltskzzHeLP4rNRsmPeIgSUzQXWuuWBPUOpERdN/aJ0OoQYg3ZmqsxcI4bHtCso9bTlGX6BklX1ShNrfA4RoPMFWlw2q0+nRqYdlOvWzrQ2G+wUh2O5LwGdOu+RUssIzu7NpAAAAAJjxLjsiweDmkIuQTVX06EDtJPWDgTlry+Z/oK2THEMzPjg/4rN0f1rqL28GoYFBSgpX2FR/oRg6IR8pqhl2DVg==</SSIS:Property>
           <SSIS:Property SSIS:Name="FormatVersion">1</SSIS:Property>
         </SSIS:Properties>
         <SSIS:Packages>
@@ -42,10 +42,10 @@
                 <SSIS:Property SSIS:Name="Name">ImportDnevenPromet</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">26</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">78</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{75A82A4A-70DD-4551-BC17-230B23B7929E}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{B21A3AFA-C3AA-4219-8A55-0A66F96CC0B0}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -60,10 +60,9 @@
                     <SSIS:Property SSIS:Name="Description">
                     </SSIS:Property>
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Required">1</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">
-                    </SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">@[User::ExcelFileName]</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -241,22 +240,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">Provider=Microsoft.ACE.OLEDB.16.0;Data Source=C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\mse_data\ALK_2020-01-01_2020-12-31.xlsx;Extended Properties="EXCEL 12.0 XML;HDR=YES";</SSIS:Property>
-                    <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
-                  </SSIS:Properties>
-                </SSIS:Parameter>
-                <SSIS:Parameter SSIS:Name="CM.Excel Connection Manager.ExcelFilePath">
-                  <SSIS:Properties>
-                    <SSIS:Property SSIS:Name="ID">
-                    </SSIS:Property>
-                    <SSIS:Property SSIS:Name="CreationName">
-                    </SSIS:Property>
-                    <SSIS:Property SSIS:Name="Description">
-                    </SSIS:Property>
-                    <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\mse_data\ALK_2020-01-01_2020-12-31.xlsx</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">Provider=Microsoft.ACE.OLEDB.12.0;Data Source=;Extended Properties="EXCEL 12.0 XML;HDR=YES";</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -329,7 +313,8 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\mse_data\ALK_2020-01-01_2020-12-31.xlsx</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">
+                    </SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -365,8 +350,8 @@
         <ConnectionProviderMappings />
         <ConnectionSecurityMappings />
         <DatabaseStorageLocations />
-        <TargetServerVersion>SQLServer2017</TargetServerVersion>
-        <AzureMode>true</AzureMode>
+        <TargetServerVersion>SQLServer2019</TargetServerVersion>
+        <AzureMode>false</AzureMode>
         <LinkedAzureTenantId />
         <LinkedAzureAccountId />
         <LinkedAzureSSISIR />

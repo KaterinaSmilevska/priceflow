@@ -5,7 +5,7 @@
     [KolicinaAkcii] INT NOT NULL, 
     [EdinecnaCenaAkcija] INT NOT NULL, 
     [Datum] DATE NOT NULL, 
-    [Iznos] DECIMAL NOT NULL, 
+    [Iznos] DECIMAL(18,2) NOT NULL, 
     [BerzanskaProvizija] DECIMAL(18, 2) NOT NULL, 
     [BrokerskaProvizija] DECIMAL(18, 2) NOT NULL, 
     [CDHVProvizija] DECIMAL(18, 2) NOT NULL, 
