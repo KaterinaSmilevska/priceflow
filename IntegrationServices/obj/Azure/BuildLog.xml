@@ -2,13 +2,13 @@
 <BuildLog xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ProjectInfo>
     <Name>IntegrationServices</Name>
-    <LastWriteTime>2025-09-02T22:27:01.4014693Z</LastWriteTime>
+    <LastWriteTime>2025-10-03T19:08:20.1644231Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
     <ProjectBuildItemInfo>
       <Name>ImportDnevenPromet.dtsx</Name>
-      <LastWriteTime>2025-09-02T22:27:30.0667652Z</LastWriteTime>
+      <LastWriteTime>2025-10-03T19:08:18.5526276Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
   </LastBuildInfos>

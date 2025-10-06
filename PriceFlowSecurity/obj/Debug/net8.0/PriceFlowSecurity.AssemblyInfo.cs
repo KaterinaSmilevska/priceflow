@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PriceFlowSecurity")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fd677f4c3d5e08a2b7c399a1b124539cdd444ded")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35840210bc7be60665aa7d2f4e79091170e1f746")]
 [assembly: System.Reflection.AssemblyProductAttribute("PriceFlowSecurity")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PriceFlowSecurity")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

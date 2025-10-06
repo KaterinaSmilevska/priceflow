@@ -11,11 +11,23 @@
   DTS:LocaleID="1071"
   DTS:ObjectName="ImportDnevenPromet"
   DTS:PackageType="5"
-  DTS:VersionBuild="78"
-  DTS:VersionGUID="{B21A3AFA-C3AA-4219-8A55-0A66F96CC0B0}">
+  DTS:VersionBuild="137"
+  DTS:VersionGUID="{93A4C757-1238-4836-8DD0-9C5D4D8B03D0}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{CD0841EE-F15D-4697-9C9D-98F4A1FA79E6}"
+      DTS:ObjectName="DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DESKTOP-E4P9EFJ\SQL2022DEV;Initial Catalog=PriceFlowDb;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-ImportDnevenPromet-{CD0841EE-F15D-4697-9C9D-98F4A1FA79E6}DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
       DTS:CreationName="OLEDB"
@@ -25,7 +37,7 @@
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=DESKTOP-E4P9EFJ\SQLEXPRESS;Initial Catalog=PriceFlowDb;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-ImportDnevenPromet-{BAAFC0DD-6A35-413F-A4B7-D187600A81DE}DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=DESKTOP-E4P9EFJ\SQL2022DEV;Initial Catalog=PriceFlowDb;Provider=SQLOLEDB.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-ImportDnevenPromet-{BAAFC0DD-6A35-413F-A4B7-D187600A81DE}DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -39,7 +51,7 @@
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="0"
           DTS:ConnectRetryInterval="0"
-          DTS:ConnectionString="Provider=Microsoft.ACE.OLEDB.12.0;Data Source=;Extended Properties=&quot;EXCEL 12.0 XML;HDR=YES&quot;;" />
+          DTS:ConnectionString="Provider=Microsoft.ACE.OLEDB.12.0;Data Source=@[User::ExcelFileName];Extended Properties=&quot;EXCEL 12.0 XML;HDR=YES&quot;;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -63,8 +75,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="ExcelFileName">
       <DTS:VariableValue
-        DTS:DataType="8"
-        xml:space="preserve"></DTS:VariableValue>
+        DTS:DataType="8">@[User::ExcelFileName]</DTS:VariableValue>
     </DTS:Variable>
   </DTS:Variables>
   <DTS:Executables>
@@ -286,7 +297,6 @@
                           errorRowDisposition="FailComponent"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[PrometBESTDenariConverted]"
                           name="PrometBESTDenariConverted"
-                          scale="2"
                           truncationRowDisposition="FailComponent">
                           <properties>
                             <property
@@ -307,7 +317,6 @@
                           errorRowDisposition="FailComponent"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[VkupenPrometDenari]"
                           name="VkupenPrometDenari"
-                          scale="2"
                           truncationRowDisposition="FailComponent">
                           <properties>
                             <property
@@ -315,6 +324,26 @@
                               dataType="System.Int32"
                               description="Specifies the input column used as the source of data for the conversion."
                               name="SourceInputColumnLineageID">#{Package\Foreach Loop Container\Data Flow Task\Excel Source.Outputs[Excel Source Output].Columns[Вкупен промет во денари]}</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Datum(DateTime)]"
+                          dataType="dbTimeStamp"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Datum(DateTime)]"
+                          name="Datum(DateTime)"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="Specifies the input column used as the source of data for the conversion."
+                              name="SourceInputColumnLineageID">#{Package\Foreach Loop Container\Data Flow Task\Excel Source.Outputs[Excel Source Output].Columns[Датум]}</property>
                             <property
                               dataType="System.Boolean"
                               description="Indicates whether the column uses the faster, locale-neutral parsing routines."
@@ -630,11 +659,168 @@
                   </outputs>
                 </component>
                 <component
-                  refId="Package\Foreach Loop Container\Data Flow Task\Lookup"
+                  refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId)"
                   componentClassID="Microsoft.Lookup"
                   contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
                   description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
-                  name="Lookup"
+                  name="Lookup (Datum, HVId)"
+                  usesDispositions="true"
+                  version="6">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the SQL statement that generates the lookup table."
+                      expressionType="Notify"
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[DnevenPromet]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                      expressionType="Notify"
+                      name="SqlCommandParam"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[DnevenPromet]) [refTable]
+where [refTable].[HVId] = ? and [refTable].[Datum] = ?</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the type of connection used to access the reference dataset."
+                      name="ConnectionType"
+                      typeConverter="LookupConnectionType">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the cache type of the lookup table."
+                      name="CacheType"
+                      typeConverter="CacheType">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                      name="NoMatchBehavior"
+                      typeConverter="LookupNoMatchBehavior">1</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                      name="NoMatchCachePercentage">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                      name="MaxMemoryUsage">25</property>
+                    <property
+                      dataType="System.Int64"
+                      description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                      name="MaxMemoryUsage64">25</property>
+                    <property
+                      dataType="System.String"
+                      description="Indicates whether to reference metadata in an XML format."
+                      name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="Id" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="HVId" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Datum" dataType="DT_DBTIMESTAMP" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="CenaPoslednaTransakcija" dataType="DT_NUMERIC" length="0" precision="18" scale="2" codePage="0"/&gt;&lt;referenceColumn name="MaxCena" dataType="DT_NUMERIC" length="0" precision="18" scale="2" codePage="0"/&gt;&lt;referenceColumn name="MinCena" dataType="DT_NUMERIC" length="0" precision="18" scale="2" codePage="0"/&gt;&lt;referenceColumn name="ProsecnaCena" dataType="DT_NUMERIC" length="0" precision="18" scale="2" codePage="0"/&gt;&lt;referenceColumn name="ProcentPromena" dataType="DT_NUMERIC" length="0" precision="18" scale="2" codePage="0"/&gt;&lt;referenceColumn name="KolicinaIstrguvaniAkcii" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="PrometBESTDenari" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="VkupenPrometDenari" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                      name="ParameterMap">#{Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Match Output].Columns[Id]};#{Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Datum(DateTime)]};</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1251</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                      name="TreatDuplicateKeysAsError">false</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
+                      connectionManagerRefId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
+                      description="Connection manager used to access lookup data."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Inputs[Lookup Input]"
+                      name="Lookup Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Inputs[Lookup Input].Columns[Id]"
+                          cachedDataType="i4"
+                          cachedName="Id"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Match Output].Columns[Id]">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table that a column joins."
+                              name="JoinToReferenceColumn">HVId</property>
+                            <property
+                              dataType="System.Null"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn" />
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Inputs[Lookup Input].Columns[Datum(DateTime)]"
+                          cachedDataType="dbTimeStamp"
+                          cachedName="Datum(DateTime)"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Datum(DateTime)]">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table that a column joins."
+                              name="JoinToReferenceColumn">Datum</property>
+                            <property
+                              dataType="System.Null"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn" />
+                          </properties>
+                        </inputColumn>
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Outputs[Lookup Match Output]"
+                      errorOrTruncationOperation="Lookup"
+                      exclusionGroup="1"
+                      name="Lookup Match Output"
+                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Inputs[Lookup Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Outputs[Lookup No Match Output]"
+                      description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                      exclusionGroup="1"
+                      name="Lookup No Match Output"
+                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Inputs[Lookup Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Outputs[Lookup Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Lookup Error Output"
+                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Inputs[Lookup Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod"
+                  componentClassID="Microsoft.Lookup"
+                  contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+                  description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+                  name="Lookup by Kod"
                   usesDispositions="true"
                   version="6">
                   <properties>
@@ -698,19 +884,19 @@ where [refTable].[Kod] = ?</property>
                   </properties>
                   <connections>
                     <connection
-                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup.Connections[OleDbConnection]"
-                      connectionManagerID="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
-                      connectionManagerRefId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb]"
+                      connectionManagerRefId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb]"
                       description="Connection manager used to access lookup data."
                       name="OleDbConnection" />
                   </connections>
                   <inputs>
                     <input
-                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup.Inputs[Lookup Input]"
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Inputs[Lookup Input]"
                       name="Lookup Input">
                       <inputColumns>
                         <inputColumn
-                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup.Inputs[Lookup Input].Columns[Код]"
+                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Inputs[Lookup Input].Columns[Код]"
                           cachedDataType="wstr"
                           cachedLength="255"
                           cachedName="Код"
@@ -732,18 +918,18 @@ where [refTable].[Kod] = ?</property>
                   </inputs>
                   <outputs>
                     <output
-                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Match Output]"
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Match Output]"
                       errorOrTruncationOperation="Lookup"
                       errorRowDisposition="FailComponent"
                       exclusionGroup="1"
                       name="Lookup Match Output"
-                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Lookup.Inputs[Lookup Input]">
+                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Inputs[Lookup Input]">
                       <outputColumns>
                         <outputColumn
-                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Match Output].Columns[Id]"
+                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Match Output].Columns[Id]"
                           dataType="i4"
                           errorOrTruncationOperation="Copy Column"
-                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Match Output].Columns[Id]"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Match Output].Columns[Id]"
                           name="Id"
                           truncationRowDisposition="FailComponent">
                           <properties>
@@ -757,30 +943,30 @@ where [refTable].[Kod] = ?</property>
                       <externalMetadataColumns />
                     </output>
                     <output
-                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup No Match Output]"
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup No Match Output]"
                       description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
                       exclusionGroup="1"
                       name="Lookup No Match Output"
-                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Lookup.Inputs[Lookup Input]">
+                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Inputs[Lookup Input]">
                       <externalMetadataColumns />
                     </output>
                     <output
-                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Error Output]"
+                      refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Error Output]"
                       exclusionGroup="1"
                       isErrorOut="true"
                       name="Lookup Error Output"
-                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Lookup.Inputs[Lookup Input]">
+                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Inputs[Lookup Input]">
                       <outputColumns>
                         <outputColumn
-                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Error Output].Columns[ErrorCode]"
                           dataType="i4"
-                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Error Output].Columns[ErrorCode]"
                           name="ErrorCode"
                           specialFlags="1" />
                         <outputColumn
-                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          refId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Error Output].Columns[ErrorColumn]"
                           dataType="i4"
-                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Error Output].Columns[ErrorColumn]"
                           name="ErrorColumn"
                           specialFlags="2" />
                       </outputColumns>
@@ -847,8 +1033,8 @@ where [refTable].[Kod] = ?</property>
                   <connections>
                     <connection
                       refId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Connections[OleDbConnection]"
-                      connectionManagerID="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
-                      connectionManagerRefId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
+                      connectionManagerID="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb]"
+                      connectionManagerRefId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb]"
                       description="The OLE DB runtime connection used to access the database."
                       name="OleDbConnection" />
                   </connections>
@@ -916,14 +1102,12 @@ where [refTable].[Kod] = ?</property>
                           refId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[PrometBESTDenariConverted]"
                           cachedDataType="decimal"
                           cachedName="PrometBESTDenariConverted"
-                          cachedScale="2"
                           externalMetadataColumnId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PrometBESTDenari]"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[PrometBESTDenariConverted]" />
                         <inputColumn
                           refId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[VkupenPrometDenari]"
                           cachedDataType="decimal"
                           cachedName="VkupenPrometDenari"
-                          cachedScale="2"
                           externalMetadataColumnId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[VkupenPrometDenari]"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[VkupenPrometDenari]" />
                       </inputColumns>
@@ -1205,7 +1389,7 @@ where [refTable].[Kod] = ?</property>
                           refId="Package\Foreach Loop Container\Data Flow Task\Sort.Inputs[Sort Input].Columns[Id]"
                           cachedDataType="i4"
                           cachedName="Id"
-                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Match Output].Columns[Id]">
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Match Output].Columns[Id]">
                           <properties>
                             <property
                               dataType="System.Int32"
@@ -1305,7 +1489,6 @@ where [refTable].[Kod] = ?</property>
                           refId="Package\Foreach Loop Container\Data Flow Task\Sort.Inputs[Sort Input].Columns[PrometBESTDenariConverted]"
                           cachedDataType="decimal"
                           cachedName="PrometBESTDenariConverted"
-                          cachedScale="2"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[PrometBESTDenariConverted]">
                           <properties>
                             <property
@@ -1322,7 +1505,6 @@ where [refTable].[Kod] = ?</property>
                           refId="Package\Foreach Loop Container\Data Flow Task\Sort.Inputs[Sort Input].Columns[VkupenPrometDenari]"
                           cachedDataType="decimal"
                           cachedName="VkupenPrometDenari"
-                          cachedScale="2"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[VkupenPrometDenari]">
                           <properties>
                             <property
@@ -1493,7 +1675,7 @@ where [refTable].[Kod] = ?</property>
                               containsID="true"
                               dataType="System.Int32"
                               description="Specifies the lineage identifier of the input column that is associated with this output column."
-                              name="SortColumnId">#{Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Match Output].Columns[Id]}</property>
+                              name="SortColumnId">#{Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Match Output].Columns[Id]}</property>
                           </properties>
                         </outputColumn>
                         <outputColumn
@@ -1569,8 +1751,7 @@ where [refTable].[Kod] = ?</property>
                           refId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[PrometBESTDenariConverted]"
                           dataType="decimal"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[PrometBESTDenariConverted]"
-                          name="PrometBESTDenariConverted"
-                          scale="2">
+                          name="PrometBESTDenariConverted">
                           <properties>
                             <property
                               containsID="true"
@@ -1583,8 +1764,7 @@ where [refTable].[Kod] = ?</property>
                           refId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[VkupenPrometDenari]"
                           dataType="decimal"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[VkupenPrometDenari]"
-                          name="VkupenPrometDenari"
-                          scale="2">
+                          name="VkupenPrometDenari">
                           <properties>
                             <property
                               containsID="true"
@@ -1602,19 +1782,24 @@ where [refTable].[Kod] = ?</property>
               <paths>
                 <path
                   refId="Package\Foreach Loop Container\Data Flow Task.Paths[Data Conversion Output]"
-                  endId="Package\Foreach Loop Container\Data Flow Task\Sort.Inputs[Sort Input]"
+                  endId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Inputs[Lookup Input]"
                   name="Data Conversion Output"
                   startId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output]" />
                 <path
                   refId="Package\Foreach Loop Container\Data Flow Task.Paths[Excel Source Output]"
-                  endId="Package\Foreach Loop Container\Data Flow Task\Lookup.Inputs[Lookup Input]"
+                  endId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Inputs[Lookup Input]"
                   name="Excel Source Output"
                   startId="Package\Foreach Loop Container\Data Flow Task\Excel Source.Outputs[Excel Source Output]" />
                 <path
                   refId="Package\Foreach Loop Container\Data Flow Task.Paths[Lookup Match Output]"
                   endId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Inputs[Data Conversion Input]"
                   name="Lookup Match Output"
-                  startId="Package\Foreach Loop Container\Data Flow Task\Lookup.Outputs[Lookup Match Output]" />
+                  startId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Outputs[Lookup Match Output]" />
+                <path
+                  refId="Package\Foreach Loop Container\Data Flow Task.Paths[Lookup No Match Output]"
+                  endId="Package\Foreach Loop Container\Data Flow Task\Sort.Inputs[Sort Input]"
+                  name="Lookup No Match Output"
+                  startId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Outputs[Lookup No Match Output]" />
                 <path
                   refId="Package\Foreach Loop Container\Data Flow Task.Paths[Sort Output]"
                   endId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input]"
@@ -1667,59 +1852,29 @@ where [refTable].[Kod] = ?</property>
       <GraphLayout
         Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="156,41.6"
-          Id="Package\Foreach Loop Container\Data Flow Task\Data Conversion"
-          TopLeft="51.6666638437246,218.399998481274" />
-        <NodeLayout
-          Size="112.8,41.6"
-          Id="Package\Foreach Loop Container\Data Flow Task\Lookup"
-          TopLeft="237.499987023573,139.533332363036" />
-        <NodeLayout
-          Size="97.6,41.6"
-          Id="Package\Foreach Loop Container\Data Flow Task\Sort"
-          TopLeft="287.499984291693,261.733331513272" />
-        <NodeLayout
           Size="171.2,41.6"
           Id="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination"
           TopLeft="435.833309520451,234.866665033434" />
         <NodeLayout
+          Size="181.6,41.6"
+          Id="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId)"
+          TopLeft="89.166661794815,305.799997884631" />
+        <NodeLayout
+          Size="147.2,41.6"
+          Id="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod"
+          TopLeft="237.499987023573,139.533332363036" />
+        <NodeLayout
           Size="140,41.6"
           Id="Package\Foreach Loop Container\Data Flow Task\Excel Source"
           TopLeft="234.999987160167,61.5333329054382" />
-        <EdgeLayout
-          Id="Package\Foreach Loop Container\Data Flow Task.Paths[Data Conversion Output]"
-          TopLeft="207.666663843725,239.199998481274">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="79.8333204479684,43.333333031998"
-              Start="0,0"
-              End="72.3333204479684,43.333333031998">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="35.9166602239842,0" />
-                  <mssgle:CubicBezierSegment
-                    Point1="35.9166602239842,0"
-                    Point2="39.9166602239842,0"
-                    Point3="39.9166602239842,4" />
-                  <mssgle:LineSegment
-                    End="39.9166602239842,39.333333031998" />
-                  <mssgle:CubicBezierSegment
-                    Point1="39.9166602239842,39.333333031998"
-                    Point2="39.9166602239842,43.333333031998"
-                    Point3="43.9166602239842,43.333333031998" />
-                  <mssgle:LineSegment
-                    End="72.3333204479684,43.333333031998" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
+        <NodeLayout
+          Size="156,41.6"
+          Id="Package\Foreach Loop Container\Data Flow Task\Data Conversion"
+          TopLeft="51.6666638437246,218.399998481274" />
+        <NodeLayout
+          Size="97.6,41.6"
+          Id="Package\Foreach Loop Container\Data Flow Task\Sort"
+          TopLeft="287.499984291693,261.733331513272" />
         <EdgeLayout
           Id="Package\Foreach Loop Container\Data Flow Task.Paths[Sort Output]"
           TopLeft="385.099984291693,282.533331513272">
@@ -1755,14 +1910,44 @@ where [refTable].[Kod] = ?</property>
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Foreach Loop Container\Data Flow Task.Paths[Lookup Match Output]"
-          TopLeft="293.899987023573,181.133332363036">
+          Id="Package\Foreach Loop Container\Data Flow Task.Paths[Lookup No Match Output]"
+          TopLeft="208.899995128148,305.799997884631">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-164.233323179848,37.266666118238"
+              EndConnector="78.5999891635447,-23.2666663713592"
               Start="0,0"
-              End="-164.233323179848,29.766666118238">
+              End="71.0999891635447,-23.2666663713592">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,-19.2666663713592" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,-19.2666663713592"
+                    Point2="0,-23.2666663713592"
+                    Point3="4,-23.2666663713592" />
+                  <mssgle:LineSegment
+                    End="71.0999891635447,-23.2666663713592" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-18.2563921369776,-18.2666663713592,111.6127734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Foreach Loop Container\Data Flow Task.Paths[Lookup Match Output]"
+          TopLeft="311.099987023573,181.133332363036">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-181.433323179848,37.266666118238"
+              Start="0,0"
+              End="-181.433323179848,29.766666118238">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -1773,49 +1958,71 @@ where [refTable].[Kod] = ?</property>
                     Point2="0,18.633333059119"
                     Point3="-4,18.633333059119" />
                   <mssgle:LineSegment
-                    End="-160.233323179848,18.633333059119" />
+                    End="-177.433323179848,18.633333059119" />
                   <mssgle:CubicBezierSegment
-                    Point1="-160.233323179848,18.633333059119"
-                    Point2="-164.233323179848,18.633333059119"
-                    Point3="-164.233323179848,22.633333059119" />
+                    Point1="-177.433323179848,18.633333059119"
+                    Point2="-181.433323179848,18.633333059119"
+                    Point3="-181.433323179848,22.633333059119" />
                   <mssgle:LineSegment
-                    End="-164.233323179848,29.766666118238" />
+                    End="-181.433323179848,29.766666118238" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-130.308048308674,23.633333059119,96.3827734375,11.609375"
+              BoundingBox="-138.908048308674,23.633333059119,96.3827734375,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Foreach Loop Container\Data Flow Task.Paths[Excel Source Output]"
-          TopLeft="304.999987160167,103.133332905438">
+          TopLeft="308.04998709187,103.133332905438">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-11.1000001365943,36.3999994575978"
+              EndConnector="0,36.3999994575978"
               Start="0,0"
-              End="-11.1000001365943,28.8999994575978">
+              End="0,28.8999994575978">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,14.1999997287989" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,14.1999997287989"
-                    Point2="0,18.1999997287989"
-                    Point3="-4,18.1999997287989" />
+                    End="0,28.8999994575978" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Foreach Loop Container\Data Flow Task.Paths[Data Conversion Output]"
+          TopLeft="129.666663843725,259.999998481274">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="50.2999979510904,45.7999994033572"
+              Start="0,0"
+              End="50.2999979510904,38.2999994033572">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
                   <mssgle:LineSegment
-                    End="-7.1000001365943,18.1999997287989" />
+                    End="0,18.8999997016786" />
                   <mssgle:CubicBezierSegment
-                    Point1="-7.1000001365943,18.1999997287989"
-                    Point2="-11.1000001365943,18.1999997287989"
-                    Point3="-11.1000001365943,22.1999997287989" />
+                    Point1="0,18.8999997016786"
+                    Point2="0,22.8999997016786"
+                    Point3="4,22.8999997016786" />
                   <mssgle:LineSegment
-                    End="-11.1000001365943,28.8999994575978" />
+                    End="46.2999979510904,22.8999997016786" />
+                  <mssgle:CubicBezierSegment
+                    Point1="46.2999979510904,22.8999997016786"
+                    Point2="50.2999979510904,22.8999997016786"
+                    Point3="50.2999979510904,26.8999997016786" />
+                  <mssgle:LineSegment
+                    End="50.2999979510904,38.2999994033572" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -1841,20 +2048,7 @@ where [refTable].[Kod] = ?</property>
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\Foreach Loop Container\Data Flow Task\Excel Source">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\Foreach Loop Container\Data Flow Task\Lookup">
+    design-time-name="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId)">
     <Properties>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
@@ -1864,7 +2058,7 @@ where [refTable].[Kod] = ?</property>
       <Property>
         <Name>UsedTableName</Name>
         <Value
-          type="q3:string">[dbo].[HartiiOdVrednost]</Value>
+          type="q3:string">[dbo].[DnevenPromet]</Value>
       </Property>
       <Property>
         <Name>TableInfoObjectType</Name>
@@ -1873,6 +2067,42 @@ where [refTable].[Kod] = ?</property>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:boolean">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string">[dbo].[HartiiOdVrednost]</Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:int">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Foreach Loop Container\Data Flow Task\Excel Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
       </Property>
     </Properties>
   </PipelineComponentMetadata>
