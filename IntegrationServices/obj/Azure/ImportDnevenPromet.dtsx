@@ -11,8 +11,8 @@
   DTS:LocaleID="1071"
   DTS:ObjectName="ImportDnevenPromet"
   DTS:PackageType="5"
-  DTS:VersionBuild="136"
-  DTS:VersionGUID="{45023D6B-C946-4BA0-965C-E8827F3F1C9B}">
+  DTS:VersionBuild="137"
+  DTS:VersionGUID="{93A4C757-1238-4836-8DD0-9C5D4D8B03D0}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>

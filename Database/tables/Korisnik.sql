@@ -5,7 +5,6 @@
     [Username] NVARCHAR(100) NOT NULL, 
     [PasswordHash] VARBINARY(48) NOT NULL, 
     [Email] NVARCHAR(100) NOT NULL, 
-    [Uloga] NVARCHAR(50) NOT NULL,
 
     CONSTRAINT pk_Korisnik PRIMARY KEY (Id),
     CONSTRAINT un_Username UNIQUE (Username)

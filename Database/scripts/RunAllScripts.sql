@@ -10,8 +10,9 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 :r .\LoadTipHV.sql
+:r .\LoadUloga.sql
 :r .\LoadSektor.sql
-:r .\Loadbroker.sql
+:r .\LoadBroker.sql
 :r .\LoadAplikativniParametri.sql
 :r .\LoadKorisnik.sql
 :r .\LoadIzdavach.sql
