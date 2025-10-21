@@ -22,10 +22,16 @@ namespace PriceFlowSecurity
             return Convert.ToBase64String(hash);
         }
 
-        public static bool VerifyPassword(string enteredPassword, string storedHash, byte[] storedSalt)
+        public static bool VerifyPassword(string enteredPassword, byte[] storedHash)
         {
-            string enteredPasswordHash = HashPassword(enteredPassword, storedSalt);
-            return enteredPasswordHash == storedHash;
+            var hash = new byte[32];
+            var salt = new byte[16];
+
+            Buffer.BlockCopy(storedHash, 0, hash, 0, 32);
+            Buffer.BlockCopy(storedHash, 32, salt, 0, 16);
+
+            var enteredHash = Convert.FromBase64String(HashPassword(enteredPassword, salt));
+            return hash.SequenceEqual(enteredHash);
         }
 
     }

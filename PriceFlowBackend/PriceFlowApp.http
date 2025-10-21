@@ -1,6 +1,0 @@
-@PriceFlowApp_HostAddress = http://localhost:5269
-
-GET {{PriceFlowApp_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

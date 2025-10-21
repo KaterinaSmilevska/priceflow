@@ -1,18 +1,197 @@
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+.navbar {
+  padding: 1rem 0;
+  background-color: #1e3a8a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-html {
-  font-size: 14px;
+.navbar-brand .logo {
+  height: 60px;
+  width: 60px;
+  transition: transform 0.3s ease;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
 }
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
+
+.navbar-brand:hover .logo {
+  transform: scale(1.05);
+}
+
+.navbar-brand .text-white {
+  color: #ffffff !important;
+}
+
+.nav-link {
+  color: #d1d5db !important;
+  font-weight: 500;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: #93c5fd !important;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+  }
+
+.navbar-toggler {
+  border: none;
+  padding: 0.5rem 0.75rem;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.container {
+  padding: 0;
+}
+
+.bg-custom-dark {
+  background-color: #1e3a8a;
+}
+
+.language-switch-container {
+  position: relative;
+  display: inline-block;
+}
+
+.language-switch {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 36px;
+}
+
+  .language-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+.language-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #4b6980;
+  transition: 0.4s;
+  border-radius: 18px;
+  border: 1px solid #93c5fd;
+}
+
+  .language-slider:before {
+    position: absolute;
+    content: "";
+    height: 32px;
+    width: 32px;
+    left: 2px;
+    bottom: 2px;
+    background-color: transparent;
+    transition: 0.4s;
+    border-radius: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+input:checked + .language-slider {
+  background-color: #3b82f6;
+}
+
+  input:checked + .language-slider:before {
+    transform: translateX(44px);
+  }
+
+  input:checked + .language-slider:before {
+    background-image: url('https://flagcdn.com/w20/mk.png');
+  }
+
+input:not(:checked) + .language-slider:before {
+  background-image: url('https://flagcdn.com/w20/gb.png');
+}
+
+.login {
+  padding: 0.5rem 1.5rem;
+  font-size: 1.2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+  .login:hover {
+    background-color: #0056b3;
+  }
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    margin-top: 1rem;
+  }
+
+  .navbar-collapse {
+    padding: 1rem;
+    background-color: #1e3a8a;
+  }
+
+  .nav-link {
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .language-switch {
+    width: 60px;
+    height: 28px;
+  }
+
+  .language-slider:before {
+    height: 24px;
+    width: 24px;
+  }
+
+  input:checked + .language-slider:before {
+    transform: translateX(34px);
   }
 }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.login-bubble {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeInOut 3s ease-in-out forwards;
+    z-index: 9999;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }
