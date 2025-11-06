@@ -21,5 +21,5 @@ FROM (
 ) as hv (ISIN, Kod, VkupenBrojAkcii, TipHVIme, IzdavachIme)
 JOIN [dbo].[TipHV] as thv
 	ON thv.Ime = hv.TipHVIme
-JOIN [dbo].[Izdavach] as i
+JOIN [dbo].[Izdavachi] as i
 	ON i.Ime = hv.IzdavachIme

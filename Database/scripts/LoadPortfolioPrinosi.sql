@@ -4,7 +4,7 @@ FROM (
 	VALUES
 	('2025-08-12', 15000.00, 500, N'Технологија', 'ALK')
 ) as pp (Datum, NetoIznos, Danok, PortfolioIme, HVKod)
-JOIN [dbo].[Portfolio] as p
+JOIN [dbo].[Portfolija] as p
 	ON p.Ime = pp.PortfolioIme
 JOIN [dbo].[HartiiOdVrednost] as hv
 	ON hv.Kod = pp.HVKod

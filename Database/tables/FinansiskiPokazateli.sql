@@ -12,5 +12,5 @@
     [DividendenPrinos] DECIMAL(18, 2) NULL, 
 
     CONSTRAINT pk_FinansiskiPokazateli PRIMARY KEY (Id),
-    CONSTRAINT fk_FinansiskiPokazateli_Izdavach FOREIGN KEY (IzdavachId) REFERENCES Izdavach(Id)
+    CONSTRAINT fk_FinansiskiPokazateli_Izdavachi FOREIGN KEY (IzdavachId) REFERENCES Izdavachi(Id)
 )

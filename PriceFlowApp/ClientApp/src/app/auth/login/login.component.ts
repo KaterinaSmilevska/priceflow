@@ -11,7 +11,7 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
   errorMessage: string = '';
-  ulogas: string[] = [];
+  roles: string[] = [];
 
   constructor(public loginService: LoginService, private router: Router) { }
 
@@ -19,7 +19,7 @@ export class LoginComponent {
     const request: LoginRequest = { username: this.username, password: this.password };
     this.loginService.login(request).subscribe({
       next: (response: LoginResponse) => {
-        this.ulogas = response.ulogas || [];
+        this.roles = response.roles || [];
         this.router.navigate(['/']);
       },
       error: (err) => {

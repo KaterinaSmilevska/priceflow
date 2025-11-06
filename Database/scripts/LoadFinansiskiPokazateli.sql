@@ -51,5 +51,5 @@ VALUES
 	(N'Фершпед АД Скопје', 2022, 104544, 5221.39, 10.15, 124302.82, 0.43, 550.00, 1.04)
 ) AS fp (IzdavachIme, Godina, OperativnaDobivka, NetoDobivkaPoAkcija, KoefCenaDobivkaPoAkcija,
 KnigovodstvenaVrednostPoAkcija, KoefCenaKnigovodstvenaVrednostPoAkcija, DividendaPoAkcija, DividendenPrinos)
-JOIN [dbo].[Izdavach] as i
+JOIN [dbo].[Izdavachi] as i
 	ON i.Ime = fp.IzdavachIme

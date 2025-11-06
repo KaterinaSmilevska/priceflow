@@ -4,6 +4,8 @@ namespace PriceFlowApp.Services
 {
     public interface IBrokerService
     {
-        Task<Broker> GetBrokerByKompanijaAsync(string kompanija);
+        Task<Brokeri?> FindById(int id);
+
+        Task<Brokeri?> FindByCompanyAsync(string company);
     }
 }

@@ -13,7 +13,7 @@ interface Task {
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  ime: string = '';
+  name: string = '';
   username: string = '';
   email: string = '';
   password: string = '';
@@ -25,7 +25,7 @@ export class RegisterComponent implements OnInit {
     { description: 'View current and historic data trends', roleName: 'Обичен корисник', selected: false },
     { description: 'Do basic filtering and limited searching', roleName: 'Обичен корисник', selected: false }
   ];
-  ulogaNames: string[] = [];
+  roleNames: string[] = [];
   response: RegisterResponse | null = null;
   generalError: string | null = null;
   usernameError: string | null = null;
@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
   isUsernameValid: boolean = true;
   isEmailValid: boolean = true;
   isPasswordValid: boolean = true;
-  isPending: boolean = false;
+  isEmailVerified: boolean = false;
 
   constructor(
     private registerService: RegisterService,
@@ -43,6 +43,7 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.checkEmailVerification();
     this.cdr.detectChanges();
   }
 
@@ -116,18 +117,18 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  updateUlogaNames(): void {
+  updateRoleNames(): void {
     const selectedRoles = this.tasks.filter(task => task.selected).map(task => task.roleName);
-    this.ulogaNames = [...new Set(selectedRoles)];
+    this.roleNames = [...new Set(selectedRoles)];
   }
 
   isFormValid(): boolean {
-    return this.ime.trim() !== '' &&
+    return this.name.trim() !== '' &&
       this.username.trim() !== '' &&
       this.email.trim() !== '' &&
       this.password.trim() !== '' &&
       this.confirmPassword.trim() !== '' &&
-      this.ulogaNames.length > 0 &&
+      this.roleNames.length > 0 &&
       this.isEmailValid &&
       this.isPasswordValid;
   }
@@ -139,38 +140,37 @@ export class RegisterComponent implements OnInit {
     }
 
     const request: RegisterRequest = {
-      ime: this.ime,
+      name: this.name,
       username: this.username,
       email: this.email,
       password: this.password,
       confirmPassword: this.confirmPassword,
-      ulogaNames: this.ulogaNames
+      roleNames: this.roleNames
     };
 
     this.registerService.register(request).subscribe({
       next: (response: RegisterResponse) => {
-        this.isPending = true;
         this.response = response;
         this.generalError = null;
-        // Reset form
+        
         this.resetForm();
       },
       error: (err: any) => {
+        console.error('Registration error: ', err);
         this.response = null;
         this.generalError = err.error?.message || 'Registration failed';
-        this.isPending = false;
       }
     });
   }
 
   resetForm(): void {
-    this.ime = '';
+    this.name = '';
     this.username = '';
     this.email = '';
     this.password = '';
     this.confirmPassword = '';
     this.tasks.forEach(task => task.selected = false);
-    this.ulogaNames = [];
+    this.roleNames = [];
     this.usernameError = null;
     this.emailError = null;
     this.passwordError = null;
@@ -182,7 +182,16 @@ export class RegisterComponent implements OnInit {
 
   clearSuccessMessage(): void {
     this.response = null;
-    this.isPending = false;
     this.resetForm();
+  }
+
+  checkEmailVerification(): void {
+    const urlParams = new URLSearchParams(window.location.search);
+    const verified = urlParams.get('verified');
+    if (verified === 'true') {
+      this.isEmailVerified = true;
+      this.generalError = null;
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }
 }

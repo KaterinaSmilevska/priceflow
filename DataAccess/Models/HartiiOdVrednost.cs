@@ -17,13 +17,13 @@ public partial class HartiiOdVrednost
 
     public int IzdavachId { get; set; }
 
-    public virtual ICollection<DnevenPromet> DnevenPromets { get; set; } = new List<DnevenPromet>();
+    public virtual ICollection<DnevenPromet> DnevenPromet { get; set; } = new List<DnevenPromet>();
 
-    public virtual Izdavach Izdavach { get; set; } = null!;
+    public virtual Izdavachi Izdavach { get; set; } = null!;
 
-    public virtual ICollection<PortfolioPrinosi> PortfolioPrinosis { get; set; } = new List<PortfolioPrinosi>();
+    public virtual ICollection<PortfolioPrinosi> PortfolioPrinosi { get; set; } = new List<PortfolioPrinosi>();
 
     public virtual TipHv TipHv { get; set; } = null!;
 
-    public virtual ICollection<Transakcii> Transakciis { get; set; } = new List<Transakcii>();
+    public virtual ICollection<Transakcii> Transakcii { get; set; } = new List<Transakcii>();
 }

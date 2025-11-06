@@ -8,6 +8,6 @@
     [HVId] INT NOT NULL, 
 
     CONSTRAINT pk_PortfolioPrinosi PRIMARY KEY (Id),
-    CONSTRAINT fk_PortfolioPrinosi_Portfolio FOREIGN KEY (PortfolioId) REFERENCES Portfolio(Id),
+    CONSTRAINT fk_PortfolioPrinosi_Portfolija FOREIGN KEY (PortfolioId) REFERENCES Portfolija(Id),
     CONSTRAINT fk_PortfolioPrinosi_HartiiOdVrednost FOREIGN KEY (HVId) REFERENCES HartiiOdVrednost(Id)
 )

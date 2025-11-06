@@ -1,7 +1,0 @@
-﻿CREATE TABLE [dbo].[Uloga]
-(
-	[Id] INT IDENTITY(1, 1) NOT NULL, 
-    [Ime] NVARCHAR(50) NOT NULL,
-
-	CONSTRAINT pk_Uloga PRIMARY KEY (Id)
-)

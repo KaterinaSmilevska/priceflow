@@ -3,19 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface RegisterRequest {
-  ime: string;
+  name: string;
   username: string;
   email: string;
   password: string;
   confirmPassword: string;
-  ulogaNames: string[];
+  roleNames: string[];
 }
 
 export interface RegisterResponse {
   id: number;
   username: string;
   email: string;
-  ulogas: string[];
+  roles: string[];
   message: string;
 }
 
@@ -65,5 +65,9 @@ export class RegisterService {
 
   validateEmail(request: EmailValidationRequest): Observable<EmailValidationResponse> {
     return this.http.post<EmailValidationResponse>(`${this.apiUrl}/validate-email`, request);
+  }
+
+  verifyEmail(token: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/verify-email?token=${token}`);
   }
 }

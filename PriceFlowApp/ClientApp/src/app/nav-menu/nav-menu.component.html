@@ -1,30 +1,49 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-custom-dark border-bottom">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" [routerLink]="['/']">
+    <div class="container position-relative">
+      <a class="navbar-brand d-flex align-items-center" [routerLink]="['/']" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
         <img src="../../assets/smlogo.png" alt="PriceFlow Logo" class="logo">
-        <span class="ms-3 text-white fw-bold" style="font-size: 1.6rem; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);">PriceFlow</span>
+        <span class="ms-3 text-white fw-bold" style="font-size: 1.6rem; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);">
+          PriceFlow
+        </span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarNav">
-        <div class="navbar-nav ms-auto"></div>
-        <div class="d-flex align-items-center justify-content-end">
-          <div class="language-switch-container" *ngIf="!(loginService.isLoggedIn() | async)">
+        <ul class="navbar-nav ms-4 me-auto">
+          <li class="nav-item" *ngIf="isAdmin()">
+            <a class="nav-link text-white fw-bold"
+               routerLink="/admin/users"
+               routerLinkActive="active-link"
+               [routerLinkActiveOptions]="{ exact: true }">Users</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white fw-bold"
+               routerLink="/securities"
+               routerLinkActive="active-link"
+               [routerLinkActiveOptions]="{ exact: true }">Securities</a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center justify-content-end position-relative">
+          <div *ngIf="successMessage" class="success-toast">
+            {{ successMessage }}
+          </div>
+
+          <div class="language-switch-container">
             <label class="language-switch">
               <input type="checkbox" id="languageToggle" (change)="toggleLanguage()">
               <span class="language-slider"></span>
             </label>
           </div>
-          <div *ngIf="showLoginBubble" class="login-bubble">
-            Logged in successfully
-          </div>
+
           <div *ngIf="!(loginService.isLoggedIn() | async)" class="d-flex align-items-center">
-            <button (click)="openLoginModal()" class="btn btn-primary ms-3 login">
-              LOGIN
-            </button>
+            <button (click)="openLoginModal()" class="btn btn-primary ms-3 login">LOGIN</button>
           </div>
+
           <div *ngIf="(loginService.isLoggedIn() | async)" class="d-flex align-items-center">
             <div class="text-white me-3" style="font-size: 1.2rem; padding: 0.5rem 1rem;">
               Welcome, {{ (loginService.getUsername() | async) || 'User' }}!

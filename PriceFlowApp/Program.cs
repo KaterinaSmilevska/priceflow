@@ -25,10 +25,16 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<PriceFlowDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PriceFlowDatabase")));
 
-builder.Services.AddScoped<IBrokerRepository, BrokerRepository>();
+builder.Services.AddScoped<IBrokersRepository, BrokersRepository>();
 builder.Services.AddScoped<IBrokerService, BrokerService>();
+builder.Services.AddScoped<IRolesRepository, RolesRepository>();
+builder.Services.AddScoped<IRolesService, RolesService>();
+builder.Services.AddScoped<IUsersRolesRepository, UsersRolesRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<ISecuritiesRepository, SecuritiesRepository>();
+builder.Services.AddScoped<ISecuritiesService, SecuritiesService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options =>

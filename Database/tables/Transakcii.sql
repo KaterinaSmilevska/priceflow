@@ -14,6 +14,6 @@
     [HVId] INT NOT NULL, 
 
     CONSTRAINT pk_Transakcii PRIMARY KEY (Id),
-    CONSTRAINT fk_Transakcii_Portfolio FOREIGN KEY (PortfolioId) REFERENCES Portfolio(Id),
+    CONSTRAINT fk_Transakcii_Portfolija FOREIGN KEY (PortfolioId) REFERENCES Portfolija(Id),
     CONSTRAINT fk_Transakcii_HartiiOdVrednost FOREIGN KEY (HVId) REFERENCES HartiiOdVrednost(Id)
 )

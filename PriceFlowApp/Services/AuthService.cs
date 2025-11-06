@@ -1,11 +1,7 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using Microsoft.IdentityModel.Tokens;
 using PriceFlowApp.DTOs;
 using PriceFlowSecurity;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace PriceFlowApp.Services
@@ -13,25 +9,46 @@ namespace PriceFlowApp.Services
     public class AuthService : IAuthService
     {
         private readonly IAuthRepository _authRepository;
+        private readonly IRolesRepository _rolesRepository;
+        private readonly IUsersRolesRepository _usersRolesRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly EmailService _emailService;
 
-        public AuthService(IAuthRepository korisnikRepository, IHttpContextAccessor httpContextAccessor)
+        public AuthService(IAuthRepository korisnikRepository, IRolesRepository rolesRepository, IUsersRolesRepository usersRolesRepository,
+            IHttpContextAccessor httpContextAccessor, EmailService emailService)
         {
             _authRepository = korisnikRepository;
+            _rolesRepository = rolesRepository;
+            _usersRolesRepository = usersRolesRepository;
             _httpContextAccessor = httpContextAccessor;
+            _emailService = emailService;
         }
 
-        public async Task<IEnumerable<Korisnik>> getAllKorisnikAsync()
+        public async Task<Korisnici?> FindByIdAsync(int id)
         {
-            return await _authRepository.getAllKorisnikAsync();
+            return await _authRepository.GetByIdAsync(id);
         }
 
-        public async Task<Korisnik> GetKorisnikByUsernameAsync(string username)
+        public async Task<IEnumerable<User>> FindAllAsync()
+        {
+            var users = await _authRepository.GetAllAsync();
+            var foundUsers = users.Select(item => new User
+            {
+                Id = item.Id,
+                Name = item.Ime,
+                Username = item.Username,
+                Email = item.Email,
+                Roles = item.KorisniciUlogi.Select(ku => ku.Uloga.Ime).ToList()
+            });
+            return foundUsers;
+        }
+
+        public async Task<Korisnici?> FindByUsernameAsync(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Username cannot be null or empty.");
 
-            var korisnik = await _authRepository.GetKorisnikByUsernameAsync(username);
+            var korisnik = await _authRepository.GetByUsernameAsync(username);
 
             if(korisnik == null)
                 throw new ArgumentException("Korisnik not found");
@@ -40,7 +57,7 @@ namespace PriceFlowApp.Services
 
         public async Task<RegisterResponse> RegisterAsync(RegisterRequest registerRequest)
         {
-            if (string.IsNullOrWhiteSpace(registerRequest.Ime) ||
+            if (string.IsNullOrWhiteSpace(registerRequest.Name) ||
                 string.IsNullOrWhiteSpace(registerRequest.Username) ||
                 string.IsNullOrWhiteSpace(registerRequest.Email) ||
                 string.IsNullOrWhiteSpace(registerRequest.Password))
@@ -64,50 +81,56 @@ namespace PriceFlowApp.Services
             if (await _authRepository.GetByUsernameAsync(registerRequest.Username) != null)
                 throw new ArgumentException("Username already exists.");
 
-            var validUlogaNames = await _authRepository.GetUlogaNamesAsync();
-            if (registerRequest.UlogaNames.Any() && registerRequest.UlogaNames.Any(name => !validUlogaNames.Contains(name)))
+            var validRoleNames = await _rolesRepository.GetNamesAsync();
+            if (registerRequest.RoleNames.Any() && registerRequest.RoleNames.Any(name => !validRoleNames.Contains(name)))
                 throw new ArgumentException("One or more role names are invalid.");
 
-            var salt = PasswordHasher.GenerateSalt();
-            var hash = PasswordHasher.HashPassword(registerRequest.Password, salt);
+            byte[] fullPasswordBytes = PasswordHelper.CalculateHashAndSalt(registerRequest.Password);
 
-            var fullPasswordBytes = new byte[48];
-            Buffer.BlockCopy(Convert.FromBase64String(hash), 0, fullPasswordBytes, 0, 32);
-            Buffer.BlockCopy(salt, 0, fullPasswordBytes, 32, 16);
+            var token = Guid.NewGuid();
 
-            var korisnik = new Korisnik
+            var user = new Korisnici
             {
-                Ime = registerRequest.Ime,
+                Ime = registerRequest.Name,
                 Username = registerRequest.Username,
                 PasswordHash = fullPasswordBytes,
-                Email = registerRequest.Email
+                Email = registerRequest.Email,
+                EmailVerificationToken = token,
+                IsEmailVerified = false,
+                ResetPasswordToken = null,
+                ResetPasswordTokenExpiry = null
             };
 
-            await _authRepository.AddKorisnikAsync(korisnik);
+            await _authRepository.AddAsync(user);
 
-            var ulogaIds = await _authRepository.GetUlogaIdsByNamesAsync(registerRequest.UlogaNames);
-            foreach (var ulogaId in ulogaIds)
+            var roleIds = await _rolesRepository.GetIdsByNamesAsync(registerRequest.RoleNames);
+            foreach (var roleId in roleIds)
             {
-                await _authRepository.AddKorisnikUlogaAsync(new KorisnikUloga
+                await _usersRolesRepository.AddAsync(new KorisniciUlogi
                 {
-                    KorisnikId = korisnik.Id,
-                    UlogaId = ulogaId
+                    KorisnikId = user.Id,
+                    UlogaId = roleId
                 });
             }
 
+            var verificationLink = $"https://localhost:44413/api/auth/verify-email?token={token}";
+            await _emailService.SendEmailAsync(user.Email, "Verify your PriceFlow account",
+                $"<p>Welcome to PriceFlow, {user.Ime}!</p>" + $"<p>Please verify your email by clicking the link below:</p>"
+                + $"<a href='{verificationLink}'>Verify Email</a>");
+
             return new RegisterResponse
             {
-                Id = korisnik.Id,
-                Username = korisnik.Username,
-                Email = korisnik.Email,
-                Ulogas = registerRequest.UlogaNames,
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Roles = registerRequest.RoleNames,
                 Message = "Registration successfull"
             };
         }
 
-        public async Task<List<string>> GetUlogaNamesAsync()
+        public async Task<List<string>> FindUlogaNamesAsync()
         {
-            return await _authRepository.GetUlogaNamesAsync();
+            return await _rolesRepository.GetNamesAsync();
         }
 
         public async Task<bool> UsernameExistsAsync(string username)
@@ -127,6 +150,16 @@ namespace PriceFlowApp.Services
                 if (request.Password != request.ConfirmPassword)
                 {
                     return new PasswordValidationResponse { IsValid = false, Message = "Passwords do not match." };
+                }
+
+                if(!PasswordHelper.ValidatePasswordStrength(request.Password))
+                {
+                    return new PasswordValidationResponse
+                    {
+                        IsValid = false,
+                        Message = "Password must contain at least 8 characters long, " +
+                        "with one lowercase letter, one uppercase letter, one number, one special character and no spaces."
+                    };
                 }
                 if (request.Password.Length < 8)
                 {
@@ -178,28 +211,103 @@ namespace PriceFlowApp.Services
                 throw new ArgumentException("Username and password are required.");
             }
 
-            var korisnik = await _authRepository.GetByUsernameAsync(loginRequest.Username);
-            if (korisnik == null)
+            var user = await _authRepository.GetByUsernameAsync(loginRequest.Username);
+            if (user == null)
                 throw new ArgumentException("Invalid username or password.");
-            if (!PasswordHasher.VerifyPassword(loginRequest.Password, korisnik.PasswordHash))
+            if (!PasswordHelper.VerifyPassword(loginRequest.Password, user.PasswordHash))
                 throw new ArgumentException("Invalid username or password.");
+
+            if (!user.IsEmailVerified)
+                throw new ArgumentException("Please verify your email before logging in.");
 
             var httpContext = _httpContextAccessor.HttpContext;
-            httpContext.Session.SetString("Username", korisnik.Username);
-            httpContext.Response.Cookies.Append("Username", korisnik.Username,new CookieOptions 
+            httpContext.Session.SetString("Username", user.Username);
+            httpContext.Session.SetString("UserId", user.Id.ToString());
+            httpContext.Response.Cookies.Append("Username", user.Username,new CookieOptions 
                 { HttpOnly = true, Expires = DateTimeOffset.Now.AddHours(1) });
 
-            var ulogas = await _authRepository.GetUlogasForKorisnik(korisnik.Id);
-            var ulogaNames = await _authRepository.GetUlogaNames(ulogas);
+            List<Ulogi> roles = await _rolesRepository.GetByUserIdAsync(user.Id);
+            var roleNames = await _rolesRepository.GetNamesAsync(roles);
 
             return new LoginResponse
             {
-                Id = korisnik.Id,
-                Username = korisnik.Username,
-                Email = korisnik.Email,
-                Ulogas = ulogaNames,
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Roles = roleNames,
                 Message = "Login successful"
             };
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            var existingUser = await _authRepository.GetByIdAsync(user.Id);
+            if (existingUser == null)
+                throw new Exception("User not found");
+
+            var otherUser = await _authRepository.GetByUsernameAsync(user.Username);
+            if (otherUser != null && otherUser.Id != user.Id)
+                throw new Exception("Username is already taken by another user.");
+
+            existingUser.Ime = user.Name;
+            existingUser.Username = user.Username;
+            existingUser.Email = user.Email;
+
+            await _authRepository.UpdateAsync(existingUser);
+        }
+
+        public async Task UpdateAsync(Korisnici user)
+        {
+            var existingUser = await _authRepository.GetByIdAsync(user.Id);
+            if (existingUser == null)
+                throw new Exception("User not found");
+
+            existingUser.Ime = user.Ime;
+            existingUser.Username = user.Username;
+            existingUser.Email = user.Email;
+            await _authRepository.UpdateAsync(existingUser);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var user = await _authRepository.GetByIdAsync(id);
+            if (user == null) throw new Exception("User not found");
+            await _authRepository.DeleteAsync(user);
+        }
+
+        public async Task<Korisnici?> FindByVerificationTokenAsync(Guid token)
+        {
+            return await _authRepository.GetByVerificationTokenAsync(token);
+        }
+
+        public async Task ForgotPasswordAsync(string username)
+        {
+            Korisnici? user = await _authRepository.GetByUsernameAsync(username);
+            if (user == null)
+                throw new Exception("User not found");
+            
+            Guid resetToken = Guid.NewGuid();
+            user.ResetPasswordToken = resetToken;
+            user.ResetPasswordTokenExpiry = DateTime.UtcNow.AddHours(1);
+            await _authRepository.UpdateAsync(user);
+
+            string resetLink = $"https://localhost:44413/forgot-password?token={resetToken}";
+            await _emailService.SendEmailAsync(user.Email, "Reset password", $"Click <a href='{resetLink}'>here</a> to reset your password.");
+        }
+
+        public async Task ResetPasswordAsync(Guid token, string newPassword)
+        {
+            Korisnici? user = await _authRepository.GetByResetPasswordTokenAsync(token);
+            if (user == null || user.ResetPasswordTokenExpiry < DateTime.UtcNow)
+                throw new Exception("Invalid or expired token");
+
+            if(PasswordHelper.ValidatePasswordStrength(newPassword))
+            {
+                user.PasswordHash = PasswordHelper.CalculateHashAndSalt(newPassword);
+                user.ResetPasswordToken = null;
+                user.ResetPasswordTokenExpiry = null;
+                await _authRepository.UpdateAsync(user);
+            }
         }
     }
 }

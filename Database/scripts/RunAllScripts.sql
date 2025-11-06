@@ -10,14 +10,15 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 :r .\LoadTipHV.sql
-:r .\LoadUloga.sql
-:r .\LoadSektor.sql
-:r .\LoadBroker.sql
+:r .\LoadUlogi.sql
+:r .\LoadSektori.sql
+:r .\LoadBrokeri.sql
 :r .\LoadAplikativniParametri.sql
-:r .\LoadKorisnik.sql
-:r .\LoadIzdavach.sql
+:r .\LoadKorisnici.sql
+:r .\LoadKorisniciUlogi.sql
+:r .\LoadIzdavachi.sql
 :r .\LoadHartiiOdVrednost.sql
-:r .\LoadPortfolio.sql
+:r .\LoadPortfolija.sql
 :r .\LoadFinansiskiPokazateli.sql
 :r .\LoadPortfolioPrinosi.sql
 :r .\LoadTransakcii.sql

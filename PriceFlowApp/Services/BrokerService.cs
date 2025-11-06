@@ -5,21 +5,26 @@ namespace PriceFlowApp.Services
 {
     public class BrokerService : IBrokerService
     {
-        private readonly IBrokerRepository _brokerRepository;
+        private readonly IBrokersRepository _brokerRepository;
 
-        public BrokerService(IBrokerRepository brokerRepository)
+        public BrokerService(IBrokersRepository brokerRepository)
         {
             _brokerRepository = brokerRepository;
         }
 
-        public async Task<Broker> GetBrokerByKompanijaAsync(string kompanija)
+        public Task<Brokeri?> FindById(int id)
         {
-            if (string.IsNullOrWhiteSpace(kompanija))
+            return _brokerRepository.GetByIdAsync(id);
+        }
+
+        public async Task<Brokeri?> FindByCompanyAsync(string company)
+        {
+            if (string.IsNullOrWhiteSpace(company))
                 throw new ArgumentException("Kompanija cannot be null or empty.");
 
-            var broker = await _brokerRepository.GetBrokerByKompanijaAsync(kompanija);
+            var broker = await _brokerRepository.GetByCompanyAsync(company);
             if (broker == null)
-                throw new ArgumentException($"Broker with Kompanija '{kompanija}' not found.");
+                throw new ArgumentException($"Broker with Kompanija '{company}' not found.");
 
             return broker;
         }

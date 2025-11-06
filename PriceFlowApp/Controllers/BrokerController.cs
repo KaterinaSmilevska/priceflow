@@ -11,12 +11,12 @@ namespace PriceFlowApp.Controllers
 
        public BrokerController(IBrokerService brokerService) => _brokerService = brokerService;
 
-        [HttpGet("{kompanija}")]
-        public async Task<IActionResult> GetBrokerByKompanijaAsyncs(string kompanija)
+        [HttpGet("{company}")]
+        public async Task<IActionResult> GetBrokerByKompanijaAsyncs(string company)
         {
             try
             {
-                var broker = await _brokerService.GetBrokerByKompanijaAsync(kompanija);
+                var broker = await _brokerService.FindByCompanyAsync(company);
                 return Ok(broker);
             }
             catch (ArgumentException ex)

@@ -25,5 +25,5 @@ public partial class FinansiskiPokazateli
 
     public decimal? DividendenPrinos { get; set; }
 
-    public virtual Izdavach Izdavach { get; set; } = null!;
+    public virtual Izdavachi Izdavach { get; set; } = null!;
 }

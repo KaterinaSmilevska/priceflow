@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess.Models;
+using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 
@@ -9,7 +10,13 @@ namespace PriceFlowApp.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService) => _authService = authService;
+        private readonly IRolesService _rolesService;
+
+        public AuthController(IAuthService authService, IRolesService rolesService)
+        {
+            _authService = authService;
+            _rolesService = rolesService;
+        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
@@ -38,12 +45,12 @@ namespace PriceFlowApp.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             if (Request.Cookies.ContainsKey(".AspNetCore.Session")) 
@@ -58,7 +65,7 @@ namespace PriceFlowApp.Controllers
         {
             try
             {
-                var ulogas = await _authService.GetUlogaNamesAsync();
+                var ulogas = await _rolesService.FindNamesAsync();
                 return Ok(ulogas);
             }
             catch (Exception ex)
@@ -109,14 +116,131 @@ namespace PriceFlowApp.Controllers
             }
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            try
+            {
+                await _authService.ForgotPasswordAsync(request.Username);
+                return Ok(new { message = "Reset link has been sent to your email. " });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            try
+            {
+                await _authService.ResetPasswordAsync(request.Token, request.NewPassword);
+                return Ok(new { message = "Password reset successful." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, new { message = ex.Message });
+            }
+        }
+
         [HttpGet("status")]
         public IActionResult Status()
         {
             var username = HttpContext.Session.GetString("Username");
-            if (!string.IsNullOrEmpty(username))
-                return Ok(new { isLoggedIn = true, username });
+            var userIdStr = HttpContext.Session.GetString("UserId");
+            if (!string.IsNullOrEmpty(username) && int.TryParse(userIdStr, out int userId))
+                return Ok(new { isLoggedIn = true, username, userId });
             else
                 return Ok(new { isLoggedIn = false });
+        }
+
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsers()
+        {
+            try
+            {
+                var users = await _authService.FindAllAsync();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching users.", detail = ex.Message });
+            }
+        }
+
+        [HttpGet("users/{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var foundUser = await _authService.FindByIdAsync(id);
+            if (foundUser == null)
+                return NotFound();
+
+            User user = new User
+            {
+                Id = foundUser.Id,
+                Name = foundUser.Ime,
+                Username = foundUser.Username,
+                Email = foundUser.Email
+            };
+
+            return Ok(user);
+        }
+
+        [HttpPut("users/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] User user)
+        {
+            if (id != user.Id)
+                return BadRequest(new { message = "User Id mismatch." });
+            try
+            {
+                await _authService.UpdateAsync(user);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("users/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                await _authService.DeleteAsync(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("verify-email")]
+        public async Task<IActionResult> VerifyEmail([FromQuery] Guid token)
+        {
+            try
+            {
+                var user = await _authService.FindByVerificationTokenAsync(token);
+                if (user == null)
+                    return BadRequest("Invalid  or expired verification link.");
+
+                if (user.IsEmailVerified)
+                    return Redirect("https://localhost:44413/register?verified=true");
+
+                user.IsEmailVerified = true;
+                user.EmailVerificationToken = null;
+
+                await _authService.UpdateAsync(user);
+
+                return Redirect("https://localhost:44413/register?verified=true");
+            }
+            
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred during email verification.", detail = ex.Message });
+            }
         }
     }
 } 

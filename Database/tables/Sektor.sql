@@ -1,8 +1,0 @@
-﻿CREATE TABLE [dbo].[Sektor]
-(
-	[Id] INT IDENTITY(1, 1) NOT NULL, 
-    [Ime] NVARCHAR(100) NOT NULL,
-
-	CONSTRAINT pk_Sektor PRIMARY KEY (Id),
-	CONSTRAINT un_Sektor_Ime UNIQUE (Ime)
-)

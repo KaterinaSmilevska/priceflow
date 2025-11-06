@@ -44,6 +44,31 @@
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
+.navbar-nav .nav-link.active-link,
+.navbar-brand.active-link {
+  color: #F0F0F0 !important;
+  background-color: rgba(0, 180, 216, 0.15);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 180, 216, 0.4);
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link,
+.navbar-brand {
+  color: #ffffff !important;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
+  .navbar-nav .nav-link:hover,
+  .navbar-brand:hover {
+    color: white !important;
+    background-color: rgba(0, 180, 216, 0.1);
+    box-shadow: 0 0 8px rgba(0, 180, 216, 0.2);
+  }
+
+
 .container {
   padding: 0;
 }
@@ -107,11 +132,11 @@ input:checked + .language-slider {
   }
 
   input:checked + .language-slider:before {
-    background-image: url('https://flagcdn.com/w20/mk.png');
+    background-image: url('../../assets/mk_flag.png');
   }
 
 input:not(:checked) + .language-slider:before {
-  background-image: url('https://flagcdn.com/w20/gb.png');
+  background-image: url('../../assets/gb_flag.png');
 }
 
 .login {
@@ -159,20 +184,24 @@ input:not(:checked) + .language-slider:before {
   }
 }
 
-.login-bubble {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    background-color: #28a745;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 30px;
-    font-size: 1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    animation: fadeInOut 3s ease-in-out forwards;
-    z-index: 9999;
+.success-toast {
+  position: absolute;
+  bottom: -40px;
+  right: 0;
+  background-color: #daf5d7;
+  color: #27632a;
+  border: 1px solid #4caf50;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+  text-align: center;
+  z-index: 1050;
+  animation: fadeInOut 3s ease-in-out forwards;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
+
+
 
 @keyframes fadeInOut {
     0% {

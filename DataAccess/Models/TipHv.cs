@@ -9,5 +9,5 @@ public partial class TipHv
 
     public string Ime { get; set; } = null!;
 
-    public virtual ICollection<HartiiOdVrednost> HartiiOdVrednosts { get; set; } = new List<HartiiOdVrednost>();
+    public virtual ICollection<HartiiOdVrednost> HartiiOdVrednost { get; set; } = new List<HartiiOdVrednost>();
 }

@@ -1,0 +1,108 @@
+.edit-user-container {
+  max-width: 400px;
+  margin: 80px auto;
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+  .edit-user-container h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 20px;
+  }
+
+.edit-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+  .form-group label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 6px;
+  }
+
+  .form-group input {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #111827;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+    .form-group input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      outline: none;
+    }
+
+.save-btn {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+  .save-btn:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+  }
+
+.error {
+  margin-top: 10px;
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.success-message {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #daf5d7;
+  border: 1px solid #4caf50;
+  color: #27632a;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: center;
+}
+
+
+.back-link {
+  margin-top: 16px;
+  text-align: center;
+}
+
+  .back-link a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+    .back-link a:hover {
+      text-decoration: underline;
+      color: #1d4ed8;
+    }

@@ -19,5 +19,5 @@ public partial class PortfolioPrinosi
 
     public virtual HartiiOdVrednost Hv { get; set; } = null!;
 
-    public virtual Portfolio Portfolio { get; set; } = null!;
+    public virtual Portfolija Portfolio { get; set; } = null!;
 }

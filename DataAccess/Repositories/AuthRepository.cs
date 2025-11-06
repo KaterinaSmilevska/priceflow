@@ -1,84 +1,81 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public class AuthRepository: IAuthRepository
     {
         private readonly PriceFlowDbContext _dbContext;
-        public AuthRepository(PriceFlowDbContext context) => _dbContext = context;
+        private readonly IUsersRolesRepository _usersRolesRepository;
 
-        public async Task<Korisnik?> GetByUsernameAsync(string username)
+        public AuthRepository(PriceFlowDbContext context, IUsersRolesRepository usersRolesRepository)
         {
-            return await _dbContext.Korisniks.FirstOrDefaultAsync(k => k.Username == username);
+            _dbContext = context;
+            _usersRolesRepository = usersRolesRepository;
         }
 
-        public async Task<Korisnik?> GetKorisnikByUsernameAsync(string username)
+        public async Task<Korisnici?> GetByIdAsync(int id)
         {
-            return await _dbContext.Korisniks
-                .FirstOrDefaultAsync(k => k.Username == username)
-                ?? throw new ArgumentException($"Korisnik with username '{username}' not found.");
+            return await _dbContext.Korisnici
+                .FindAsync(id);
         }
 
-        public async Task<IEnumerable<Korisnik>> getAllKorisnikAsync()
+        public async Task<Korisnici?> GetByUsernameAsync(string username)
         {
-            return await _dbContext.Korisniks.ToListAsync();
+            return await _dbContext.Korisnici
+                .FirstOrDefaultAsync(k => k.Username == username);
         }
 
-        public async Task AddKorisnikAsync(Korisnik korisnik)
+        public async Task<IEnumerable<Korisnici>> GetAllAsync()
         {
-            _dbContext.Korisniks.Add(korisnik);
+            return await _dbContext.Korisnici
+                .Include(k => k.KorisniciUlogi)
+                .ThenInclude(ku => ku.Uloga)
+                .ToListAsync();
+        }
+
+        public async Task AddAsync(Korisnici user)
+        {
+            _dbContext.Korisnici.Add(user);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task AddKorisnikUlogaAsync(KorisnikUloga korisnikUloga)
+        public async Task UpdateAsync(Korisnici user)
         {
-            _dbContext.KorisnikUlogas.Add(korisnikUloga);
+            _dbContext.Korisnici.Update(user);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<string>> GetUlogaNamesAsync()
+        public async Task DeleteAsync(Korisnici user)
         {
-            return await _dbContext.Ulogas.Select(u => u.Ime).ToListAsync();
-        }
+            await _usersRolesRepository.RemoveByUserIdAsync(user.Id);
 
-        public async Task<List<int>> GetUlogaIdsByNamesAsync(List<string> ulogaNames)
-        {
-            return await _dbContext.Ulogas
-               .Where(u => ulogaNames.Contains(u.Ime))
-               .Select(u => u.Id)
-               .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Uloga>> GetAllUlogasAsync()
-        {
-            return await _dbContext.Ulogas.ToListAsync();
+            _dbContext.Korisnici.Remove(user);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<bool> UsernameExistsAsync(string username)
         {
-            return await _dbContext.Korisniks.AnyAsync(k => k.Username == username);
-
+            return await _dbContext.Korisnici
+                .AnyAsync(k => k.Username == username);
         }
 
-        public async Task<List<Uloga>> GetUlogasForKorisnik(int korisnikId)
+        public async Task<Korisnici?> GetByVerificationTokenAsync(Guid token)
         {
-            return await _dbContext.KorisnikUlogas
-                .Where(ku => ku.KorisnikId == korisnikId)
-                .Select(ku => ku.Uloga)
-                .ToListAsync();
+            return await _dbContext.Korisnici
+                .FirstOrDefaultAsync(k => k.EmailVerificationToken == token);
         }
 
-        public async Task<List<string>> GetUlogaNames(List<Uloga> ulogas)
+        public async Task<Korisnici?> GetByEmailAsync(string email)
         {
-            return await _dbContext.Ulogas
-               .Select(u => u.Ime)
-               .ToListAsync();
+            return await _dbContext.Korisnici
+                .FirstOrDefaultAsync(k => k.Email == email);
+        }
+
+        public async Task<Korisnici?> GetByResetPasswordTokenAsync(Guid token)
+        {
+            return await _dbContext.Korisnici
+                .FirstOrDefaultAsync(k => k.ResetPasswordToken == token);
         }
     }
 }

@@ -58,36 +58,61 @@
     <Folder Include="Properties" />
     <Folder Include="tables" />
     <Folder Include="scripts" />
+    <Folder Include="indexes" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
     <None Include="scripts\LoadAplikativniParametri.sql" />
-    <None Include="scripts\LoadSektor.sql" />
+    <None Include="scripts\LoadSektori.sql" />
     <None Include="scripts\LoadTipHV.sql" />
-    <None Include="scripts\LoadBroker.sql" />
-    <None Include="scripts\LoadKorisnik.sql" />
-    <None Include="scripts\LoadIzdavach.sql" />
+    <None Include="scripts\LoadBrokeri.sql" />
+    <None Include="scripts\LoadKorisnici.sql" />
+    <None Include="scripts\LoadIzdavachi.sql" />
     <None Include="scripts\LoadHartiiOdVrednost.sql" />
-    <None Include="scripts\LoadPortfolio.sql" />
+    <None Include="scripts\LoadPortfolija.sql" />
     <None Include="scripts\LoadFinansiskiPokazateli.sql" />
     <None Include="scripts\LoadPortfolioPrinosi.sql" />
     <None Include="scripts\LoadTransakcii.sql" />
-    <None Include="scripts\LoadUloga.sql" />
+    <None Include="scripts\LoadUlogi.sql" />
+    <None Include="scripts\LoadKorisniciUlogi.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="tables\AplikativniParametri.sql" />
-    <Build Include="tables\Broker.sql" />
+    <Build Include="tables\Brokeri.sql" />
     <Build Include="tables\DnevenPromet.sql" />
     <Build Include="tables\FinansiskiPokazateli.sql" />
     <Build Include="tables\HartiiOdVrednost.sql" />
-    <Build Include="tables\Izdavach.sql" />
-    <Build Include="tables\Korisnik.sql" />
-    <Build Include="tables\Portfolio.sql" />
+    <Build Include="tables\Izdavachi.sql" />
+    <Build Include="tables\Korisnici.sql" />
+    <Build Include="tables\Portfolija.sql" />
     <Build Include="tables\PortfolioPrinosi.sql" />
-    <Build Include="tables\Sektor.sql" />
+    <Build Include="tables\Sektori.sql" />
     <Build Include="tables\TipHV.sql" />
-    <Build Include="tables\Uloga.sql" />
-    <Build Include="tables\KorisnikUloga.sql" />
+    <Build Include="tables\Ulogi.sql" />
+    <Build Include="tables\KorisniciUlogi.sql" />
+    <Build Include="indexes\UX_EmailVerificationToken.sql" />
+    <Build Include="indexes\UX_Brokeri_Kompanija.sql" />
+    <Build Include="indexes\UX_Ulogi_Ime.sql" />
+    <Build Include="indexes\UX_KorisniciUlogi_KorisnikId.sql" />
+    <Build Include="indexes\UX_KorisniciUlogi_UlogaId.sql" />
+    <Build Include="indexes\UX_DnevenPromet_HVId.sql" />
+    <Build Include="indexes\UX_FinansiskiPokazateli_IzdavachId.sql" />
+    <Build Include="indexes\UX_HartiiOdVrednost_TipHVId.sql" />
+    <Build Include="indexes\UX_HartiiOdVrednost_IzdavachId.sql" />
+    <Build Include="indexes\UX_Izdavachi_SektorId.sql" />
+    <Build Include="indexes\UX_Izdavachi_Ime.sql" />
+    <Build Include="indexes\UX_Korisnici_Ime.sql" />
+    <Build Include="indexes\UX_Korisnici_Username.sql" />
+    <Build Include="indexes\UX_Korisnici_Email.sql" />
+    <Build Include="indexes\UX_Korisnici_ResetPasswordToken.sql" />
+    <Build Include="indexes\UX_Portfolija_Ime.sql" />
+    <Build Include="indexes\UX_Portfolija_KorisnikId.sql" />
+    <Build Include="indexes\UX_PortfolioPrinosi_PortfolioId.sql" />
+    <Build Include="indexes\UX_PortfolioPrinosi_HVId.sql" />
+    <Build Include="indexes\UX_Sektori_Ime.sql" />
+    <Build Include="indexes\UX_TipHV_Ime.sql" />
+    <Build Include="indexes\UX_Transakcii_PortfolioId.sql" />
+    <Build Include="indexes\UX_Transakcii_HVId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Database.refactorlog" />

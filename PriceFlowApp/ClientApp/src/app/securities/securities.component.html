@@ -1,0 +1,30 @@
+<div class="securities-section">
+  <h2 class="text-center mt-4">Securities</h2>
+
+  <div *ngIf="securities.length > 0; else noData">
+    <table class="table table-striped table-hover mt-3">
+      <thead class="table-primary">
+        <tr>
+          <th>Code</th>
+          <th>ISIN</th>
+          <th>Type</th>
+          <th>Issuer</th>
+          <th>Total Shares</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sec of securities">
+          <td>{{ sec.code }}</td>
+          <td>{{ sec.isin }}</td>
+          <td>{{ sec.typeSecurityName }}</td>
+          <td>{{ sec.issuerName }}</td>
+          <td>{{ sec.totalNumShares | number }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noData>
+    <p class="text-center text-muted mt-3">No securities available.</p>
+  </ng-template>
+</div>
