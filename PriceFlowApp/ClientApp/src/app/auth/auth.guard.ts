@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { LoginService } from './login/login.service';
@@ -7,7 +7,7 @@ import { LoginService } from './login/login.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard  {
   constructor(private loginService: LoginService, private router: Router) { }
 
   canActivate(
@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
 @Injectable({
   providedIn: 'root'
 })
-export class AdminGuard implements CanActivate {
+export class AdminGuard  {
   constructor(private loginService: LoginService, private router: Router) { }
 
   canActivate(

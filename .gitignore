@@ -21,3 +21,6 @@ obj/
 *.ipch
 TestResults/
 publish/
+
+# Miscellaneous
+PriceFlowApp/ClientApp/.angular.cache
