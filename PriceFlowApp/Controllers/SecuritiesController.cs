@@ -38,5 +38,44 @@ namespace PriceFlowApp.Controllers
 
             return Ok(security);
         }
+
+        [HttpPost]
+        //[Authorize(Roles = "Администратор")]
+        public async Task<IActionResult> Create([FromBody] CreateSecurity security)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var createdSecurity = await _securitiesService.AddAsync(security);
+            return CreatedAtAction(nameof(GetById), new { id = createdSecurity.Id }, createdSecurity);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _securitiesService.DeleteAsync(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error deleting security.", detail = ex.Message });
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Security>> Update(int id, [FromBody] CreateSecurity updatedSecurity)
+        {
+            try
+            {
+                Security security = await _securitiesService.UpdateAsync(id, updatedSecurity);
+                return Ok(security);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error updating security.", detail = ex.Message });
+            }
+        }
     }
 }

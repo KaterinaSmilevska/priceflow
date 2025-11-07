@@ -35,6 +35,12 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<ISecuritiesRepository, SecuritiesRepository>();
 builder.Services.AddScoped<ISecuritiesService, SecuritiesService>();
+builder.Services.AddScoped<ITypeSecurityRepository, TypeSecurityRepository>();
+builder.Services.AddScoped<ITypeSecurityService,  TypeSecurityService>();
+builder.Services.AddScoped<IIssuersRepository, IssuersRepository>();
+builder.Services.AddScoped<IIssuersService, IssuersService>();
+builder.Services.AddScoped<IMarketOverviewService,  MarketOverviewService>();
+builder.Services.AddScoped<IChartService, ChartService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options =>
@@ -43,6 +49,16 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+//builder.Services.AddAuthentication("Cookies")
+//    .AddCookie("Cookies", options =>
+//    {
+//        options.LoginPath = "/login";
+//        options.AccessDeniedPath = "/access-denied";
+//    });
+
+
+//builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -60,6 +76,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseSession();
 app.UseStaticFiles();
+
+//app.UseAuthentication();
+//app.UseAuthorization();
+
 app.UseEndpoints(endpoints => endpoints.MapControllers());
 
 app.MapControllerRoute(

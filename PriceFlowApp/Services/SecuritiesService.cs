@@ -10,6 +10,36 @@ namespace PriceFlowApp.Services
 
         public SecuritiesService(ISecuritiesRepository securitiesRepository) => _securitiesRepository = securitiesRepository;
 
+        public async Task<Security> AddAsync(CreateSecurity security)
+        {
+            var entity = new HartiiOdVrednost
+            {
+                Isin = security.Isin,
+                Kod = security.Code,
+                VkupenBrojAkcii = security.TotalNumShares,
+                TipHvid = security.TypeSecurityId,
+                IzdavachId = security.IssuerId
+            };
+
+            var createdSecurity = await _securitiesRepository.AddAsync(entity);
+            var full = await _securitiesRepository.GetByIdAsync(createdSecurity.Id);
+
+            return new Security
+            {
+                Id = full.Id,
+                Isin = full.Isin,
+                Code = full.Kod,
+                TypeSecurityName = full.TipHv.Ime,
+                IssuerName = full.Izdavach.Ime,
+                TotalNumShares = full.VkupenBrojAkcii
+            };
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _securitiesRepository.DeleteAsync(id);
+        }
+
         public async Task<IEnumerable<Security>> FindAllAsync()
         {
             var foundSecurities = await _securitiesRepository.GetAllAsync();
@@ -40,6 +70,33 @@ namespace PriceFlowApp.Services
                 TypeSecurityName = security.TipHv.Ime,
                 IssuerName = security.Izdavach.Ime,
                 TotalNumShares = security.VkupenBrojAkcii
+            };
+        }
+
+        public async Task<Security> UpdateAsync(int id, CreateSecurity security)
+        {
+            HartiiOdVrednost? existingSecurity = await _securitiesRepository.GetByIdAsync(id);
+            if (existingSecurity == null)
+                throw new Exception("Security not found");
+
+            existingSecurity.Isin = security.Isin;
+            existingSecurity.Kod = security.Code;
+            existingSecurity.VkupenBrojAkcii = security.TotalNumShares;
+            existingSecurity.TipHvid = security.TypeSecurityId;
+            existingSecurity.IzdavachId = security.IssuerId;
+
+            await _securitiesRepository.UpdateAsync(existingSecurity);
+
+            var full = await _securitiesRepository.GetByIdAsync(id);
+
+            return new Security
+            {
+                Id = full.Id,
+                Isin = full.Isin,
+                Code = full.Kod,
+                TypeSecurityName = full.TipHv.Ime,
+                IssuerName = full.Izdavach.Ime,
+                TotalNumShares = full.VkupenBrojAkcii
             };
         }
     }

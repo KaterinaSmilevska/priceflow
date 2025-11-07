@@ -1,0 +1,41 @@
+<div class="modal-overlay">
+  <div class="modal-content p-4">
+    <h5>{{ securityToEdit ? 'Edit Security' : 'Add Security' }}</h5>
+
+    <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label>Code</label>
+        <input formControlName="code" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>ISIN</label>
+        <input formControlName="isin" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>Total Shares</label>
+        <input type="number" formControlName="totalNumShares" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>Type of Security</label>
+        <select formControlName="typeSecurityId" class="form-select">
+          <option *ngFor="let type of types" [value]="type.id">{{ type.name }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label>Issuer</label>
+        <select formControlName="issuerId" class="form-select">
+          <option *ngFor="let issuer of issuers" [value]="issuer.id">{{ issuer.name }}</option>
+        </select>
+      </div>
+
+      <div class="text-end">
+        <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary">{{ securityToEdit ? 'Save Changes' : 'Add' }}</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="market-cards" *ngIf="overview && !loading">
+  <div class="card market-card-cap">
+    <div class="card-icon">
+      <i class="bi bi-currency-exchange"></i>
+    </div>
+    <h5>Total Market Cap</h5>
+    <p>{{ overview.totalMarketCap | number }} MKD</p>
+  </div>
+
+  <div class="card market-card-volume">
+    <div class="card-icon">
+      <i class="bi bi-bar-chart-line"></i>
+    </div>
+    <h5>Avg Daily Volume</h5>
+    <p>{{ overview.averageDailyVolume | number }}</p>
+  </div>
+
+  <div class="card market-card-gainer">
+    <div class="card-icon">
+      <i class="bi bi-arrow-up-circle"></i>
+    </div>
+    <h5>Top Gainer</h5>
+    <p>
+      {{ overview.topGainer }}
+      <span class="badge badge-up">{{ overview.topGainerChange | number:'1.2-2' }}%</span>
+    </p>
+  </div>
+
+  <div class="card market-card-loser">
+    <div class="card-icon">
+      <i class="bi bi-arrow-down-circle"></i>
+    </div>
+    <h5>Top Loser</h5>
+    <p>
+      {{ overview.topLoser }}
+      <span class="badge badge-down">{{ overview.topLoserChange | number:'1.2-2' }}%</span>
+    </p>
+  </div>
+
+  <div class="card market-card-securities">
+    <div class="card-icon">
+      <i class="bi bi-collection"></i>
+    </div>
+    <h5>Total Securities</h5>
+    <p>{{ overview.totalSecurities }}</p>
+  </div>
+</div>
+
+<div *ngIf="loading" class="text-center">Loading market overview...</div>

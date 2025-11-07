@@ -3,4 +3,36 @@
   <p>Analyze the latest trends and make informed decisions</p>
   <button class="get-started-btn" (click)="onGetStarted()">Get Started</button>
 </div>
+
+<app-market-overview></app-market-overview>
+<app-top-performers></app-top-performers>
+
 <app-securities></app-securities>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <h3>PriceFlow</h3>
+      <p>Your trusted platform for market insights and analysis.</p>
+    </div>
+
+    <div class="footer-center">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a routerLink="/">Home</a></li>
+        <li><a routerLink="/securities">Securities</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-right">
+      <h4>Contact</h4>
+      <p>Email: <a href="mailto:support@priceflow.com">support@priceflow.com</a></p>
+      <p>Phone: +389 2 123 4567</p>
+      <p>Skopje, Macedonia</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 PriceFlow. All rights reserved.</p>
+  </div>
+</footer>

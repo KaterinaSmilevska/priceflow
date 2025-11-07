@@ -12,5 +12,11 @@ namespace DataAccess.Repositories
         Task<IEnumerable<HartiiOdVrednost>> GetAllAsync();
 
         Task<HartiiOdVrednost?> GetByIdAsync(int id);
+
+        Task<HartiiOdVrednost> AddAsync(HartiiOdVrednost security);
+
+        Task DeleteAsync(int id);
+
+        Task UpdateAsync(HartiiOdVrednost security);
     }
 }

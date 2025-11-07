@@ -14,6 +14,24 @@ namespace DataAccess.Repositories
 
         public SecuritiesRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
 
+        public async Task<HartiiOdVrednost> AddAsync(HartiiOdVrednost security)
+        {
+            _dbContext.HartiiOdVrednost.Add(security);
+            await _dbContext.SaveChangesAsync();
+            return security;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var security = await _dbContext.HartiiOdVrednost.FindAsync(id);
+            if(security != null)
+            {
+                _dbContext.HartiiOdVrednost.Remove(security);
+                await _dbContext.SaveChangesAsync();
+            }
+
+        }
+
         public async Task<IEnumerable<HartiiOdVrednost>> GetAllAsync()
         {
             return await _dbContext.HartiiOdVrednost
@@ -28,6 +46,12 @@ namespace DataAccess.Repositories
                 .Include(hv => hv.Izdavach)
                 .Include(hv => hv.TipHv)
                 .FirstOrDefaultAsync(hv => hv.Id == id);
+        }
+
+        public async Task UpdateAsync(HartiiOdVrednost security)
+        {
+            _dbContext.HartiiOdVrednost.Update(security);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

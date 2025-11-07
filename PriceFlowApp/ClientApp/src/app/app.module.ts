@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -16,6 +17,9 @@ import { AuthGuard } from './auth/auth.guard';
 import { VerifyEmailComponent } from './auth/register/verify-email.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SecuritiesComponent } from './securities/securities.component';
+import { AddSecurityComponent } from './securities/add-security/add-security.component';
+import { MarketOverviewComponent } from './market-overview/market-overview.component';
+import { TopPerformersComponent } from './market-overview/top-performers/top-performers.component';
 
 const routes: Routes = [
   {
@@ -28,7 +32,9 @@ const routes: Routes = [
   { path: 'admin/users/:id', component: EditUserComponent, canActivate: [AuthGuard]},
   { path: 'verify-email', component: VerifyEmailComponent, canActivate: [AuthGuard] },
   { path: 'forgot-password', component: ResetPasswordComponent },
-  { path: 'securities', component: SecuritiesComponent},
+  { path: 'securities', component: SecuritiesComponent },
+  { path: 'securities/add', component: AddSecurityComponent, canActivate: [AuthGuard] },
+  { path: 'marketoverview', component: MarketOverviewComponent},
 ]
 
 @NgModule({
@@ -43,12 +49,16 @@ const routes: Routes = [
     AdminComponent,
     EditUserComponent,
     SecuritiesComponent,
+    AddSecurityComponent,
+    MarketOverviewComponent,
+    TopPerformersComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(routes, {useHash: false})
+    RouterModule.forRoot(routes, { useHash: false }),
+    ReactiveFormsModule,
   ],
   exports: [RouterModule],
   providers: [],
