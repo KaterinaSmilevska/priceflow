@@ -1,5 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RegisterService, RegisterRequest, RegisterResponse, UsernameCheckResponse, PasswordValidationRequest, PasswordValidationResponse, EmailValidationRequest, EmailValidationResponse } from './register.service';
+import { RegisterService, RegisterRequest, RegisterResponse, UsernameCheckResponse, PasswordValidationResponse, EmailValidationResponse } from './register.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 interface Task {
   description: string;
@@ -9,6 +12,8 @@ interface Task {
 
 @Component({
   selector: 'app-register',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })

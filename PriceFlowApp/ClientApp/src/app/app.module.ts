@@ -6,7 +6,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { BrokerComponent } from './broker/broker.component';
@@ -19,7 +18,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { SecuritiesComponent } from './securities/securities.component';
 import { AddSecurityComponent } from './securities/add-security/add-security.component';
 import { MarketOverviewComponent } from './market-overview/market-overview.component';
-import { TopPerformersComponent } from './market-overview/top-performers/top-performers.component';
 
 const routes: Routes = [
   {
@@ -39,29 +37,16 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    RegisterComponent,
-    LoginComponent,
-    BrokerComponent,
-    ResetPasswordComponent,
-    AdminComponent,
-    EditUserComponent,
-    SecuritiesComponent,
-    AddSecurityComponent,
-    MarketOverviewComponent,
-    TopPerformersComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(routes, { useHash: false }),
     ReactiveFormsModule,
   ],
   exports: [RouterModule],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

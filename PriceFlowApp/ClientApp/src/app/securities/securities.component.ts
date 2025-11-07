@@ -1,9 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CreateSecurity, Issuer, SecuritiesService, Security, TypeSecurity } from './securities.service';
+import { Component, OnInit } from '@angular/core';
+import { SecuritiesService, Security } from './securities.service';
 import { LoginService } from '../auth/login/login.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AddSecurityComponent } from './add-security/add-security.component';
 
 @Component({
   selector: 'app-securities',
+  standalone: true,
+  imports: [CommonModule, FormsModule, AddSecurityComponent],
   templateUrl: './securities.component.html',
   styleUrls: ['./securities.component.css']
 })

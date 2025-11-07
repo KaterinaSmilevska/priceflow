@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AdminService, User } from './admin.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-user',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.css', '../../styles.css']
 })
+
 export class EditUserComponent implements OnInit {
   user: User = { id: 0, name: '', username: '', email: '', roles: [] };
   originalUsername: string | null = null;

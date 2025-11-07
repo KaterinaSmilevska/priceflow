@@ -1,9 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import { LoginService } from '../auth/login/login.service';
 import { Observable, map } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-nav-menu',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css', '../../styles.css']
 })

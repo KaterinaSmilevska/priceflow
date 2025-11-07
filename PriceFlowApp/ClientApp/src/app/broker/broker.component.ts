@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Broker, BrokerService } from './broker.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-broker',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './broker.component.html',
   styleUrls: ['./broker.component.css']
 })

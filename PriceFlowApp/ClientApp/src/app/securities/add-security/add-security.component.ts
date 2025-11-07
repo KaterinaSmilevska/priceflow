@@ -1,13 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
 import { CreateSecurity, Issuer, SecuritiesService, Security, TypeSecurity } from '../securities.service';
-import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-security',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule],
   templateUrl: './add-security.component.html',
   styleUrls: ['./add-security.component.css']
 })
+
 export class AddSecurityComponent implements OnInit {
   @Input() securityToEdit?: Security;
   @Output() close = new EventEmitter<Security | null>();

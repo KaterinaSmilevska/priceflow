@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoginService } from '../login/login.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-verify-email',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   template:
     `
     <div class="verify-container">

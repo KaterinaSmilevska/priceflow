@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MarketOverviewService, SecurityPerformance } from '../market-overview.service';
 import { forkJoin } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-top-performers',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './top-performers.component.html',
   styleUrls: ['./top-performers.component.css']
 })
+
 export class TopPerformersComponent implements OnInit {
   topGainers: SecurityPerformance[] = [];
   topLosers: SecurityPerformance[] = [];

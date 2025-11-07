@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService, User } from './admin.service';
 import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
+
 export class AdminComponent implements OnInit {
   users: User[] = [];
   errorMessage: string | null = null;
