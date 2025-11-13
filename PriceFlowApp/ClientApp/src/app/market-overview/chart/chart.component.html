@@ -1,0 +1,40 @@
+<div class="charts-container">
+
+  <div class="chart-section">
+    <div class="filters">
+      <h3>&#x1F4C8; Price Trend Filters</h3>
+
+      <label>Security:</label>
+      <select [(ngModel)]="selectedSecurityId">
+        <option *ngFor="let s of securities" [value]="s.id">{{ s.code }}</option>
+      </select>
+
+      <label>Start Date:</label>
+      <input type="date" [(ngModel)]="startDate" />
+
+      <label>End Date:</label>
+      <input type="date" [(ngModel)]="endDate" />
+
+      <button (click)="onFilterChange()">Apply Filters</button>
+    </div>
+
+    <app-price-trend [securityId]="selectedSecurityId"
+                     [startDate]="startDate"
+                     [endDate]="endDate">
+    </app-price-trend>
+  </div>
+
+  <div class="chart-section">
+    <div class="filters">
+      <h3>&#x1F3E2; Sector Distribution Filters</h3>
+
+      <label>Date:</label>
+      <input type="date" [(ngModel)]="sectorDate" />
+
+      <button (click)="onFilterChange()">Apply Filters</button>
+    </div>
+
+    <app-sector-distribution [date]="sectorDate"></app-sector-distribution>
+  </div>
+
+</div>

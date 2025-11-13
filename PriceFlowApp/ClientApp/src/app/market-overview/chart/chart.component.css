@@ -1,0 +1,82 @@
+.charts-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.chart-section {
+  flex: 1 1 45%;
+  min-width: 300px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 700px;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+  .filters h3 {
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    color: #111827;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 4px;
+  }
+
+  .filters label {
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .filters input,
+  .filters select {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+    background: #fff;
+  }
+
+  .filters button {
+    margin-top: 10px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+
+    .filters button:hover {
+      background-color: #2563eb;
+    }
+
+.chart-section app-price-trend,
+.chart-section app-sector-distribution {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.chart-section app-sector-distribution {
+  max-width: 400px;
+  margin: 0 auto;
+}

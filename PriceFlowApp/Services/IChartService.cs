@@ -7,5 +7,9 @@ namespace PriceFlowApp.Services
         Task<IEnumerable<PriceTrend>> GetPriceTrendAsync(int securityId, DateTime startDate, DateTime endDate);
 
         Task<IEnumerable<SectorDistribution>> GetSectorDistributionAsync(DateTime date);
+
+        Task<IEnumerable<Security>> GetSecurities();
+
+        DateTime? FindLatestDate(); 
     }
 }
