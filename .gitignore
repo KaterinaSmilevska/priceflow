@@ -23,4 +23,4 @@ TestResults/
 publish/
 
 # Miscellaneous
-PriceFlowApp/ClientApp/.angular.cache
+PriceFlowApp/ClientApp/.angular/cache

@@ -90,8 +90,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\app.component.html",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-13T21:16:43.678Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T21:16:43.678Z"
             },
             {
               "$type": "Document",
@@ -103,8 +102,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\chart\\sector-distribution.component.html",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-12T21:43:47.318Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T21:43:47.318Z"
             },
             {
               "$type": "Document",
@@ -116,8 +114,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\chart\\sector-distribution.component.css",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-11-13T19:34:13.256Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T19:34:13.256Z"
             },
             {
               "$type": "Document",
@@ -129,8 +126,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\chart\\chart.component.css",
               "ViewState": "AgIAAEIAAAAAAAAAAAAAAEsAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-11-13T18:35:38.313Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T18:35:38.313Z"
             },
             {
               "$type": "Document",
@@ -142,8 +138,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\chart\\chart.component.html",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-13T18:35:31.897Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T18:35:31.897Z"
             },
             {
               "$type": "Document",
@@ -168,8 +163,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\securities\\securities.component.html",
               "ViewState": "AgIAACoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-13T21:16:37.897Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T21:16:37.897Z"
             },
             {
               "$type": "Document",
@@ -181,8 +175,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\securities\\add-security\\add-security.component.html",
               "ViewState": "AgIAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-13T21:16:33.191Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T21:16:33.191Z"
             },
             {
               "$type": "Document",
@@ -194,8 +187,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\reset-password\\reset-password.component.html",
               "ViewState": "AgIAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-13T21:16:13.022Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T21:16:13.022Z"
             },
             {
               "$type": "Document",
@@ -207,8 +199,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\admin\\edit-user.component.html",
               "ViewState": "AgIAACEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-13T21:15:47.21Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T21:15:47.21Z"
             },
             {
               "$type": "Document",
@@ -220,8 +211,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\home\\home.component.html",
               "ViewState": "AgIAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-13T21:15:42.366Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T21:15:42.366Z"
             },
             {
               "$type": "Document",
@@ -233,8 +223,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\chart\\price-trend.component.css",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-11-13T20:49:26.894Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T20:49:26.894Z"
             },
             {
               "$type": "Document",
@@ -246,8 +235,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\chart\\chart.service.ts",
               "ViewState": "AgIAAB4AAAAAAAAAAAAAACcAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-11-13T19:27:36.196Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T19:27:36.196Z"
             },
             {
               "$type": "Document",
@@ -259,8 +247,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\chart\\price-trend.component.html",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-11-12T21:38:26.849Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T21:38:26.849Z"
             },
             {
               "$type": "Document",
@@ -272,8 +259,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\chart\\price-trend.component.ts",
               "ViewState": "AgIAAE8AAAAAAAAAAAAuwHQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-11-13T18:26:53.893Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T18:26:53.893Z"
             },
             {
               "$type": "Document",
@@ -285,8 +271,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\chart\\sector-distribution.component.ts",
               "ViewState": "AgIAAD4AAAAAAAAAAAAuwGMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2025-11-12T21:39:09.739Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T21:39:09.739Z"
             },
             {
               "$type": "Document",
@@ -298,8 +283,7 @@
               "RelativeToolTip": "PriceFlowApp\\Controllers\\ChartController.cs",
               "ViewState": "AgIAADAAAAAAAAAAAAAAADcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T19:20:47.559Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T19:20:47.559Z"
             }
           ]
         }
