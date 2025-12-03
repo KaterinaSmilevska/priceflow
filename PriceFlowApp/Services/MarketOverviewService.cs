@@ -24,13 +24,13 @@ namespace PriceFlowApp.Services
                 .AverageAsync(dp => dp.KolicinaIstrguvaniAkcii);
 
             var topGainer = await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate)
+                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena != 0)
                 .OrderByDescending(dp => dp.ProcentPromena)
                 .Select(dp => new { dp.Hv.Kod, dp.ProcentPromena })
                 .FirstOrDefaultAsync();
 
             var topLoser = await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate)
+                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena != 0)
                 .OrderBy(dp => dp.ProcentPromena)
                 .Select(dp => new { dp.Hv.Kod, dp.ProcentPromena })
                 .FirstOrDefaultAsync();
@@ -55,7 +55,7 @@ namespace PriceFlowApp.Services
             DateTime latestDate = await _dbContext.DnevenPromet.MaxAsync(dp => dp.Datum);
 
             return await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate)
+                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena != 0)
                 .OrderByDescending(dp => dp.ProcentPromena)
                 .Take(count)
                 .Select(dp => new SecurityPerformance
@@ -72,7 +72,7 @@ namespace PriceFlowApp.Services
             DateTime latestDate = await _dbContext.DnevenPromet.MaxAsync(dp => dp.Datum);
 
             return await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate)
+                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena != 0)
                 .OrderBy(dp => dp.ProcentPromena)
                 .Take(count)
                 .Select(dp => new SecurityPerformance

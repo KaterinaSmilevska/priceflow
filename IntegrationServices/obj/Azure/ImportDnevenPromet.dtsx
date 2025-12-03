@@ -11,8 +11,8 @@
   DTS:LocaleID="1071"
   DTS:ObjectName="ImportDnevenPromet"
   DTS:PackageType="5"
-  DTS:VersionBuild="146"
-  DTS:VersionGUID="{7C70EB45-82DF-4E1D-BC0C-DD366DA1AFAD}">
+  DTS:VersionBuild="155"
+  DTS:VersionGUID="{6400AA94-D770-4E2E-AE8F-8E4AE63822FE}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -358,6 +358,88 @@
                           refId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
                           dataType="i4"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena"
+                  componentClassID="Microsoft.DerivedColumn"
+                  contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+                  name="Derived Column ProcentPromena"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Inputs[Derived Column Input]"
+                      description="Input to the Derived Column Transformation"
+                      name="Derived Column Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Inputs[Derived Column Input].Columns[%промена]"
+                          cachedDataType="r8"
+                          cachedName="%промена"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Excel Source.Outputs[Excel Source Output].Columns[%промена]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Output]"
+                      description="Default Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      name="Derived Column Output"
+                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Output].Columns[ProcentPromena]"
+                          dataType="numeric"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Output].Columns[ProcentPromena]"
+                          name="ProcentPromena"
+                          precision="18"
+                          scale="2"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">#{Package\Foreach Loop Container\Data Flow Task\Excel Source.Outputs[Excel Source Output].Columns[%промена]} / 100.00</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">[%промена] / 100.00</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Error Output]"
+                      description="Error Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Derived Column Error Output"
+                      synchronousInputId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
                           name="ErrorColumn"
                           specialFlags="2" />
                       </outputColumns>
@@ -1035,12 +1117,6 @@ where [refTable].[Kod] = ?</property>
                       name="OLE DB Destination Input">
                       <inputColumns>
                         <inputColumn
-                          refId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[%промена]"
-                          cachedDataType="r8"
-                          cachedName="%промена"
-                          externalMetadataColumnId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProcentPromena]"
-                          lineageId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[%промена]" />
-                        <inputColumn
                           refId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Количина]"
                           cachedDataType="r8"
                           cachedName="Количина"
@@ -1098,6 +1174,14 @@ where [refTable].[Kod] = ?</property>
                           cachedName="VkupenPrometDenari"
                           externalMetadataColumnId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[VkupenPrometDenari]"
                           lineageId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[VkupenPrometDenari]" />
+                        <inputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ProcentPromena]"
+                          cachedDataType="numeric"
+                          cachedName="ProcentPromena"
+                          cachedPrecision="18"
+                          cachedScale="2"
+                          externalMetadataColumnId="Package\Foreach Loop Container\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[ProcentPromena]"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[ProcentPromena]" />
                       </inputColumns>
                       <externalMetadataColumns
                         isUsed="True">
@@ -1505,6 +1589,24 @@ where [refTable].[Kod] = ?</property>
                               name="NewSortKeyPosition">0</property>
                           </properties>
                         </inputColumn>
+                        <inputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Sort.Inputs[Sort Input].Columns[ProcentPromena]"
+                          cachedDataType="numeric"
+                          cachedName="ProcentPromena"
+                          cachedPrecision="18"
+                          cachedScale="2"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Output].Columns[ProcentPromena]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              description="Specifies the comparison options for character data."
+                              name="NewComparisonFlags">0</property>
+                            <property
+                              dataType="System.Int32"
+                              description="Specifies the sort order of the column."
+                              name="NewSortKeyPosition">0</property>
+                          </properties>
+                        </inputColumn>
                       </inputColumns>
                       <externalMetadataColumns />
                     </input>
@@ -1761,6 +1863,21 @@ where [refTable].[Kod] = ?</property>
                               name="SortColumnId">#{Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[VkupenPrometDenari]}</property>
                           </properties>
                         </outputColumn>
+                        <outputColumn
+                          refId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[ProcentPromena]"
+                          dataType="numeric"
+                          lineageId="Package\Foreach Loop Container\Data Flow Task\Sort.Outputs[Sort Output].Columns[ProcentPromena]"
+                          name="ProcentPromena"
+                          precision="18"
+                          scale="2">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="Specifies the lineage identifier of the input column that is associated with this output column."
+                              name="SortColumnId">#{Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Output].Columns[ProcentPromena]}</property>
+                          </properties>
+                        </outputColumn>
                       </outputColumns>
                       <externalMetadataColumns />
                     </output>
@@ -1774,8 +1891,13 @@ where [refTable].[Kod] = ?</property>
                   name="Data Conversion Output"
                   startId="Package\Foreach Loop Container\Data Flow Task\Data Conversion.Outputs[Data Conversion Output]" />
                 <path
-                  refId="Package\Foreach Loop Container\Data Flow Task.Paths[Excel Source Output]"
+                  refId="Package\Foreach Loop Container\Data Flow Task.Paths[Derived Column Output]"
                   endId="Package\Foreach Loop Container\Data Flow Task\Lookup by Kod.Inputs[Lookup Input]"
+                  name="Derived Column Output"
+                  startId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Outputs[Derived Column Output]" />
+                <path
+                  refId="Package\Foreach Loop Container\Data Flow Task.Paths[Excel Source Output]"
+                  endId="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena.Inputs[Derived Column Input]"
                   name="Excel Source Output"
                   startId="Package\Foreach Loop Container\Data Flow Task\Excel Source.Outputs[Excel Source Output]" />
                 <path
@@ -1964,28 +2086,6 @@ where [refTable].[Kod] = ?</property>
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Foreach Loop Container\Data Flow Task.Paths[Excel Source Output]"
-          TopLeft="308.04998709187,103.133332905438">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,36.3999994575978"
-              Start="0,0"
-              End="0,28.8999994575978">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,28.8999994575978" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
           Id="Package\Foreach Loop Container\Data Flow Task.Paths[Data Conversion Output]"
           TopLeft="129.666663843725,259.999998481274">
           <EdgeLayout.Curve>
@@ -2019,6 +2119,78 @@ where [refTable].[Kod] = ?</property>
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
+        <NodeLayout
+          Size="233.6,41.6"
+          Id="Package\Foreach Loop Container\Data Flow Task\Derived Column ProcentPromena"
+          TopLeft="497.4999728178,95.3333326703972" />
+        <EdgeLayout
+          Id="Package\Foreach Loop Container\Data Flow Task.Paths[Excel Source Output]"
+          TopLeft="374.999987160167,82.3333329054382">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="122.499985657633,33.799999764959"
+              Start="0,0"
+              End="114.999985657633,33.799999764959">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="57.2499928288163,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="57.2499928288163,0"
+                    Point2="61.2499928288163,0"
+                    Point3="61.2499928288163,4" />
+                  <mssgle:LineSegment
+                    End="61.2499928288163,29.799999764959" />
+                  <mssgle:CubicBezierSegment
+                    Point1="61.2499928288163,29.799999764959"
+                    Point2="61.2499928288163,33.799999764959"
+                    Point3="65.2499928288163,33.799999764959" />
+                  <mssgle:LineSegment
+                    End="114.999985657633,33.799999764959" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Foreach Loop Container\Data Flow Task.Paths[Derived Column Output]"
+          TopLeft="497.4999728178,121.733332670397">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-112.799985794227,38.5999996926388"
+              Start="0,0"
+              End="-105.299985794227,38.5999996926388">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-43.6266606686734,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-43.6266606686734,0"
+                    Point2="-47.6266606686734,0"
+                    Point3="-47.6266606686734,4" />
+                  <mssgle:LineSegment
+                    End="-47.6266606686734,34.5999996926388" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-47.6266606686734,34.5999996926388"
+                    Point2="-47.6266606686734,38.5999996926388"
+                    Point3="-51.6266606686734,38.5999996926388" />
+                  <mssgle:LineSegment
+                    End="-105.299985794227,38.5999996926388" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
@@ -2041,7 +2213,7 @@ where [refTable].[Kod] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:boolean">false</Value>
+          type="q2:string">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -2051,7 +2223,7 @@ where [refTable].[Kod] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:int">0</Value>
+          type="q4:string">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
