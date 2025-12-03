@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Hub_Ulogi]
+(
+	Ulogi_HK CHAR(32) NOT NULL,
+	Ime NVARCHAR(50) NOT NULL,
+	LoadDate DATETIME2 NOT NULL,
+	RecordSource NVARCHAR(50) NOT NULL,
+
+	CONSTRAINT pk_Hub_Ulogi PRIMARY KEY (Ulogi_HK),
+	CONSTRAINT un_Hub_Ulogi_Ime UNIQUE (Ime)
+)

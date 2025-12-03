@@ -1,4 +1,0 @@
-﻿CREATE NONCLUSTERED INDEX [UX_Transakcii_HVId]
-	ON [dbo].[Transakcii]
-	(HVId)
-WHERE HVId IS NOT NULL

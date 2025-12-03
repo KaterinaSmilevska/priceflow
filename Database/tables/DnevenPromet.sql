@@ -13,6 +13,6 @@
     [VkupenPrometDenari] INT NULL,
 
     CONSTRAINT pk_DnevenPromet PRIMARY KEY (Id),
-    CONSTRAINT un_DnevenPromet_Datum_HVId UNIQUE (Datum, HvId),
+    CONSTRAINT un_DnevenPromet_Datum_HVId UNIQUE (Datum, HVId),
     CONSTRAINT fk_DnevenPromet_HartiiOdVrednost FOREIGN KEY (HVId) REFERENCES HartiiOdVrednost(Id)
 )

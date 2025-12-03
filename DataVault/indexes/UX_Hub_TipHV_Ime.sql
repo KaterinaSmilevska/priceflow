@@ -1,0 +1,4 @@
+﻿CREATE UNIQUE NONCLUSTERED INDEX [UX_Hub_TipHV_Ime]
+	ON [dbo].[Hub_TipHV]
+	(Ime)
+WHERE Ime IS NOT NULL

@@ -1,0 +1,4 @@
+﻿CREATE UNIQUE NONCLUSTERED INDEX [UX_Hub_Ulogi_Ime]
+	ON [dbo].[Hub_Ulogi]
+	(Ime)
+WHERE Ime IS NOT NULL

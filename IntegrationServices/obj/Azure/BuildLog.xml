@@ -2,13 +2,73 @@
 <BuildLog xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ProjectInfo>
     <Name>IntegrationServices</Name>
-    <LastWriteTime>2025-10-03T19:08:20.1644231Z</LastWriteTime>
+    <LastWriteTime>2025-12-03T18:10:45.4335124Z</LastWriteTime>
     <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
   </ProjectInfo>
   <LastBuildInfos>
     <ProjectBuildItemInfo>
       <Name>ImportDnevenPromet.dtsx</Name>
-      <LastWriteTime>2025-10-03T21:03:49.3440229Z</LastWriteTime>
+      <LastWriteTime>2025-12-02T19:43:18.721982Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_Brokeri.dtsx</Name>
+      <LastWriteTime>2025-12-01T22:50:49.4719565Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_HartiiOdVrednost.dtsx</Name>
+      <LastWriteTime>2025-12-01T22:49:55.8951823Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>ExecuteAll.dtsx</Name>
+      <LastWriteTime>2025-12-03T18:57:24.5043358Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_Izdavachi.dtsx</Name>
+      <LastWriteTime>2025-12-01T22:49:28.4744017Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_Korisnici.dtsx</Name>
+      <LastWriteTime>2025-12-01T22:57:37.2731095Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_Korisnici_Sensitive.dtsx</Name>
+      <LastWriteTime>2025-12-02T19:02:37.3973165Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_Portfolija.dtsx</Name>
+      <LastWriteTime>2025-12-02T20:04:11.5038739Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_PortfolioPrinosi.dtsx</Name>
+      <LastWriteTime>2025-12-02T19:24:53.3878339Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_Transakcii.dtsx</Name>
+      <LastWriteTime>2025-12-02T22:45:05.591908Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_DnevenPromet.dtsx</Name>
+      <LastWriteTime>2025-12-02T22:51:53.6373318Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadSat_FinansiskiPokazateli.dtsx</Name>
+      <LastWriteTime>2025-12-02T23:19:48.2291438Z</LastWriteTime>
+      <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
+    </ProjectBuildItemInfo>
+    <ProjectBuildItemInfo>
+      <Name>LoadRef_AplikativniParametri.dtsx</Name>
+      <LastWriteTime>2025-12-03T18:53:27.3988933Z</LastWriteTime>
       <LastKnownProtectionLevel>EncryptSensitiveWithUserKey</LastKnownProtectionLevel>
     </ProjectBuildItemInfo>
   </LastBuildInfos>

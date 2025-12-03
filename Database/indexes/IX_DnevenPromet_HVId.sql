@@ -1,0 +1,4 @@
+﻿CREATE NONCLUSTERED INDEX [IX_DnevenPromet_HVId]
+	ON [dbo].[DnevenPromet]
+	(HVId)
+WHERE HVId IS NOT NULL

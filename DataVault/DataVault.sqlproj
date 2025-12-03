@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>DataVault</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{0186bcb0-e510-4c75-ba0e-0555bdc863e7}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath />
+    <RootNamespace>DataVault</RootNamespace>
+    <AssemblyName>DataVault</AssemblyName>
+    <ModelCollation>1071,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>Macedonian_FYROM_100_CI_AS</DefaultCollation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="tables" />
+    <Folder Include="tables\Hubs" />
+    <Folder Include="tables\Links" />
+    <Folder Include="tables\Satellites" />
+    <Folder Include="tables\References" />
+    <Folder Include="scripts" />
+    <Folder Include="indexes" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="tables\Hubs\Hub_Brokeri.sql" />
+    <Build Include="tables\Hubs\Hub_TipHV.sql" />
+    <Build Include="tables\Hubs\Hub_Sektori.sql" />
+    <Build Include="tables\Hubs\Hub_Ulogi.sql" />
+    <Build Include="tables\Hubs\Hub_Izdavachi.sql" />
+    <Build Include="tables\Hubs\Hub_Korisnici.sql" />
+    <Build Include="tables\Hubs\Hub_Portfolija.sql" />
+    <Build Include="tables\Hubs\Hub_HartiiOdVrednost.sql" />
+    <Build Include="tables\Satellites\Sat_HartiiOdVrednost.sql" />
+    <Build Include="tables\Satellites\Sat_Brokeri.sql" />
+    <Build Include="tables\Satellites\Sat_Izdavachi.sql" />
+    <Build Include="tables\Satellites\Sat_Portfolija.sql" />
+    <Build Include="tables\Satellites\Sat_Korisnici.sql" />
+    <Build Include="tables\Satellites\Sat_FinansiskiPokazateli.sql" />
+    <Build Include="tables\Satellites\Sat_PortfolioPrinosi.sql" />
+    <Build Include="tables\Satellites\Sat_DnevenPromet.sql" />
+    <Build Include="tables\References\Ref_AplikativniParametri.sql" />
+    <Build Include="tables\Links\Link_KorisniciUlogi.sql" />
+    <Build Include="tables\Links\Link_Transakcii.sql" />
+    <Build Include="tables\Satellites\Sat_Transakcii.sql" />
+    <Build Include="tables\Links\Link_PortfolioPrinosi.sql" />
+    <Build Include="tables\Links\Link_Portfolija_Korisnici.sql" />
+    <Build Include="tables\Links\Link_Izdavachi_Sektori.sql" />
+    <Build Include="tables\Links\Link_HartiiOdVrednost_Izdavachi.sql" />
+    <Build Include="tables\Links\Link_HartiiOdVrednost_TipHV.sql" />
+    <Build Include="tables\Satellites\Sat_Korisnici_Sensitive.sql" />
+    <Build Include="indexes\IX_Link_HartiiOdVrednost_Izdavachi_HartiiOdVrednost_HK.sql" />
+    <Build Include="indexes\IX_Link_HartiiOdVrednost_Izdavachi_Izdavachi_HK.sql" />
+    <Build Include="indexes\IX_Link_HartiiOdVrednost_TipHV_HartiiOdVrednost_HK.sql" />
+    <Build Include="indexes\IX_Link_HartiiOdVrednost_TipHV_TipHV_HK.sql" />
+    <Build Include="indexes\IX_Link_Izdavachi_Sektori_Izdavachi_HK.sql" />
+    <Build Include="indexes\IX_Link_Izdavachi_Sektori_Sektori_HK.sql" />
+    <Build Include="indexes\IX_Link_KorisniciUlogi_Korisnici_HK.sql" />
+    <Build Include="indexes\IX_Link_KorisniciUlogi_Ulogi_HK.sql" />
+    <Build Include="indexes\IX_Link_Portfolija_Korisnici_Korisnici_HK.sql" />
+    <Build Include="indexes\IX_Link_Portfolija_Korisnici_Portfolija_HK.sql" />
+    <Build Include="indexes\IX_Link_PortfolioPrinosi_HartiiOdVrednost_HK.sql" />
+    <Build Include="indexes\IX_Link_PortfolioPrinosi_Portfolija_HK.sql" />
+    <Build Include="indexes\IX_Link_Transakcii_HartiiOdVrednost_HK.sql" />
+    <Build Include="indexes\IX_Link_Transakcii_Portfolija_HK.sql" />
+    <Build Include="indexes\IX_Sat_Brokeri_Brokeri_HK.sql" />
+    <Build Include="indexes\IX_Sat_Brokeri_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_DnevenPromet.sql" />
+    <Build Include="indexes\IX_Sat_DnevenPromet_HartiiOdVrednost_HK.sql" />
+    <Build Include="indexes\IX_Sat_DnevenPromet_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_FinansiskiPokazateli.sql" />
+    <Build Include="indexes\IX_Sat_FinansiskiPokazateli_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_FinansiskiPokazateli_Izdavachi_HK.sql" />
+    <Build Include="indexes\IX_Sat_HartiiodVrednost_HartiiOdVrednost_HK.sql" />
+    <Build Include="indexes\IX_Sat_HartiiOdVrednost_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_Izdavachi_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_Izdavachi_Izdavachi_HK.sql" />
+    <Build Include="indexes\IX_Sat_Korisnici_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_Korisnici_Korisnici_HK.sql" />
+    <Build Include="indexes\IX_Sat_Korisnici_Sensitive_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_Korisnici_Sensitive_Korisnici_HK.sql" />
+    <Build Include="indexes\IX_Sat_Portfolija_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_Portfolija_Portfolija_HK.sql" />
+    <Build Include="indexes\IX_Sat_PortfolioPrinosi.sql" />
+    <Build Include="indexes\IX_Sat_PortfolioPrinosi_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_PortfolioPrinosi_PortfolioPrinosi_HK.sql" />
+    <Build Include="indexes\IX_Sat_Transakcii_HashDiff.sql" />
+    <Build Include="indexes\IX_Sat_Transakcii_Transakcii_HK.sql" />
+    <None Include="indexes\UX_Hub_Brokeri_Kompanija.sql" />
+    <None Include="indexes\UX_Hub_HartiiOdVrednost_Kod.sql" />
+    <None Include="indexes\UX_Hub_Izdavachi_Ime.sql" />
+    <None Include="indexes\UX_Hub_Korisnici_Username.sql" />
+    <None Include="indexes\UX_Hub_Portfolija_Ime.sql" />
+    <None Include="indexes\UX_Hub_Sektori_Ime.sql" />
+    <None Include="indexes\UX_Hub_TipHV_Ime.sql" />
+    <None Include="indexes\UX_Hub_Ulogi_Ime.sql" />
+    <Build Include="indexes\UX_Link_HartiiOdVrednost_Izdavachi.sql" />
+    <Build Include="indexes\UX_Link_HartiiOdVrednost_TipHV.sql" />
+    <Build Include="indexes\UX_Link_Izdavachi_Sektori.sql" />
+    <Build Include="indexes\UX_Link_KorisniciUlogi.sql" />
+    <Build Include="indexes\UX_Link_Portfolija_Korisnici.sql" />
+    <Build Include="indexes\UX_Link_PortfolioPrinosi.sql" />
+    <Build Include="indexes\UX_Link_Transakcii.sql" />
+    <None Include="scripts\LoadHub_Brokeri.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataVault.publish.xml" />
+    <None Include="scripts\LoadHub_HartiiOdVrednost.sql" />
+    <None Include="scripts\LoadHub_Izdavachi.sql" />
+    <None Include="scripts\LoadHub_Korisnici.sql" />
+    <None Include="scripts\LoadHub_Portfolija.sql" />
+    <None Include="scripts\LoadHub_Sektori.sql" />
+    <None Include="scripts\LoadHub_TipHV.sql" />
+    <None Include="scripts\LoadHub_Ulogi.sql" />
+    <None Include="scripts\LoadLink_HartiiOdVrednost_Izdavachi.sql" />
+    <None Include="scripts\LoadLink_HartiiOdVrednost_TipHV.sql" />
+    <None Include="scripts\LoadLink_Izdavachi_Sektori.sql" />
+    <None Include="scripts\LoadLink_KorisniciUlogi.sql" />
+    <None Include="scripts\LoadLink_Portfolija_Korisnici.sql" />
+    <None Include="scripts\LoadLink_PortfolioPrinosi.sql" />
+    <None Include="scripts\LoadLink_Transakcii.sql" />
+    <None Include="scripts\LoadSat_Brokeri.sql" />
+    <None Include="scripts\LoadSat_HartiiOdVrednost.sql" />
+    <None Include="scripts\LoadRef_AplikativniParametri.sql" />
+    <None Include="scripts\LoadSat_Izdavachi.sql" />
+    <None Include="scripts\LoadSat_Korisnici.sql" />
+    <None Include="scripts\LoadSat_Korisnici_Sensitive.sql" />
+    <None Include="scripts\LoadSat_Portfolija.sql" />
+    <None Include="scripts\LoadSat_PortfolioPrinosi.sql" />
+    <None Include="scripts\LoadSat_Transakcii.sql" />
+    <None Include="scripts\LoadSat_DnevenPromet.sql" />
+    <None Include="scripts\LoadSat_FinansiskiPokazateli.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="scripts\RunAllScripts.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="PriceFlowDb">
+      <DefaultValue>Database</DefaultValue>
+      <Value>$(SqlCmdVar__4)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Database\Database.sqlproj">
+      <Name>Database</Name>
+      <Project>{4cba52d0-2920-446d-ac57-a71613a5d696}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>PriceFlowDb</DatabaseSqlCmdVariable>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

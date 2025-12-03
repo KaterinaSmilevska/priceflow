@@ -11,8 +11,8 @@
   DTS:LocaleID="1071"
   DTS:ObjectName="ImportDnevenPromet"
   DTS:PackageType="5"
-  DTS:VersionBuild="137"
-  DTS:VersionGUID="{93A4C757-1238-4836-8DD0-9C5D4D8B03D0}">
+  DTS:VersionBuild="146"
+  DTS:VersionGUID="{7C70EB45-82DF-4E1D-BC0C-DD366DA1AFAD}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -26,18 +26,6 @@
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
           DTS:ConnectionString="Data Source=DESKTOP-E4P9EFJ\SQL2022DEV;Initial Catalog=PriceFlowDb;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-ImportDnevenPromet-{CD0841EE-F15D-4697-9C9D-98F4A1FA79E6}DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb;Auto Translate=False;" />
-      </DTS:ObjectData>
-    </DTS:ConnectionManager>
-    <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
-      DTS:CreationName="OLEDB"
-      DTS:DTSID="{BAAFC0DD-6A35-413F-A4B7-D187600A81DE}"
-      DTS:ObjectName="DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb">
-      <DTS:ObjectData>
-        <DTS:ConnectionManager
-          DTS:ConnectRetryCount="1"
-          DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=DESKTOP-E4P9EFJ\SQL2022DEV;Initial Catalog=PriceFlowDb;Provider=SQLOLEDB.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-ImportDnevenPromet-{BAAFC0DD-6A35-413F-A4B7-D187600A81DE}DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
@@ -728,8 +716,8 @@ where [refTable].[HVId] = ? and [refTable].[Datum] = ?</property>
                   <connections>
                     <connection
                       refId="Package\Foreach Loop Container\Data Flow Task\Lookup (Datum, HVId).Connections[OleDbConnection]"
-                      connectionManagerID="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
-                      connectionManagerRefId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQLEXPRESS.PriceFlowDb]"
+                      connectionManagerID="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb]"
+                      connectionManagerRefId="Package.ConnectionManagers[DESKTOP-E4P9EFJ\SQL2022DEV.PriceFlowDb]"
                       description="Connection manager used to access lookup data."
                       name="OleDbConnection" />
                   </connections>
@@ -2053,7 +2041,7 @@ where [refTable].[Kod] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -2063,7 +2051,7 @@ where [refTable].[Kod] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -2076,7 +2064,7 @@ where [refTable].[Kod] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:boolean">false</Value>
+          type="q2:string">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -2086,7 +2074,7 @@ where [refTable].[Kod] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:int">0</Value>
+          type="q4:string">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
