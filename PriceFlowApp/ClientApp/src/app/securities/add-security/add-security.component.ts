@@ -20,6 +20,9 @@ export class AddSecurityComponent implements OnInit {
   types: TypeSecurity[] = [];
   issuers: Issuer[] = [];
 
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
+
   constructor(private fb: FormBuilder, private securitiesService: SecuritiesService, private router: Router) { }
 
   ngOnInit(): void {
@@ -58,19 +61,36 @@ loadIssuers(): void {
 }
 
   onSubmit() {
+    this.errorMessage = null;
+    this.successMessage = null;
+
     if (this.addEditForm.invalid) return;
 
     const security: CreateSecurity = this.addEditForm.value;
 
     if (this.securityToEdit) {
-      this.securitiesService.updateSecurity(this.securityToEdit.id, security).subscribe(
-        updated => {
-          this.close.emit(updated);
-        });
-      ;
+      this.securitiesService.updateSecurity(this.securityToEdit.id, security).subscribe({
+        next: (updated) => {
+          this.successMessage = 'Security updated successfully!';
+          setTimeout(() => this.close.emit(updated), 1000);
+        },
+        error: (err) => {
+          console.error('Failed to update security:', err);
+          this.errorMessage = 'Failed to update security.';
+          setTimeout(() => this.close.emit(err), 1000);
+        }
+       });
     } else {
-      this.securitiesService.addSecurity(security).subscribe(newSecurity => {
-        this.close.emit(newSecurity);
+      this.securitiesService.addSecurity(security).subscribe({
+        next: (newSecurity) => {
+          this.successMessage = 'Security added successfully!';
+          setTimeout(() => this.close.emit(newSecurity), 1000);
+        },
+        error: (err) => {
+          console.error('Failed to update security:', err);
+          this.errorMessage = 'Failed to update security.';
+          setTimeout(() => this.close.emit(err), 1000);
+        }
       });
     }
   }

@@ -22,8 +22,8 @@
           <td class="py-2 px-4 border-b">{{ user.roles.join(', ') }}</td>
           <td class="py-2 px-4 border-b">
             <button (click)="editUser(user.id)"
-                    class="bg-blue-500 text-white px-3 py-1 rounded mr-2">
-              Edit
+                class="btn btn-warning btn-sm me-1">
+                Edit
             </button>
 
             <button *ngIf="currentUserId !== null && user.id !== currentUserId"
@@ -40,6 +40,11 @@
     <a [routerLink]="['/']" class="text-blue-600 hover:text-blue-800 hover:underline">Back to Home</a>
   </p>
 </div>
+
+<app-edit-user *ngIf="showEditModal"
+               [userToEdit]="userToEdit!"
+               (close)="onEditModalClose($event)">
+</app-edit-user>
 
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">

@@ -3,11 +3,12 @@ import { AdminService, User } from './admin.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { EditUserComponent } from './edit-user.component';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, EditUserComponent],
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
@@ -17,7 +18,9 @@ export class AdminComponent implements OnInit {
   errorMessage: string | null = null;
   showDeleteModal = false;
   userToDelete: User | null = null;
-  currentUserId: number| null = null;
+  currentUserId: number | null = null;
+  showEditModal = false;
+  userToEdit: User | null = null;
 
   constructor(private adminService: AdminService, private router: Router) { }
 
@@ -52,7 +55,24 @@ export class AdminComponent implements OnInit {
   }
 
   editUser(userId: number): void {
-    this.router.navigate([`/admin/users/${userId}`]);
+    const user = this.users.find(u => u.id === userId);
+    if (user)
+      this.openEditModal(user);
+  }
+
+  onEditModalClose(updated: User | null) {
+    this.showEditModal = false;
+
+    if (updated) {
+      const index = this.users.findIndex(u => u.id === updated.id);
+      if (index > -1)
+        this.users[index] = updated;
+    }
+  }
+
+  openEditModal(user: User): void {
+    this.userToEdit = user;
+    this.showEditModal = true;
   }
 
   openDeleteModal(user: User): void {
