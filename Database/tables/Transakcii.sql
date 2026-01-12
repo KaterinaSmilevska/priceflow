@@ -11,7 +11,8 @@
     [CDHVProvizija] DECIMAL(18, 2) NOT NULL, 
     [TipTransakcija] NVARCHAR(20) NOT NULL, 
     [Realna] NVARCHAR(2) NOT NULL,
-    [HVId] INT NOT NULL, 
+    [HVId] INT NOT NULL,
+    [DateModified] DATETIME NOT NULL CONSTRAINT df_Transakcii_DateModified DEFAULT (SYSUTCDATETIME()),
 
     CONSTRAINT pk_Transakcii PRIMARY KEY (Id),
     CONSTRAINT fk_Transakcii_Portfolija FOREIGN KEY (PortfolioId) REFERENCES Portfolija(Id),

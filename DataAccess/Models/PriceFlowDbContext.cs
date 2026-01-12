@@ -79,7 +79,7 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_DnevenPromet");
 
-            entity.HasIndex(e => e.Hvid, "UX_DnevenPromet_HVId").HasFilter("([HVId] IS NOT NULL)");
+            entity.HasIndex(e => e.Hvid, "IX_DnevenPromet_HVId").HasFilter("([HVId] IS NOT NULL)");
 
             entity.HasIndex(e => new { e.Datum, e.Hvid }, "un_DnevenPromet_Datum_HVId").IsUnique();
 
@@ -102,7 +102,7 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_FinansiskiPokazateli");
 
-            entity.HasIndex(e => e.IzdavachId, "UX_FinansiskiPokazateli_IzdavachId").HasFilter("([IzdavachId] IS NOT NULL)");
+            entity.HasIndex(e => e.IzdavachId, "IX_FinansiskiPokazateli_IzdavachId").HasFilter("([IzdavachId] IS NOT NULL)");
 
             entity.Property(e => e.DividendaPoAkcija).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.DividendenPrinos).HasColumnType("decimal(18, 2)");
@@ -122,9 +122,13 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_HartiiOdVrednost");
 
-            entity.HasIndex(e => e.IzdavachId, "UX_HartiiOdVrednost_IzdavachId").HasFilter("([IzdavachId] IS NOT NULL)");
+            entity.HasIndex(e => e.IzdavachId, "IX_HartiiOdVrednost_IzdavachId").HasFilter("([IzdavachId] IS NOT NULL)");
 
-            entity.HasIndex(e => e.TipHvid, "UX_HartiiOdVrednost_TipHVId").HasFilter("([TipHVId] IS NOT NULL)");
+            entity.HasIndex(e => e.TipHvid, "IX_HartiiOdVrednost_TipHVId").HasFilter("([TipHVId] IS NOT NULL)");
+
+            entity.HasIndex(e => e.Kod, "UX_HartiiOdVrednost_Kod")
+                .IsUnique()
+                .HasFilter("([Kod] IS NOT NULL)");
 
             entity.HasIndex(e => e.Kod, "un_HartiiOdVrednost_Kod").IsUnique();
 
@@ -149,11 +153,11 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_Izdavachi");
 
+            entity.HasIndex(e => e.SektorId, "IX_Izdavachi_SektorId").HasFilter("([SektorId] IS NOT NULL)");
+
             entity.HasIndex(e => e.Ime, "UX_Izdavachi_Ime")
                 .IsUnique()
                 .HasFilter("([Ime] IS NOT NULL)");
-
-            entity.HasIndex(e => e.SektorId, "UX_Izdavachi_SektorId").HasFilter("([SektorId] IS NOT NULL)");
 
             entity.HasIndex(e => e.Ime, "un_Izdavachi_Ime").IsUnique();
 
@@ -171,15 +175,11 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_Korisnici");
 
-            entity.HasIndex(e => e.EmailVerificationToken, "UX_EmailVerificationToken")
+            entity.HasIndex(e => e.Ime, "IX_Korisnici_Ime").HasFilter("([Ime] IS NOT NULL)");
+
+            entity.HasIndex(e => e.EmailVerificationToken, "UX_Korisnici_EmailVerificationToken")
                 .IsUnique()
                 .HasFilter("([EmailVerificationToken] IS NOT NULL)");
-
-            entity.HasIndex(e => e.Email, "UX_Korisnici_Email").HasFilter("([Email] IS NOT NULL)");
-
-            entity.HasIndex(e => e.Ime, "UX_Korisnici_Ime")
-                .IsUnique()
-                .HasFilter("([Ime] IS NOT NULL)");
 
             entity.HasIndex(e => e.ResetPasswordToken, "UX_Korisnici_ResetPasswordToken")
                 .IsUnique()
@@ -202,9 +202,9 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_KorisniciUlogi");
 
-            entity.HasIndex(e => e.KorisnikId, "UX_KorisniciUlogi_KorisnikId").HasFilter("([KorisnikId] IS NOT NULL)");
+            entity.HasIndex(e => e.KorisnikId, "IX_KorisniciUlogi_KorisnikId").HasFilter("([KorisnikId] IS NOT NULL)");
 
-            entity.HasIndex(e => e.UlogaId, "UX_KorisniciUlogi_UlogaId").HasFilter("([UlogaId] IS NOT NULL)");
+            entity.HasIndex(e => e.UlogaId, "IX_KorisniciUlogi_UlogaId").HasFilter("([UlogaId] IS NOT NULL)");
 
             entity.HasOne(d => d.Korisnik).WithMany(p => p.KorisniciUlogi)
                 .HasForeignKey(d => d.KorisnikId)
@@ -221,11 +221,11 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_Portfolija");
 
+            entity.HasIndex(e => e.KorisnikId, "IX_Portfolija_KorisnikId").HasFilter("([KorisnikId] IS NOT NULL)");
+
             entity.HasIndex(e => e.Ime, "UX_Portfolija_Ime")
                 .IsUnique()
                 .HasFilter("([Ime] IS NOT NULL)");
-
-            entity.HasIndex(e => e.KorisnikId, "UX_Portfolija_KorisnikId").HasFilter("([KorisnikId] IS NOT NULL)");
 
             entity.HasIndex(e => new { e.KorisnikId, e.Ime }, "un_Portfolija_KorisnikId_Ime").IsUnique();
 
@@ -242,9 +242,9 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_PortfolioPrinosi");
 
-            entity.HasIndex(e => e.Hvid, "UX_PortfolioPrinosi_HVId").HasFilter("([HVId] IS NOT NULL)");
+            entity.HasIndex(e => e.Hvid, "IX_PortfolioPrinosi_HVId").HasFilter("([HVId] IS NOT NULL)");
 
-            entity.HasIndex(e => e.PortfolioId, "UX_PortfolioPrinosi_PortfolioId").HasFilter("([PortfolioId] IS NOT NULL)");
+            entity.HasIndex(e => e.PortfolioId, "IX_PortfolioPrinosi_PortfolioId").HasFilter("([PortfolioId] IS NOT NULL)");
 
             entity.Property(e => e.Danok).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Hvid).HasColumnName("HVId");
@@ -293,9 +293,9 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_Transakcii");
 
-            entity.HasIndex(e => e.Hvid, "UX_Transakcii_HVId").HasFilter("([HVId] IS NOT NULL)");
+            entity.HasIndex(e => e.Hvid, "IX_Transakcii_HVId").HasFilter("([HVId] IS NOT NULL)");
 
-            entity.HasIndex(e => e.PortfolioId, "UX_Transakcii_PortfolioId").HasFilter("([PortfolioId] IS NOT NULL)");
+            entity.HasIndex(e => e.PortfolioId, "IX_Transakcii_PortfolioId").HasFilter("([PortfolioId] IS NOT NULL)");
 
             entity.Property(e => e.BerzanskaProvizija).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.BrokerskaProvizija).HasColumnType("decimal(18, 2)");
@@ -325,6 +325,8 @@ public partial class PriceFlowDbContext : DbContext
             entity.HasIndex(e => e.Ime, "UX_Ulogi_Ime")
                 .IsUnique()
                 .HasFilter("([Ime] IS NOT NULL)");
+
+            entity.HasIndex(e => e.Ime, "un_Ulogi_Ime").IsUnique();
 
             entity.Property(e => e.Ime).HasMaxLength(50);
         });

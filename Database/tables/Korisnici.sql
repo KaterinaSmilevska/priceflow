@@ -9,6 +9,7 @@
     [EmailVerificationToken] UNIQUEIDENTIFIER NULL,
     [ResetPasswordToken] UNIQUEIDENTIFIER NULL,
     [ResetPasswordTokenExpiry] DATETIME NULL,
+    [DateModified] DATETIME NOT NULL CONSTRAINT df_Korisnici_DateModified DEFAULT (SYSUTCDATETIME()),
 
     CONSTRAINT pk_Korisnici PRIMARY KEY (Id),
     CONSTRAINT un_Korisnici_Username UNIQUE (Username)

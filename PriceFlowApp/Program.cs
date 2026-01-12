@@ -41,6 +41,8 @@ builder.Services.AddScoped<IIssuersRepository, IssuersRepository>();
 builder.Services.AddScoped<IIssuersService, IssuersService>();
 builder.Services.AddScoped<IMarketOverviewService,  MarketOverviewService>();
 builder.Services.AddScoped<IChartService, ChartService>();
+builder.Services.AddScoped<IPortfoliosRepository, PortfoliosRepository>();
+builder.Services.AddScoped<IPortfoliosService, PortfoliosService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options =>

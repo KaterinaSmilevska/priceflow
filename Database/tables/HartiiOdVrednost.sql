@@ -6,6 +6,7 @@
     [VkupenBrojAkcii] INT NOT NULL,
     [TipHVId] INT NOT NULL,
     [IzdavachId] INT NOT NULL,
+    [DateModified] DATETIME NOT NULL CONSTRAINT df_HartiiOdVrednost_DateModified DEFAULT (SYSUTCDATETIME()),
 
     CONSTRAINT pk_HartiiOdVrednost PRIMARY KEY (Id),
     CONSTRAINT un_HartiiOdVrednost_Kod UNIQUE (Kod),
