@@ -8,5 +8,5 @@
 
     CONSTRAINT pk_Portfolija PRIMARY KEY (Id),
     CONSTRAINT un_Portfolija_KorisnikId_Ime UNIQUE (KorisnikId, Ime),
-    CONSTRAINT fk_Portfolija_Korisnici FOREIGN KEY (KorisnikId) REFERENCES Korisnici(Id)
+    CONSTRAINT fk_Portfolija_Korisnici FOREIGN KEY (KorisnikId) REFERENCES Korisnici(Id) ON DELETE CASCADE
 )

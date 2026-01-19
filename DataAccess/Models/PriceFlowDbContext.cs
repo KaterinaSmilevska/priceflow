@@ -54,10 +54,15 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_AplikativniParametri");
 
+            entity.HasIndex(e => e.DateModified, "IX_AplikativniParametri_DateModified");
+
             entity.Property(e => e.BerzanskaProvizija).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Cdhvprovizija)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("CDHVProvizija");
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.PersonalenDanok).HasColumnType("decimal(18, 2)");
         });
 
@@ -65,25 +70,39 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_Brokeri");
 
+            entity.HasIndex(e => e.DateModified, "IX_Brokeri_DateModified");
+
             entity.HasIndex(e => e.Kompanija, "UX_Brokeri_Kompanija")
                 .IsUnique()
                 .HasFilter("([Kompanija] IS NOT NULL)");
 
             entity.HasIndex(e => e.Kompanija, "un_Brokeri_Kompanija").IsUnique();
 
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Kompanija).HasMaxLength(100);
             entity.Property(e => e.ProcentProvizija).HasColumnType("decimal(18, 3)");
         });
 
         modelBuilder.Entity<DnevenPromet>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("pk_DnevenPromet");
+            entity.HasKey(e => e.Id)
+                .HasName("pk_DnevenPromet")
+                .IsClustered(false);
+
+            entity.HasIndex(e => e.DateModified, "IX_DnevenPromet_DateModified");
 
             entity.HasIndex(e => e.Hvid, "IX_DnevenPromet_HVId").HasFilter("([HVId] IS NOT NULL)");
 
-            entity.HasIndex(e => new { e.Datum, e.Hvid }, "un_DnevenPromet_Datum_HVId").IsUnique();
+            entity.HasIndex(e => new { e.Datum, e.Hvid }, "un_DnevenPromet_Datum_HVId")
+                .IsUnique()
+                .IsClustered();
 
             entity.Property(e => e.CenaPoslednaTransakcija).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Datum).HasColumnType("datetime");
             entity.Property(e => e.Hvid).HasColumnName("HVId");
             entity.Property(e => e.MaxCena).HasColumnType("decimal(18, 2)");
@@ -94,7 +113,6 @@ public partial class PriceFlowDbContext : DbContext
 
             entity.HasOne(d => d.Hv).WithMany(p => p.DnevenPromet)
                 .HasForeignKey(d => d.Hvid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_DnevenPromet_HartiiOdVrednost");
         });
 
@@ -102,8 +120,13 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_FinansiskiPokazateli");
 
-            entity.HasIndex(e => e.IzdavachId, "IX_FinansiskiPokazateli_IzdavachId").HasFilter("([IzdavachId] IS NOT NULL)");
+            entity.HasIndex(e => e.DateModified, "IX_FinansiskiPokazateli_DateModified");
 
+            entity.HasIndex(e => new { e.Godina, e.IzdavachId }, "IX_FinansiskiPokazateli_IzdavachId").HasFilter("([IzdavachId] IS NOT NULL)");
+
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.DividendaPoAkcija).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.DividendenPrinos).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.KnigovodstvenaVrednostPoAkcija).HasColumnType("decimal(18, 2)");
@@ -114,13 +137,14 @@ public partial class PriceFlowDbContext : DbContext
 
             entity.HasOne(d => d.Izdavach).WithMany(p => p.FinansiskiPokazateli)
                 .HasForeignKey(d => d.IzdavachId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_FinansiskiPokazateli_Izdavachi");
         });
 
         modelBuilder.Entity<HartiiOdVrednost>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk_HartiiOdVrednost");
+
+            entity.HasIndex(e => e.DateModified, "IX_HartiiOdVrednost_DateModified");
 
             entity.HasIndex(e => e.IzdavachId, "IX_HartiiOdVrednost_IzdavachId").HasFilter("([IzdavachId] IS NOT NULL)");
 
@@ -132,6 +156,9 @@ public partial class PriceFlowDbContext : DbContext
 
             entity.HasIndex(e => e.Kod, "un_HartiiOdVrednost_Kod").IsUnique();
 
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Isin)
                 .HasMaxLength(12)
                 .HasColumnName("ISIN");
@@ -140,18 +167,18 @@ public partial class PriceFlowDbContext : DbContext
 
             entity.HasOne(d => d.Izdavach).WithMany(p => p.HartiiOdVrednost)
                 .HasForeignKey(d => d.IzdavachId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_HartiiOdVrednost_Izdavachi");
 
             entity.HasOne(d => d.TipHv).WithMany(p => p.HartiiOdVrednost)
                 .HasForeignKey(d => d.TipHvid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_HartiiOdVrednost_TipHV");
         });
 
         modelBuilder.Entity<Izdavachi>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk_Izdavachi");
+
+            entity.HasIndex(e => e.DateModified, "IX_Izdavachi_DateModified");
 
             entity.HasIndex(e => e.SektorId, "IX_Izdavachi_SektorId").HasFilter("([SektorId] IS NOT NULL)");
 
@@ -161,19 +188,23 @@ public partial class PriceFlowDbContext : DbContext
 
             entity.HasIndex(e => e.Ime, "un_Izdavachi_Ime").IsUnique();
 
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Drzava).HasMaxLength(100);
             entity.Property(e => e.Grad).HasMaxLength(100);
             entity.Property(e => e.Ime).HasMaxLength(100);
 
             entity.HasOne(d => d.Sektor).WithMany(p => p.Izdavachi)
                 .HasForeignKey(d => d.SektorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Izdavachi_Sektori");
         });
 
         modelBuilder.Entity<Korisnici>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk_Korisnici");
+
+            entity.HasIndex(e => e.DateModified, "IX_Korisnici_DateModified");
 
             entity.HasIndex(e => e.Ime, "IX_Korisnici_Ime").HasFilter("([Ime] IS NOT NULL)");
 
@@ -191,6 +222,9 @@ public partial class PriceFlowDbContext : DbContext
 
             entity.HasIndex(e => e.Username, "un_Korisnici_Username").IsUnique();
 
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.Ime).HasMaxLength(100);
             entity.Property(e => e.PasswordHash).HasMaxLength(48);
@@ -202,24 +236,30 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_KorisniciUlogi");
 
+            entity.HasIndex(e => e.DateModified, "IX_KorisniciUlogi_DateModified");
+
             entity.HasIndex(e => e.KorisnikId, "IX_KorisniciUlogi_KorisnikId").HasFilter("([KorisnikId] IS NOT NULL)");
 
             entity.HasIndex(e => e.UlogaId, "IX_KorisniciUlogi_UlogaId").HasFilter("([UlogaId] IS NOT NULL)");
 
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
+
             entity.HasOne(d => d.Korisnik).WithMany(p => p.KorisniciUlogi)
                 .HasForeignKey(d => d.KorisnikId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_KorisniciUlogi_Korisnici");
 
             entity.HasOne(d => d.Uloga).WithMany(p => p.KorisniciUlogi)
                 .HasForeignKey(d => d.UlogaId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_KorisniciUlogi_Ulogi");
         });
 
         modelBuilder.Entity<Portfolija>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk_Portfolija");
+
+            entity.HasIndex(e => e.DateModified, "IX_Portfolija_DateModified");
 
             entity.HasIndex(e => e.KorisnikId, "IX_Portfolija_KorisnikId").HasFilter("([KorisnikId] IS NOT NULL)");
 
@@ -229,12 +269,14 @@ public partial class PriceFlowDbContext : DbContext
 
             entity.HasIndex(e => new { e.KorisnikId, e.Ime }, "un_Portfolija_KorisnikId_Ime").IsUnique();
 
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Ime).HasMaxLength(50);
             entity.Property(e => e.Opis).HasMaxLength(100);
 
             entity.HasOne(d => d.Korisnik).WithMany(p => p.Portfolija)
                 .HasForeignKey(d => d.KorisnikId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Portfolija_Korisnici");
         });
 
@@ -242,22 +284,25 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_PortfolioPrinosi");
 
+            entity.HasIndex(e => e.DateModified, "IX_PortfolioPrinosi_DateModified");
+
             entity.HasIndex(e => e.Hvid, "IX_PortfolioPrinosi_HVId").HasFilter("([HVId] IS NOT NULL)");
 
             entity.HasIndex(e => e.PortfolioId, "IX_PortfolioPrinosi_PortfolioId").HasFilter("([PortfolioId] IS NOT NULL)");
 
             entity.Property(e => e.Danok).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Hvid).HasColumnName("HVId");
             entity.Property(e => e.NetoIznos).HasColumnType("decimal(18, 0)");
 
             entity.HasOne(d => d.Hv).WithMany(p => p.PortfolioPrinosi)
                 .HasForeignKey(d => d.Hvid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_PortfolioPrinosi_HartiiOdVrednost");
 
             entity.HasOne(d => d.Portfolio).WithMany(p => p.PortfolioPrinosi)
                 .HasForeignKey(d => d.PortfolioId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_PortfolioPrinosi_Portfolija");
         });
 
@@ -265,12 +310,17 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_Sektori");
 
+            entity.HasIndex(e => e.DateModified, "IX_Sektori_DateModified");
+
             entity.HasIndex(e => e.Ime, "UX_Sektori_Ime")
                 .IsUnique()
                 .HasFilter("([Ime] IS NOT NULL)");
 
             entity.HasIndex(e => e.Ime, "un_Sektori_Ime").IsUnique();
 
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Ime).HasMaxLength(100);
         });
 
@@ -280,18 +330,25 @@ public partial class PriceFlowDbContext : DbContext
 
             entity.ToTable("TipHV");
 
+            entity.HasIndex(e => e.DateModified, "IX_TipHV_DateModified");
+
             entity.HasIndex(e => e.Ime, "UX_TipHV_Ime")
                 .IsUnique()
                 .HasFilter("([Ime] IS NOT NULL)");
 
             entity.HasIndex(e => e.Ime, "un_TipHV_Ime").IsUnique();
 
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Ime).HasMaxLength(10);
         });
 
         modelBuilder.Entity<Transakcii>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk_Transakcii");
+
+            entity.HasIndex(e => e.DateModified, "IX_Transakcii_DateModified");
 
             entity.HasIndex(e => e.Hvid, "IX_Transakcii_HVId").HasFilter("([HVId] IS NOT NULL)");
 
@@ -302,19 +359,19 @@ public partial class PriceFlowDbContext : DbContext
             entity.Property(e => e.Cdhvprovizija)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("CDHVProvizija");
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Hvid).HasColumnName("HVId");
             entity.Property(e => e.Iznos).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.Realna).HasMaxLength(2);
             entity.Property(e => e.TipTransakcija).HasMaxLength(20);
 
             entity.HasOne(d => d.Hv).WithMany(p => p.Transakcii)
                 .HasForeignKey(d => d.Hvid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Transakcii_HartiiOdVrednost");
 
             entity.HasOne(d => d.Portfolio).WithMany(p => p.Transakcii)
                 .HasForeignKey(d => d.PortfolioId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Transakcii_Portfolija");
         });
 
@@ -322,12 +379,17 @@ public partial class PriceFlowDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("pk_Ulogi");
 
+            entity.HasIndex(e => e.DateModified, "IX_Ulogi_DateModified");
+
             entity.HasIndex(e => e.Ime, "UX_Ulogi_Ime")
                 .IsUnique()
                 .HasFilter("([Ime] IS NOT NULL)");
 
             entity.HasIndex(e => e.Ime, "un_Ulogi_Ime").IsUnique();
 
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Ime).HasMaxLength(50);
         });
 

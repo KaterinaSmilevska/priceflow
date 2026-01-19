@@ -13,57 +13,26 @@ namespace PriceFlowApp.Services
 
         public async Task DeletePortfolio(int id, int userId)
         {
-            await _portfolijaRepository.DeleteAsync(id, userId);
+            var portfolio = await _portfolijaRepository.GetByIdAsync(id);
+            if (portfolio == null || portfolio.KorisnikId != userId)
+                throw new Exception("Portfolio not found");
+
+            await _portfolijaRepository.DeleteAsync(portfolio);
         }
 
-        public async Task<PortfolioDetails?> FindPortfolioAsync(int id, int userId)
-        {
-            Portfolija? portfolio = await _portfolijaRepository.GetByIdAsync(id, userId);
-            if (portfolio == null)
-                return null;
-
-            return new PortfolioDetails
-            {
-                Id = portfolio.Id,
-                Name = portfolio.Ime,
-                Description = portfolio.Opis,
-                Transactions = portfolio.Transakcii.Select(t => new Transaction
-                {
-                    Id = t.Id,
-                    HVCode = t.Hv.Kod,
-                    SharesQuantity = t.KolicinaAkcii,
-                    SharesUnitPrice = t.EdinecnaCenaAkcija,
-                    Amount = t.Iznos,
-                    TypeTransaction = t.TipTransakcija,
-                    Date = t.Datum
-
-                }).ToList(),
-
-                Returns = portfolio.PortfolioPrinosi.Select(pp => new PortfolioReturn
-                {
-                    Date = pp.Datum,
-                    NetAmount = pp.NetoIznos,
-                    Tax = pp.Danok,
-                    HVCode = pp.Hv.Kod,
-                }).ToList()
-            };
-        }
-
-        public async Task<IEnumerable<PortfolioList>> FindUserPortfoliosAsync(int userId)
+        public async Task<IEnumerable<Portfolio>> FindUserPortfoliosAsync(int userId)
         {
             IEnumerable<Portfolija?> items = await _portfolijaRepository.GetByUserAsync(userId);
 
-            return items.Select(p => new PortfolioList
+            return items.Select(p => new Portfolio
             {
                 Id = p.Id,
                 Name = p.Ime,
-                Description = p.Opis,
-                TotalTransactions = p.Transakcii.Count,
-                TotalValue = p.Transakcii.Sum(t => t.Iznos)
-            });
+                Description = p.Opis
+            }).ToList();
         }
 
-        public async Task<PortfolioList?> CreatePortfolio(int userId, CreatePortfolio portfolio)
+        public async Task<Portfolio> CreatePortfolio(int userId, CreatePortfolio portfolio)
         {
             Portfolija entity = new Portfolija
             {
@@ -74,36 +43,31 @@ namespace PriceFlowApp.Services
 
             entity = await _portfolijaRepository.CreateAsync(entity);
 
-            return new PortfolioList
+            return new Portfolio
             {
                 Id = entity.Id,
                 Name = entity.Ime,
-                Description = entity.Opis,
-                TotalTransactions = 0,
-                TotalValue = 0
+                Description = entity.Opis
             };
         }
 
-        public async Task<PortfolioList?> UpdatePortfolio(int id, int userId, UpdatePortfolio portfolio)
+        public async Task<Portfolio> UpdatePortfolio(int id, int userId, UpdatePortfolio portfolio)
         {
-            var updated = await _portfolijaRepository.UpdateAsync(new Portfolija
-            {
-                Id = id,
-                KorisnikId = userId,
-                Ime = portfolio.Name,
-                Opis = portfolio.Description
-            });
+            var foundPortfolio = await _portfolijaRepository.GetByIdAsync(id);
 
-            if (updated == null)
-                return null;
+            if (foundPortfolio == null || foundPortfolio.KorisnikId != userId)
+                throw new Exception("Portfolio not found");
 
-            return new PortfolioList
+            foundPortfolio.Ime = portfolio.Name;
+            foundPortfolio.Opis = portfolio.Description;
+
+            var updated = await _portfolijaRepository.UpdateAsync(foundPortfolio);
+
+            return new Portfolio
             {
                 Id = updated.Id,
                 Name = updated.Ime,
-                Description = updated.Opis,
-                TotalTransactions = updated.Transakcii.Count,
-                TotalValue = updated.Transakcii.Sum(t => t.Iznos)
+                Description = updated.Opis
             };
         }
     }

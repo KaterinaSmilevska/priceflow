@@ -9,6 +9,6 @@
     [DateModified] DATETIME NOT NULL CONSTRAINT df_PortfolioPrinosi_DateModified DEFAULT (SYSUTCDATETIME()),
 
     CONSTRAINT pk_PortfolioPrinosi PRIMARY KEY (Id),
-    CONSTRAINT fk_PortfolioPrinosi_Portfolija FOREIGN KEY (PortfolioId) REFERENCES Portfolija(Id),
-    CONSTRAINT fk_PortfolioPrinosi_HartiiOdVrednost FOREIGN KEY (HVId) REFERENCES HartiiOdVrednost(Id)
+    CONSTRAINT fk_PortfolioPrinosi_Portfolija FOREIGN KEY (PortfolioId) REFERENCES Portfolija(Id) ON DELETE CASCADE,
+    CONSTRAINT fk_PortfolioPrinosi_HartiiOdVrednost FOREIGN KEY (HVId) REFERENCES HartiiOdVrednost(Id) ON DELETE CASCADE
 )

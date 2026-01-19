@@ -5,13 +5,11 @@ namespace PriceFlowApp.Services
 {
     public interface IPortfoliosService
     {
-        Task<IEnumerable<PortfolioList>> FindUserPortfoliosAsync(int userId);
+        Task<IEnumerable<Portfolio>> FindUserPortfoliosAsync(int userId);
 
-        Task<PortfolioDetails?> FindPortfolioAsync(int id, int userId);
+        Task<Portfolio> CreatePortfolio(int userId, CreatePortfolio portfolio);
 
-        Task<PortfolioList?> CreatePortfolio(int userId, CreatePortfolio portfolio);
-
-        Task<PortfolioList?> UpdatePortfolio(int id, int userId, UpdatePortfolio portfolio);
+        Task<Portfolio> UpdatePortfolio(int id, int userId, UpdatePortfolio portfolio);
 
         Task DeletePortfolio(int id, int userId);
     }

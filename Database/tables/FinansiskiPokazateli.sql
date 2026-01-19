@@ -13,5 +13,5 @@
     [DateModified] DATETIME NOT NULL CONSTRAINT df_FinansiskiPokazateli_DateModified DEFAULT (SYSUTCDATETIME()),
 
     CONSTRAINT pk_FinansiskiPokazateli PRIMARY KEY (Id),
-    CONSTRAINT fk_FinansiskiPokazateli_Izdavachi FOREIGN KEY (IzdavachId) REFERENCES Izdavachi(Id)
+    CONSTRAINT fk_FinansiskiPokazateli_Izdavachi FOREIGN KEY (IzdavachId) REFERENCES Izdavachi(Id) ON DELETE CASCADE
 )

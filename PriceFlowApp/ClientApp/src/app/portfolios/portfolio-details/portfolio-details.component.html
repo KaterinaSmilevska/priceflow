@@ -1,0 +1,32 @@
+<div class="page-wrapper">
+
+  <div class="header-row">
+    <h2>📊 {{ portfolio.name }}</h2>
+    <!--<button class="btn btn-secondary" (click)="back()">← Back</button>-->
+  </div>
+
+  <div class="details-card" *ngIf="portfolio">
+
+    <div class="field">
+      <label>Name</label>
+      <div class="value">{{ portfolio.name }}</div>
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <div class="portfolio-description-box">
+        {{ portfolio.description || 'No description provided.' }}
+      </div>
+    </div>
+
+    <div class="coming-soon">
+      📈 Portfolio performance charts coming soon...
+    </div>
+
+  </div>
+
+  <!--<div *ngIf="error" class="error-box">
+    {{ error }}
+  </div>-->
+
+</div>

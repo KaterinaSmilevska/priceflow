@@ -25,9 +25,11 @@ public partial class Transakcii
 
     public string TipTransakcija { get; set; } = null!;
 
-    public string Realna { get; set; } = null!;
+    public bool Realna { get; set; }
 
     public int Hvid { get; set; }
+
+    public DateTime DateModified { get; set; }
 
     public virtual HartiiOdVrednost Hv { get; set; } = null!;
 

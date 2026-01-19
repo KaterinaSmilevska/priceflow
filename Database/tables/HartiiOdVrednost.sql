@@ -10,6 +10,6 @@
 
     CONSTRAINT pk_HartiiOdVrednost PRIMARY KEY (Id),
     CONSTRAINT un_HartiiOdVrednost_Kod UNIQUE (Kod),
-    CONSTRAINT fk_HartiiOdVrednost_TipHV FOREIGN KEY (TipHVId) REFERENCES TipHV(Id),
-    CONSTRAINT fk_HartiiOdVrednost_Izdavachi FOREIGN KEY (IzdavachId) REFERENCES Izdavachi(Id)
+    CONSTRAINT fk_HartiiOdVrednost_TipHV FOREIGN KEY (TipHVId) REFERENCES TipHV(Id) ON DELETE CASCADE,
+    CONSTRAINT fk_HartiiOdVrednost_Izdavachi FOREIGN KEY (IzdavachId) REFERENCES Izdavachi(Id) ON DELETE CASCADE
 )

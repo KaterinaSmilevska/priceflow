@@ -9,5 +9,7 @@ public partial class Sektori
 
     public string Ime { get; set; } = null!;
 
+    public DateTime DateModified { get; set; }
+
     public virtual ICollection<Izdavachi> Izdavachi { get; set; } = new List<Izdavachi>();
 }

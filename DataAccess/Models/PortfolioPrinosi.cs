@@ -17,6 +17,8 @@ public partial class PortfolioPrinosi
 
     public int Hvid { get; set; }
 
+    public DateTime DateModified { get; set; }
+
     public virtual HartiiOdVrednost Hv { get; set; } = null!;
 
     public virtual Portfolija Portfolio { get; set; } = null!;

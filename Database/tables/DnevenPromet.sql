@@ -15,5 +15,5 @@
 
     CONSTRAINT pk_DnevenPromet PRIMARY KEY (Id),
     CONSTRAINT un_DnevenPromet_Datum_HVId UNIQUE CLUSTERED (Datum, HVId),
-    CONSTRAINT fk_DnevenPromet_HartiiOdVrednost FOREIGN KEY (HVId) REFERENCES HartiiOdVrednost(Id)
+    CONSTRAINT fk_DnevenPromet_HartiiOdVrednost FOREIGN KEY (HVId) REFERENCES HartiiOdVrednost(Id) ON DELETE CASCADE
 )

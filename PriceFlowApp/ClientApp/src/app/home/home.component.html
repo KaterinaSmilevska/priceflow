@@ -4,6 +4,8 @@
   <button class="get-started-btn" (click)="onGetStarted()">Get Started</button>
 </div>
 
+<app-brokers *ngIf="(loginService.isInvestor() | async)"></app-brokers>
+
 <app-market-overview></app-market-overview>
 <app-top-performers></app-top-performers>
 

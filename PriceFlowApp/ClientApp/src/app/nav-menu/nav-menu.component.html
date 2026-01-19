@@ -26,6 +26,11 @@
                routerLinkActive="active-link"
                [routerLinkActiveOptions]="{ exact: true }">Securities</a>
           </li>
+          <li *ngIf="(loginService.isLoggedIn() | async) && (loginService.isInvestor() | async)" class="nav-item">
+            <a class="nav-link text-white fw-bold"
+               routerLink="/portfolios"
+               routerLinkActive="active-link">My Portfolios</a>
+          </li>
         </ul>
 
         <div class="d-flex align-items-center justify-content-end position-relative">

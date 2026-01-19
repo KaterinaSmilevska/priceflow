@@ -1,7 +1,9 @@
 using DataAccess.Models;
 using DataAccess.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.Services;
+using PriceFlowSecurity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,12 +13,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", builder =>
     {
-        builder.WithOrigins("https://localhost:44413")
+        builder.WithOrigins("http://localhost:4200")
         .AllowAnyHeader().AllowAnyMethod().AllowCredentials();
     });
 });
 
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -25,6 +27,7 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<PriceFlowDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PriceFlowDatabase")));
 
+//builder.Services.AddScoped<SessionHelper>();
 builder.Services.AddScoped<IBrokersRepository, BrokersRepository>();
 builder.Services.AddScoped<IBrokerService, BrokerService>();
 builder.Services.AddScoped<IRolesRepository, RolesRepository>();
@@ -43,30 +46,59 @@ builder.Services.AddScoped<IMarketOverviewService,  MarketOverviewService>();
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IPortfoliosRepository, PortfoliosRepository>();
 builder.Services.AddScoped<IPortfoliosService, PortfoliosService>();
+builder.Services.AddScoped<IPortfolioDetailsService, PortfolioDetailsService>();
 
+//builder.Services.AddDistributedMemoryCache();
+//builder.Services.AddSession(options =>
+//{
+//    options.IdleTimeout = TimeSpan.FromHours(1);
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//    options.Cookie.SameSite = SameSiteMode.None;
+//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//    options.Cookie.Name = "PriceFlow.Session";
+//});
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromHours(1);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
 
-//builder.Services.AddAuthentication("Cookies")
-//    .AddCookie("Cookies", options =>
-//    {
-//        options.LoginPath = "/login";
-//        options.AccessDeniedPath = "/access-denied";
-//    });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie("Cookies", options =>
+    {
+        options.Cookie.Name = "PriceFlow.Auth";
+        options.Cookie.Path = "/";
+        options.LoginPath = "/auth/login";
+        options.LogoutPath = "/auth/logout";
+        options.SlidingExpiration = true;
+        options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+        options.Events.OnRedirectToLogin = context =>
+        {
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            }
+            context.Response.Redirect(context.RedirectUri);
+            return Task.CompletedTask;
+        };
+
+        options.Events.OnRedirectToAccessDenied = context =>
+        {
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                return Task.CompletedTask;
+            }
+
+            context.Response.Redirect(context.RedirectUri);
+            return Task.CompletedTask;
+        };
+    });
 
 
-//builder.Services.AddAuthorization();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
-
-
-app.UseRouting();
-app.UseCors("AllowFrontend");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -76,17 +108,18 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseSession();
 app.UseStaticFiles();
-
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseRouting();
+app.UseCors("AllowFrontend");
+//app.UseSession();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");
 

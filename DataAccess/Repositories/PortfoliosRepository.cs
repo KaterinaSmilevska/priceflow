@@ -21,11 +21,8 @@ namespace DataAccess.Repositories
             return portfolio;
         }
 
-        public async Task DeleteAsync(int id, int userId)
+        public async Task DeleteAsync(Portfolija portfolio)
         {
-            Portfolija? portfolio = await _dbContext.Portfolija
-                .FirstOrDefaultAsync(p => p.Id == id && p.KorisnikId == userId);
-
             if(portfolio != null)
             {
                 _dbContext.Portfolija.Remove(portfolio);
@@ -33,13 +30,9 @@ namespace DataAccess.Repositories
             }
         }
 
-        public async Task<Portfolija?> GetByIdAsync(int id, int userId)
+        public async Task<Portfolija?> GetByIdAsync(int id)
         {
-            return await _dbContext.Portfolija
-                .Where(p => p.Id == id && p.KorisnikId == userId)
-                .Include(p => p.Transakcii).ThenInclude(t => t.Hv)
-                .Include(p => p.PortfolioPrinosi).ThenInclude(pp => pp.Hv)
-                .FirstOrDefaultAsync();
+            return await _dbContext.Portfolija.FindAsync(id);
         }
 
         public async Task<IEnumerable<Portfolija>> GetByUserAsync(int userId)
@@ -51,7 +44,7 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Portfolija?> UpdateAsync(Portfolija portfolio)
+        public async Task<Portfolija> UpdateAsync(Portfolija portfolio)
         {
             var foundPortfolio = await _dbContext.Portfolija
                 .FirstOrDefaultAsync(p => p.Id == portfolio.Id && p.KorisnikId == portfolio.KorisnikId);

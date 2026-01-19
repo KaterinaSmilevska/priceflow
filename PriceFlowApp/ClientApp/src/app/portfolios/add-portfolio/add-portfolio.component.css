@@ -1,0 +1,20 @@
+.animate-in {
+  animation: pop .18s ease-out;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.portfolio-textarea {
+  resize: none;
+  height: 90px;
+}
