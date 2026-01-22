@@ -40,6 +40,12 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
+        public async Task<HartiiOdVrednost?> GetByCodeAsync(string code)
+        {
+            return await _dbContext.HartiiOdVrednost
+                .FirstOrDefaultAsync(hv => hv.Kod == code);
+        }
+
         public async Task<HartiiOdVrednost?> GetByIdAsync(int id)
         {
             return await _dbContext.HartiiOdVrednost

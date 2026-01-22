@@ -1,0 +1,56 @@
+.btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.1s ease;
+}
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+.btn-danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+  .btn-danger:hover {
+    background-color: #dc2626;
+  }
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+  .btn-secondary:hover {
+    background-color: #d1d5db;
+  }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal-content {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  min-width: 320px;
+  max-width: 420px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+

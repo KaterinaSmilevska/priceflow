@@ -1,0 +1,101 @@
+<button class="btn btn-success btn-sm mb-3" (click)="openAddModal()">
+  Add Transaction
+</button>
+
+<div class="table-responsive" *ngIf="!loading && transactions.length">
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Date</th>
+        <th>Security</th>
+        <th>Type</th>
+        <th class="text-end">Qty</th>
+        <th class="text-end">Unit Price</th>
+        <th class="text-end">Total</th>
+        <th class="text-center"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let t of transactions" [class.table-secondary]="!t.isReal">
+
+        <td>{{ t.date | date:'dd.MM.yyyy' }}</td>
+        <td>
+          <strong>{{ t.hvCode }}</strong>
+        </td>
+
+        <td>
+          <span class="badge"
+                [ngClass]="{
+                  'bg-success': t.typeTransaction === 'Купување',
+                  'bg-danger': t.typeTransaction === 'Продавање'
+                }">
+            {{ t.typeTransaction }}
+          </span>
+        </td>
+        <td class="text-end">
+          {{ t.sharesQuantity }}
+        </td>
+
+        <td class="text-end">
+          {{ t.sharesUnitPrice | number:'1.2-2' }}
+        </td>
+
+        <td class="text-end fw-bold">
+          {{ t.amount | number:'1.2-10' }} ден.
+        </td>
+        <td class="text-center">
+          <button class="btn btn-warning btn-sm me-1"
+                  (click)="openEditModal(t)">
+            Edit
+          </button>
+          <button class="btn btn-danger btn-sm"
+                  (click)="openDeleteModal(t)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="card mt-3">
+    <div class="card-body">
+      <h6>Total Income</h6>
+
+      <h3 [class.text-success]="analytics?.totalIncome! >= 0"
+          [class.text-danger]="analytics?.totalIncome! < 0">
+        {{ analytics?.totalIncome | number:'1.2-2' }} ден.
+      </h3>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="!loading && !transactions.length" class="text-muted">
+  No transactions yet.
+</div>
+
+<app-transaction-form *ngIf="showEditModal"
+                      [portfolioId]="portfolioId"
+                      [transaction]="transactionToEdit"
+                      (close)="onModalClose($event)">
+</app-transaction-form>
+
+<app-portfolio-income [portfolioId]="portfolioId"></app-portfolio-income>
+
+<app-portfolio-security-allocation [portfolioId]="portfolioId"></app-portfolio-security-allocation>
+
+<div *ngIf="showDeleteModal" class="modal-overlay">
+  <div class="modal-content animate-in">
+    <h3>Confirm Delete</h3>
+    <p>
+      Are you sure you want to delete transaction for
+      <strong>{{ transactionToDelete?.hvCode }}</strong>
+      on
+      <strong>{{ transactionToDelete?.date | date: 'dd.MM.yyyy' }}</strong>?
+    </p>
+    <div class="modal-actions">
+      <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+    </div>
+  </div>
+</div>

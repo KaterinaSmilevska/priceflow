@@ -7,6 +7,8 @@ namespace PriceFlowApp.Services
     {
         Task<IEnumerable<Portfolio>> FindUserPortfoliosAsync(int userId);
 
+        Task<Portfolio> FindById(int id);
+
         Task<Portfolio> CreatePortfolio(int userId, CreatePortfolio portfolio);
 
         Task<Portfolio> UpdatePortfolio(int id, int userId, UpdatePortfolio portfolio);

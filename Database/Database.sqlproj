@@ -75,6 +75,9 @@
     <None Include="scripts\LoadTransakcii.sql" />
     <None Include="scripts\LoadUlogi.sql" />
     <None Include="scripts\LoadKorisniciUlogi.sql" />
+    <None Include="..\PriceFlowApp\ClientApp\src\app\market-overview\portfolio-security-allocation\PortfolioSecurityAllocationComponent.ts">
+      <Link>PortfolioSecurityAllocationComponent.ts</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Build Include="tables\AplikativniParametri.sql" />

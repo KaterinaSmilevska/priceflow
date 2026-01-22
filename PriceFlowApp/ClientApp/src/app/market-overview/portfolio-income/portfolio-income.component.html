@@ -1,0 +1,9 @@
+<div class="chart-container">
+  <ng-container *ngIf="!noDataMessage; else noData">
+    <canvas baseChart [data]="data" [type]="type"></canvas>
+  </ng-container>
+
+  <ng-template #noData>
+    <div class="no-data-message">{{ noDataMessage }}</div>
+  </ng-template>
+</div>

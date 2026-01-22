@@ -9,7 +9,10 @@ namespace PriceFlowApp.Services
 
         private readonly IPortfoliosRepository _portfolijaRepository;
 
-        public PortfoliosService(IPortfoliosRepository portfolijaRepository) => _portfolijaRepository = portfolijaRepository;
+        public PortfoliosService(IPortfoliosRepository portfolijaRepository)
+        {
+            _portfolijaRepository = portfolijaRepository;
+        } 
 
         public async Task DeletePortfolio(int id, int userId)
         {
@@ -68,6 +71,21 @@ namespace PriceFlowApp.Services
                 Id = updated.Id,
                 Name = updated.Ime,
                 Description = updated.Opis
+            };
+        }
+
+        public async Task<Portfolio> FindById(int id)
+        {
+            Portfolija? portfolio = await _portfolijaRepository.GetByIdAsync(id);
+
+            if (portfolio == null)
+                throw new Exception("Portfolio not found");
+
+            return new Portfolio
+            {
+                Id = portfolio.Id,
+                Name = portfolio.Ime,
+                Description = portfolio.Opis
             };
         }
     }

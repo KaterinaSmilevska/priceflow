@@ -18,6 +18,10 @@ export interface UpdatePortfolio {
   description: string | null;
 }
 
+export interface PortfolioAnalytics {
+  totalIncome: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class PortfoliosService {
   private apiUrl = 'api/portfolios';
@@ -26,6 +30,12 @@ export class PortfoliosService {
 
   getAll(): Observable<Portfolio[]> {
     return this.http.get<Portfolio[]>(this.apiUrl, { withCredentials: true });
+  }
+
+  getById(id: number): Observable<Portfolio> {
+    return this.http.get<Portfolio>(`${this.apiUrl}/${id}`, {
+      withCredentials: true
+    });
   }
 
    createPortfolio(portfolio: CreatePortfolio): Observable <Portfolio> {
@@ -39,5 +49,4 @@ export class PortfoliosService {
   deletePortfolio(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
-  
 }

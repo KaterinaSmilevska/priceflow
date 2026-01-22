@@ -64,5 +64,34 @@ namespace PriceFlowApp.Controllers
 
             return Ok(latestDate.ToString());
         }
+
+        [HttpGet("portfolio-income")]
+        public async Task<ActionResult<IEnumerable<MonthlyIncome>>> GetMonthlyIncome(int portfolioId)
+        {
+            try
+            {
+                IEnumerable<MonthlyIncome> monthlyIncome= await _chartService.GetMonthlyIncomeAsync(portfolioId);
+                return Ok(monthlyIncome);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching monthly income for portfolio.", detail = ex.Message });
+            }
+        }
+
+
+        [HttpGet("portfolio-security-allocation")]
+        public async Task<ActionResult<IEnumerable<MonthlyIncome>>> GetSecurityAllocation(int portfolioId)
+        {
+            try
+            {
+                IEnumerable<SecurityAllocation> securityAllocation = await _chartService.GetAllocationAsync(portfolioId);
+                return Ok(securityAllocation);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching security allocation for portfolio.", detail = ex.Message });
+            }
+        }
     }
 }

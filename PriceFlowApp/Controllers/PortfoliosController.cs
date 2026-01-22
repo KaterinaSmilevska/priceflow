@@ -35,6 +35,21 @@ namespace PriceFlowApp.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                int userId = User.GetUserId();
+                Portfolio portfolio = await _portfoliosService.FindById(id);
+                return Ok(portfolio);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching portfolios for user.", detail = ex.Message });
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreatePortfolio portfolio)
         {
@@ -61,7 +76,7 @@ namespace PriceFlowApp.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error updading portoflio..", detail = ex.Message });
+                return StatusCode(500, new { message = "Error updading portoflio.", detail = ex.Message });
             }
         }
 
@@ -76,7 +91,7 @@ namespace PriceFlowApp.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error deleting portoflio..", detail = ex.Message });
+                return StatusCode(500, new { message = "Error deleting portoflio.", detail = ex.Message });
             }
         }
     }

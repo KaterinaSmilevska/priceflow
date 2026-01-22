@@ -10,6 +10,10 @@ namespace PriceFlowApp.Services
 
         Task<IEnumerable<Security>> GetSecurities();
 
-        DateTime? FindLatestDate(); 
+        DateTime? FindLatestDate();
+
+        Task<IEnumerable<MonthlyIncome>> GetMonthlyIncomeAsync(int portfolioid);
+
+        Task<IEnumerable<SecurityAllocation>> GetAllocationAsync(int portfolioId);
     }
 }
