@@ -12,6 +12,6 @@ namespace PriceFlowApp.Services
 
         Task DeleteAsync(int id);
 
-        Task<PortfolioAnalytics> GetTotalIncomeAsync(int portfolioid);
+        Task<PortfolioAnalytics> GetAnalyticsAsync(int portfolioid);
     }
 }

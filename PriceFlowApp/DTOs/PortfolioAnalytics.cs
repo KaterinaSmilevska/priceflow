@@ -2,6 +2,8 @@
 {
     public class PortfolioAnalytics
     {
-        public decimal TotalIncome { get; set; }
+        public decimal TotalRevenue{ get; set; }
+        public decimal TotalExpenses { get; set; }
+        public decimal Balance { get; set; }
     }
 }

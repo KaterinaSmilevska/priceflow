@@ -9,11 +9,14 @@ namespace PriceFlowApp.Services
     {
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly ISecuritiesRepository _securitiesRepository;
+        private readonly IPortfolioReturnsService _portfolioReturnsService;
 
-        public TransactionsService(ITransactionsRepository transactionsRepository, ISecuritiesRepository securitiesRepository)
+        public TransactionsService(ITransactionsRepository transactionsRepository, ISecuritiesRepository securitiesRepository,
+            IPortfolioReturnsService portfolioReturnsService)
         {
             _transactionsRepository = transactionsRepository;
             _securitiesRepository = securitiesRepository;
+            _portfolioReturnsService = portfolioReturnsService;
         }
 
         public async Task<Transaction> AddAsync(int portfolioId, Transaction transaction)
@@ -120,15 +123,25 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public async Task<PortfolioAnalytics> GetTotalIncomeAsync(int portfolioId)
+        public async Task<PortfolioAnalytics> GetAnalyticsAsync(int portfolioId)
         {
             List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioId);
 
-            transactions = transactions.FindAll(t => t.TipTransakcija == "Продавање");
+            List<Transakcii> sellTransactions = transactions.FindAll(t => t.TipTransakcija == "Продавање");
 
+            List<Transakcii> buyTransactiona = transactions.FindAll(t => t.TipTransakcija == "Купување");
+
+            PortfolioReturnsSummary summary = await _portfolioReturnsService.CalculateSummaryAsync(portfolioId);
+
+            decimal totalRevenue = sellTransactions.Sum(t => t.Iznos) + summary.TotalDividends;
+            decimal totalExpenses = buyTransactiona.Sum(t => t.Iznos) + CalculateCommission(transactions);
+            
+            
             return new PortfolioAnalytics
             {
-                TotalIncome = transactions.Sum(t => t.Iznos)
+                TotalRevenue = totalRevenue,
+                TotalExpenses = totalExpenses,
+                Balance = totalRevenue - totalExpenses
             };
         }
 
@@ -137,8 +150,8 @@ namespace PriceFlowApp.Services
             decimal amount = transaction.SharesQuantity * transaction.SharesUnitPrice;
 
             decimal feesPercent = transaction.BrokerageCommission
-                + transaction.StockExchangeCommission
-                + transaction.CDHVCommission;
+                   + transaction.StockExchangeCommission
+                   + transaction.CDHVCommission;
             decimal fees = amount * feesPercent / 100;
 
             return transaction.TypeTransaction == "Купување"
@@ -146,5 +159,22 @@ namespace PriceFlowApp.Services
                 : amount - fees;
 
         }
+
+        private decimal CalculateCommission(List<Transakcii> transactions) {
+            decimal totalCommission = 0;
+            foreach(Transakcii t in transactions)
+            {
+                decimal amount = t.KolicinaAkcii * t.EdinecnaCenaAkcija;
+
+                decimal feesPercent = t.BrokerskaProvizija
+                    + t.BerzanskaProvizija
+                    + t.Cdhvprovizija;
+                decimal fees = amount * feesPercent / 100;
+
+                totalCommission += fees;
+            }
+            return totalCommission;
+        }
+
     }
 }

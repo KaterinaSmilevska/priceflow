@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Chart, ChartData, ChartType, registerables } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-Chart.register(...registerables);
+Chart.register(...registerables, ChartDataLabels);
 
 @Component({
   selector: 'app-portfolio-security-allocation',
@@ -25,6 +26,11 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
   };
 
   public noDataMessage: string | null = null;
+
+  public options = {
+    responsive: true,
+    maintainAspectRatio: false
+  };
 
   constructor(private chartService: ChartService) { }
 
@@ -50,15 +56,15 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
           return;
         }
 
+        const values = res.map(x => x.quantity);
+        const colors = this.chartService.generateColors(values.length);
+
         this.data = {
           labels: res.map(x => x.securityCode),
           datasets: [
             {
-              data: res.map(x => x.quantity),
-              backgroundColor: [
-                '#007bff', '#28a745', '#dc3545', '#ffc107', '#6f42c1',
-                '#20c997', '#fd7e14', '#6610f2', '#e83e8c', '#17a2b8'
-              ],
+              data: values,
+              backgroundColor: colors,
             }
           ],
         };

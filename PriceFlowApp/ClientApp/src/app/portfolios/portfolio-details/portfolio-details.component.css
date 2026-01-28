@@ -1,5 +1,5 @@
 .page-wrapper {
-  max-width: 900px;
+  max-width: fit-content;
   margin: 40px auto;
   padding: 30px;
 }

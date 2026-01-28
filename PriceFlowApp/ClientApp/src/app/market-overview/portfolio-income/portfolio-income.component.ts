@@ -24,6 +24,11 @@ export class PortfolioIncomeComponent implements OnInit {
 
   public noDataMessage: string | null = null;
 
+  public options = {
+    responsive: true,
+    maintainAspectRatio: false
+  };
+
   constructor(private chartService: ChartService) { }
 
   ngOnInit(): void {

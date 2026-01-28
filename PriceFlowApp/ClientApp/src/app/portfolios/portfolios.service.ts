@@ -19,7 +19,9 @@ export interface UpdatePortfolio {
 }
 
 export interface PortfolioAnalytics {
-  totalIncome: number;
+  totalRevenue: number;
+  totalExpenses: number;
+  balance: number;
 }
 
 @Injectable({ providedIn: 'root' })

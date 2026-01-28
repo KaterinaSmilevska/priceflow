@@ -2,100 +2,166 @@
   Add Transaction
 </button>
 
-<div class="table-responsive" *ngIf="!loading && transactions.length">
-  <table class="table table-hover align-middle">
-    <thead class="table-light">
-      <tr>
-        <th>Date</th>
-        <th>Security</th>
-        <th>Type</th>
-        <th class="text-end">Qty</th>
-        <th class="text-end">Unit Price</th>
-        <th class="text-end">Total</th>
-        <th class="text-center"></th>
-      </tr>
-    </thead>
+<div class="row g-4" *ngIf="!loading && transactions.length">
+  <div class="col-xl-9 col-lg-8">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle transactions-table">
+        <thead class="table-light">
+          <tr>
+            <th>Date</th>
+            <th>Security</th>
+            <th>Type</th>
+            <th class="text-end">Qty</th>
+            <th class="text-end">Unit Price</th>
+            <th class="text-end">Total</th>
+            <th class="text-end">Commission</th>
+            <th class="text-end">Cash flow</th>
+            <th class="text-center"></th>
+          </tr>
+        </thead>
 
-    <tbody>
-      <tr *ngFor="let t of transactions" [class.table-secondary]="!t.isReal">
+        <tbody>
+          <tr *ngFor="let t of visibleTransactions" [class.table-secondary]="!t.isReal">
 
-        <td>{{ t.date | date:'dd.MM.yyyy' }}</td>
-        <td>
-          <strong>{{ t.hvCode }}</strong>
-        </td>
+            <td>{{ t.date | date:'dd.MM.yyyy' }}</td>
+            <td>
+              <span class="fw-semibold text-primary">{{ t.hvCode }}</span>
+            </td>
 
-        <td>
-          <span class="badge"
-                [ngClass]="{
-                  'bg-success': t.typeTransaction === 'Купување',
-                  'bg-danger': t.typeTransaction === 'Продавање'
-                }">
-            {{ t.typeTransaction }}
-          </span>
-        </td>
-        <td class="text-end">
-          {{ t.sharesQuantity }}
-        </td>
+            <td>
+              <span class="badge rounded-pill px-3"
+                    [ngClass]="{
+           'bg-success-subtle text-success': t.typeTransaction === 'Купување',
+           'bg-danger-subtle text-danger': t.typeTransaction === 'Продавање'
+         }">
+                {{ t.typeTransaction }}
+              </span>
+            </td>
+            <td class="text-end">
+              {{ t.sharesQuantity }}
+            </td>
 
-        <td class="text-end">
-          {{ t.sharesUnitPrice | number:'1.2-2' }}
-        </td>
+            <td class="text-end">
+              {{ t.sharesUnitPrice | number:'1.2-2' }}
+            </td>
 
-        <td class="text-end fw-bold">
-          {{ t.amount | number:'1.2-10' }} ден.
-        </td>
-        <td class="text-center">
-          <button class="btn btn-warning btn-sm me-1"
-                  (click)="openEditModal(t)">
-            Edit
-          </button>
-          <button class="btn btn-danger btn-sm"
-                  (click)="openDeleteModal(t)">
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="card mt-3">
+            <td class="text-end fw-bold">
+              {{ t.amount | number:'1.2-10' }} ден.
+            </td>
+            <td class="text-end fw-bold">
+              {{ getTotalCommission(t) | number: '1.2-2' }} ден.
+            </td>
+            <td class="text-end fw-bold"
+                [class.text-danger]="getCashFlow(t) < 0"
+                [class.text-success]="getCashFlow(t) > 0">
+              {{ getCashFlow(t) | number: '1.2-2'}} ден.
+            </td>
+            <td class="text-center">
+              <div class="action-buttons">
+                <button class="btn btn-warning btn-sm me-1"
+                        (click)="openEditModal(t)">
+                  Edit
+                </button>
+                <button class="btn btn-danger btn-sm"
+                        (click)="openDeleteModal(t)">
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-3"
+         *ngIf="transactions.length > displayLimit">
+
+      <button class="btn btn-secondary btn-sm"
+              (click)="toggleShowAll()">
+        {{ showAll ? 'Show less' : 'See more' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-lg-4">
+    <app-portfolio-returns [portfolioId]="portfolioId"
+                           (updated)="loadAnalytics()">
+    </app-portfolio-returns>
+  </div>
+  </div>
+
+  <div class="card mt-4 summary-card">
     <div class="card-body">
-      <h6>Total Income</h6>
+      <div class="row text-center g-3">
 
-      <h3 [class.text-success]="analytics?.totalIncome! >= 0"
-          [class.text-danger]="analytics?.totalIncome! < 0">
-        {{ analytics?.totalIncome | number:'1.2-2' }} ден.
-      </h3>
+        <div class="col-md-4">
+          <h6 class="text-muted">Revenue</h6>
+          <h3 class="text-success fw-semibold">
+            {{ analytics?.totalRevenue | number:'1.2-2' }} ден.
+          </h3>
+        </div>
+
+        <div class="col-md-4">
+          <h6 class="text-muted">Expenses</h6>
+          <h3 class="text-danger fw-semibold">
+            {{ analytics?.totalExpenses | number:'1.2-2' }} ден.
+          </h3>
+        </div>
+
+        <div class="col-md-4">
+          <h6 class="text-muted">Balance</h6>
+          <h3 class="fw-bold"
+              [class.text-success]="analytics?.balance! >= 0"
+              [class.text-danger]="analytics?.balance! < 0">
+            {{ analytics?.balance | number:'1.2-2' }} ден.
+          </h3>
+
+          <small class="fw-semibold"
+                 [class.text-success]="analytics?.balance! >= 0"
+                 [class.text-danger]="analytics?.balance! < 0">
+            {{ analytics?.balance! >= 0 ? 'Profit' : 'Loss' }}
+          </small>
+        </div>
+
+      </div>
     </div>
   </div>
 
-</div>
+  <div *ngIf="!loading && !transactions.length" class="text-muted">
+    No transactions yet.
+  </div>
 
-<div *ngIf="!loading && !transactions.length" class="text-muted">
-  No transactions yet.
-</div>
+  <app-transaction-form *ngIf="showEditModal"
+                        [portfolioId]="portfolioId"
+                        [transaction]="transactionToEdit"
+                        (close)="onModalClose($event)">
+  </app-transaction-form>
 
-<app-transaction-form *ngIf="showEditModal"
-                      [portfolioId]="portfolioId"
-                      [transaction]="transactionToEdit"
-                      (close)="onModalClose($event)">
-</app-transaction-form>
 
-<app-portfolio-income [portfolioId]="portfolioId"></app-portfolio-income>
+  <div class="charts-grid">
+    <div class="chart-card income">
+      <app-portfolio-income [portfolioId]="portfolioId"></app-portfolio-income>
+    </div>
 
-<app-portfolio-security-allocation [portfolioId]="portfolioId"></app-portfolio-security-allocation>
-
-<div *ngIf="showDeleteModal" class="modal-overlay">
-  <div class="modal-content animate-in">
-    <h3>Confirm Delete</h3>
-    <p>
-      Are you sure you want to delete transaction for
-      <strong>{{ transactionToDelete?.hvCode }}</strong>
-      on
-      <strong>{{ transactionToDelete?.date | date: 'dd.MM.yyyy' }}</strong>?
-    </p>
-    <div class="modal-actions">
-      <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
-      <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+    <div class="chart-card allocation">
+      <app-portfolio-security-allocation [portfolioId]="portfolioId">
+      </app-portfolio-security-allocation>
     </div>
   </div>
-</div>
+
+
+  <div *ngIf="showDeleteModal" class="modal-overlay">
+    <div class="modal-content animate-in">
+      <h3>Confirm Delete</h3>
+      <p>
+        Are you sure you want to delete transaction for
+        <strong>{{ transactionToDelete?.hvCode }}</strong>
+        on
+        <strong>{{ transactionToDelete?.date | date: 'dd.MM.yyyy' }}</strong>?
+      </p>
+      <div class="modal-actions">
+        <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+        <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+      </div>
+    </div>
+  </div>

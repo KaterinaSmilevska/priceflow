@@ -76,7 +76,7 @@ namespace PriceFlowApp.Controllers
         {
             try
             {
-                PortfolioAnalytics analytics = await _transactionsService.GetTotalIncomeAsync(portfolioId);
+                PortfolioAnalytics analytics = await _transactionsService.GetAnalyticsAsync(portfolioId);
                 return Ok(analytics);
             }
             catch (Exception ex)

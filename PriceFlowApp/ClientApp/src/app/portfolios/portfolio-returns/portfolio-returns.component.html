@@ -1,0 +1,60 @@
+<div class="card shadow-sm h-100">
+  <div class="card-body">
+
+    <h5 class="mb-3">Portfolio Returns</h5>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+
+      <div class="mb-3">
+        <label class="form-label">Date</label>
+        <input type="date"
+               class="form-control w-100"
+               formControlName="date">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Security</label>
+        <select class="form-select"
+                formControlName="hvId">
+          <option [ngValue]="null">Select security</option>
+          <option *ngFor="let s of securities" [value]="s.id">
+            {{ s.code }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Dividend (Net)</label>
+        <input type="number"
+               class="form-control w-100"
+               formControlName="netAmount">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Tax</label>
+        <input type="number"
+               class="form-control w-100"
+               formControlName="tax">
+      </div>
+
+      <button class="btn btn-success w-100" type="submit">
+        Add Return
+      </button>
+    </form>
+
+    <hr />
+
+    <div *ngIf="summary" class="text-center">
+      <div class="small text-muted">Total Dividends</div>
+      <div class="fw-bold text-success">
+        {{ summary.totalDividends | number:'1.2-2' }} ден.
+      </div>
+
+      <div class="small text-muted mt-2">Total Taxes</div>
+      <div class="fw-bold text-warning">
+        {{ summary.totalTaxes | number:'1.2-2' }} ден.
+      </div>
+    </div>
+
+  </div>
+</div>

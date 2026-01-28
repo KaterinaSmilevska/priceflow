@@ -72,6 +72,12 @@ export class ChartService {
       params: { portfolioId }
     });
   }
+
+  public generateColors(count: number): string[] {
+    return Array.from({ length: count }, (_, i) =>
+      `hsl(${(i * 360) / count}, 65%, 55%)`
+    );
+  }
 }
 
 
