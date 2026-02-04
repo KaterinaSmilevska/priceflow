@@ -26,6 +26,10 @@ export class PortfolioReturnsService {
   }
 
   getSummary(portfolioId: number): Observable<PortfolioReturnsSummary>  {
-    return this.http.get<PortfolioReturnsSummary>(`${this.apiUrl}/summary/${portfolioId}`)
+    return this.http.get<PortfolioReturnsSummary>(`${this.apiUrl}/summary/${portfolioId}`);
+  }
+
+  getByPortfolioId(portfolioId: number): Observable<PortfolioReturns[]> {
+    return this.http.get<PortfolioReturns[]>(`${this.apiUrl}/${portfolioId}`);
   }
 }

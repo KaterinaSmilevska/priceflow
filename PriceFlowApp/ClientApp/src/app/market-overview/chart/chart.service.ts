@@ -61,15 +61,15 @@ export class ChartService {
     return this.http.get<string>(`${this.baseUrl}/latest-date`);
   }
 
-  getPortfolioIncome(portfolioId: number): Observable<PortfolioIncome[]> {
+  getPortfolioIncome(portfolioId: number, isReal:  boolean): Observable<PortfolioIncome[]> {
     return this.http.get<PortfolioIncome[]>(`${this.baseUrl}/portfolio-income`, {
-      params: { portfolioId }
+      params: { portfolioId, isReal }
     });
   }
 
-  getSecurityAllocation(portfolioId: number): Observable<SecurityAllocation[]> {
+  getSecurityAllocation(portfolioId: number, isReal: boolean): Observable<SecurityAllocation[]> {
     return this.http.get<SecurityAllocation[]>(`${this.baseUrl}/portfolio-security-allocation`, {
-      params: { portfolioId }
+      params: { portfolioId, isReal }
     });
   }
 

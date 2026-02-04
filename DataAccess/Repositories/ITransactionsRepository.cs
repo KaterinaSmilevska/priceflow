@@ -13,6 +13,8 @@ namespace DataAccess.Repositories
 
         Task<List<Transakcii>> GetByPortfolioIdAsync(int portfolioId);
 
+        Task<int> GetOwnedSharesAsync(int portfolioId, int securityId, bool isReal);
+
         Task<Transakcii> AddAsync(Transakcii transaction);
 
         Task<Transakcii> UpdateAsync(Transakcii transaction);

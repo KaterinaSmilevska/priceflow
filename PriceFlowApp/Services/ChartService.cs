@@ -69,12 +69,12 @@ namespace PriceFlowApp.Services
                 .FirstOrDefault();
         }
 
-        public async Task<IEnumerable<MonthlyIncome>> GetMonthlyIncomeAsync(int portfolioid)
+        public async Task<IEnumerable<MonthlyIncome>> GetMonthlyIncomeAsync(int portfolioid, bool isReal)
         {
             List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioid);
 
             List<MonthlyIncome> monthlyIncome = transactions
-                .Where(t => t.TipTransakcija == "Продавање")
+                .Where(t => t.TipTransakcija == "Продавање" && t.Realna == isReal)
                 .GroupBy(t => new {t.Datum.Year, t.Datum.Month})
                 .Select(g => new MonthlyIncome
                 {
@@ -89,11 +89,12 @@ namespace PriceFlowApp.Services
             return monthlyIncome;
         }
 
-        public async Task<IEnumerable<SecurityAllocation>> GetAllocationAsync(int portfolioId)
+        public async Task<IEnumerable<SecurityAllocation>> GetAllocationAsync(int portfolioId, bool isReal)
         {
             List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioId);
 
             List<SecurityAllocation> securityAllocation = transactions
+                .Where(t => t.Realna == isReal)
                 .GroupBy(t => t.Hv.Kod)
                 .Select(g => new SecurityAllocation
                 {

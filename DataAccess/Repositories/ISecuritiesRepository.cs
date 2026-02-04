@@ -15,6 +15,12 @@ namespace DataAccess.Repositories
 
         Task<HartiiOdVrednost?> GetByCodeAsync(string code);
 
+        Task<string?> GetSecurityCode(int id);
+
+        Task<int?> GetTotalNumShares(int id);
+
+        Task<int?> GetTotalNumSharesAsync(string securityCode);
+
         Task<HartiiOdVrednost> AddAsync(HartiiOdVrednost security);
 
         Task DeleteAsync(int id);

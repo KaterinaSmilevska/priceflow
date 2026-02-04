@@ -20,6 +20,12 @@
 
       <label>Quantity</label>
       <input type="number" formControlName="sharesQuantity" class="form-control">
+      <div *ngIf="sellLimitExceeded" class="text-danger mt-1">
+        You can sell at most {{ ownedShares }} shares.
+      </div>
+      <div *ngIf="buyLimitExceeded" class="text-danger mt-1">
+        You can buy at most {{ remainingShares }} shares.
+      </div>
 
       <label>Unit Price</label>
       <input type="number" formControlName="sharesUnitPrice" class="form-control">
@@ -77,12 +83,15 @@
 
       <div class="text-end mt-3">
         <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancel</button>
-        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || sellLimitExceeded || buyLimitExceeded">
           {{ transaction ? 'Save Changes' : 'Add Transaction' }}
         </button>
       </div>
 
+      <div *ngIf="form.errors?.backend" class="alert alert-danger mt-2">
+        {{ form.errors?.backend }}
+      </div>
     </form>
-
   </div>
 </div>
+

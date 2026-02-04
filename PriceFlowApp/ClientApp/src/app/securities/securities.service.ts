@@ -48,6 +48,10 @@ export class SecuritiesService {
     return this.http.get<Security>(`${this.apiUrl}/${id}`);
   }
 
+  getSecurityCode(id: number): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}/code/${id}`);
+  }
+
   addSecurity(security: CreateSecurity): Observable<Security> {
     return this.http.post<Security>(this.apiUrl, security);
   }

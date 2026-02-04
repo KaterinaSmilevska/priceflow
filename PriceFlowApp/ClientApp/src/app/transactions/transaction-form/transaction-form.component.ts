@@ -21,6 +21,15 @@ export class TransactionFormComponent implements OnInit {
   form!: FormGroup;
   securities: Security[] = [];
 
+  ownedShares: number | null = null;
+  totalShares: number | null = null;
+  remainingShares: number | null = null;
+
+  sellLimitExceeded = false;
+  buyLimitExceeded = false;
+
+  isReal = true;
+
   constructor(private fb: FormBuilder,
     private transactionsService: TransactionsService,
     private securitiesService: SecuritiesService) { }
@@ -41,6 +50,15 @@ export class TransactionFormComponent implements OnInit {
 
     this.securitiesService.getAll().subscribe(s => { this.securities = s; })
 
+    this.form.get('hvCode')?.valueChanges.subscribe(() => this.updateShares());
+
+    this.form.get('isReal')?.valueChanges.subscribe(() => this.updateShares());
+
+    this.form.valueChanges.subscribe(() => {
+      this.calculateAmountPreview();
+      this.evaluateLimits();
+    })
+
     if (this.transaction) {
       this.form.patchValue({
         hvCode: this.transaction.hvCode,
@@ -56,13 +74,43 @@ export class TransactionFormComponent implements OnInit {
       }, { emitEvent: false });
 
       this.calculateAmountPreview();
+      this.updateShares();
     }
-    this.form.valueChanges.subscribe(() => this.calculateAmountPreview());
 
     setTimeout(() => {
       document.querySelectorAll('[data-bs-toggle="tooltip"]')
         .forEach(el => new Tooltip(el));
     });
+  }
+
+  private updateShares(): void {
+    const code = this.form.get('hvCode')?.value;
+
+    if (!code) return;
+
+    const isRealValue = this.form.get('isReal')?.value ?? true;
+
+    this.transactionsService
+      .getOwnedShares(this.portfolioId, code, isRealValue)
+      .subscribe(val => {
+        this.ownedShares = val;
+        this.calculateRemainingShares();
+      });
+
+    this.transactionsService
+      .getTotalShares(code)
+      .subscribe(val => {
+        this.totalShares = val;
+        this.calculateRemainingShares();
+      });
+  }
+
+  private calculateRemainingShares(): void {
+    if (this.totalShares !== null && this.ownedShares !== null) {
+      this.remainingShares = this.totalShares - this.ownedShares;
+    } else {
+      this.remainingShares = null;
+    }
   }
 
   private calculateAmountPreview(): void {
@@ -80,6 +128,23 @@ export class TransactionFormComponent implements OnInit {
       : base - total;
 
     this.form.patchValue({ amount: Number(preview.toFixed(2)) }, { emitEvent: false });
+  }
+
+  private evaluateLimits(): void {
+    const raw = this.form.getRawValue();
+
+    this.sellLimitExceeded = false;
+    this.buyLimitExceeded = false;
+
+    if (!raw.sharesQuantity || !raw.typeTransaction) return;
+
+    if (raw.typeTransaction === 'Продавање' && this.ownedShares !== null) {
+      this.sellLimitExceeded = raw.sharesQuantity > this.ownedShares;
+    }
+
+    if (raw.typeTransaction === 'Купување' && this.remainingShares !== null) {
+      this.buyLimitExceeded = raw.sharesQuantity > this.remainingShares;
+    }
   }
 
   onSubmit(): void {
@@ -112,9 +177,18 @@ export class TransactionFormComponent implements OnInit {
     } else {
       this.transactionsService
         .add(this.portfolioId, payload)
-        .subscribe((newTransaction) => {
-          this.form.patchValue({ amount: newTransaction.amount }, { emitEvent: false });
-          this.close.emit(newTransaction);
+        .subscribe({
+          next: (newTransaction) => {
+            this.form.patchValue({ amount: newTransaction.amount }, { emitEvent: false });
+            this.close.emit(newTransaction);
+          },
+          error: (err) => {
+            if (err.status === 400) {
+              this.form.setErrors({
+                backend: err.error
+              });
+            }
+          }
         });
     }
   }

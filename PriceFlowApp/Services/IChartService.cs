@@ -12,8 +12,8 @@ namespace PriceFlowApp.Services
 
         DateTime? FindLatestDate();
 
-        Task<IEnumerable<MonthlyIncome>> GetMonthlyIncomeAsync(int portfolioid);
+        Task<IEnumerable<MonthlyIncome>> GetMonthlyIncomeAsync(int portfolioid, bool isReal);
 
-        Task<IEnumerable<SecurityAllocation>> GetAllocationAsync(int portfolioId);
+        Task<IEnumerable<SecurityAllocation>> GetAllocationAsync(int portfolioId, bool isReal);
     }
 }

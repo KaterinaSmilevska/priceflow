@@ -22,6 +22,7 @@ export interface PortfolioAnalytics {
   totalRevenue: number;
   totalExpenses: number;
   balance: number;
+  taxes: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -40,8 +41,8 @@ export class PortfoliosService {
     });
   }
 
-   createPortfolio(portfolio: CreatePortfolio): Observable <Portfolio> {
-     return this.http.post<Portfolio>(this.apiUrl, portfolio, { withCredentials: true });
+  createPortfolio(portfolio: CreatePortfolio): Observable<Portfolio> {
+    return this.http.post<Portfolio>(this.apiUrl, portfolio, { withCredentials: true });
   }
 
   updatePortfolio(id: number, portfolio: UpdatePortfolio): Observable<Portfolio> {

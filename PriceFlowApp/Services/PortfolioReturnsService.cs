@@ -39,5 +39,19 @@ namespace PriceFlowApp.Services
 
             return portfolioReturns;
         }
+
+        public async Task<IEnumerable<PortfolioReturns>> FindByPortfolioId(int portfolioId)
+        {
+            IEnumerable<PortfolioPrinosi> entities = await _portfolioReturnsRepository.GetByPortfolioIdAsync(portfolioId);
+
+            return entities.Select(e => new PortfolioReturns
+            {
+                Date = e.Datum,
+                NetAmount = e.NetoIznos,
+                Tax = e.Danok,
+                PortfolioId = e.PortfolioId,
+                HVId = e.Hvid
+            });
+        }
     }
 }

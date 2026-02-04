@@ -41,6 +41,23 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
+        public async Task<int> GetOwnedSharesAsync(int portfolioId, int securityId, bool isReal)
+        {
+            List<Transakcii> transactions = await _dbContext.Transakcii
+                .Where(t => t.PortfolioId == portfolioId && t.Hvid == securityId && t.Realna == isReal)
+                .ToListAsync();
+
+            int bought = transactions
+                .Where(t => t.TipTransakcija == "Купување")
+                .Sum(t => t.KolicinaAkcii);
+
+            int sold = transactions
+               .Where(t => t.TipTransakcija == "Продавање")
+               .Sum(t => t.KolicinaAkcii);
+
+            return bought - sold;
+        }
+
         public async Task<Transakcii> UpdateAsync(Transakcii transaction)
         {
             _dbContext.Transakcii.Update(transaction);

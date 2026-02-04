@@ -1,4 +1,4 @@
-<div class="card shadow-sm h-100">
+<div class="card shadow-sm h-80">
   <div class="card-body">
 
     <h5 class="mb-3">Portfolio Returns</h5>
@@ -37,7 +37,7 @@
                formControlName="tax">
       </div>
 
-      <button class="btn btn-success w-100" type="submit">
+      <button class="btn btn-success w-100" type="submit" [disabled]="form.invalid">
         Add Return
       </button>
     </form>

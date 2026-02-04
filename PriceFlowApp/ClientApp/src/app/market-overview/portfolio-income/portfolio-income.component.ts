@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ChartType, ChartData } from 'chart.js';
+import { ChartType, ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
 
@@ -16,7 +16,9 @@ export class PortfolioIncomeComponent implements OnInit {
   @Input() portfolioId!: number;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-  public type: ChartType = 'line';
+  @Input() isReal: boolean = true;
+
+  public type: 'line' = 'line';
   public data: ChartData<'line', number[], string> = {
     labels: [],
     datasets: [],
@@ -24,9 +26,26 @@ export class PortfolioIncomeComponent implements OnInit {
 
   public noDataMessage: string | null = null;
 
-  public options = {
+  public options: ChartOptions<'line'> = {
     responsive: true,
-    maintainAspectRatio: false
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Portfolio income over time',
+        font: {
+          size: 16,
+          weight: 'bold'
+        },
+        padding: {
+          top: 10,
+          bottom: 20
+        }
+      },
+      legend: {
+        display: true
+      }
+    }
   };
 
   constructor(private chartService: ChartService) { }
@@ -39,12 +58,15 @@ export class PortfolioIncomeComponent implements OnInit {
     if (changes['portfolioId'] && !changes['portfolioId'].firstChange) {
       this.loadChart();
     }
+    if (changes['isReal'] && !changes['isReal'].firstChange) {
+      this.loadChart();
+    }
   }
 
   loadChart(): void {
     this.noDataMessage = null;
 
-    this.chartService.getPortfolioIncome(this.portfolioId).subscribe({
+    this.chartService.getPortfolioIncome(this.portfolioId, this.isReal).subscribe({
       next: (res) => {
         if (!res || res.length === 0) {
           this.data = { labels: [], datasets: [] };
@@ -53,8 +75,9 @@ export class PortfolioIncomeComponent implements OnInit {
           return;
         }
 
+        const labels = res.map(x => `${x.month}.${x.year}`);
         this.data = {
-          labels: res.map(x => `${x.month}.${x.year}`),
+          labels,
           datasets: [
             {
               label: 'Income',
@@ -66,6 +89,9 @@ export class PortfolioIncomeComponent implements OnInit {
             }
           ],
         };
+
+        (this.options as any).plugins.title.text =
+          `Portfolio income (${labels[0]} - ${labels[labels.length - 1]})`;
         this.chart?.update();
       },
       error: (err) => {

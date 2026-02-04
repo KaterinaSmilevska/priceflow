@@ -1,7 +1,10 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
+using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
+using System.Linq;
 using System.Reflection.Emit;
+using System.Threading.Tasks;
 
 namespace PriceFlowApp.Services
 {
@@ -22,8 +25,10 @@ namespace PriceFlowApp.Services
         public async Task<Transaction> AddAsync(int portfolioId, Transaction transaction)
         {
             HartiiOdVrednost security = await _securitiesRepository.GetByCodeAsync(transaction.HVCode)
-                ?? throw new ArgumentException($"Security with code  '{transaction.HVCode}' not found.");
-            
+                ?? throw new InvalidOperationException($"Security with code  '{transaction.HVCode}' not found.");
+
+            await ValidateSharesAsync(portfolioId, security, transaction);
+
             Transakcii entity = new Transakcii
             {
                 PortfolioId = portfolioId,
@@ -91,7 +96,9 @@ namespace PriceFlowApp.Services
                 ?? throw new KeyNotFoundException();
 
             HartiiOdVrednost security = await _securitiesRepository.GetByCodeAsync(transaction.HVCode)
-                ?? throw new ArgumentException($"Security with code  '{transaction.HVCode}' not found.");
+                ?? throw new InvalidOperationException($"Security with code  '{transaction.HVCode}' not found.");
+
+            await ValidateSharesAsync(foundTransaction.PortfolioId, security, transaction, id);
 
             foundTransaction.Hvid = security.Id;
             foundTransaction.KolicinaAkcii = transaction.SharesQuantity;
@@ -123,58 +130,118 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public async Task<PortfolioAnalytics> GetAnalyticsAsync(int portfolioId)
+        public async Task<PortfolioAnalytics> GetAnalyticsAsync(int portfolioId, bool isReal)
         {
             List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioId);
 
+            transactions = transactions
+                .Where(t => t.Realna == isReal)
+                .ToList();
+
             List<Transakcii> sellTransactions = transactions.FindAll(t => t.TipTransakcija == "Продавање");
 
-            List<Transakcii> buyTransactiona = transactions.FindAll(t => t.TipTransakcija == "Купување");
+            List<Transakcii> buyTransactions = transactions.FindAll(t => t.TipTransakcija == "Купување");
 
             PortfolioReturnsSummary summary = await _portfolioReturnsService.CalculateSummaryAsync(portfolioId);
 
-            decimal totalRevenue = sellTransactions.Sum(t => t.Iznos) + summary.TotalDividends;
-            decimal totalExpenses = buyTransactiona.Sum(t => t.Iznos) + CalculateCommission(transactions);
+            decimal totalRevenue = sellTransactions.Sum(t => t.Iznos);
+            decimal totalExpenses = buyTransactions.Sum(t => t.Iznos + CalculateCommission(t)) + 
+                sellTransactions.Sum(t => CalculateCommission(t));
+
+            decimal taxes = 0;
             
-            
+            if(isReal)
+            {
+                totalRevenue += summary.TotalDividends;
+                taxes = summary.TotalTaxes;
+
+            }
             return new PortfolioAnalytics
             {
                 TotalRevenue = totalRevenue,
                 TotalExpenses = totalExpenses,
-                Balance = totalRevenue - totalExpenses
+                Balance = totalRevenue - totalExpenses,
+                Taxes = taxes,
+                IsReal = isReal
             };
         }
 
         private decimal CalculateTransactionAmount(Transaction transaction)
         {
-            decimal amount = transaction.SharesQuantity * transaction.SharesUnitPrice;
+            return transaction.SharesQuantity * transaction.SharesUnitPrice;
 
-            decimal feesPercent = transaction.BrokerageCommission
-                   + transaction.StockExchangeCommission
-                   + transaction.CDHVCommission;
-            decimal fees = amount * feesPercent / 100;
+            //decimal feesPercent = transaction.BrokerageCommission
+            //       + transaction.StockExchangeCommission
+            //       + transaction.CDHVCommission;
+            //decimal fees = amount * feesPercent / 100;
 
-            return transaction.TypeTransaction == "Купување"
-                ? amount + fees
-                : amount - fees;
+            //return transaction.TypeTransaction == "Купување"
+            //    ? amount + fees
+            //    : amount - fees;
 
         }
 
-        private decimal CalculateCommission(List<Transakcii> transactions) {
-            decimal totalCommission = 0;
-            foreach(Transakcii t in transactions)
-            {
-                decimal amount = t.KolicinaAkcii * t.EdinecnaCenaAkcija;
+        private decimal CalculateCommission(Transakcii transaction) {
+            decimal amount = transaction.KolicinaAkcii * transaction.EdinecnaCenaAkcija;
 
-                decimal feesPercent = t.BrokerskaProvizija
-                    + t.BerzanskaProvizija
-                    + t.Cdhvprovizija;
+                decimal feesPercent = transaction.BrokerskaProvizija
+                    + transaction.BerzanskaProvizija
+                    + transaction.Cdhvprovizija;
                 decimal fees = amount * feesPercent / 100;
 
-                totalCommission += fees;
-            }
-            return totalCommission;
+            return fees;
         }
 
+        private async Task ValidateSharesAsync(int portfolioId, HartiiOdVrednost security,
+            Transaction transaction, int? transactionIdToExclude = null)
+        {
+            if (transaction.SharesQuantity <= 0)
+                throw new InvalidOperationException("Transaction quantity must be greater than 0.");
+
+            List<Transakcii> allTransactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioId);
+
+            allTransactions = allTransactions
+                .Where(t => t.Hvid == security.Id && t.Realna == transaction.IsReal)
+                .ToList();
+
+            if (transactionIdToExclude.HasValue)
+            {
+                allTransactions = allTransactions
+                    .Where(t => t.Id != transactionIdToExclude.Value)
+                    .ToList();
+            }
+
+            int totalBought = allTransactions
+                .Where(t => t.TipTransakcija == "Купување")
+                .Sum(t => t.KolicinaAkcii);
+
+            int totalSold = allTransactions
+                .Where(t => t.TipTransakcija == "Продавање")
+                .Sum(t => t.KolicinaAkcii);
+
+            int owned = totalBought - totalSold;
+
+            if(transaction.TypeTransaction == "Продавање" && transaction.SharesQuantity > owned)
+            {
+                throw new InvalidOperationException($"Cannot sell {transaction.SharesQuantity} shares of '{security.Kod}'." +
+                    $"You own only {owned}.");
+            }
+
+            if(transaction.TypeTransaction == "Купување" && totalBought + transaction.SharesQuantity > security.VkupenBrojAkcii)
+            {
+                int available = security.VkupenBrojAkcii - totalBought;
+                throw new InvalidOperationException($"Cannot buy {transaction.SharesQuantity} shares of '{security.Kod}'." +
+                    $"Only {available} available.");
+            }
+        }
+
+        public async Task<int> FindOwnedSharesAsync(int portfolioId, string securityCode, bool isReal)
+        {
+            HartiiOdVrednost security = await _securitiesRepository.GetByCodeAsync(securityCode)
+                ?? throw new InvalidOperationException("Security not found.");
+
+            return await _transactionsRepository
+                .GetOwnedSharesAsync(portfolioId, security.Id, isReal);
+        }
     }
 }

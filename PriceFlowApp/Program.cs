@@ -51,6 +51,7 @@ builder.Services.AddScoped<ITransactionsRepository, TransactionsRepository>();
 builder.Services.AddScoped<ITransactionsService, TransactionsService>();
 builder.Services.AddScoped<IPortfolioReturnsRepository, PortfolioReturnsRepository>();
 builder.Services.AddScoped<IPortfolioReturnsService, PortfolioReturnsService>();
+builder.Services.AddScoped<IPortfolioValueService, PortfolioValueService>();
 
 //builder.Services.AddDistributedMemoryCache();
 //builder.Services.AddSession(options =>

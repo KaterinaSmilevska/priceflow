@@ -66,11 +66,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("portfolio-income")]
-        public async Task<ActionResult<IEnumerable<MonthlyIncome>>> GetMonthlyIncome(int portfolioId)
+        public async Task<ActionResult<IEnumerable<MonthlyIncome>>> GetMonthlyIncome(int portfolioId, [FromQuery] bool isReal)
         {
             try
             {
-                IEnumerable<MonthlyIncome> monthlyIncome= await _chartService.GetMonthlyIncomeAsync(portfolioId);
+                IEnumerable<MonthlyIncome> monthlyIncome= await _chartService.GetMonthlyIncomeAsync(portfolioId, isReal);
                 return Ok(monthlyIncome);
             }
             catch (Exception ex)
@@ -81,11 +81,11 @@ namespace PriceFlowApp.Controllers
 
 
         [HttpGet("portfolio-security-allocation")]
-        public async Task<ActionResult<IEnumerable<MonthlyIncome>>> GetSecurityAllocation(int portfolioId)
+        public async Task<ActionResult<IEnumerable<MonthlyIncome>>> GetSecurityAllocation(int portfolioId, bool isReal)
         {
             try
             {
-                IEnumerable<SecurityAllocation> securityAllocation = await _chartService.GetAllocationAsync(portfolioId);
+                IEnumerable<SecurityAllocation> securityAllocation = await _chartService.GetAllocationAsync(portfolioId, isReal);
                 return Ok(securityAllocation);
             }
             catch (Exception ex)

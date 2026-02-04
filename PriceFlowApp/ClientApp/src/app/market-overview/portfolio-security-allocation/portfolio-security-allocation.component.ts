@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Chart, ChartData, ChartType, registerables } from 'chart.js';
+import { Chart, ChartData, ChartOptions, ChartType, registerables } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -19,7 +19,9 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
   @Input() portfolioId!: number;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-  public type: ChartType = 'pie';
+  @Input() isReal: boolean = true;
+
+  public type: 'pie' = 'pie';
   public data: ChartData<'pie', number[], string> = {
     labels: [],
     datasets: [],
@@ -27,9 +29,26 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
 
   public noDataMessage: string | null = null;
 
-  public options = {
+  public options: ChartOptions<'pie'> = {
     responsive: true,
-    maintainAspectRatio: false
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Security allocation',
+        font: {
+          size: 16,
+          weight: 'bold'
+        },
+        padding: {
+          top: 10,
+          bottom: 20
+        }
+      },
+      legend: {
+        position: 'bottom'
+      }
+    }
   };
 
   constructor(private chartService: ChartService) { }
@@ -42,12 +61,15 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
     if (changes['portfolioId'] && !changes['portfolioId'].firstChange) {
       this.loadChart();
     }
+    if (changes['isReal'] && !changes['isReal'].firstChange) {
+      this.loadChart();
+    }
   }
 
   loadChart(): void {
     this.noDataMessage = null;
 
-    this.chartService.getSecurityAllocation(this.portfolioId).subscribe({
+    this.chartService.getSecurityAllocation(this.portfolioId, this.isReal).subscribe({
       next: (res) => {
         if (!res || res.length === 0) {
           this.data = { labels: [], datasets: [] };

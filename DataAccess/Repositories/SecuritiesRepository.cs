@@ -54,6 +54,28 @@ namespace DataAccess.Repositories
                 .FirstOrDefaultAsync(hv => hv.Id == id);
         }
 
+        public async Task<string?> GetSecurityCode(int id)
+        {
+            HartiiOdVrednost? security = await _dbContext.HartiiOdVrednost
+                .FirstOrDefaultAsync(hv => hv.Id == id);
+
+            return security?.Kod;
+        }
+
+        public async Task<int?> GetTotalNumShares(int id)
+        {
+            HartiiOdVrednost? security = await this.GetByIdAsync(id);
+
+            return security?.VkupenBrojAkcii;
+        }
+
+        public async Task<int?> GetTotalNumSharesAsync(string securityCode)
+        {
+            HartiiOdVrednost? security = await this.GetByCodeAsync(securityCode);
+
+            return security?.VkupenBrojAkcii;
+        }
+
         public async Task UpdateAsync(HartiiOdVrednost security)
         {
             _dbContext.HartiiOdVrednost.Update(security);

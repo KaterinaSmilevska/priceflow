@@ -5,5 +5,7 @@
         public decimal TotalRevenue{ get; set; }
         public decimal TotalExpenses { get; set; }
         public decimal Balance { get; set; }
+        public decimal Taxes { get; set; }
+        public bool IsReal { get; set; }
     }
 }

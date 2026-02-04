@@ -73,6 +73,24 @@ namespace PriceFlowApp.Services
             };
         }
 
+        public async Task<Security?> FindByCodeAsync(string code)
+        {
+            var security = await _securitiesRepository.GetByCodeAsync(code);
+
+            if (security == null)
+                return null;
+
+            return new Security
+            {
+                Id = security.Id,
+                Isin = security.Isin,
+                Code = security.Kod,
+                TypeSecurityName = security.TipHv.Ime,
+                IssuerName = security.Izdavach.Ime,
+                TotalNumShares = security.VkupenBrojAkcii
+            };
+        }
+
         public async Task<Security> UpdateAsync(int id, CreateSecurity security)
         {
             HartiiOdVrednost? existingSecurity = await _securitiesRepository.GetByIdAsync(id);
@@ -98,6 +116,21 @@ namespace PriceFlowApp.Services
                 IssuerName = full.Izdavach.Ime,
                 TotalNumShares = full.VkupenBrojAkcii
             };
+        }
+
+        public async Task<string?> FindSecurityCode(int id)
+        {
+            return await _securitiesRepository.GetSecurityCode(id);
+        }
+
+        public async Task<int?> FindTotalNumShares(int id)
+        {
+            return await _securitiesRepository.GetTotalNumShares(id);
+        }
+
+        public async Task<int?> FindTotalNumSharesAsync(string securityCode)
+        {
+            return await _securitiesRepository.GetTotalNumSharesAsync(securityCode);
         }
     }
 }

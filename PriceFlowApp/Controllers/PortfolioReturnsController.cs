@@ -41,5 +41,19 @@ namespace PriceFlowApp.Controllers
                 return StatusCode(500, new { message = "Error getting portfolio summary.", detail = ex.Message });
             }
         }
+
+        [HttpGet("{portfolioId}")]
+        public async Task<ActionResult<IEnumerable<PortfolioReturns>>> GetByPortfolioId(int portfolioId)
+        {
+            try
+            {
+                IEnumerable<PortfolioReturns> returns = await _portfolioReturnsService.FindByPortfolioId(portfolioId);
+                return Ok(returns);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error getting portfolio returns.", detail = ex.Message });
+            }
+        }
     }
 }
