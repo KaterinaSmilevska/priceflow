@@ -1,0 +1,46 @@
+<div class="container-fluid mt-3">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h5 class="mb-1 fw-semibold">Market Liquidity Overview</h5>
+      <div class="text-muted small">
+        Ranked securities based on trading activity
+      </div>
+    </div>
+
+    <select class="form-select form-select-sm w-auto"
+            [(ngModel)]="months"
+            (change)="loadLiquidity()">
+      <option [value]="3">Last 3 months</option>
+      <option [value]="6">Last 6 months</option>
+      <option [value]="12">Last 12 months</option>
+    </select>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <app-liquidity-table [title]="'Most Liquid (Traded Quantity)'"
+                           [data]="liquidity.mostByTradedQuantity">
+      </app-liquidity-table>
+    </div>
+
+    <div class="col-md-6">
+      <app-liquidity-table [title]="'Least Liquid (Traded Quantity)'"
+                           [data]="liquidity.leastByTradedQuantity">
+      </app-liquidity-table>
+    </div>
+
+    <div class="col-md-6">
+      <app-liquidity-table [title]="'Most Active (Trading Days)'"
+                           [data]="liquidity.mostByTradingDays">
+      </app-liquidity-table>
+    </div>
+
+    <div class="col-md-6">
+      <app-liquidity-table [title]="'Least Active (Trading Days)'"
+                           [data]="liquidity.leastByTradingDays">
+      </app-liquidity-table>
+    </div>
+
+  </div>
+</div>

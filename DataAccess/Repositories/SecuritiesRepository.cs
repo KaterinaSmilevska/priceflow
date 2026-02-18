@@ -40,6 +40,13 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<HartiiOdVrednost>> GetAllByIds(List<int> securitiesIds)
+        {
+            return await _dbContext.HartiiOdVrednost
+                .Where(s => securitiesIds.Contains(s.Id))
+                .ToListAsync();
+        }
+
         public async Task<HartiiOdVrednost?> GetByCodeAsync(string code)
         {
             return await _dbContext.HartiiOdVrednost

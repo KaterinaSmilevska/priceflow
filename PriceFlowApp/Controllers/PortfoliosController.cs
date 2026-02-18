@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.Enums;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
@@ -13,10 +14,12 @@ namespace PriceFlowApp.Controllers
     public class PortfoliosController : ControllerBase
     {
         private readonly IPortfoliosService _portfoliosService;
+        private readonly ITransactionsService _transactionsService;
 
-        public PortfoliosController(IPortfoliosService portfoliosService)
+        public PortfoliosController(IPortfoliosService portfoliosService, ITransactionsService transactionsService)
         {
             _portfoliosService = portfoliosService;
+            _transactionsService = transactionsService;
         }
 
 
@@ -92,6 +95,21 @@ namespace PriceFlowApp.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Error deleting portoflio.", detail = ex.Message });
+            }
+        }
+
+        [HttpGet("securities-price-trend")]
+        public async Task<ActionResult<List<OwnedSecuritiesPriceTrend>>> GetSecuritiesPriceTrend([FromQuery] PriceTrendPeriod period = PriceTrendPeriod.Monthly, [FromQuery] int periodsBack = 12)
+        {
+            try
+            {
+                int userId = User.GetUserId();
+                List<OwnedSecuritiesPriceTrend> result = await _transactionsService.FindPriceTrendAsync(userId, period, periodsBack);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching portfolio price trend.", detail = ex.Message });
             }
         }
     }

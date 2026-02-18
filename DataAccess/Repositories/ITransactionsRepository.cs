@@ -20,5 +20,9 @@ namespace DataAccess.Repositories
         Task<Transakcii> UpdateAsync(Transakcii transaction);
 
         Task DeleteAsync(Transakcii transaction);
+
+        Task<List<int>> GetOwnedSecuritiesIdsAsync(int userId);
+
+        Task<int> GetOwnedSharesAtDateAsync(int portfolioId, int securityId, bool isReal, DateOnly date, int? excludeTransactionId = null);
     }
 }

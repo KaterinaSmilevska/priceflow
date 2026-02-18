@@ -1,9 +1,12 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.Enums;
+using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Runtime.Intrinsics.Arm;
 using System.Threading.Tasks;
 
 namespace PriceFlowApp.Services
@@ -13,13 +16,15 @@ namespace PriceFlowApp.Services
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly ISecuritiesRepository _securitiesRepository;
         private readonly IPortfolioReturnsService _portfolioReturnsService;
+        private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
 
         public TransactionsService(ITransactionsRepository transactionsRepository, ISecuritiesRepository securitiesRepository,
-            IPortfolioReturnsService portfolioReturnsService)
+            IPortfolioReturnsService portfolioReturnsService, IDailyTurnoverRepository dailyTurnoverRepository)
         {
             _transactionsRepository = transactionsRepository;
             _securitiesRepository = securitiesRepository;
             _portfolioReturnsService = portfolioReturnsService;
+            _dailyTurnoverRepository = dailyTurnoverRepository;
         }
 
         public async Task<Transaction> AddAsync(int portfolioId, Transaction transaction)
@@ -103,7 +108,7 @@ namespace PriceFlowApp.Services
             foundTransaction.Hvid = security.Id;
             foundTransaction.KolicinaAkcii = transaction.SharesQuantity;
             foundTransaction.EdinecnaCenaAkcija = transaction.SharesUnitPrice;
-            foundTransaction.Iznos = transaction.Amount;
+            //foundTransaction.Iznos = transaction.Amount;
             foundTransaction.TipTransakcija = transaction.TypeTransaction;
             foundTransaction.Realna = transaction.IsReal;
             foundTransaction.BerzanskaProvizija = transaction.StockExchangeCommission;
@@ -169,16 +174,6 @@ namespace PriceFlowApp.Services
         private decimal CalculateTransactionAmount(Transaction transaction)
         {
             return transaction.SharesQuantity * transaction.SharesUnitPrice;
-
-            //decimal feesPercent = transaction.BrokerageCommission
-            //       + transaction.StockExchangeCommission
-            //       + transaction.CDHVCommission;
-            //decimal fees = amount * feesPercent / 100;
-
-            //return transaction.TypeTransaction == "Купување"
-            //    ? amount + fees
-            //    : amount - fees;
-
         }
 
         private decimal CalculateCommission(Transakcii transaction) {
@@ -211,28 +206,63 @@ namespace PriceFlowApp.Services
                     .ToList();
             }
 
-            int totalBought = allTransactions
+            allTransactions.Add(new Transakcii
+            {
+                Hvid = security.Id,
+                TipTransakcija = transaction.TypeTransaction,
+                KolicinaAkcii = transaction.SharesQuantity,
+                Datum = transaction.Date,
+                Realna = transaction.IsReal
+            });
+
+            var ordered = allTransactions
+                .OrderBy(t => t.Datum)
+                .ThenBy(t => t.TipTransakcija == "Купување" ? 0:1)
+                .ToList();
+
+            if(transaction.TypeTransaction == "Продавање")
+            {
+                int ownedAtDate = await _transactionsRepository.GetOwnedSharesAtDateAsync(portfolioId, security.Id,
+                    transaction.IsReal, transaction.Date, transactionIdToExclude);
+
+                if (transaction.SharesQuantity < ownedAtDate)
+                {
+                    throw new BusinessRuleException("SELL_BEFORE_BUY",
+                        $"On {transaction.Date::yyyy-MM-dd} you own only {ownedAtDate} shares of '{security.Kod}'");
+                }
+            }
+
+            int totalBought = ordered
                 .Where(t => t.TipTransakcija == "Купување")
                 .Sum(t => t.KolicinaAkcii);
 
-            int totalSold = allTransactions
+            int totalSold = ordered
                 .Where(t => t.TipTransakcija == "Продавање")
                 .Sum(t => t.KolicinaAkcii);
 
             int owned = totalBought - totalSold;
 
-            if(transaction.TypeTransaction == "Продавање" && transaction.SharesQuantity > owned)
-            {
-                throw new InvalidOperationException($"Cannot sell {transaction.SharesQuantity} shares of '{security.Kod}'." +
-                    $"You own only {owned}.");
-            }
+            //if (transaction.TypeTransaction == "Продавање" && transaction.SharesQuantity > owned)
+            //{
+            //    throw new InvalidOperationException($"Cannot sell {transaction.SharesQuantity} shares of '{security.Kod}'." +
+            //        $"You own only {owned}.");
+            //}
 
-            if(transaction.TypeTransaction == "Купување" && totalBought + transaction.SharesQuantity > security.VkupenBrojAkcii)
-            {
-                int available = security.VkupenBrojAkcii - totalBought;
-                throw new InvalidOperationException($"Cannot buy {transaction.SharesQuantity} shares of '{security.Kod}'." +
-                    $"Only {available} available.");
-            }
+            //if(transaction.TypeTransaction == "Купување" && totalBought + transaction.SharesQuantity > security.VkupenBrojAkcii)
+            //{
+            //    int available = security.VkupenBrojAkcii - totalBought;
+            //    throw new InvalidOperationException($"Cannot buy {transaction.SharesQuantity} shares of '{security.Kod}'." +
+            //        $"Only {available} available.");
+            //}
+        }
+
+        public async Task<int> FindOwnedSharesAtDateAsync(int portfolioId, string securityCode, bool isReal, DateOnly date)
+        {
+            HartiiOdVrednost security = await _securitiesRepository.GetByCodeAsync(securityCode)
+                ?? throw new InvalidOperationException("Security not found.");
+
+            return await _transactionsRepository
+                .GetOwnedSharesAtDateAsync(portfolioId, security.Id, isReal, date);
         }
 
         public async Task<int> FindOwnedSharesAsync(int portfolioId, string securityCode, bool isReal)
@@ -242,6 +272,22 @@ namespace PriceFlowApp.Services
 
             return await _transactionsRepository
                 .GetOwnedSharesAsync(portfolioId, security.Id, isReal);
+        }
+
+        public async Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod period, int periodsBack = 12)
+        {
+            List<int> ownedSecuritiesIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
+
+            IEnumerable<DnevenPromet> dailyPrices = await _dailyTurnoverRepository
+                .GetBySecuritiesIdsAsync(ownedSecuritiesIds, period, periodsBack);
+
+            return dailyPrices.Select(dp => new OwnedSecuritiesPriceTrend
+            {
+                Date = dp.Datum,
+                SecurityId = dp.Hvid,
+                SecurityCode = dp.Hv.Kod,
+                Price = dp.CenaPoslednaTransakcija!.Value
+            }).ToList();
         }
     }
 }

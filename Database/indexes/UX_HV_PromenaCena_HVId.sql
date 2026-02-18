@@ -1,0 +1,3 @@
+﻿CREATE UNIQUE NONCLUSTERED INDEX [UX_HV_PromenaCena_HVId]
+	ON [dbo].[HV_PromenaCena]
+	(HVId)

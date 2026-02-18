@@ -7,14 +7,17 @@ import { ChartComponent } from '../market-overview/chart/chart.component';
 import { BrokersComponent } from '../brokers/brokers.component';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../auth/login/login.service';
+import { SecuritiesPriceTrendComponent } from '../portfolios/securities-price-trend/securities-price-trend.component';
+import { LiquidityComponent } from '../liquidity/liquidity.component';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, BrokersComponent, MarketOverviewComponent, TopPerformersComponent, SecuritiesComponent, ChartComponent],
+  imports: [CommonModule, BrokersComponent, MarketOverviewComponent, TopPerformersComponent, SecuritiesComponent, ChartComponent, SecuritiesPriceTrendComponent, LiquidityComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+  portfolioId?: number;
   constructor(private router: Router, public loginService: LoginService) { }
 
   onGetStarted() {

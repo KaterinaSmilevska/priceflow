@@ -15,6 +15,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { PortfoliosComponent } from './portfolios/portfolios.component';
 import { InvestorGuard } from './portfolios/investor.guard';
 import { PortfolioDetailsComponent } from './portfolios/portfolio-details/portfolio-details.component';
+import { ThresholdComponent } from './thresholds/threshold.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -30,5 +31,6 @@ export const routes: Routes = [
   { path: 'marketoverview', component: MarketOverviewComponent },
   { path: 'portfolios', component: PortfoliosComponent, canActivate: [InvestorGuard] },
   { path: 'portfolios/:id', component: PortfolioDetailsComponent, canActivate: [InvestorGuard] },
+  { path: 'price-alerts', component: ThresholdComponent, canActivate: [InvestorGuard] },
   { path: '**', redirectTo: '' },
 ];

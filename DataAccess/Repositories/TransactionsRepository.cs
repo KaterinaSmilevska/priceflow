@@ -29,7 +29,9 @@ namespace DataAccess.Repositories
 
         public async Task<Transakcii?> GetByIdAsync(int id)
         {
-            return await _dbContext.Transakcii.FindAsync(id);
+            return await _dbContext.Transakcii
+                .Include(t => t.Hv)
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<List<Transakcii>> GetByPortfolioIdAsync(int portfolioId)
@@ -39,6 +41,24 @@ namespace DataAccess.Repositories
                 .Where(t => t.PortfolioId == portfolioId)
                 .OrderByDescending(t => t.Datum)
                 .ToListAsync();
+        }
+
+        public async Task<List<int>> GetOwnedSecuritiesIdsAsync(int userId)
+        {
+            IEnumerable<Transakcii> transactions = await _dbContext.Transakcii
+                .Include(t => t.Portfolio)
+                .Where(t => t.Portfolio.KorisnikId == userId && t.Realna)
+                .ToListAsync();
+
+            return transactions
+                .GroupBy(t => t.Hvid)
+                .Where(g => 
+                    g.Sum(t => t.TipTransakcija == "Купување" ? t.KolicinaAkcii : 0)
+                    - g.Sum(t => t.TipTransakcija == "Продавање" ? t.KolicinaAkcii : 0)
+                    > 0
+                    )
+                .Select(g => g.Key)
+                .ToList();
         }
 
         public async Task<int> GetOwnedSharesAsync(int portfolioId, int securityId, bool isReal)
@@ -56,6 +76,30 @@ namespace DataAccess.Repositories
                .Sum(t => t.KolicinaAkcii);
 
             return bought - sold;
+        }
+
+        public async Task<int> GetOwnedSharesAtDateAsync(int portfolioId, int securityId, bool isReal, DateOnly date, int? excludeTransactionId = null)
+        {
+            var query = _dbContext.Transakcii
+                .Where(t => t.PortfolioId == portfolioId && t.Hvid == securityId &&
+                    t.Realna == isReal && t.Datum <= date);
+
+            if(excludeTransactionId.HasValue)
+                query = query.Where(t => t.Id != excludeTransactionId.Value);
+            
+            var transactions = await query
+                .OrderBy(t => t.Datum)
+                .ToListAsync();
+
+            int ownedShares = 0;
+
+            foreach(var t in transactions)
+            {
+                ownedShares += t.TipTransakcija == "Купување"
+                    ? t.KolicinaAkcii
+                    : -t.KolicinaAkcii;
+            }
+            return ownedShares;
         }
 
         public async Task<Transakcii> UpdateAsync(Transakcii transaction)

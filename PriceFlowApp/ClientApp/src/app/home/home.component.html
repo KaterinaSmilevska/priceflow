@@ -6,6 +6,10 @@
 
 <app-brokers *ngIf="(loginService.isInvestor() | async)"></app-brokers>
 
+<app-liquidity *ngIf="(loginService.isInvestor() | async)"></app-liquidity>
+
+<app-securities-price-trend *ngIf="(loginService.isInvestor() | async)"></app-securities-price-trend>
+
 <app-market-overview></app-market-overview>
 <app-top-performers></app-top-performers>
 

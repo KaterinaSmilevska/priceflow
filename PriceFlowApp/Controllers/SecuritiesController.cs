@@ -101,5 +101,21 @@ namespace PriceFlowApp.Controllers
                 return StatusCode(500, new { message = "Error updating security.", detail = ex.Message });
             }
         }
+
+        [HttpGet("prices")]
+        public async Task<ActionResult<SecurityDailyPrices>> GetLatestPrices([FromQuery] string securityCode, [FromQuery] DateTime date)
+        {
+            try
+            {
+                SecurityDailyPrices? result = await _securitiesService.GetLatestPricesAsync(securityCode, date);
+                if (result == null)
+                    return NotFound();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching latest prices.", detail = ex.Message });
+            }
+        }
     }
 }

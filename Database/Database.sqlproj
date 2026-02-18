@@ -78,6 +78,11 @@
     <None Include="..\PriceFlowApp\ClientApp\src\app\market-overview\portfolio-security-allocation\PortfolioSecurityAllocationComponent.ts">
       <Link>PortfolioSecurityAllocationComponent.ts</Link>
     </None>
+    <None Include="..\PriceFlowApp\ClientApp\src\app\transactions\transaction-form\TransactionFormComponent.ts">
+      <Link>TransactionFormComponent.ts</Link>
+    </None>
+    <None Include="tables\HV_PromenaCena.sql" />
+    <None Include="tables\Izvestuvanja_PromenaCena.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="tables\AplikativniParametri.sql" />
@@ -130,6 +135,9 @@
     <Build Include="indexes\IX_Ulogi_DateModified.sql" />
     <Build Include="indexes\IX_HartiiOdVrednost_DateModified.sql" />
     <Build Include="indexes\IX_PortfolioPrinosi_DateModified.sql" />
+    <Build Include="indexes\UX_HV_PromenaCena_HVId.sql" />
+    <Build Include="indexes\UX_Izvestuvanja_PromenaCena.sql" />
+    <Build Include="indexes\IX_Izvestuvanja_PromenaCena_Procitano.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Database.refactorlog" />

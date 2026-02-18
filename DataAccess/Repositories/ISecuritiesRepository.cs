@@ -13,6 +13,8 @@ namespace DataAccess.Repositories
 
         Task<HartiiOdVrednost?> GetByIdAsync(int id);
 
+        Task<IEnumerable<HartiiOdVrednost>> GetAllByIds(List<int> securitiesIds);
+
         Task<HartiiOdVrednost?> GetByCodeAsync(string code);
 
         Task<string?> GetSecurityCode(int id);

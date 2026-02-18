@@ -1,7 +1,9 @@
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using PriceFlowApp.Exceptions;
 using PriceFlowApp.Services;
 using PriceFlowSecurity;
 
@@ -46,12 +48,16 @@ builder.Services.AddScoped<IMarketOverviewService,  MarketOverviewService>();
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IPortfoliosRepository, PortfoliosRepository>();
 builder.Services.AddScoped<IPortfoliosService, PortfoliosService>();
-builder.Services.AddScoped<IPortfolioDetailsService, PortfolioDetailsService>();
 builder.Services.AddScoped<ITransactionsRepository, TransactionsRepository>();
 builder.Services.AddScoped<ITransactionsService, TransactionsService>();
 builder.Services.AddScoped<IPortfolioReturnsRepository, PortfolioReturnsRepository>();
 builder.Services.AddScoped<IPortfolioReturnsService, PortfolioReturnsService>();
 builder.Services.AddScoped<IPortfolioValueService, PortfolioValueService>();
+builder.Services.AddScoped<IDailyTurnoverRepository, DailyTurnoverRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IThresholdRepository, ThresholdRepository>();
+builder.Services.AddScoped<IThresholdService, ThresholdService>();
 
 //builder.Services.AddDistributedMemoryCache();
 //builder.Services.AddSession(options =>
@@ -121,6 +127,28 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+app.UseExceptionHandler(appError =>
+{
+    app.Run(async context =>
+    {
+        var exception = context.Features
+        .Get<IExceptionHandlerFeature>()?.Error;
+
+        if (exception is BusinessRuleException bre)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            await context.Response.WriteAsJsonAsync(new
+            {
+                message = bre.Message,
+                code = bre.Code
+            });
+            return;
+        }
+        throw exception!;
+    });
+});
 
 //app.MapControllerRoute(
 //    name: "default",

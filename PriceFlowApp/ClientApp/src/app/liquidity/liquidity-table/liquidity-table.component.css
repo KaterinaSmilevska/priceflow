@@ -1,0 +1,38 @@
+.card {
+    border-radius: 16px;
+    background: #ffffff;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.liquidity-table thead {
+    background: #f8f9fa;
+}
+
+.liquidity-table thead th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    color: #6c757d;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.liquidity-table tbody tr {
+    border-bottom: 1px solid #f1f3f5;
+    transition: background-color 0.15s ease;
+}
+
+.liquidity-table tbody tr:hover {
+    background-color: #eef2f7;
+}
+
+.liquidity-table td {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+
+.tracking {
+    letter-spacing: 0.05rem;
+}

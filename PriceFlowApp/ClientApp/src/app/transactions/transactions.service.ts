@@ -92,6 +92,11 @@ export class TransactionsService {
       { params: { code, isReal }, withCredentials: true });
   }
 
+  getOwnedSharesAtDate(portfolioId: number, code: string, isReal: boolean, date: string) {
+    return this.http.get<number>(`${this.apiUrl}/${portfolioId}/transactions/owned-shares-date`,
+      { params: { code, isReal, date }, withCredentials: true });
+  }
+
   getTotalShares(code: string) {
     return this.http.get<number>(`${this.securitiesUrl}/${code}/total-shares`,
       { withCredentials: true }

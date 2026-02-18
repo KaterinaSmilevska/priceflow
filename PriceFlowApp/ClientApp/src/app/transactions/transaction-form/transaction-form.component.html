@@ -27,8 +27,17 @@
         You can buy at most {{ remainingShares }} shares.
       </div>
 
-      <label>Unit Price</label>
-      <input type="number" formControlName="sharesUnitPrice" class="form-control">
+      <label>Price Type</label>
+      <select formControlName="selectedPriceType" class="form-select">
+        <option value="min">Min price</option>
+        <option value="average">Average price</option>
+        <option value="max">Max price</option>
+      </select>
+
+      <div class="text-muted small mt-1" *ngIf="dailyPrices">
+        Selected price:
+        <strong>{{ form.get('sharesUnitPrice')?.value | number:'1.2-2' }} ден.</strong>
+      </div>
 
       <div class="mt-3 border-top pt-2">
 
@@ -69,7 +78,6 @@
         </div>
       </div>
 
-
       <label>Date</label>
       <input type="date" formControlName="date" class="form-control">
 
@@ -83,13 +91,17 @@
 
       <div class="text-end mt-3">
         <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancel</button>
-        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || sellLimitExceeded || buyLimitExceeded">
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || sellLimitExceeded || buyLimitExceeded || dateSellInvalid">
           {{ transaction ? 'Save Changes' : 'Add Transaction' }}
         </button>
       </div>
 
       <div *ngIf="form.errors?.backend" class="alert alert-danger mt-2">
         {{ form.errors?.backend }}
+      </div>
+
+      <div *ngIf="dateSellInvalid" class="text-danger mt-1">
+        On the selected date you own only {{ ownedSharesAtDate }} shares.
       </div>
     </form>
   </div>

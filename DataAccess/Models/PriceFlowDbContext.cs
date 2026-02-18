@@ -25,7 +25,11 @@ public partial class PriceFlowDbContext : DbContext
 
     public virtual DbSet<HartiiOdVrednost> HartiiOdVrednost { get; set; }
 
+    public virtual DbSet<HvPromenaCena> HvPromenaCena { get; set; }
+
     public virtual DbSet<Izdavachi> Izdavachi { get; set; }
+
+    public virtual DbSet<IzvestuvanjaPromenaCena> IzvestuvanjaPromenaCena { get; set; }
 
     public virtual DbSet<Korisnici> Korisnici { get; set; }
 
@@ -174,6 +178,32 @@ public partial class PriceFlowDbContext : DbContext
                 .HasConstraintName("fk_HartiiOdVrednost_TipHV");
         });
 
+        modelBuilder.Entity<HvPromenaCena>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pk_HV_PromenaCena");
+
+            entity.ToTable("HV_PromenaCena");
+
+            entity.HasIndex(e => e.Hvid, "UX_HV_PromenaCena_HVId").IsUnique();
+
+            entity.HasIndex(e => new { e.KorisnikId, e.Hvid }, "un_HV_PromenaCena_Korisnici_HartiiOdVrednost").IsUnique();
+
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.DolnaGranica).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.GornaGranica).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.Hvid).HasColumnName("HVId");
+
+            entity.HasOne(d => d.Hv).WithOne(p => p.HvPromenaCena)
+                .HasForeignKey<HvPromenaCena>(d => d.Hvid)
+                .HasConstraintName("fk_HV_PromenaCena_HartiiOdVrednost");
+
+            entity.HasOne(d => d.Korisnik).WithMany(p => p.HvPromenaCena)
+                .HasForeignKey(d => d.KorisnikId)
+                .HasConstraintName("fk_HV_PromenaCena_Korisnici");
+        });
+
         modelBuilder.Entity<Izdavachi>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk_Izdavachi");
@@ -198,6 +228,33 @@ public partial class PriceFlowDbContext : DbContext
             entity.HasOne(d => d.Sektor).WithMany(p => p.Izdavachi)
                 .HasForeignKey(d => d.SektorId)
                 .HasConstraintName("fk_Izdavachi_Sektori");
+        });
+
+        modelBuilder.Entity<IzvestuvanjaPromenaCena>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pk_Izvestuvanja_PromenaCena");
+
+            entity.ToTable("Izvestuvanja_PromenaCena");
+
+            entity.HasIndex(e => new { e.KorisnikId, e.Procitano }, "IX_Izvestuvanja_PromenaCena_Procitano");
+
+            entity.HasIndex(e => new { e.KorisnikId, e.Hvid, e.DatumTrguvanje }, "UX_Izvestuvanja_PromenaCena").IsUnique();
+
+            entity.Property(e => e.DateModified)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.DatumTrguvanje).HasColumnType("datetime");
+            entity.Property(e => e.Hvid).HasColumnName("HVId");
+            entity.Property(e => e.Poraka).HasMaxLength(500);
+            entity.Property(e => e.ProcentPromena).HasColumnType("decimal(18, 2)");
+
+            entity.HasOne(d => d.Hv).WithMany(p => p.IzvestuvanjaPromenaCena)
+                .HasForeignKey(d => d.Hvid)
+                .HasConstraintName("fk__Izvestuvanja_PromenaCena_HartiiOdVrednost");
+
+            entity.HasOne(d => d.Korisnik).WithMany(p => p.IzvestuvanjaPromenaCena)
+                .HasForeignKey(d => d.KorisnikId)
+                .HasConstraintName("fk_Izvestuvanja_PromenaCena_Korisnici");
         });
 
         modelBuilder.Entity<Korisnici>(entity =>

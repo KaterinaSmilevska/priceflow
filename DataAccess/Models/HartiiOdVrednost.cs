@@ -21,7 +21,11 @@ public partial class HartiiOdVrednost
 
     public virtual ICollection<DnevenPromet> DnevenPromet { get; set; } = new List<DnevenPromet>();
 
+    public virtual HvPromenaCena? HvPromenaCena { get; set; }
+
     public virtual Izdavachi Izdavach { get; set; } = null!;
+
+    public virtual ICollection<IzvestuvanjaPromenaCena> IzvestuvanjaPromenaCena { get; set; } = new List<IzvestuvanjaPromenaCena>();
 
     public virtual ICollection<PortfolioPrinosi> PortfolioPrinosi { get; set; } = new List<PortfolioPrinosi>();
 

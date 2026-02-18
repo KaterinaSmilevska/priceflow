@@ -31,6 +31,12 @@
                routerLink="/portfolios"
                routerLinkActive="active-link">My Portfolios</a>
           </li>
+
+          <li *ngIf="(loginService.isLoggedIn() | async) && (loginService.isInvestor() | async)" class="nav-item">
+            <a class="nav-link text-white fw-bold"
+               routerLink="/price-alerts"
+               routerLinkActive="active-link">Price Alerts</a>
+          </li>
         </ul>
 
         <div class="d-flex align-items-center justify-content-end position-relative">
@@ -53,6 +59,9 @@
             <div class="text-white me-3" style="font-size: 1.2rem; padding: 0.5rem 1rem;">
               Welcome, {{ (loginService.getUsername() | async) || 'User' }}!
             </div>
+
+             <app-notifications></app-notifications>
+
             <button (click)="loginService.logout();$event.stopPropagation()" class="btn btn-secondary ms-3 login">
               LOGOUT
             </button>

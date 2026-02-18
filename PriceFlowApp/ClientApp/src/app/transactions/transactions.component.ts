@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { PortfolioTableView, PortfolioValue, Transaction, TransactionsService } from './transactions.service';
-import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { PortfolioAnalytics } from '../portfolios/portfolios.service';
 import { PortfolioSecurityAllocationComponent } from '../market-overview/portfolio-security-allocation/portfolio-security-allocation.component';
 import { PortfolioIncomeComponent } from '../market-overview/portfolio-income/portfolio-income.component';
 import { PortfolioReturnsComponent } from '../portfolios/portfolio-returns/portfolio-returns.component';
 import { PortfolioReturns, PortfolioReturnsService } from '../portfolios/portfolio-returns/portfolio-returns.service';
 import { SecuritiesService } from '../securities/securities.service';
+import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 
 @Component({
   selector: 'app-transactions',

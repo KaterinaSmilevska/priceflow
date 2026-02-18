@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SecurityLiquidity } from '../liquidity/SecurityLiquidity';
 
 export interface Portfolio {
   id: number;
@@ -23,6 +24,12 @@ export interface PortfolioAnalytics {
   totalExpenses: number;
   balance: number;
   taxes: number;
+}
+
+export interface SecuritiesPriceTrend {
+  date: string;
+  securityCode: string;
+  price: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -51,5 +58,11 @@ export class PortfoliosService {
 
   deletePortfolio(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
+  }
+
+  getSecuritiesPriceTrend(period: 'Monthly' | 'Yearly', periodsBack = 12) {
+    return this.http.get<SecuritiesPriceTrend[]>(
+      `${this.apiUrl}/securities-price-trend`,
+      { params: { period, periodsBack }, withCredentials: true });
   }
 }

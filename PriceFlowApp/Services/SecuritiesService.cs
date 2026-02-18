@@ -7,8 +7,14 @@ namespace PriceFlowApp.Services
     public class SecuritiesService : ISecuritiesService
     {
         private readonly ISecuritiesRepository _securitiesRepository;
+        private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
 
-        public SecuritiesService(ISecuritiesRepository securitiesRepository) => _securitiesRepository = securitiesRepository;
+        public SecuritiesService(ISecuritiesRepository securitiesRepository, IDailyTurnoverRepository dailyTurnoverRepository)
+        {
+            _securitiesRepository = securitiesRepository;
+            _dailyTurnoverRepository = dailyTurnoverRepository;
+
+        }
 
         public async Task<Security> AddAsync(CreateSecurity security)
         {
@@ -131,6 +137,37 @@ namespace PriceFlowApp.Services
         public async Task<int?> FindTotalNumSharesAsync(string securityCode)
         {
             return await _securitiesRepository.GetTotalNumSharesAsync(securityCode);
+        }
+
+        public async Task<SecurityDailyPrices?> GetLatestPricesAsync(string securityCode, DateTime date)
+        {
+           IEnumerable<DnevenPromet?> dailyTurnover = await _dailyTurnoverRepository.GetBySecurityCode(securityCode, date);
+
+            if (!dailyTurnover.Any())
+                return null;
+
+            decimal? minPrice = dailyTurnover
+                .Where(dailyTurnover => dailyTurnover.MinCena.HasValue)
+                .Select(d => d.MinCena)
+                .FirstOrDefault();
+
+            decimal? maxPrice = dailyTurnover
+                .Where(dailyTurnover => dailyTurnover.MaxCena.HasValue)
+                .Select(d => d.MaxCena)
+                .FirstOrDefault();
+
+            decimal? averagePrice = dailyTurnover
+                .Where(dailyTurnover => dailyTurnover.ProsecnaCena.HasValue)
+                .Select(d => d.ProsecnaCena)
+                .FirstOrDefault();
+
+            return new SecurityDailyPrices
+            {
+                SecurityCode = securityCode,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice,
+                AveragePrice = averagePrice
+            };
         }
     }
 }

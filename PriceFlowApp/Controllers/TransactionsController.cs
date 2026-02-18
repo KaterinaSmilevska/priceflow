@@ -43,7 +43,22 @@ namespace PriceFlowApp.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(400, new { message = "Error fetching number of owned shares.", detail = ex.Message });
+                return StatusCode(500, new { message = "Error fetching number of owned shares.", detail = ex.Message });
+            }
+        }
+
+
+        [HttpGet("owned-shares-date")]
+        public async Task<ActionResult<int>> GetOwnedSharesAtDate(int portfolioId, [FromQuery] string code, [FromQuery] bool isReal, [FromQuery] DateOnly date)
+        {
+            try
+            {
+                int ownedSharesAtDate = await _transactionsService.FindOwnedSharesAtDateAsync(portfolioId, code, isReal, date);
+                return Ok(ownedSharesAtDate);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching number of owned shares at the specified date.", detail = ex.Message });
             }
         }
 
@@ -54,6 +69,10 @@ namespace PriceFlowApp.Controllers
             {
                 Transaction createdTransaction = await _transactionsService.AddAsync(portfolioId, transaction);
                 return Ok(createdTransaction);
+            }
+            catch(InvalidOperationException ex)
+            {
+                return BadRequest(new {message = ex.Message});
             }
             catch (Exception ex)
             {
@@ -68,6 +87,10 @@ namespace PriceFlowApp.Controllers
             {
                 Transaction updatedTransaction = await _transactionsService.UpdateAsync(id, transaction);
                 return Ok(updatedTransaction);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Transaction, TransactionsService } from '../transactions.service';
-import { SecuritiesService, Security } from '../../securities/securities.service';
+import { SecurityDailyPrices, SecuritiesService, Security } from '../../securities/securities.service';
 import { Tooltip } from 'bootstrap';
 
 @Component({
@@ -21,6 +21,9 @@ export class TransactionFormComponent implements OnInit {
   form!: FormGroup;
   securities: Security[] = [];
 
+  dateSellInvalid = false;
+  ownedSharesAtDate: number | null = null;
+
   ownedShares: number | null = null;
   totalShares: number | null = null;
   remainingShares: number | null = null;
@@ -30,6 +33,8 @@ export class TransactionFormComponent implements OnInit {
 
   isReal = true;
 
+  dailyPrices?: SecurityDailyPrices;
+
   constructor(private fb: FormBuilder,
     private transactionsService: TransactionsService,
     private securitiesService: SecuritiesService) { }
@@ -38,7 +43,8 @@ export class TransactionFormComponent implements OnInit {
     this.form = this.fb.group({
       hvCode: ['', Validators.required],
       sharesQuantity: [1, [Validators.required, Validators.min(1)]],
-      sharesUnitPrice: [0, [Validators.required, Validators.min(0)]],
+      sharesUnitPrice: [{ value: 0, disabled: true }],
+      selectedPriceType: ['average', Validators.required],
       typeTransaction: ['Купување', Validators.required],
       isReal: [true],
       stockExchangeCommission: [{ value: 0.2, disabled: true }],
@@ -50,13 +56,28 @@ export class TransactionFormComponent implements OnInit {
 
     this.securitiesService.getAll().subscribe(s => { this.securities = s; })
 
-    this.form.get('hvCode')?.valueChanges.subscribe(() => this.updateShares());
+    this.form.get('hvCode')?.valueChanges.subscribe(() => {
+      this.updateShares();
+      this.loadPrices();
+    });
 
-    this.form.get('isReal')?.valueChanges.subscribe(() => this.updateShares());
+    this.form.get('isReal')?.valueChanges.subscribe(() => {
+      this.updateShares();
+      this.loadPrices();
+    });
+
+    this.form.get('selectedPriceType')?.valueChanges
+      .subscribe(() => this.applySelectedPrice());
+
+    this.form.get('date')?.valueChanges
+      .subscribe(() => this.loadPrices());
 
     this.form.valueChanges.subscribe(() => {
+      this.updateShares();
+      this.loadPrices();
       this.calculateAmountPreview();
       this.evaluateLimits();
+      this.validateSellDate();
     })
 
     if (this.transaction) {
@@ -75,6 +96,7 @@ export class TransactionFormComponent implements OnInit {
 
       this.calculateAmountPreview();
       this.updateShares();
+      this.loadPrices();
     }
 
     setTimeout(() => {
@@ -147,8 +169,61 @@ export class TransactionFormComponent implements OnInit {
     }
   }
 
+  private validateSellDate(): void {
+    const raw = this.form.getRawValue();
+
+    if (raw.typeTransaction !== 'Продавање' || !raw.hvCode) {
+      this.dateSellInvalid = false;
+      return;
+    }
+
+    this.transactionsService.getOwnedSharesAtDate(this.portfolioId, raw.hvCode, raw.isReal, raw.date)
+      .subscribe(owned => {
+        this.ownedSharesAtDate = owned;
+        this.dateSellInvalid = raw.sharesQuantity > owned;
+      });
+  }
+
+  private loadPrices(): void {
+    const code = this.form.get('hvCode')?.value;
+    const date = this.form.get('date')?.value;
+
+    if (!code) return;
+
+    this.securitiesService.getLatestPrices(code, date).subscribe(prices => {
+      this.dailyPrices = prices;
+      this.applySelectedPrice();
+    })
+  }
+
+  private applySelectedPrice(): void {
+    if (!this.dailyPrices) return;
+
+    const type = this.form.get('selectedPriceType')?.value;
+    let price: number | null = null;
+
+    switch (type) {
+      case 'min':
+        price = this.dailyPrices.minPrice;
+        break;
+      case 'max':
+        price = this.dailyPrices.maxPrice;
+        break;
+      default:
+        price = this.dailyPrices.averagePrice;
+    }
+
+    if (price == null) return;
+
+    this.form.patchValue(
+      { sharesUnitPrice: price },
+      { emitEvent: false }
+    );
+    this.calculateAmountPreview();
+  }
+
   onSubmit(): void {
-    if (this.form.invalid) return;
+    if (this.form.invalid || this.sellLimitExceeded || this.buyLimitExceeded || this.dateSellInvalid) return;
 
     const raw = this.form.getRawValue();
 
@@ -183,9 +258,9 @@ export class TransactionFormComponent implements OnInit {
             this.close.emit(newTransaction);
           },
           error: (err) => {
-            if (err.status === 400) {
+            if (err.status === 400 && err.error?.message) {
               this.form.setErrors({
-                backend: err.error
+                backend: err.error.message
               });
             }
           }

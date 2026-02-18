@@ -22,5 +22,7 @@ namespace PriceFlowApp.Services
         Task DeleteAsync(int id);
 
         Task<Security> UpdateAsync(int id, CreateSecurity security);
+
+        Task<SecurityDailyPrices?> GetLatestPricesAsync(string securityCode, DateTime date);
     }
 }

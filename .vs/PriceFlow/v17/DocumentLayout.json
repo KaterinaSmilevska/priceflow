@@ -3,28 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\services\\portfoliovalueservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\services\\portfoliovalueservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\app\\market-overview\\market-overview.component.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\app\\market-overview\\market-overview.component.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\app\\transactions\\transaction-form\\transaction-form.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\app\\transactions\\transaction-form\\transaction-form.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\services\\marketoverviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\services\\marketoverviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\services\\transactionsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\services\\transactionsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\app\\thresholds\\threshold.component.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\app\\thresholds\\threshold.component.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\app\\transactions\\transaction-form\\transaction-form.component.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\app\\transactions\\transaction-form\\transaction-form.component.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\app\\transactions\\transactions.service.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\app\\transactions\\transactions.service.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\app\\market-overview\\portfolio-income\\portfolio-income.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\app\\market-overview\\portfolio-income\\portfolio-income.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\app\\thresholds\\threshold.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\app\\thresholds\\threshold.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,89 +26,63 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{a83394e3-39c2-4678-a3c8-364b69d78fd3}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PortfolioValueService.cs",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\PortfolioValueService.cs",
-              "RelativeDocumentMoniker": "PriceFlowApp\\Services\\PortfolioValueService.cs",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\PortfolioValueService.cs",
-              "RelativeToolTip": "PriceFlowApp\\Services\\PortfolioValueService.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-04T19:47:02.112Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "transaction-form.component.html",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\transactions\\transaction-form\\transaction-form.component.html",
-              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\app\\transactions\\transaction-form\\transaction-form.component.html",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\transactions\\transaction-form\\transaction-form.component.html",
-              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\transactions\\transaction-form\\transaction-form.component.html",
-              "ViewState": "AgIAAEoAAAAAAAAAAAAqwGEAAAAAAAAAAAAAAA==",
+              "Title": "market-overview.component.html",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\market-overview\\market-overview.component.html",
+              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\market-overview.component.html",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\market-overview\\market-overview.component.html",
+              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\market-overview.component.html",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAACcAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2026-02-04T18:44:09.886Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "TransactionsService.cs",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\TransactionsService.cs",
-              "RelativeDocumentMoniker": "PriceFlowApp\\Services\\TransactionsService.cs",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\TransactionsService.cs",
-              "RelativeToolTip": "PriceFlowApp\\Services\\TransactionsService.cs",
-              "ViewState": "AgIAAOIAAAAAAAAAAAAAAPcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-04T18:43:14.817Z",
+              "WhenOpened": "2026-02-18T20:19:10.979Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "transaction-form.component.ts",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\transactions\\transaction-form\\transaction-form.component.ts",
-              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\app\\transactions\\transaction-form\\transaction-form.component.ts",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\transactions\\transaction-form\\transaction-form.component.ts",
-              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\transactions\\transaction-form\\transaction-form.component.ts",
-              "ViewState": "AgIAAFkAAAAAAAAAAAAhwGYAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-02-04T18:26:13.327Z",
+              "Title": "MarketOverviewService.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\MarketOverviewService.cs",
+              "RelativeDocumentMoniker": "PriceFlowApp\\Services\\MarketOverviewService.cs",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\MarketOverviewService.cs",
+              "RelativeToolTip": "PriceFlowApp\\Services\\MarketOverviewService.cs",
+              "ViewState": "AgIAAF8AAAAAAAAAAAAiwG8AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-18T18:13:20.678Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "transactions.service.ts",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\transactions\\transactions.service.ts",
-              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\app\\transactions\\transactions.service.ts",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\transactions\\transactions.service.ts",
-              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\transactions\\transactions.service.ts",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAAAFsAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-02-04T18:23:09.143Z",
+              "DocumentIndex": 2,
+              "Title": "threshold.component.html",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\thresholds\\threshold.component.html",
+              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\app\\thresholds\\threshold.component.html",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\thresholds\\threshold.component.html",
+              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\thresholds\\threshold.component.html",
+              "ViewState": "AgIAADkAAAAAAAAAAAAUwE0AAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-02-18T18:07:50.767Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "portfolio-income.component.ts",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\market-overview\\portfolio-income\\portfolio-income.component.ts",
-              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\portfolio-income\\portfolio-income.component.ts",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\market-overview\\portfolio-income\\portfolio-income.component.ts",
-              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\market-overview\\portfolio-income\\portfolio-income.component.ts",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAswFoAAAAKAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "threshold.component.ts",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\thresholds\\threshold.component.ts",
+              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\app\\thresholds\\threshold.component.ts",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\thresholds\\threshold.component.ts",
+              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\thresholds\\threshold.component.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-02-04T16:54:55.089Z",
+              "WhenOpened": "2026-02-18T14:50:42.75Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a83394e3-39c2-4678-a3c8-364b69d78fd3}"
             }
           ]
         }
