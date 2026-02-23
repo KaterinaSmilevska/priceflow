@@ -2,6 +2,7 @@
 (
 	[Id] INT IDENTITY(1, 1) NOT NULL, 
     [Ime] NVARCHAR(100) NOT NULL,
+	[DateModified] DATETIME NOT NULL CONSTRAINT df_Sektori_DateModified DEFAULT (SYSUTCDATETIME()),
 
 	CONSTRAINT pk_Sektori PRIMARY KEY (Id),
 	CONSTRAINT un_Sektori_Ime UNIQUE (Ime)

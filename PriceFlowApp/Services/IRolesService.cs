@@ -7,5 +7,7 @@ namespace PriceFlowApp.Services
         Task<Ulogi?> FindByNameAsync(string name);
 
         Task<List<string>> FindNamesAsync();
+
+        Task<List<string>> FindByUserIdAsync(int  userId);
     }
 }

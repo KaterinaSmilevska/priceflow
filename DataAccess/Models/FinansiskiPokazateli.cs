@@ -9,7 +9,7 @@ public partial class FinansiskiPokazateli
 
     public int IzdavachId { get; set; }
 
-    public int? Godina { get; set; }
+    public int Godina { get; set; }
 
     public decimal? OperativnaDobivka { get; set; }
 
@@ -24,6 +24,8 @@ public partial class FinansiskiPokazateli
     public decimal? DividendaPoAkcija { get; set; }
 
     public decimal? DividendenPrinos { get; set; }
+
+    public DateTime DateModified { get; set; }
 
     public virtual Izdavachi Izdavach { get; set; } = null!;
 }

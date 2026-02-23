@@ -17,6 +17,17 @@ export interface SectorDistribution {
   marketCap: number;
 }
 
+export interface PortfolioIncome {
+  month: number;
+  year: number;
+  income: number;
+}
+
+export interface SecurityAllocation {
+  securityCode: string;
+  quantity: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -48,6 +59,24 @@ export class ChartService {
 
   getLatestDate(): Observable<string> {
     return this.http.get<string>(`${this.baseUrl}/latest-date`);
+  }
+
+  getPortfolioIncome(portfolioId: number, isReal:  boolean): Observable<PortfolioIncome[]> {
+    return this.http.get<PortfolioIncome[]>(`${this.baseUrl}/portfolio-income`, {
+      params: { portfolioId, isReal }
+    });
+  }
+
+  getSecurityAllocation(portfolioId: number, isReal: boolean): Observable<SecurityAllocation[]> {
+    return this.http.get<SecurityAllocation[]>(`${this.baseUrl}/portfolio-security-allocation`, {
+      params: { portfolioId, isReal }
+    });
+  }
+
+  public generateColors(count: number): string[] {
+    return Array.from({ length: count }, (_, i) =>
+      `hsl(${(i * 360) / count}, 65%, 55%)`
+    );
   }
 }
 

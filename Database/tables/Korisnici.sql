@@ -9,6 +9,10 @@
     [EmailVerificationToken] UNIQUEIDENTIFIER NULL,
     [ResetPasswordToken] UNIQUEIDENTIFIER NULL,
     [ResetPasswordTokenExpiry] DATETIME NULL,
+    [NotificationFrequency] NVARCHAR(20) NOT NULL CONSTRAINT df_Korisnici_NotificationFrequency DEFAULT 'Monthly',
+    [IsNotificationEnabled] BIT NOT NULL,
+    [LasttNotificationSent] DATETIME NULL,
+    [DateModified] DATETIME NOT NULL CONSTRAINT df_Korisnici_DateModified DEFAULT (SYSUTCDATETIME()),
 
     CONSTRAINT pk_Korisnici PRIMARY KEY (Id),
     CONSTRAINT un_Korisnici_Username UNIQUE (Username)

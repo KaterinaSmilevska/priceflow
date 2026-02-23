@@ -25,5 +25,11 @@ namespace DataAccess.Repositories
             return await _dbContext.Brokeri
                 .FirstOrDefaultAsync(b => b.Kompanija == company);
         }
+
+        public async Task<IEnumerable<Brokeri>> GetAllAsync()
+        {
+            return await _dbContext.Brokeri
+                .ToListAsync();
+        }
     }
 }

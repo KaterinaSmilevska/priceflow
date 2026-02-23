@@ -23,6 +23,10 @@ public partial class Korisnici
 
     public DateTime? ResetPasswordTokenExpiry { get; set; }
 
+    public DateTime DateModified { get; set; }
+
+    public virtual ICollection<HvPromenaCena> HvPromenaCena { get; set; } = new List<HvPromenaCena>();
+
     public virtual ICollection<KorisniciUlogi> KorisniciUlogi { get; set; } = new List<KorisniciUlogi>();
 
     public virtual ICollection<Portfolija> Portfolija { get; set; } = new List<Portfolija>();

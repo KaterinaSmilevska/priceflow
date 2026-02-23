@@ -7,8 +7,14 @@ namespace PriceFlowApp.Services
     public class SecuritiesService : ISecuritiesService
     {
         private readonly ISecuritiesRepository _securitiesRepository;
+        private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
 
-        public SecuritiesService(ISecuritiesRepository securitiesRepository) => _securitiesRepository = securitiesRepository;
+        public SecuritiesService(ISecuritiesRepository securitiesRepository, IDailyTurnoverRepository dailyTurnoverRepository)
+        {
+            _securitiesRepository = securitiesRepository;
+            _dailyTurnoverRepository = dailyTurnoverRepository;
+
+        }
 
         public async Task<Security> AddAsync(CreateSecurity security)
         {
@@ -73,6 +79,24 @@ namespace PriceFlowApp.Services
             };
         }
 
+        public async Task<Security?> FindByCodeAsync(string code)
+        {
+            var security = await _securitiesRepository.GetByCodeAsync(code);
+
+            if (security == null)
+                return null;
+
+            return new Security
+            {
+                Id = security.Id,
+                Isin = security.Isin,
+                Code = security.Kod,
+                TypeSecurityName = security.TipHv.Ime,
+                IssuerName = security.Izdavach.Ime,
+                TotalNumShares = security.VkupenBrojAkcii
+            };
+        }
+
         public async Task<Security> UpdateAsync(int id, CreateSecurity security)
         {
             HartiiOdVrednost? existingSecurity = await _securitiesRepository.GetByIdAsync(id);
@@ -97,6 +121,52 @@ namespace PriceFlowApp.Services
                 TypeSecurityName = full.TipHv.Ime,
                 IssuerName = full.Izdavach.Ime,
                 TotalNumShares = full.VkupenBrojAkcii
+            };
+        }
+
+        public async Task<string?> FindSecurityCode(int id)
+        {
+            return await _securitiesRepository.GetSecurityCode(id);
+        }
+
+        public async Task<int?> FindTotalNumShares(int id)
+        {
+            return await _securitiesRepository.GetTotalNumShares(id);
+        }
+
+        public async Task<int?> FindTotalNumSharesAsync(string securityCode)
+        {
+            return await _securitiesRepository.GetTotalNumSharesAsync(securityCode);
+        }
+
+        public async Task<SecurityDailyPrices?> GetLatestPricesAsync(string securityCode, DateTime date)
+        {
+           IEnumerable<DnevenPromet?> dailyTurnover = await _dailyTurnoverRepository.GetBySecurityCode(securityCode, date);
+
+            if (!dailyTurnover.Any())
+                return null;
+
+            decimal? minPrice = dailyTurnover
+                .Where(dailyTurnover => dailyTurnover.MinCena.HasValue)
+                .Select(d => d.MinCena)
+                .FirstOrDefault();
+
+            decimal? maxPrice = dailyTurnover
+                .Where(dailyTurnover => dailyTurnover.MaxCena.HasValue)
+                .Select(d => d.MaxCena)
+                .FirstOrDefault();
+
+            decimal? averagePrice = dailyTurnover
+                .Where(dailyTurnover => dailyTurnover.ProsecnaCena.HasValue)
+                .Select(d => d.ProsecnaCena)
+                .FirstOrDefault();
+
+            return new SecurityDailyPrices
+            {
+                SecurityCode = securityCode,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice,
+                AveragePrice = averagePrice
             };
         }
     }

@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[ETL_Load]
+(
+	[SourceTableName] NVARCHAR(50) NOT NULL,
+	[LastLoadDate] DATETIME NOT NULL DEFAULT '1753-01-01',
+
+	CONSTRAINT pk_ETL_Load PRIMARY KEY (SourceTableName)
+)

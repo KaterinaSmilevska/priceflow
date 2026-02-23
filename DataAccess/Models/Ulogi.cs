@@ -9,5 +9,7 @@ public partial class Ulogi
 
     public string Ime { get; set; } = null!;
 
+    public DateTime DateModified { get; set; }
+
     public virtual ICollection<KorisniciUlogi> KorisniciUlogi { get; set; } = new List<KorisniciUlogi>();
 }

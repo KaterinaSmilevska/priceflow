@@ -1,0 +1,25 @@
+<div class="brokers-wrapper" *ngIf="!loading && brokers.length > 0">
+  <h3>🏦 Brokerage Companies</h3>
+  <table class="brokers-table">
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Commission (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of brokers">
+        <td>{{ b.company }}</td>
+        <td>{{ b.commissionPercent | number:'1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="loading" class="loading">
+  Loading brokers...
+</div>
+
+<div *ngIf="!loading && brokers.length === 0" class="loading">
+  No brokers found.
+</div>

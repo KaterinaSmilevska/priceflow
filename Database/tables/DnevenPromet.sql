@@ -11,8 +11,9 @@
     [KolicinaIstrguvaniAkcii] INT NULL, 
     [PrometBESTDenari] INT NULL, 
     [VkupenPrometDenari] INT NULL,
+    [DateModified] DATETIME NOT NULL CONSTRAINT df_DnevenPromet_DateModified DEFAULT (SYSUTCDATETIME()),
 
     CONSTRAINT pk_DnevenPromet PRIMARY KEY (Id),
-    CONSTRAINT un_DnevenPromet_Datum_HVId UNIQUE (Datum, HVId),
-    CONSTRAINT fk_DnevenPromet_HartiiOdVrednost FOREIGN KEY (HVId) REFERENCES HartiiOdVrednost(Id)
+    CONSTRAINT un_DnevenPromet_Datum_HVId UNIQUE CLUSTERED (Datum, HVId),
+    CONSTRAINT fk_DnevenPromet_HartiiOdVrednost FOREIGN KEY (HVId) REFERENCES HartiiOdVrednost(Id) ON DELETE CASCADE
 )

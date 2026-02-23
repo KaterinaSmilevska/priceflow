@@ -1,0 +1,50 @@
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { SecurityLiquidity } from './SecurityLiquidity';
+import { MarketOverviewService } from '../market-overview/market-overview.service';
+import { FormsModule } from '@angular/forms';
+import { LiquidityOverview } from './LiquidityOverview';
+import { LiquidityTableComponent } from './liquidity-table/liquidity-table.component';
+
+@Component({
+  selector: 'app-liquidity',
+  standalone: true,
+  imports: [CommonModule, FormsModule, LiquidityTableComponent],
+  templateUrl: './liquidity.component.html',
+  styleUrl: './liquidity.component.css',
+})
+export class LiquidityComponent {
+  liquidity: LiquidityOverview = {
+    mostByTradedQuantity: [],
+    leastByTradedQuantity: [],
+    mostByTradingDays: [],
+    leastByTradingDays: []
+  };
+  months = 6;
+
+  noDataMessage: string | null = null;
+
+  constructor(private marketOverviewService: MarketOverviewService) { }
+
+  ngOnInit() {
+    this.loadLiquidity();
+  }
+
+  loadLiquidity() {
+    this.noDataMessage = null;
+    this.marketOverviewService.getLiquidity(this.months)
+      .subscribe({
+        next: (res) => {
+          if (!res) {
+            this.noDataMessage = 'No data available for the selected period.'
+            return;
+          }
+          this.liquidity = res;
+        },
+        error: (err) => {
+          console.error(err);
+          this.noDataMessage = 'Error loading security liquidity data.'
+        }
+      });
+  }
+}

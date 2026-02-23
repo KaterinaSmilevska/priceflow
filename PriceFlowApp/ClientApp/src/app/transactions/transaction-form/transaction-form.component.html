@@ -1,0 +1,109 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+
+    <h5>{{ transaction ? 'Edit Transaction' : 'Add Transaction' }}</h5>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <label>Security</label>
+      <select formControlName="hvCode" class="form-select">
+        <option *ngFor="let s of securities" [value]="s.code">
+          {{ s.code }}
+        </option>
+      </select>
+
+      <label>Transaction Type</label>
+      <select formControlName="typeTransaction" class="form-select">
+        <option value="Купување">Купување</option>
+        <option value="Продавање">Продавање</option>
+      </select>
+
+      <label>Quantity</label>
+      <input type="number" formControlName="sharesQuantity" class="form-control">
+      <div *ngIf="sellLimitExceeded" class="text-danger mt-1">
+        You can sell at most {{ ownedShares }} shares.
+      </div>
+      <div *ngIf="buyLimitExceeded" class="text-danger mt-1">
+        You can buy at most {{ remainingShares }} shares.
+      </div>
+
+      <label>Price Type</label>
+      <select formControlName="selectedPriceType" class="form-select">
+        <option value="min">Min price</option>
+        <option value="average">Average price</option>
+        <option value="max">Max price</option>
+      </select>
+
+      <div class="text-muted small mt-1" *ngIf="dailyPrices">
+        Selected price:
+        <strong>{{ form.get('sharesUnitPrice')?.value | number:'1.2-2' }} ден.</strong>
+      </div>
+
+      <div class="mt-3 border-top pt-2">
+
+        <div class="d-flex align-items-center mb-1">
+          <span class="text-muted small">Commissions</span>
+
+          <i class="bi bi-question-circle ms-2 text-secondary"
+             data-bs-toggle="tooltip"
+             data-bs-placement="right"
+             title="Commission percentages are indicative and used for calculation of the amount.">
+          </i>
+        </div>
+
+        <div class="text-muted small">
+          Stock Exchange:
+          <span class="float-end">
+            {{ stockExchangeFee | number:'1.2-2' }} ден.
+          </span>
+        </div>
+
+        <div class="text-muted small">
+          Brokerage:
+          <span class="float-end">
+            {{ brokerageFee | number:'1.2-2' }} ден.
+          </span>
+        </div>
+
+        <div class="text-muted small">
+          CDHV:
+          <span class="float-end">
+            {{ cdhvFee | number:'1.2-2' }} ден.
+          </span>
+        </div>
+
+        <div class="fw-bold mt-2 d-flex justify-content-between">
+          <span>Total Commission</span>
+          <span>{{ totalCommission | number:'1.2-2' }} ден.</span>
+        </div>
+      </div>
+
+      <label>Date</label>
+      <input type="date" formControlName="date" class="form-control">
+
+      <label>Total Amount</label>
+      <input type="text" [value]="form.get('amount')?.value | number: '1.2-2'" class="form-control" readonly disabled>
+
+      <div class="form-check mt-2">
+        <input class="form-check-input" type="checkbox" formControlName="isReal">
+        <label class="form-check-label">Real transaction</label>
+      </div>
+
+      <div class="text-end mt-3">
+        <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || sellLimitExceeded || buyLimitExceeded || dateSellInvalid">
+          {{ transaction ? 'Save Changes' : 'Add Transaction' }}
+        </button>
+      </div>
+
+      <div *ngIf="form.errors?.backend" class="alert alert-danger mt-2">
+        {{ form.errors?.backend }}
+      </div>
+
+      <div *ngIf="dateSellInvalid" class="text-danger mt-1">
+        On the selected date you own only {{ ownedSharesAtDate }} shares.
+      </div>
+    </form>
+  </div>
+</div>
+

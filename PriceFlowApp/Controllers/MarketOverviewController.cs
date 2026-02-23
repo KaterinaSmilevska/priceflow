@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess.Enums;
+using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 
@@ -67,6 +68,21 @@ namespace PriceFlowApp.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "An error has occured while fetching most traded securities.", detail = ex.Message });
+            }
+        }
+
+        [HttpGet("liquidity")]
+        public async Task<ActionResult<LiquidityOverview>> GetLiquidity([FromQuery] int months = 6, [FromQuery] bool onlyOwned = true)
+        {
+            try
+            {
+                int userId = User.GetUserId();
+                LiquidityOverview result = await _marketOverviewService.FindLiquidityAsync(userId, months, onlyOwned);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching securities liquidity.", detail = ex.Message });
             }
         }
     }
