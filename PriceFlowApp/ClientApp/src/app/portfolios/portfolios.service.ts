@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SecurityLiquidity } from '../liquidity/SecurityLiquidity';
+import { PortfolioPerformanceSummary } from './performance-export/PortfolioPerformanceSummary';
 
 export interface Portfolio {
   id: number;
@@ -64,5 +65,31 @@ export class PortfoliosService {
     return this.http.get<SecuritiesPriceTrend[]>(
       `${this.apiUrl}/securities-price-trend`,
       { params: { period, periodsBack }, withCredentials: true });
+  }
+
+  getPerformanceSummary(portfolioId: number, from: string, to: string): Observable<PortfolioPerformanceSummary> {
+    return this.http.get<PortfolioPerformanceSummary>(
+      `${this.apiUrl}/${portfolioId}/performance-summary`,
+      {
+        params: {
+          from,
+          to
+        }
+      }
+    );
+  }
+
+  exportPerformanceSummary(portfolioId: number, from: string, to: string, format: string) {
+    return this.http.get(
+      `${this.apiUrl}/${portfolioId}/performance-summary`,
+      {
+        params: {
+          from,
+          to,
+          format
+        },
+        responseType: 'blob'
+      }
+    );
   }
 }

@@ -1,15 +1,16 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
+using static QuestPDF.Helpers.Colors;
 
 namespace PriceFlowApp.Services
 {
-    public class NotificationService: INotificationService
+    public class PriceChangeNotificationService: IPriceChangeNotificationService
     {
-        private readonly INotificationRepository _notificationRepository;
+        private readonly IPriceChangeNotificationsRepository _notificationRepository;
         private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
 
-        public NotificationService(INotificationRepository notificationRepository, IDailyTurnoverRepository dailyTurnoverRepository)
+        public PriceChangeNotificationService(IPriceChangeNotificationsRepository notificationRepository, IDailyTurnoverRepository dailyTurnoverRepository)
         {
             _notificationRepository = notificationRepository;
             _dailyTurnoverRepository = dailyTurnoverRepository;
@@ -32,11 +33,11 @@ namespace PriceFlowApp.Services
             return await _notificationRepository.GetUnreadNotificationCountAsync(userId);
         }
 
-        public async Task<List<NotificationResponse>> GetUserNotificationsAsync(int userId)
+        public async Task<List<PriceChangeNotificationResponse>> GetUserNotificationsAsync(int userId)
         {
             List<IzvestuvanjaPromenaCena> notifications = await _notificationRepository.GetByUserAsync(userId);
 
-            return notifications.Select(n => new NotificationResponse
+            return notifications.Select(n => new PriceChangeNotificationResponse
             {
                 Id = n.Id,
                 HvId = n.Hvid,

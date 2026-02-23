@@ -29,6 +29,8 @@ public partial class PriceFlowDbContext : DbContext
 
     public virtual DbSet<Izdavachi> Izdavachi { get; set; }
 
+    public virtual DbSet<IzvestuvanjaPortfolija> IzvestuvanjaPortfolija { get; set; }
+
     public virtual DbSet<IzvestuvanjaPromenaCena> IzvestuvanjaPromenaCena { get; set; }
 
     public virtual DbSet<Korisnici> Korisnici { get; set; }
@@ -228,6 +230,22 @@ public partial class PriceFlowDbContext : DbContext
             entity.HasOne(d => d.Sektor).WithMany(p => p.Izdavachi)
                 .HasForeignKey(d => d.SektorId)
                 .HasConstraintName("fk_Izdavachi_Sektori");
+        });
+
+        modelBuilder.Entity<IzvestuvanjaPortfolija>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pk_IzvestuvanjaPortfolija");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Frekvencija)
+                .HasMaxLength(10)
+                .HasDefaultValue("Weekly");
+            entity.Property(e => e.PoslednoIsprateno).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Portfolio).WithMany(p => p.IzvestuvanjaPortfolija)
+                .HasForeignKey(d => d.PortfolioId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_IzvestuvanjaPortfolija_Portfolija");
         });
 
         modelBuilder.Entity<IzvestuvanjaPromenaCena>(entity =>

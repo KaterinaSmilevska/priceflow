@@ -51,3 +51,32 @@
   color: #868e96;
   text-align: center;
 }
+
+.top-row {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.bottom-row {
+    display: flex;
+    gap: 25px;
+    margin-top: 30px;
+    align-items: flex-start;
+}
+
+.transactions-section {
+    flex: 3;
+}
+
+.export-section {
+    max-width: 450px;
+}
+
+.notifications-section {
+    max-width: 400px;
+}
+
+.export-section, .notifications-section {
+    flex: 1;
+}

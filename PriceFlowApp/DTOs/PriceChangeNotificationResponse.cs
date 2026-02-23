@@ -1,6 +1,6 @@
 ﻿namespace PriceFlowApp.DTOs
 {
-    public class NotificationResponse
+    public class PriceChangeNotificationResponse
     {
         public int Id { get; set; }
         public int HvId { get; set; }

@@ -1,4 +1,4 @@
-export interface Notification {
+export interface PriceChangeNotification {
   id: number;
   hvId: number;
   changePercent: number;

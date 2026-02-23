@@ -4,14 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { LoginService } from '../auth/login/login.service';
-import { Notification } from '../notifications/Notification';
-import { NotificationsService } from '../notifications/notifications.service';
-import { NotificationsComponent } from '../notifications/notifications.component';
+import { PriceChangeNotificationsService } from '../notifications/price-change/price-change-notifications.service';
+import { PriceChangeNotification } from '../notifications/price-change/PriceChangeNotification';
+import { PriceChangeNotificationsComponent } from '../notifications/price-change/price-change-notifications.component';
 
 @Component({
   selector: 'app-nav-menu',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, NotificationsComponent],
+  imports: [CommonModule, FormsModule, RouterModule, PriceChangeNotificationsComponent],
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css', '../../styles.css']
 })
@@ -22,11 +22,11 @@ export class NavMenuComponent implements OnInit {
   isAdmin$: Observable<boolean>
   private previousLoginState = false;
 
-  notifications: Notification[] = [];
+  notifications: PriceChangeNotification[] = [];
   unreadCount = 0;
   showDropdown = false;
 
-  constructor(public loginService: LoginService, private notificationsService: NotificationsService) {
+  constructor(public loginService: LoginService, private notificationsService: PriceChangeNotificationsService) {
     this.isAdmin$ = this.loginService.getUserRoles().pipe(
       map(roles => roles.includes('Администратор')));
   }
@@ -56,7 +56,7 @@ export class NavMenuComponent implements OnInit {
     this.notificationsService.getUnreadNotificationCount();
   }
 
-  markAsRead(notification: Notification): void {
+  markAsRead(notification: PriceChangeNotification): void {
     if (!notification.isRead) {
       this.notificationsService.markNotificationAsRead(notification.id)
         .subscribe(() => {

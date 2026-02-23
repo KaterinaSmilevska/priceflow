@@ -37,7 +37,7 @@ builder.Services.AddScoped<IRolesService, RolesService>();
 builder.Services.AddScoped<IUsersRolesRepository, UsersRolesRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ISecuritiesRepository, SecuritiesRepository>();
 builder.Services.AddScoped<ISecuritiesService, SecuritiesService>();
 builder.Services.AddScoped<ITypeSecurityRepository, TypeSecurityRepository>();
@@ -54,10 +54,15 @@ builder.Services.AddScoped<IPortfolioReturnsRepository, PortfolioReturnsReposito
 builder.Services.AddScoped<IPortfolioReturnsService, PortfolioReturnsService>();
 builder.Services.AddScoped<IPortfolioValueService, PortfolioValueService>();
 builder.Services.AddScoped<IDailyTurnoverRepository, DailyTurnoverRepository>();
-builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IPriceChangeNotificationsRepository, PriceChangeNotificationsRepository>();
+builder.Services.AddScoped<IPriceChangeNotificationService, PriceChangeNotificationService>();
 builder.Services.AddScoped<IThresholdRepository, ThresholdRepository>();
 builder.Services.AddScoped<IThresholdService, ThresholdService>();
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IPortfolioReportExportService, PortfolioReportExportService>();
+builder.Services.AddScoped<IPortfoliosNotificationsRepository, PortfoliosNotificationsRepository>();
+builder.Services.AddScoped<IPortfoliosNotificationsService, PortfoliosNotificationsService>();
+builder.Services.AddHostedService<NotificationBackgroundService>();
 
 //builder.Services.AddDistributedMemoryCache();
 //builder.Services.AddSession(options =>

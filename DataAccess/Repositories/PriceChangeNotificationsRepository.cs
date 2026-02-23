@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class NotificationRepository : INotificationRepository
+    public class PriceChangeNotificationsRepository : IPriceChangeNotificationsRepository
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public NotificationRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
+        public PriceChangeNotificationsRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
 
         public async Task GenerateNotificationsAsync(DateTime tradingDate)
         {

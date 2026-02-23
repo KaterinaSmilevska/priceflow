@@ -15,11 +15,14 @@ namespace PriceFlowApp.Controllers
     {
         private readonly IPortfoliosService _portfoliosService;
         private readonly ITransactionsService _transactionsService;
+        private readonly IPortfolioReportExportService _exportService;
 
-        public PortfoliosController(IPortfoliosService portfoliosService, ITransactionsService transactionsService)
+        public PortfoliosController(IPortfoliosService portfoliosService, ITransactionsService transactionsService,
+            IPortfolioReportExportService exportService)
         {
             _portfoliosService = portfoliosService;
             _transactionsService = transactionsService;
+            _exportService = exportService;
         }
 
 
@@ -110,6 +113,39 @@ namespace PriceFlowApp.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Error fetching portfolio price trend.", detail = ex.Message });
+            }
+        }
+
+        [HttpGet("{id}/performance-summary")]
+        public async Task<IActionResult> GetPerformanceSummary(int id, [FromQuery] DateOnly from, [FromQuery] DateOnly to, [FromQuery] string? format = null)
+        {
+            try
+            {
+                PortfolioPerformanceSummary result = await _portfoliosService.GeneratePerformanceSummaryAsync(id, from, to);
+                
+                if(string.IsNullOrEmpty(format))
+                    return Ok(result);
+
+                if(format.ToLower() == "csv")
+                {
+                    byte[] bytes = _exportService.ExportToCsv(result);
+                    return File(bytes, "text/csv", "portfolio_performance_summary.csv");
+                }
+                if(format.ToLower() == "excel")
+                {
+                    byte[] bytes = _exportService.ExportToExcel(result);
+                    return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "portfolio_performance_summary.xlsx");
+                }
+                if (format.ToLower() == "pdf")
+                {
+                    byte[] bytes = _exportService.ExportToPDF(result);
+                    return File(bytes, "application/pdf", "portfolio_performance_summary.pdf");
+                }
+                return BadRequest("Unsupported format.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching portfolio performance summary.", detail = ex.Message });
             }
         }
     }

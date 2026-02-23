@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public interface INotificationRepository
+    public interface IPriceChangeNotificationsRepository
     {
         Task<IzvestuvanjaPromenaCena?> GetById(int id);
 

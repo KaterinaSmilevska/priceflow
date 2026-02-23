@@ -15,10 +15,10 @@ namespace PriceFlowApp.Services
         private readonly IRolesRepository _rolesRepository;
         private readonly IUsersRolesRepository _usersRolesRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly EmailService _emailService;
+        private readonly IEmailService _emailService;
 
         public AuthService(IAuthRepository korisnikRepository, IRolesRepository rolesRepository, IUsersRolesRepository usersRolesRepository,
-            IHttpContextAccessor httpContextAccessor, EmailService emailService)
+            IHttpContextAccessor httpContextAccessor, IEmailService emailService)
         {
             _authRepository = korisnikRepository;
             _rolesRepository = rolesRepository;

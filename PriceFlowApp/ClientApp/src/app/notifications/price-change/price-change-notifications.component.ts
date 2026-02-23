@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
-import { Notification } from '../notifications/Notification';
-import { NotificationsService } from './notifications.service';
-import { NotificationsDropDownComponent } from './notifications-dropdown.component';
+import { PriceChangeNotificationsService } from './price-change-notifications.service';
+import { PriceChangeNotification } from './PriceChangeNotification';
+import { PriceChangeNotificationsDropDownComponent } from './price-change-dropdown/price-change-notifications-dropdown.component';
 
 @Component({
-  selector: 'app-notifications',
+  selector: 'app-price-change-notifications',
   standalone: true,
-  imports: [CommonModule, NotificationsDropDownComponent],
-  templateUrl: './notifications.component.html',
-  styleUrl: './notifications.component.css',
+  imports: [CommonModule, PriceChangeNotificationsDropDownComponent],
+  templateUrl: './price-change-notifications.component.html',
+  styleUrl: './price-change-notifications.component.css',
 })
-export class NotificationsComponent implements OnInit {
-  notifications: Notification[] = [];
+export class PriceChangeNotificationsComponent implements OnInit {
+  notifications: PriceChangeNotification[] = [];
   unreadCount: number = 0;
   showDropdown = false;
 
-  constructor(private notificationsService: NotificationsService, private elementRef: ElementRef) { }
+  constructor(private notificationsService: PriceChangeNotificationsService, private elementRef: ElementRef) { }
 
   ngOnInit(): void {
     this.loadNotifications();

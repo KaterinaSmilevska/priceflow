@@ -17,5 +17,7 @@ namespace DataAccess.Repositories
         Task<IEnumerable<DnevenPromet>> GetLiquidityAsync(IEnumerable<int>? securityIds, DateTime fromDate);
 
         Task<bool> ExistsForDateAsync(DateTime date);
+
+        Task<decimal> GetLatestPriceAsync(int securityId, DateOnly date);
     }
 }

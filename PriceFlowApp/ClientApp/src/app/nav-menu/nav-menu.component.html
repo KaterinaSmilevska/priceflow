@@ -60,7 +60,7 @@
               Welcome, {{ (loginService.getUsername() | async) || 'User' }}!
             </div>
 
-             <app-notifications></app-notifications>
+             <app-price-change-notifications></app-price-change-notifications>
 
             <button (click)="loginService.logout();$event.stopPropagation()" class="btn btn-secondary ms-3 login">
               LOGOUT

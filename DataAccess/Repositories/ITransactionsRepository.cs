@@ -24,5 +24,7 @@ namespace DataAccess.Repositories
         Task<List<int>> GetOwnedSecuritiesIdsAsync(int userId);
 
         Task<int> GetOwnedSharesAtDateAsync(int portfolioId, int securityId, bool isReal, DateOnly date, int? excludeTransactionId = null);
+
+        Task<IEnumerable<Transakcii>> GetByPortfolioUntilDateAsync(int portfolioId, DateOnly date);
     }
 }

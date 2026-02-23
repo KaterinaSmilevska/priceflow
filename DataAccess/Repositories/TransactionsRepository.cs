@@ -43,6 +43,14 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Transakcii>> GetByPortfolioUntilDateAsync(int portfolioId, DateOnly date)
+        {
+            return await _dbContext.Transakcii
+                .Where(t => t.PortfolioId == portfolioId && t.Realna && t.Datum <= date)
+                .OrderBy(t => t.Datum)
+                .ToListAsync();
+        }
+
         public async Task<List<int>> GetOwnedSecuritiesIdsAsync(int userId)
         {
             IEnumerable<Transakcii> transactions = await _dbContext.Transakcii

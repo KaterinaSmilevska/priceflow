@@ -6,9 +6,9 @@ namespace PriceFlowApp.Services
 {
     public class PortfolioReturnsService : IPortfolioReturnsService
     {
-        private readonly IPortfolioReturnsRepository _portfolioReturnsRepository;
+        private readonly DataAccess.Repositories.IPortfolioReturnsRepository _portfolioReturnsRepository;
 
-        public PortfolioReturnsService(IPortfolioReturnsRepository portfolioReturnsRepository)
+        public PortfolioReturnsService(DataAccess.Repositories.IPortfolioReturnsRepository portfolioReturnsRepository)
         {
             _portfolioReturnsRepository = portfolioReturnsRepository;
         }
@@ -21,6 +21,17 @@ namespace PriceFlowApp.Services
             {
                     TotalDividends = returns.Sum(x => x.NetoIznos),
                     TotalTaxes = returns.Sum(x => x.Danok)
+            };
+        }
+
+        public async Task<PortfolioReturnsSummary> CalculateSummaryForPeriodAsync(int portfolioId, DateOnly from, DateOnly to)
+        {
+            IEnumerable<PortfolioPrinosi> returns = await _portfolioReturnsRepository.GetByPortfolioIdForPeriod(portfolioId, from, to);
+
+            return new PortfolioReturnsSummary
+            {
+                TotalDividends = returns.Sum(x => x.NetoIznos),
+                TotalTaxes = returns.Sum(x => x.Danok)
             };
         }
 

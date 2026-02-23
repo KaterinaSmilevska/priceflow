@@ -27,5 +27,14 @@ namespace DataAccess.Repositories
                 .Where(pp => pp.PortfolioId == portfolioId)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<PortfolioPrinosi>> GetByPortfolioIdForPeriod(int portfolioId, DateOnly from, DateOnly to)
+        {
+            return await _dbContext.PortfolioPrinosi
+                .Where(pp => pp.PortfolioId == portfolioId 
+                && pp.Datum >= from
+                && pp.Datum <= to)
+                .ToListAsync();
+        }
     }
 }

@@ -4,11 +4,13 @@ import { Portfolio, PortfoliosService } from '../portfolios.service';
 import { ActivatedRoute } from '@angular/router';
 import { TransactionsComponent } from '../../transactions/transactions.component';
 import { switchMap } from 'rxjs';
+import { PerformanceExportComponent } from '../performance-export/performance-export.component';
+import { PortfolioNotificationsComponent } from '../../notifications/portfolio-notifications/portfolio-notifications.component';
 
 @Component({
   selector: 'app-portfolio-details',
   standalone: true,
-  imports: [CommonModule, TransactionsComponent],
+  imports: [CommonModule, TransactionsComponent, PerformanceExportComponent, PortfolioNotificationsComponent],
   templateUrl: './portfolio-details.component.html',
   styleUrl: './portfolio-details.component.css',
 })

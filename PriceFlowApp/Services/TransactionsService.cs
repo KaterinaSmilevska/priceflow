@@ -184,7 +184,7 @@ namespace PriceFlowApp.Services
                     + transaction.Cdhvprovizija;
                 decimal fees = amount * feesPercent / 100;
 
-            return fees;
+            return Math.Round(fees, 2);
         }
 
         private async Task ValidateSharesAsync(int portfolioId, HartiiOdVrednost security,
@@ -225,10 +225,10 @@ namespace PriceFlowApp.Services
                 int ownedAtDate = await _transactionsRepository.GetOwnedSharesAtDateAsync(portfolioId, security.Id,
                     transaction.IsReal, transaction.Date, transactionIdToExclude);
 
-                if (transaction.SharesQuantity < ownedAtDate)
+                if (transaction.SharesQuantity > ownedAtDate)
                 {
-                    throw new BusinessRuleException("SELL_BEFORE_BUY",
-                        $"On {transaction.Date::yyyy-MM-dd} you own only {ownedAtDate} shares of '{security.Kod}'");
+                    throw new BusinessRuleException("SELL_MORE_THAN_OWNED",
+                        $"On {transaction.Date.ToString("yyyy-MM-dd")} you own only {ownedAtDate} shares of '{security.Kod}'");
                 }
             }
 

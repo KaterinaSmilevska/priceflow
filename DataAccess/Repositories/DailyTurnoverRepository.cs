@@ -62,6 +62,15 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
+        public async Task<decimal> GetLatestPriceAsync(int securityId, DateOnly date)
+        {
+            return (decimal)await _dbContext.DnevenPromet
+                .Where(dp => dp.Hvid == securityId && DateOnly.FromDateTime(dp.Datum) <= date && dp.CenaPoslednaTransakcija.HasValue)
+                .OrderByDescending(dp => dp.Datum)
+                .Select(dp => dp.CenaPoslednaTransakcija)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<DnevenPromet>> GetLiquidityAsync(IEnumerable<int>? securityIds, DateTime fromDate)
         {
             var query = _dbContext.DnevenPromet

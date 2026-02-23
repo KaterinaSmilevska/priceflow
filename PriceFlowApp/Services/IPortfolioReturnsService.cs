@@ -9,5 +9,7 @@ namespace PriceFlowApp.Services
         Task<PortfolioReturns> CreateAsync(PortfolioReturns portfolioReturns);
 
         Task<PortfolioReturnsSummary> CalculateSummaryAsync(int portfolioId);
+
+        Task<PortfolioReturnsSummary> CalculateSummaryForPeriodAsync(int portfolioId, DateOnly from, DateOnly to);
     }
 }

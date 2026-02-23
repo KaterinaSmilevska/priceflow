@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
@@ -6,13 +7,13 @@ using PriceFlowApp.Services;
 namespace PriceFlowApp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/price-change-notification")]
     [Authorize]
-    public class NotificationController : ControllerBase
+    public class PriceChangeNotificationController : ControllerBase
     {
-        private readonly INotificationService _notificationService;
+        private readonly IPriceChangeNotificationService _notificationService;
 
-        public NotificationController(INotificationService notificationService)
+        public PriceChangeNotificationController(IPriceChangeNotificationService notificationService)
         {
             _notificationService = notificationService;
         }
@@ -26,7 +27,7 @@ namespace PriceFlowApp.Controllers
 
                 await _notificationService.CheckAndGenerateNotificationsAsync();
 
-                List<NotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
+                List<PriceChangeNotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
                 return Ok(notifications);
             }
             catch (Exception ex)
@@ -44,7 +45,7 @@ namespace PriceFlowApp.Controllers
 
                 await _notificationService.CheckAndGenerateNotificationsAsync();
 
-                List<NotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
+                List<PriceChangeNotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
                 return Ok(notifications);
             }
             catch (Exception ex)
@@ -81,6 +82,6 @@ namespace PriceFlowApp.Controllers
             {
                 return StatusCode(500, new { message = "Error marking notification as read.", detail = ex.Message });
             }
-        }        
+        }
     }
 }

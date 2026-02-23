@@ -14,5 +14,7 @@ namespace PriceFlowApp.Services
         Task<Portfolio> UpdatePortfolio(int id, int userId, UpdatePortfolio portfolio);
 
         Task DeletePortfolio(int id, int userId);
+
+        Task<PortfolioPerformanceSummary> GeneratePerformanceSummaryAsync(int portfolioId, DateOnly from, DateOnly to);
     }
 }
