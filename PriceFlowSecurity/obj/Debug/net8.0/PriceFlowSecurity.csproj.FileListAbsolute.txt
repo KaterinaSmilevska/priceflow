@@ -1,0 +1,13 @@
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\bin\Debug\net8.0\PriceFlowSecurity.deps.json
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\bin\Debug\net8.0\PriceFlowSecurity.dll
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\bin\Debug\net8.0\PriceFlowSecurity.pdb
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\PriceFlowSecurity.csproj.AssemblyReference.cache
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\PriceFlowSecurity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\PriceFlowSecurity.AssemblyInfoInputs.cache
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\PriceFlowSecurity.AssemblyInfo.cs
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\PriceFlowSecurity.csproj.CoreCompileInputs.cache
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\PriceFlowSecurity.sourcelink.json
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\PriceFlowSecurity.dll
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\refint\PriceFlowSecurity.dll
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\PriceFlowSecurity.pdb
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowSecurity\obj\Debug\net8.0\ref\PriceFlowSecurity.dll
