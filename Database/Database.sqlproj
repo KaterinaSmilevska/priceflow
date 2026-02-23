@@ -129,7 +129,7 @@
     <Build Include="indexes\IX_Ulogi_DateModified.sql" />
     <Build Include="indexes\IX_HartiiOdVrednost_DateModified.sql" />
     <Build Include="indexes\IX_PortfolioPrinosi_DateModified.sql" />
-    <Build Include="indexes\UX_HV_PromenaCena_HVId.sql" />
+    <Build Include="indexes\UX_Izvestuvanja_PromenaCena_HVId.sql" />
     <Build Include="indexes\UX_Izvestuvanja_PromenaCena.sql" />
     <Build Include="indexes\IX_Izvestuvanja_PromenaCena_Procitano.sql" />
     <Build Include="tables\IzvestuvanjaPortfolija.sql" />

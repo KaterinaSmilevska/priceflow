@@ -15,7 +15,7 @@ public partial class Portfolija
 
     public DateTime DateModified { get; set; }
 
-    public virtual ICollection<IzvestuvanjaPortfolija> IzvestuvanjaPortfolija { get; set; } = new List<IzvestuvanjaPortfolija>();
+    public virtual IzvestuvanjaPortfolija? IzvestuvanjaPortfolija { get; set; }
 
     public virtual Korisnici Korisnik { get; set; } = null!;
 
