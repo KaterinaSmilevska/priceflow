@@ -1,0 +1,12 @@
+<div class="chart-wrapper" *ngIf="!noDataMessage; else noData">
+  <canvas baseChart
+          [type]="type"
+          [data]="data"
+          [options]="options">
+  </canvas>
+</div>
+
+<ng-template #noData>
+  <strong>{{ options.plugins!.title!.text }}</strong>
+  <div class="no-data-message">{{ noDataMessage }}</div>
+</ng-template>

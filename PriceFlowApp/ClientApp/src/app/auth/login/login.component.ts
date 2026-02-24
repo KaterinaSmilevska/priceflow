@@ -28,7 +28,7 @@ export class LoginComponent {
         this.router.navigate(['/']);
       },
       error: (err) => {
-        this.errorMessage = err.error?.Message || 'Login failed';
+        this.errorMessage = 'Invalid username or password';
       }
     });
   }

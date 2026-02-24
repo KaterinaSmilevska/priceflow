@@ -75,6 +75,8 @@
     <None Include="scripts\LoadTransakcii.sql" />
     <None Include="scripts\LoadUlogi.sql" />
     <None Include="scripts\LoadKorisniciUlogi.sql" />
+    <None Include="tables\HV_PromenaCena.sql" />
+    <Build Include="tables\Izvestuvanja_PromenaCena.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="tables\AplikativniParametri.sql" />
@@ -103,7 +105,6 @@
     <Build Include="indexes\UX_Izdavachi_Ime.sql" />
     <Build Include="indexes\IX_Korisnici_Ime.sql" />
     <Build Include="indexes\UX_Korisnici_Username.sql" />
-    <Build Include="indexes\UX_Korisnici_Email.sql" />
     <Build Include="indexes\UX_Korisnici_ResetPasswordToken.sql" />
     <Build Include="indexes\UX_Portfolija_Ime.sql" />
     <Build Include="indexes\IX_Portfolija_KorisnikId.sql" />
@@ -114,6 +115,23 @@
     <Build Include="indexes\IX_Transakcii_PortfolioId.sql" />
     <Build Include="indexes\IX_Transakcii_HVId.sql" />
     <Build Include="indexes\UX_HartiiOdVrednost_Kod.sql" />
+    <Build Include="indexes\IX_AplikativniParametri_DateModified.sql" />
+    <Build Include="indexes\IX_Brokeri_DateModified.sql" />
+    <Build Include="indexes\IX_DnevenPromet_DateModified.sql" />
+    <Build Include="indexes\IX_FinansiskiPokazateli_DateModified.sql" />
+    <Build Include="indexes\IX_Izdavachi_DateModified.sql" />
+    <Build Include="indexes\IX_Korisnici_DateModified.sql" />
+    <Build Include="indexes\IX_KorisniciUlogi_DateModified.sql" />
+    <Build Include="indexes\IX_Portfolija_DateModified.sql" />
+    <Build Include="indexes\IX_Sektori_DateModified.sql" />
+    <Build Include="indexes\IX_TipHV_DateModified.sql" />
+    <Build Include="indexes\IX_Transakcii_DateModified.sql" />
+    <Build Include="indexes\IX_Ulogi_DateModified.sql" />
+    <Build Include="indexes\IX_HartiiOdVrednost_DateModified.sql" />
+    <Build Include="indexes\IX_PortfolioPrinosi_DateModified.sql" />
+    <Build Include="tables\IzvestuvanjaPortfolija.sql" />
+    <Build Include="indexes\UX_Izvestuvanja_PromenaCena.sql" />
+    <Build Include="indexes\IX_Izvestuvanja_PromenaCena_Procitano.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Database.refactorlog" />

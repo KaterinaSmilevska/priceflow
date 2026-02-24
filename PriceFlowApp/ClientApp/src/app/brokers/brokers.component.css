@@ -1,0 +1,50 @@
+.brokers-wrapper {
+  margin: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+  .brokers-wrapper h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+.brokers-table {
+  width: 100%;
+  max-width: 600px;
+  border-collapse: collapse;
+  font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+  .brokers-table th, .brokers-table td {
+    padding: 12px 10px;
+    text-align: center;
+  }
+
+  .brokers-table th {
+    background: #007bff33;
+    font-weight: 600;
+  }
+
+  .brokers-table tr:nth-child(even) {
+    background-color: #f5f6fa;
+  }
+
+  .brokers-table tr:hover {
+    background-color: #e0e6f1;
+    transform: translateY(-1px);
+  }
+
+.loading {
+  text-align: center;
+  margin: 40px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #007bff;
+}

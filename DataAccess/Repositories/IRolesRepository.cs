@@ -14,7 +14,7 @@ namespace DataAccess.Repositories
 
         Task<List<int>> GetIdsByNamesAsync(List<string> names);
 
-        Task<List<Ulogi>> GetByUserIdAsync(int id);
+        Task<List<string>> GetByUserIdAsync(int id);
 
         Task<List<string>> GetNamesAsync(IEnumerable<Ulogi> roles);
     }

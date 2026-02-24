@@ -11,6 +11,8 @@ public partial class KorisniciUlogi
 
     public int UlogaId { get; set; }
 
+    public DateTime DateModified { get; set; }
+
     public virtual Korisnici Korisnik { get; set; } = null!;
 
     public virtual Ulogi Uloga { get; set; } = null!;

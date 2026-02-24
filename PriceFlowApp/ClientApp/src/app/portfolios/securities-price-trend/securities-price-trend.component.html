@@ -1,0 +1,29 @@
+<div class="card m-4" *ngIf="securities.length">
+  <div class="card-header">
+    <h5>Price Trend (Owned Securities)</h5>
+
+    <select class="form-select mt-2"
+            [(ngModel)]="selectedSecurity"
+            (change)="onSecurityChange()">
+      <option [ngValue]="undefined">All securities</option>
+      <option *ngFor="let s of securities" [value]="s">
+        {{ s }}
+      </option>
+    </select>
+    <select class="form-select mt-2"
+            [(ngModel)]="selectedPeriod" (change)="loadData()">
+      <option value="Monthly">Monthly</option>
+      <option value="Yearly">Yearly</option>
+    </select>
+  </div>;
+
+  <div class="card-body">
+    <canvas baseChart
+            [data]="chartData"
+            [options]="chartOptions"
+            chartType="line">
+    </canvas>
+  </div>
+</div>
+
+

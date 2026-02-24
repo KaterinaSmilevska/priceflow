@@ -1,7 +1,12 @@
 ﻿using DataAccess.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace PriceFlowApp.Controllers
 {
@@ -11,11 +16,13 @@ namespace PriceFlowApp.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IRolesService _rolesService;
+        private readonly IBrokersService _brokersService;
 
-        public AuthController(IAuthService authService, IRolesService rolesService)
+        public AuthController(IAuthService authService, IRolesService rolesService, IBrokersService brokersService)
         {
             _authService = authService;
             _rolesService = rolesService;
+            _brokersService = brokersService;
         }
 
         [HttpPost("register")]
@@ -50,23 +57,19 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();
-            if (Request.Cookies.ContainsKey(".AspNetCore.Session")) 
-            {
-                Response.Cookies.Delete(".AspNetCore.Session");
-            }
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok(new { success = true, message = "Logged out successfully." });
         }
 
         [HttpGet("ulogi")]
-        public async Task<IActionResult> GetUlogaNames()
+        public async Task<IActionResult> GetRolesNames()
         {
             try
             {
-                var ulogas = await _rolesService.FindNamesAsync();
-                return Ok(ulogas);
+                var roles = await _rolesService.FindNamesAsync();
+                return Ok(roles);
             }
             catch (Exception ex)
             {
@@ -147,12 +150,23 @@ namespace PriceFlowApp.Controllers
         [HttpGet("status")]
         public IActionResult Status()
         {
-            var username = HttpContext.Session.GetString("Username");
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (!string.IsNullOrEmpty(username) && int.TryParse(userIdStr, out int userId))
-                return Ok(new { isLoggedIn = true, username, userId });
-            else
+            if (!User.Identity!.IsAuthenticated)
                 return Ok(new { isLoggedIn = false });
+
+            var username = User.Identity!.Name;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+
+            return Ok(new
+            {
+                isLoggedIn = true,
+                username,
+                userId,
+                roles
+            });
         }
 
         [HttpGet("users")]
@@ -217,6 +231,62 @@ namespace PriceFlowApp.Controllers
             }
         }
 
+        [HttpGet("brokers")]
+        public async Task<IActionResult> GetBrokers()
+        {
+            try
+            {
+                var brokers = await _brokersService.FindAllAsync();
+                return Ok(brokers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching brokers.", detail = ex.Message });
+            }
+        }
+
+        [HttpPost("brokers")]
+        public async Task<IActionResult> AddBroker([FromBody] CreateBrokerRequest broker)
+        {
+            try
+            {
+                Broker result = await _brokersService.AddAsync(broker);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error creating broker.", detail = ex.Message });
+            }
+        }
+
+        [HttpPut("brokers/{id}")]
+        public async Task<IActionResult> UpdateBroker(int id, [FromBody] UpdateBrokerRequest broker)
+        {
+            try
+            {
+                BrokerResponse result = await _brokersService.UpdateAsync(broker);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error updating broker.", detail = ex.Message });
+            }
+        }
+
+        [HttpDelete("brokers/{id}")]
+        public async Task<IActionResult> DeleteBroker(int id)
+        {
+            try
+            {
+                await _brokersService.DeleteAsync(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error deleting broker.", detail = ex.Message });
+            }
+        }
+
         [HttpGet("verify-email")]
         public async Task<IActionResult> VerifyEmail([FromQuery] Guid token)
         {
@@ -241,6 +311,16 @@ namespace PriceFlowApp.Controllers
             {
                 return StatusCode(500, new { message = "An error occurred during email verification.", detail = ex.Message });
             }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("session-test")]
+        public IActionResult SessionTest()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            var username = HttpContext.Session.GetString("Username");
+            var roles = HttpContext.Session.GetString("Roles");
+            return Ok(new { userId, username, roles });
         }
     }
 } 

@@ -1,14 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import { LoginService } from '../auth/login/login.service';
-import { Observable, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Observable, map } from 'rxjs';
+import { LoginService } from '../auth/login/login.service';
+import { PriceChangeNotificationsService } from '../notifications/price-change/price-change-notifications.service';
+import { PriceChangeNotification } from '../notifications/price-change/PriceChangeNotification';
+import { PriceChangeNotificationsComponent } from '../notifications/price-change/price-change-notifications.component';
 
 @Component({
   selector: 'app-nav-menu',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, PriceChangeNotificationsComponent],
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css', '../../styles.css']
 })
@@ -19,7 +22,11 @@ export class NavMenuComponent implements OnInit {
   isAdmin$: Observable<boolean>
   private previousLoginState = false;
 
-  constructor(public loginService: LoginService) {
+  notifications: PriceChangeNotification[] = [];
+  unreadCount = 0;
+  showDropdown = false;
+
+  constructor(public loginService: LoginService, private notificationsService: PriceChangeNotificationsService) {
     this.isAdmin$ = this.loginService.getUserRoles().pipe(
       map(roles => roles.includes('Администратор')));
   }
@@ -28,6 +35,7 @@ export class NavMenuComponent implements OnInit {
      this.loginService.isLoggedIn().subscribe(currentState => {
        if (this.previousLoginState != currentState) {
          if (currentState) {
+           this.loadNotifications();
            this.showSuccessMessage('Logged in successfully!');
          } else if (this.previousLoginState) {
            this.showSuccessMessage('Logged out successfully!');
@@ -36,7 +44,28 @@ export class NavMenuComponent implements OnInit {
        this.previousLoginState = currentState;
        this.isLoggedIn = currentState;
      });
-   }
+     this.notificationsService.unreadCount$
+       .subscribe(count => this.unreadCount = count);
+  }
+
+  loadNotifications(): void {
+    this.notificationsService.getNotifications()
+      .subscribe(res => {
+        this.notifications = res;
+      });
+    this.notificationsService.getUnreadNotificationCount();
+  }
+
+  markAsRead(notification: PriceChangeNotification): void {
+    if (!notification.isRead) {
+      this.notificationsService.markNotificationAsRead(notification.id)
+        .subscribe(() => {
+          notification.isRead = true;
+
+          this.notificationsService.getUnreadNotificationCount();
+        });
+    }
+  }
 
   isAdmin(): boolean {
     return this.loginService.hasRole('Администратор');

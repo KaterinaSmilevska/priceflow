@@ -3,6 +3,9 @@ using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
 using PriceFlowSecurity;
 using System.Text.RegularExpressions;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace PriceFlowApp.Services
 {
@@ -12,10 +15,10 @@ namespace PriceFlowApp.Services
         private readonly IRolesRepository _rolesRepository;
         private readonly IUsersRolesRepository _usersRolesRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly EmailService _emailService;
+        private readonly IEmailService _emailService;
 
         public AuthService(IAuthRepository korisnikRepository, IRolesRepository rolesRepository, IUsersRolesRepository usersRolesRepository,
-            IHttpContextAccessor httpContextAccessor, EmailService emailService)
+            IHttpContextAccessor httpContextAccessor, IEmailService emailService)
         {
             _authRepository = korisnikRepository;
             _rolesRepository = rolesRepository;
@@ -221,20 +224,48 @@ namespace PriceFlowApp.Services
                 throw new ArgumentException("Please verify your email before logging in.");
 
             var httpContext = _httpContextAccessor.HttpContext;
-            httpContext.Session.SetString("Username", user.Username);
-            httpContext.Session.SetString("UserId", user.Id.ToString());
-            httpContext.Response.Cookies.Append("Username", user.Username,new CookieOptions 
-                { HttpOnly = true, Expires = DateTimeOffset.Now.AddHours(1) });
 
-            List<Ulogi> roles = await _rolesRepository.GetByUserIdAsync(user.Id);
-            var roleNames = await _rolesRepository.GetNamesAsync(roles);
+            if (httpContext == null)
+                throw new Exception("No HttpContext available.");
+
+            List<string> roles = await _rolesRepository.GetByUserIdAsync(user.Id);
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            foreach(var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await httpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1)
+                }
+             );
+
+            //httpContext.Session.SetString("Username", user.Username);
+            //httpContext.Session.SetString("UserId", user.Id.ToString());
+            //httpContext.Session.SetString("Roles", string.Join(",", roleNames));
+            //httpContext.Response.Cookies.Append("Username", user.Username,new CookieOptions 
+            //    { HttpOnly = true, Expires = DateTimeOffset.Now.AddHours(1) });
 
             return new LoginResponse
             {
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                Roles = roleNames,
+                Roles = roles,
                 Message = "Login successful"
             };
         }

@@ -27,5 +27,7 @@ public partial class DnevenPromet
 
     public int? VkupenPrometDenari { get; set; }
 
+    public DateTime DateModified { get; set; }
+
     public virtual HartiiOdVrednost Hv { get; set; } = null!;
 }

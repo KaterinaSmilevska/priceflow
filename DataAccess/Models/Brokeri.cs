@@ -10,4 +10,6 @@ public partial class Brokeri
     public string Kompanija { get; set; } = null!;
 
     public decimal ProcentProvizija { get; set; }
+
+    public DateTime DateModified { get; set; }
 }

@@ -1,0 +1,36 @@
+<div *ngIf="!loading" class="notification-card">
+
+  <div class="card-header">Portfolio Performance Notifications</div>
+
+  <div class="card-body">
+    <div class="form-check">
+      <input type="checkbox"
+             class="form-check-input"
+             id="enableNotifications"
+             [(ngModel)]="notification.isEnabled" />
+      <label class="form-check-label" for="enableNotifications">
+        Enable notifications
+      </label>
+    </div>
+    <div *ngIf="notification.isEnabled" class="mt-3">
+      <label class="form-label">Frequency</label>
+      <select class="form-select"
+              [(ngModel)]="notification.frequency">
+        <option value="Weekly">Weekly</option>
+        <option value="Monthly">Monthly</option>
+      </select>
+    </div>
+    <div class="mt-4">
+      <button class="btn btn-primary"
+              (click)="save()"
+              [disabled]="saving">
+        <span *ngIf="!saving">Save</span>
+        <span *ngIf="saving">Saving...</span>
+      </button>
+    </div>
+
+    <div *ngIf="saved" class="alert alert-success mt-3">Settings saved successfully.</div>
+
+    <p *ngIf="error" class="alert alert-danger mt-3">Error saving settings.</p>
+  </div>
+</div>

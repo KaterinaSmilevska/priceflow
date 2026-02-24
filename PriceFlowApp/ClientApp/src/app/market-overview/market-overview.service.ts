@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { LiquidityOverview } from '../liquidity/LiquidityOverview';
 
 export interface MarketOverview {
   totalMarketCap: number;
@@ -41,5 +42,13 @@ export class MarketOverviewService {
 
   getMostTraded(count: number): Observable<SecurityPerformance[]> {
     return this.http.get<SecurityPerformance[]>(`${this.apiUrl}/most-traded?count=${count}`);
+  }
+
+  getLiquidity(months: number, onlyOwned = true) {
+    return this.http.get<LiquidityOverview>(`${this.apiUrl}/liquidity`,
+      {
+        params: { months, onlyOwned },
+        withCredentials: true
+      });
   }
 }

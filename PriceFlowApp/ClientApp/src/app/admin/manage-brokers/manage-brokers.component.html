@@ -1,0 +1,52 @@
+<div class="brokers-container">
+  <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Manage Brokers</h2>
+
+  <div *ngIf="errorMessage" class="error mb-4 p-2">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div class="mb-4 text-end">
+    <button class="btn btn-success"
+            (click)="openAddModal()">
+      Add broker
+    </button>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-200">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="py-2 px-4 border-b">Company</th>
+          <th class="py-2 px-4 border-b">Commission (%)</th>
+          <th class="py-2 px-4 border-b">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let broker of brokers" class="hover:bg-gray-50">
+          <td class="py-2 px-4 border-b">{{ broker.company }}</td>
+          <td class="py-2 px-4 border-b">{{ broker.commissionPercent }}</td>
+          <td class="py-2 px-4 border-b">
+            <button class="btn btn-warning me-1" (click)="openEditModal(broker)">Edit</button>
+            <button class="btn btn-danger" (click)="openDeleteModal(broker)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-edit-broker *ngIf="showEditModal"
+                 [brokerToEdit]="brokerToEdit!"
+                 (close)="onEditModalClose($event)">
+</app-edit-broker>
+
+<div *ngIf="showDeleteModal" class="modal-overlay">
+  <div class="modal-content animate-in">
+    <h3>Confirm Delete</h3>
+    <p>Are you sure you want to delete broker <strong>{{ brokerToDelete?.company }}</strong>?</p>
+    <div class="modal-actions">
+      <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+    </div>
+  </div>
+</div>

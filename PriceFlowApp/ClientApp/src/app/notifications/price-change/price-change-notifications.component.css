@@ -1,0 +1,9 @@
+.notification-wrapper {
+    position: relative;
+    cursor: pointer;
+}
+
+.bell-icon {
+    font-size: 1.5rem;
+    position: relative;
+}

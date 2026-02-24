@@ -17,7 +17,11 @@ public partial class HartiiOdVrednost
 
     public int IzdavachId { get; set; }
 
+    public DateTime DateModified { get; set; }
+
     public virtual ICollection<DnevenPromet> DnevenPromet { get; set; } = new List<DnevenPromet>();
+
+    public virtual HvPromenaCena? HvPromenaCena { get; set; }
 
     public virtual Izdavachi Izdavach { get; set; } = null!;
 

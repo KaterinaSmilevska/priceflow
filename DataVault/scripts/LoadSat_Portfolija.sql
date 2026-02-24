@@ -1,32 +1,103 @@
-﻿;WITH SourceData AS (
-		SELECT
-			hp.Portfolija_HK,
-			p.Opis,
-			CONVERT(CHAR(32), HASHBYTES(
-				'MD5',
-				UPPER(
-					TRIM(
-						CONCAT(
-							ISNULL(CONVERT(NVARCHAR(50), p.Opis), '')
+﻿CREATE PROCEDURE [dbo].Load_Sat_Portfolija @SyncDate DATETIME
+AS
+	BEGIN TRANSACTION;
+		BEGIN TRY
+
+			DECLARE @LastLoadDate DATETIME = 
+			(
+				SELECT LastLoadDate
+				FROM [dbo].ETL_Load
+				WHERE SourceTableName = 'Portfolija'
+			)
+
+			DECLARE @Portfolija_Result TABLE
+			(
+				Username NVARCHAR(100) NOT NULL,
+				Ime NVARCHAR(50) NOT NULL,
+				Opis NVARCHAR(100) NULL,
+				HashDiff AS
+				(
+					CONVERT(CHAR(32), HASHBYTES(
+						'MD5',
+						UPPER(
+							TRIM(
+								ISNULL(CONVERT(NVARCHAR(50), Opis), '')
+							)
 						)
-					)
-				)
-			), 2) AS HashDiff,
-			SYSUTCDATETIME() AS LoadDate,
-			'PriceFlowDb' AS RecordSource
+					), 2)
+				),
+				Portfolija_HK AS
+				(
+					CONVERT(CHAR(32), HASHBYTES('MD5', CONCAT(UPPER(TRIM(Username)), '|', UPPER(TRIM(Ime)))), 2)
+				),
+				DateModified DATETIME NOT NULL
+			);
+
+			INSERT INTO @Portfolija_Result
+			(
+				Username,
+				Ime,
+				Opis,
+				DateModified
+			)
+			SELECT
+				k.Username,
+				p.Ime,
+				p.Opis,
+				p.DateModified
 			FROM [$(PriceFlowDb)].[dbo].Portfolija AS p
 			INNER JOIN [$(PriceFlowDb)].[dbo].Korisnici AS k
 				ON k.Id = p.KorisnikId
-			INNER JOIN Hub_Portfolija AS hp
-				ON (hp.Username = k.Username AND hp.Ime = p.Ime)
-)
+			WHERE p.DateModified > @LastLoadDate AND p.DateModified <= @SyncDate
 
-MERGE Sat_Portfolija AS target
-USING SourceData AS source
-	ON target.Portfolija_HK = source.Portfolija_HK
-WHEN MATCHED AND target.HashDiff <> source.HashDiff AND target.EndDate IS NULL THEN
-	UPDATE SET EndDate = SYSUTCDATETIME()
-WHEN NOT MATCHED BY TARGET THEN
-	INSERT (Portfolija_HK, Opis, HashDiff, LoadDate,EndDate, RecordSource)
-	VALUES (source.Portfolija_HK, source.Opis, source.HashDiff, source.LoadDate, NULL, source.RecordSource)
-;
+			IF @@ROWCOUNT > 0
+
+			BEGIN
+				UPDATE sp
+				SET EndDate = r.DateModified
+				FROM [dbo].Sat_Portfolija AS sp
+				INNER JOIN @Portfolija_Result AS r
+					ON r.Portfolija_HK = sp.Portfolija_HK
+				WHERE sp.HashDiff <> r.HashDiff
+					AND sp.EndDate IS NULL
+				
+				INSERT INTO [dbo].Sat_Portfolija
+				(
+					Portfolija_HK,
+					Opis,
+					LoadDate,
+					HashDiff,
+					RecordSource
+				)
+				SELECT
+					r.Portfolija_HK,
+					r.Opis,
+					SYSUTCDATETIME(),
+					r.HashDiff,
+					'PriceFlowDb'
+				FROM @Portfolija_Result AS r
+				LEFT OUTER JOIN [dbo].Sat_Portfolija AS sp
+					ON sp.Portfolija_HK = r.Portfolija_HK
+						AND sp.HashDiff = r.HashDiff
+						AND sp.EndDate IS NULL
+				WHERE sp.Portfolija_HK IS NULL
+
+				UPDATE [dbo].ETL_Load
+				SET LastLoadDate = (
+					SELECT max(DateModified)
+					FROM @Portfolija_Result
+				)
+				WHERE SourceTableName = 'Portfolija'
+			END
+
+			COMMIT TRANSACTION;
+		END TRY
+
+		BEGIN CATCH
+
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+
+		THROW;
+		END CATCH;
+GO

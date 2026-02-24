@@ -1,0 +1,256 @@
+<div class="btn-group mb-3">
+  <button class="btn btn-outline-primary"
+          [class.active]="isReal"
+          (click)="setMode(true)">
+    Real
+  </button>
+  <button class="btn btn-outline-secondary"
+          [class.active]="isReal"
+          (click)="setMode(false)">
+    Simulated
+  </button>
+</div>
+
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <button class="nav-link active"
+              data-bs-toggle="tab"
+              data-bs-target="#overview">
+        Overview
+      </button>
+    </li>
+
+    <li class="nav-item">
+      <button class="nav-link"
+              data-bs-toggle="tab"
+              data-bs-target="#analytics">
+        Analytics
+      </button>
+    </li>
+
+    <li class="nav-item">
+      <button class="nav-link"
+              data-bs-toggle="tab"
+              data-bs-target="#worth"
+              (click)="loadPortfolioValue()">
+        Current Value
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="overview">
+      <div class="card mt-4 mb-4 summary-card">
+        <div class="card-body">
+          <div class="row text-center g-3">
+
+            <div class="col-md-3">
+              <h6 class="text-muted">Revenue</h6>
+              <h3 class="text-success fw-semibold">
+                {{ analytics?.totalRevenue | number:'1.2-2' }} ден.
+              </h3>
+            </div>
+
+            <div class="col-md-3">
+              <h6 class="text-muted">Expenses</h6>
+              <h3 class="text-danger fw-semibold">
+                {{ analytics?.totalExpenses | number:'1.2-2' }} ден.
+              </h3>
+            </div>
+
+            <div class="col-md-3">
+              <h6 class="text-muted">Taxes</h6>
+              <h3 class="text-danger fw-semibold">
+                {{ analytics?.taxes | number:'1.2-2' }} ден.
+              </h3>
+            </div>
+
+            <div class="col-md-3">
+              <h6 class="text-muted">Balance</h6>
+              <h3 class="fw-bold"
+                  [class.text-success]="analytics?.balance! >= 0"
+                  [class.text-danger]="analytics?.balance! < 0">
+                {{ analytics?.balance | number:'1.2-2' }} ден.
+              </h3>
+
+              <small class="fw-semibold"
+                     [class.text-success]="analytics?.balance! >= 0"
+                     [class.text-danger]="analytics?.balance! < 0">
+                {{ analytics?.balance! >= 0 ? 'Profit' : 'Loss' }}
+              </small>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-success btn-sm mb-3" (click)="openAddModal()">
+        Add Transaction
+      </button>
+
+      <div class="row g-4" *ngIf="!loading && transactions.length">
+        <div class="col-xl-9 col-lg-8">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle transactions-table">
+              <thead class="table-light">
+                <tr>
+                  <th>Date</th>
+                  <th>Security</th>
+                  <th>Type</th>
+                  <th class="text-end">Qty</th>
+                  <th class="text-end">Unit Price</th>
+                  <th class="text-end">Trade value</th>
+                  <th class="text-end">Commission</th>
+                  <th class="text-end">Cash flow</th>
+                  <th class="text-center"></th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let t of visibleTableView" [class.table-secondary]="!t.isReal">
+
+                  <td>{{ t.date | date:'dd.MM.yyyy' }}</td>
+                  <td>
+                    <span class="fw-semibold text-primary">{{ t.hvCode }}</span>
+                    <span *ngIf="!t.isReal" class="badge bg-secondary ms-2">Simulated</span>
+                  </td>
+
+                  <td>
+                    <span class="badge rounded-pill px-3"
+                          [ngClass]="{
+                     'bg-success-subtle text-success': t.type === 'Купување',
+                     'bg-danger-subtle text-danger': t.type === 'Продавање',
+                     'bg-info-subtle text-info': t.type === 'Дивиденден принос'
+                   }">
+                      {{ t.type }}
+                    </span>
+                  </td>
+                  <td class="text-end">
+                    {{ t.sharesQuantity ?? '-' }}
+                  </td>
+
+                  <td class="text-end">
+                    {{ t.sharesUnitPrice ? (t.sharesUnitPrice | number:'1.2-2'): '-' }}
+                  </td>
+
+                  <td class="text-end fw-bold">
+                    {{ t.amount | number:'1.2-10' }} ден.
+                  </td>
+                  <td class="text-end fw-bold">
+                    {{ t.commission ? (t.commission | number: '1.2-2') + ' ден.': '-'  }}
+                  </td>
+                  <td class="text-end fw-bold"
+                      [class.text-danger]="t.cashFlow < 0"
+                      [class.text-success]="t.cashFlow > 0">
+                    {{ t.cashFlow | number: '1.2-2'}} ден.
+                  </td>
+                  <td class="text-center">
+                    <div class="action-buttons" *ngIf="t.transactionId">
+                      <button class="btn btn-warning btn-sm me-1"
+                              (click)="editFromTable(t.transactionId)">
+                        Edit
+                      </button>
+                      <button class="btn btn-danger btn-sm"
+                              (click)="deleteFromTable(t.transactionId)">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="text-center mt-3"
+               *ngIf="filteredTableView.length > displayLimit">
+
+            <button class="btn btn-secondary btn-sm"
+                    (click)="toggleShowAll()">
+              {{ showAll ? 'Show less' : 'See more' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-4">
+          <app-portfolio-returns [portfolioId]="portfolioId"
+                                 (updated)="reloadAll()">
+          </app-portfolio-returns>
+        </div>
+      </div>
+
+      <div *ngIf="!loading && !transactions.length" class="text-muted">
+        No transactions yet.
+      </div>
+
+      <app-transaction-form *ngIf="showEditModal"
+                            [portfolioId]="portfolioId"
+                            [transaction]="transactionToEdit"
+                            (close)="onModalClose($event)">
+      </app-transaction-form>
+
+      <div *ngIf="showDeleteModal" class="modal-overlay">
+        <div class="modal-content animate-in">
+          <h3>Confirm Delete</h3>
+          <p>
+            Are you sure you want to delete transaction for
+            <strong>{{ transactionToDelete?.hvCode }}</strong>
+            on
+            <strong>{{ transactionToDelete?.date | date: 'dd.MM.yyyy' }}</strong>?
+          </p>
+          <div class="modal-actions">
+            <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+            <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="analytics">
+      <div class="charts-grid">
+        <div class="chart-card income">
+          <app-portfolio-income [portfolioId]="portfolioId" [isReal]="isReal"></app-portfolio-income>
+        </div>
+
+        <div class="chart-card allocation">
+          <app-portfolio-security-allocation [portfolioId]="portfolioId" [isReal]="isReal">
+          </app-portfolio-security-allocation>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="worth">
+        <div class="table-responsive mt-3">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Security</th>
+                <th class="text-end">Quantity</th>
+                <th class="text-end">Last price</th>
+                <th class="text-end">Current value</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let v of portfolioValue">
+                <td class="fw-semibold text-primary">{{ v.hvCode }}</td>
+                <td class="text-end">{{ v.totalQuantity }}</td>
+                <td class="text-end">
+                  {{ v.lastPrice | number:'1.2-2' }} ден.
+                </td>
+                <td class="text-end fw-bold">
+                  {{ v.currentValue | number:'1.2-2' }} ден.
+                </td>
+              </tr>
+
+              <tr *ngIf="!portfolioValue.length && !loadingValue">
+                <td colspan="4" class="text-center text-muted">
+                  No owned securities.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+
+    </div>
+  </div>
+

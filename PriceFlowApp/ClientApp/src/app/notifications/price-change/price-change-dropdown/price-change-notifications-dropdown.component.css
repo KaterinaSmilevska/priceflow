@@ -1,0 +1,32 @@
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1050;
+  width: 350px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .15);
+  background-color: #ffff;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f3f5;
+    cursor: pointer;
+}
+
+.dropdown-item:not(.bg-light) {
+    font-weight: 500;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}

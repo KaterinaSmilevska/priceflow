@@ -4,6 +4,12 @@
   <button class="get-started-btn" (click)="onGetStarted()">Get Started</button>
 </div>
 
+<app-brokers *ngIf="(loginService.isInvestor() | async)"></app-brokers>
+
+<app-liquidity *ngIf="(loginService.isInvestor() | async)"></app-liquidity>
+
+<app-securities-price-trend *ngIf="(loginService.isInvestor() | async)"></app-securities-price-trend>
+
 <app-market-overview></app-market-overview>
 <app-top-performers></app-top-performers>
 
@@ -35,6 +41,11 @@
   </div>
 
   <div class="footer-bottom">
+    <p class="disclaimer">
+      PriceFlow does not provide investment advice, financial advice, or recommendations of any kind. 
+      All data, analytics, and insights are provided for informational purposes only.
+      Investment decisions are made solely by the user.
+    </p>
     <p>© 2025 PriceFlow. All rights reserved.</p>
   </div>
 </footer>

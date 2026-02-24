@@ -1,0 +1,53 @@
+<div class="portfolios-section">
+  <h2 class="text-center mt-4">📊 My Portfolios</h2>
+
+  <div class="text-md-end mb-3">
+    <button class="btn btn-success btn-sm" (click)="openAddModal()">Add Portfolio</button>
+  </div>
+
+  <div *ngIf="portfolios.length > 0; else noData">
+    <table class="table table-striped table-hover mt-3">
+      <thead class="table-primary">
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th style="width:160px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of portfolios">
+          <td>{{ p.name }}</td>
+          <td>{{ p.description }}</td>
+          <td class="d-flex align-items-center justify-content-center gap-2">
+            <button class="btn btn-sm btn-info" (click)="view(p.id)">View</button>
+            <button class="btn btn-sm btn-warning" (click)="openEditModal(p)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="openDeleteModal(p)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noData>
+    <p class="text-center text-muted mt-3">No portfolios available.</p>
+  </ng-template>
+</div>
+
+<app-add-portfolio *ngIf="showEditModal"
+                   [portfolioToEdit]="portfolioToEdit"
+                   (close)="onModalClose($event)">
+</app-add-portfolio>
+
+<div *ngIf="showDeleteModal" class="modal-overlay">
+  <div class="modal-content animate-in">
+    <h3>Confirm Delete</h3>
+    <p>
+      Are you sure you want to delete portfolio
+      <strong>{{ portfolioToDelete?.name }}</strong>?
+    </p>
+    <div class="modal-actions">
+      <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+    </div>
+  </div>
+</div>

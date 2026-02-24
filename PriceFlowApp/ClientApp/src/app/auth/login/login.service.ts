@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 export interface LoginRequest {
   username: string;
@@ -26,12 +27,12 @@ export class LoginService {
   private username = new BehaviorSubject<string | null>(null);
   private userRoles = new BehaviorSubject<string[]>([]);
 
-  constructor(private http: HttpClient) {
-    this.http.get<{ isLoggedIn: boolean; username?: string, ulogas?: string[] }>(`${this.apiUrl}/status`)
+  constructor(private http: HttpClient, private router: Router) {
+    this.http.get<{ isLoggedIn: boolean; username?: string, roles?: string[] }>(`${this.apiUrl}/status`, { withCredentials: true })
       .subscribe(status => {
         this.loggedIn.next(status.isLoggedIn);
         this.username.next(status.username || '');
-        this.userRoles.next(status.ulogas || []);
+        this.userRoles.next(status.roles || []);
       });
   }
 
@@ -52,6 +53,8 @@ export class LoginService {
       this.loggedIn.next(false);
       this.username.next(null);
       this.userRoles.next([]);
+
+      this.router.navigate(['/login']);
     });
   }
 
@@ -73,5 +76,15 @@ export class LoginService {
 
   verifyEmail(token: string) {
     return this.http.get(`${this.apiUrl}/verify-email?token=${encodeURIComponent(token)}`);
+  }
+
+  getSession(): Observable<any> {
+    return this.http.get<any>('api/auth/session-test', { withCredentials: true });
+  }
+
+  isInvestor(): Observable<boolean> {
+    return this.userRoles.asObservable().pipe(
+      map(roles => roles.includes('Инвеститор'))
+    );
   }
 }

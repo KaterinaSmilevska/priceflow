@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface User {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  roles: string[]
-}
+import { User } from './manage-users/User';
+import { Broker } from './manage-brokers/Broker';
 
 export interface AuthStatus {
   isLoggedIn: boolean;
@@ -38,6 +32,22 @@ export class AdminService {
 
   deleteUser(userId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/users/${userId}`);
+  }
+
+  getBrokers(): Observable<Broker[]> {
+    return this.http.get<Broker[]>(`${this.apiUrl}/brokers`);
+  }
+
+  addBroker(broker: Broker): Observable<Broker> {
+    return this.http.post<Broker>(`${this.apiUrl}/brokers`, broker);
+  } 
+
+  updateBroker(broker: Broker): Observable<Broker> {
+    return this.http.put<Broker>(`${this.apiUrl}/brokers/${broker.id}`, broker);
+  }
+
+  deleteBroker(brokerId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/brokers/${brokerId}`);
   }
 
   getCurrentUserStatus(): Observable<AuthStatus> {

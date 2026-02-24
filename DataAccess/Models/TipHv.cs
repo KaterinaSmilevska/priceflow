@@ -9,5 +9,7 @@ public partial class TipHv
 
     public string Ime { get; set; } = null!;
 
+    public DateTime DateModified { get; set; }
+
     public virtual ICollection<HartiiOdVrednost> HartiiOdVrednost { get; set; } = new List<HartiiOdVrednost>();
 }
