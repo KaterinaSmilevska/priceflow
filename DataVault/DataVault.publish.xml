@@ -13,5 +13,8 @@
     <SqlCmdVariable Include="PriceFlowDb">
       <Value>PriceFlowDb</Value>
     </SqlCmdVariable>
+    <SqlCmdVariable Include="PriceFlowDV">
+      <Value>PriceFlowDV</Value>
+    </SqlCmdVariable>
   </ItemGroup>
 </Project>

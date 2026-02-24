@@ -21,6 +21,11 @@ namespace PriceFlowApp.Services
 
         }
 
+        public async Task<List<string>> FindByUserIdAsync(int userId)
+        {
+            return await _rolesRepository.GetByUserIdAsync(userId);
+        }
+
         public async Task<List<string>> FindNamesAsync()
         {
             return await _rolesRepository.GetNamesAsync();

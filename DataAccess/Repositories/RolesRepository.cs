@@ -40,11 +40,12 @@ namespace DataAccess.Repositories
                .ToListAsync();
         }
 
-        public async Task<List<Ulogi>> GetByUserIdAsync(int id)
+        public async Task<List<string>> GetByUserIdAsync(int id)
         {
             return await _dbContext.KorisniciUlogi
                 .Where(ku => ku.KorisnikId == id)
-                .Select(ku => ku.Uloga)
+                .Include(ku => ku.Uloga)
+                .Select(ku => ku.Uloga.Ime)
                 .ToListAsync();
         }
 

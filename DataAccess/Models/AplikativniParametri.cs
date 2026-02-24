@@ -12,4 +12,6 @@ public partial class AplikativniParametri
     public decimal BerzanskaProvizija { get; set; }
 
     public decimal Cdhvprovizija { get; set; }
+
+    public DateTime DateModified { get; set; }
 }

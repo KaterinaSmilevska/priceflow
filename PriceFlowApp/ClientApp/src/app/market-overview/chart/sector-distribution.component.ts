@@ -72,15 +72,15 @@ export class SectorDistributionComponent implements OnInit {
           this.chart?.update();
           return;
         }
+
+        const values = res.map((x) => x.marketCap);
+        const colors = this.chartService.generateColors(values.length);
         this.data = {
           labels: res.map((x) => x.sectorName),
           datasets: [
             {
-              data: res.map((x) => x.marketCap),
-              backgroundColor: [
-                '#007bff', '#28a745', '#dc3545', '#ffc107', '#6f42c1',
-                '#20c997', '#fd7e14', '#6610f2', '#e83e8c', '#17a2b8'
-              ],
+              data: values,
+              backgroundColor: colors,
             },
           ],
         };

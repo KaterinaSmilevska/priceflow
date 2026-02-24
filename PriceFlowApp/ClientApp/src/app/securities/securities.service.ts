@@ -29,6 +29,13 @@ export interface Issuer {
   name: string;
 }
 
+export interface SecurityDailyPrices {
+  securityCode: string;
+  minPrice: number | null;
+  maxPrice: number | null;
+  averagePrice: number | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -46,6 +53,10 @@ export class SecuritiesService {
 
   getById(id: number): Observable<Security> {
     return this.http.get<Security>(`${this.apiUrl}/${id}`);
+  }
+
+  getSecurityCode(id: number): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}/code/${id}`);
   }
 
   addSecurity(security: CreateSecurity): Observable<Security> {
@@ -66,5 +77,10 @@ export class SecuritiesService {
 
   updateSecurity(id: number, security: CreateSecurity): Observable<Security> {
     return this.http.put<Security>(`${this.apiUrl}/${id}`, security);
+  }
+
+  getLatestPrices(securityCode: string, date: string): Observable<SecurityDailyPrices> {
+    return this.http.get<SecurityDailyPrices>(`${this.apiUrl}/prices/`,
+      { params: { securityCode, date }, withCredentials: true });
   }
 }

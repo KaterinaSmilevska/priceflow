@@ -9,18 +9,30 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+:r .\Load_ETL_Load.sql
 :r .\LoadHub_Brokeri.sql
-:r .\LoadHub_HartiiOdVrednost.sql
-:r .\LoadHub_Izdavachi.sql
-:r .\LoadHub_Korisnici.sql
-:r .\LoadHub_Portfolija.sql
-:r .\LoadHub_Sektori.sql
 :r .\LoadHub_TipHV.sql
+:r .\LoadHub_Sektori.sql
+:r .\LoadHub_Izdavachi.sql
 :r .\LoadHub_Ulogi.sql
-:r .\LoadLink_HartiiOdVrednost_Izdavachi.sql
+:r .\LoadHub_Korisnici.sql
+:r .\LoadHub_HartiiOdVrednost.sql
+:r .\LoadHub_Portfolija.sql
+:r .\LoadLink_HartiiodVrednost_Izdavachi.sql
 :r .\LoadLink_HartiiOdVrednost_TipHV.sql
 :r .\LoadLink_Izdavachi_Sektori.sql
-:r .\LoadLink_KorisniciUlogi.sql
 :r .\LoadLink_Portfolija_Korisnici.sql
+:r .\LoadLink_KorisniciUlogi.sql
 :r .\LoadLink_PortfolioPrinosi.sql
 :r .\LoadLink_Transakcii.sql
+:r .\LoadSat_Brokeri.sql
+:r .\LoadSat_Izdavachi.sql
+:r .\LoadSat_FinansiskiPokazateli.sql
+:r .\LoadSat_Korisnici.sql
+:r .\LoadSat_HartiiOdVrednost.sql
+:r .\LoadSat_DnevenPromet.sql
+:r .\LoadSat_Portfolija.sql
+:r .\LoadSat_PortfolioPrinosi.sql
+:r .\LoadSat_Transakcii.sql
+:r .\LoadRef_AplikativniParametri.sql
+:r .\ExecuteAll.sql

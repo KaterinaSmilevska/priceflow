@@ -13,6 +13,10 @@ public partial class Portfolija
 
     public int KorisnikId { get; set; }
 
+    public DateTime DateModified { get; set; }
+
+    public virtual IzvestuvanjaPortfolija? IzvestuvanjaPortfolija { get; set; }
+
     public virtual Korisnici Korisnik { get; set; } = null!;
 
     public virtual ICollection<PortfolioPrinosi> PortfolioPrinosi { get; set; } = new List<PortfolioPrinosi>();

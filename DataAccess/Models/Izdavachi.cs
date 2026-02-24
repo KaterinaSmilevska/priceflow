@@ -15,6 +15,8 @@ public partial class Izdavachi
 
     public int SektorId { get; set; }
 
+    public DateTime DateModified { get; set; }
+
     public virtual ICollection<FinansiskiPokazateli> FinansiskiPokazateli { get; set; } = new List<FinansiskiPokazateli>();
 
     public virtual ICollection<HartiiOdVrednost> HartiiOdVrednost { get; set; } = new List<HartiiOdVrednost>();

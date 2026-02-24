@@ -1,4 +1,6 @@
-﻿using PriceFlowApp.DTOs;
+﻿using DataAccess.Enums;
+using DataAccess.Models;
+using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {
@@ -11,5 +13,7 @@ namespace PriceFlowApp.Services
         Task<IEnumerable<SecurityPerformance>> GetTopLosersAsync(int count);
 
         Task<IEnumerable<SecurityPerformance>> GetMostTradedAsync(int count);
+
+        Task<LiquidityOverview> FindLiquidityAsync(int userId, int monthsBack, bool onlyOwned);
     }
 }

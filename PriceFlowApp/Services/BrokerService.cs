@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
+using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {
@@ -27,6 +28,18 @@ namespace PriceFlowApp.Services
                 throw new ArgumentException($"Broker with Kompanija '{company}' not found.");
 
             return broker;
+        }
+
+        public async Task<IEnumerable<Broker>> FindAllAsync()
+        {
+            IEnumerable<Brokeri> brokers = await _brokerRepository.GetAllAsync();
+
+            return brokers.Select(b => new Broker
+            {
+                Id = b.Id,
+                Company = b.Kompanija,
+                CommissionPercent = b.ProcentProvizija
+            });
         }
     }
 }

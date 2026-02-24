@@ -104,29 +104,16 @@
     <Build Include="indexes\IX_Link_PortfolioPrinosi_Portfolija_HK.sql" />
     <Build Include="indexes\IX_Link_Transakcii_HartiiOdVrednost_HK.sql" />
     <Build Include="indexes\IX_Link_Transakcii_Portfolija_HK.sql" />
-    <Build Include="indexes\IX_Sat_Brokeri_Brokeri_HK.sql" />
-    <Build Include="indexes\IX_Sat_Brokeri_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_DnevenPromet.sql" />
-    <Build Include="indexes\IX_Sat_DnevenPromet_HartiiOdVrednost_HK.sql" />
-    <Build Include="indexes\IX_Sat_DnevenPromet_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_FinansiskiPokazateli.sql" />
-    <Build Include="indexes\IX_Sat_FinansiskiPokazateli_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_FinansiskiPokazateli_Izdavachi_HK.sql" />
-    <Build Include="indexes\IX_Sat_HartiiodVrednost_HartiiOdVrednost_HK.sql" />
-    <Build Include="indexes\IX_Sat_HartiiOdVrednost_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_Izdavachi_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_Izdavachi_Izdavachi_HK.sql" />
-    <Build Include="indexes\IX_Sat_Korisnici_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_Korisnici_Korisnici_HK.sql" />
-    <Build Include="indexes\IX_Sat_Korisnici_Sensitive_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_Korisnici_Sensitive_Korisnici_HK.sql" />
-    <Build Include="indexes\IX_Sat_Portfolija_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_Portfolija_Portfolija_HK.sql" />
-    <Build Include="indexes\IX_Sat_PortfolioPrinosi.sql" />
-    <Build Include="indexes\IX_Sat_PortfolioPrinosi_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_PortfolioPrinosi_PortfolioPrinosi_HK.sql" />
-    <Build Include="indexes\IX_Sat_Transakcii_HashDiff.sql" />
-    <Build Include="indexes\IX_Sat_Transakcii_Transakcii_HK.sql" />
+    <Build Include="indexes\IX_Sat_Brokeri_Active.sql" />
+    <Build Include="indexes\IX_Sat_DnevenPromet_Active.sql" />
+    <Build Include="indexes\IX_Sat_FinansiskiPokazateli_Active.sql" />
+    <Build Include="indexes\IX_Sat_HartiiodVrednost_Active.sql" />
+    <Build Include="indexes\IX_Sat_Izdavachi_Active.sql" />
+    <Build Include="indexes\IX_Sat_Korisnici_Active.sql" />
+    <Build Include="indexes\IX_Sat_Korisnici_Sensitive_Active.sql" />
+    <Build Include="indexes\IX_Sat_Portfolija_Active.sql" />
+    <Build Include="indexes\IX_Sat_PortfolioPrinosi_Active.sql" />
+    <Build Include="indexes\IX_Sat_Transakcii_Active.sql" />
     <None Include="indexes\UX_Hub_Brokeri_Kompanija.sql" />
     <None Include="indexes\UX_Hub_HartiiOdVrednost_Kod.sql" />
     <None Include="indexes\UX_Hub_Izdavachi_Ime.sql" />
@@ -143,6 +130,7 @@
     <Build Include="indexes\UX_Link_PortfolioPrinosi.sql" />
     <Build Include="indexes\UX_Link_Transakcii.sql" />
     <None Include="scripts\LoadHub_Brokeri.sql" />
+    <Build Include="tables\References\ETL_Load.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DataVault.publish.xml" />
@@ -160,17 +148,18 @@
     <None Include="scripts\LoadLink_Portfolija_Korisnici.sql" />
     <None Include="scripts\LoadLink_PortfolioPrinosi.sql" />
     <None Include="scripts\LoadLink_Transakcii.sql" />
-    <None Include="scripts\LoadSat_Brokeri.sql" />
-    <None Include="scripts\LoadSat_HartiiOdVrednost.sql" />
     <None Include="scripts\LoadRef_AplikativniParametri.sql" />
-    <None Include="scripts\LoadSat_Izdavachi.sql" />
-    <None Include="scripts\LoadSat_Korisnici.sql" />
-    <None Include="scripts\LoadSat_Korisnici_Sensitive.sql" />
-    <None Include="scripts\LoadSat_Portfolija.sql" />
     <None Include="scripts\LoadSat_PortfolioPrinosi.sql" />
     <None Include="scripts\LoadSat_Transakcii.sql" />
-    <None Include="scripts\LoadSat_DnevenPromet.sql" />
+    <None Include="scripts\Load_ETL_Load.sql" />
+    <None Include="scripts\ExecuteAll.sql" />
+    <None Include="scripts\LoadSat_Brokeri.sql" />
+    <None Include="scripts\LoadSat_Izdavachi.sql" />
     <None Include="scripts\LoadSat_FinansiskiPokazateli.sql" />
+    <None Include="scripts\LoadSat_Korisnici.sql" />
+    <None Include="scripts\LoadSat_HartiiOdVrednost.sql" />
+    <None Include="scripts\LoadSat_DnevenPromet.sql" />
+    <None Include="scripts\LoadSat_Portfolija.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="scripts\RunAllScripts.sql" />
@@ -179,6 +168,10 @@
     <SqlCmdVariable Include="PriceFlowDb">
       <DefaultValue>Database</DefaultValue>
       <Value>$(SqlCmdVar__4)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="PriceFlowDV">
+      <DefaultValue>DataVault</DefaultValue>
+      <Value>$(SqlCmdVar__5)</Value>
     </SqlCmdVariable>
   </ItemGroup>
   <ItemGroup>

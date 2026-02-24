@@ -1,0 +1,24 @@
+<div class="notification-dropdown shadow show">
+  <div *ngIf="notifications.length === 0"
+       class="dropdown-item text-muted text-center">
+    No notifications.
+  </div>
+  <div *ngFor="let n of notifications"
+       [class.bg-light]="!n.isRead"
+       class="dropdown-item">
+    <div class="small fw-bold">
+      {{ n.changePercent }} %
+    </div>
+    <div class="small text-muted">
+      {{ n.message }}
+    </div>
+    <div class="small text-secondary">
+      {{ n.tradingDate | date: 'short'}}
+    </div>
+    <button *ngIf="!n.isRead"
+            class="btn btn-sm btn-primary mt-1"
+            (click)="onMarkAsRead(n.id)">
+      Mark as read
+    </button>
+  </div>
+</div>
