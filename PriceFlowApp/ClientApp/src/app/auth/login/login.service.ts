@@ -87,5 +87,4 @@ export class LoginService {
       map(roles => roles.includes('Инвеститор'))
     );
   }
-
 }

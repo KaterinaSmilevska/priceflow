@@ -24,7 +24,7 @@ export class ThresholdComponent implements OnInit {
   constructor(private fb: FormBuilder, private thresholdService: ThresholdService) { }
 
   form = this.fb.group({
-    hvId: [null as number | null, Validators.required],
+    hvId: [null as number | null, Validators.required,],
     lowerThreshold: [null as number | null, Validators.required],
     upperThreshold: [null as number | null, Validators.required]
   });
@@ -98,6 +98,8 @@ export class ThresholdComponent implements OnInit {
         lowerThreshold: th.lowerThreshold,
         upperThreshold: th.upperThreshold
       });
+
+      this.form.get('hvId')?.disable();
   }
 
   delete(id: number) {
@@ -108,6 +110,8 @@ export class ThresholdComponent implements OnInit {
     resetForm() {
       this.editingId = null;
       this.form.reset();
+
+      this.form.get('hvId')?.enable();
   }
 
   isSecurityAlreadyUsed(hvId: number): boolean {

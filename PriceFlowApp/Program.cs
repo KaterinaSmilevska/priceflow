@@ -31,7 +31,7 @@ builder.Services.AddDbContext<PriceFlowDbContext>(options =>
 
 //builder.Services.AddScoped<SessionHelper>();
 builder.Services.AddScoped<IBrokersRepository, BrokersRepository>();
-builder.Services.AddScoped<IBrokerService, BrokerService>();
+builder.Services.AddScoped<IBrokersService, BrokersService>();
 builder.Services.AddScoped<IRolesRepository, RolesRepository>();
 builder.Services.AddScoped<IRolesService, RolesService>();
 builder.Services.AddScoped<IUsersRolesRepository, UsersRolesRepository>();

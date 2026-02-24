@@ -1,15 +1,15 @@
 import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { AdminService, User } from './admin.service';
+import { AdminService } from '../../admin.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { User } from '../User';
 
 @Component({
   selector: 'app-edit-user',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.css', '../../styles.css']
+  styleUrls: ['./edit-user.component.css']
 })
 
 export class EditUserComponent implements OnInit {
@@ -63,7 +63,7 @@ export class EditUserComponent implements OnInit {
         this.adminService.updateUser(updatedUser).subscribe({
           next: () => {
             this.successMessage = 'User updated successfully!';
-            setTimeout(() => this.close.emit(updatedUser), 1000);
+            setTimeout(() => this.close.emit(updatedUser), 800);
           },
           error: (err) => {
             console.error('Failed to update user:', err);

@@ -1,0 +1,21 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h4>{{ brokerToEdit.id === 0 ? 'Add broker' : 'Edit broker' }}</h4>
+    <form [formGroup]="editForm" (ngSubmit)="saveBroker()">
+      <div class="mb-3">
+        <label>Company</label>
+        <input class="form-control" formControlName="company">
+      </div>
+      <div class="mb-3">
+        <label>Commission (%)</label>
+        <input type="number" step="0.01" class="form-control" formControlName="commissionPercent">
+      </div>
+      <div class="text-end">
+        <button type="button" class="btn btn-secondary me-2" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary">{{ brokerToEdit.id === 0 ? 'Add' : 'Save changes'}}</button>
+      </div>
+      <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage }}</div>
+    </form>
+  </div>
+</div>

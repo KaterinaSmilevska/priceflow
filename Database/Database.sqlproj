@@ -76,7 +76,7 @@
     <None Include="scripts\LoadUlogi.sql" />
     <None Include="scripts\LoadKorisniciUlogi.sql" />
     <None Include="tables\HV_PromenaCena.sql" />
-    <None Include="tables\Izvestuvanja_PromenaCena.sql" />
+    <Build Include="tables\Izvestuvanja_PromenaCena.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="tables\AplikativniParametri.sql" />
@@ -129,10 +129,9 @@
     <Build Include="indexes\IX_Ulogi_DateModified.sql" />
     <Build Include="indexes\IX_HartiiOdVrednost_DateModified.sql" />
     <Build Include="indexes\IX_PortfolioPrinosi_DateModified.sql" />
-    <Build Include="indexes\UX_Izvestuvanja_PromenaCena_HVId.sql" />
+    <Build Include="tables\IzvestuvanjaPortfolija.sql" />
     <Build Include="indexes\UX_Izvestuvanja_PromenaCena.sql" />
     <Build Include="indexes\IX_Izvestuvanja_PromenaCena_Procitano.sql" />
-    <Build Include="tables\IzvestuvanjaPortfolija.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Database.refactorlog" />

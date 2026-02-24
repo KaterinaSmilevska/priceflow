@@ -12,9 +12,9 @@ namespace PriceFlowApp.Controllers
     [Route("api/[controller]")]
     public class BrokersController : ControllerBase
     {
-        private readonly IBrokerService _brokerService;
+        private readonly IBrokersService _brokerService;
 
-        public BrokersController(IBrokerService brokerService)
+        public BrokersController(IBrokersService brokerService)
         {
             _brokerService = brokerService;
         }

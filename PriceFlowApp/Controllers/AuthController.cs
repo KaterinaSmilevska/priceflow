@@ -16,11 +16,13 @@ namespace PriceFlowApp.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IRolesService _rolesService;
+        private readonly IBrokersService _brokersService;
 
-        public AuthController(IAuthService authService, IRolesService rolesService)
+        public AuthController(IAuthService authService, IRolesService rolesService, IBrokersService brokersService)
         {
             _authService = authService;
             _rolesService = rolesService;
+            _brokersService = brokersService;
         }
 
         [HttpPost("register")]
@@ -226,6 +228,62 @@ namespace PriceFlowApp.Controllers
             catch (Exception ex)
             {
                 return StatusCode(400, new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("brokers")]
+        public async Task<IActionResult> GetBrokers()
+        {
+            try
+            {
+                var brokers = await _brokersService.FindAllAsync();
+                return Ok(brokers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching brokers.", detail = ex.Message });
+            }
+        }
+
+        [HttpPost("brokers")]
+        public async Task<IActionResult> AddBroker([FromBody] CreateBrokerRequest broker)
+        {
+            try
+            {
+                Broker result = await _brokersService.AddAsync(broker);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error creating broker.", detail = ex.Message });
+            }
+        }
+
+        [HttpPut("brokers/{id}")]
+        public async Task<IActionResult> UpdateBroker(int id, [FromBody] UpdateBrokerRequest broker)
+        {
+            try
+            {
+                BrokerResponse result = await _brokersService.UpdateAsync(broker);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error updating broker.", detail = ex.Message });
+            }
+        }
+
+        [HttpDelete("brokers/{id}")]
+        public async Task<IActionResult> DeleteBroker(int id)
+        {
+            try
+            {
+                await _brokersService.DeleteAsync(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error deleting broker.", detail = ex.Message });
             }
         }
 

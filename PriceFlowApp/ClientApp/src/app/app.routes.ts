@@ -4,7 +4,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { BrokersComponent } from './brokers/brokers.component';
 import { AdminComponent } from './admin/admin.component';
-import { EditUserComponent } from './admin/edit-user.component';
+import { EditUserComponent } from './admin/manage-users/forms/edit-user.component';
 import { VerifyEmailComponent } from './auth/register/verify-email.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SecuritiesComponent } from './securities/securities.component';
@@ -16,13 +16,16 @@ import { PortfoliosComponent } from './portfolios/portfolios.component';
 import { InvestorGuard } from './portfolios/investor.guard';
 import { PortfolioDetailsComponent } from './portfolios/portfolio-details/portfolio-details.component';
 import { ThresholdComponent } from './thresholds/threshold.component';
+import { ManageUsersComponent } from './admin/manage-users/manage-users.component';
+import { ManageBrokersComponent } from './admin/manage-brokers/manage-brokers.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'brokers', component: BrokersComponent, canActivate: [InvestorGuard] },
-  { path: 'admin/users', component: AdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/users', component: ManageUsersComponent, canActivate: [AuthGuard] },
+  { path: 'admin/brokers', component: ManageBrokersComponent, canActivate: [AuthGuard] },
   { path: 'admin/users/:id', component: EditUserComponent, canActivate: [AuthGuard] },
   { path: 'verify-email', component: VerifyEmailComponent, canActivate: [AuthGuard] },
   { path: 'forgot-password', component: ResetPasswordComponent },

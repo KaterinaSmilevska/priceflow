@@ -9,5 +9,11 @@ namespace DataAccess.Repositories
         Task<Brokeri?> GetByIdAsync(int id);
 
         Task<Brokeri?> GetByCompanyAsync(string company);
+
+        Task<Brokeri> AddAsync(Brokeri broker);
+
+        Task UpdateAsync(Brokeri broker);
+
+        Task DeleteAsync(int id);
     }
 }
