@@ -25,6 +25,8 @@ public partial class HartiiOdVrednost
 
     public virtual Izdavachi Izdavach { get; set; } = null!;
 
+    public virtual ICollection<IzvestuvanjaPromenaCena> IzvestuvanjaPromenaCena { get; set; } = new List<IzvestuvanjaPromenaCena>();
+
     public virtual ICollection<PortfolioPrinosi> PortfolioPrinosi { get; set; } = new List<PortfolioPrinosi>();
 
     public virtual TipHv TipHv { get; set; } = null!;

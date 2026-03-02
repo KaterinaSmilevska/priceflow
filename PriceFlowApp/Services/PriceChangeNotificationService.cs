@@ -18,7 +18,7 @@ namespace PriceFlowApp.Services
 
         public async Task CheckAndGenerateNotificationsAsync()
         {
-            DateTime today = DateTime.Today;
+            DateTime today = await _dailyTurnoverRepository.GetLatestDateAsync();
 
             bool hasTodayData = await _dailyTurnoverRepository.ExistsForDateAsync(today);
             

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PriceFlowApp.Controllers
 {
@@ -64,7 +65,6 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Create([FromBody] CreateSecurity security)
         {
             if (!ModelState.IsValid)

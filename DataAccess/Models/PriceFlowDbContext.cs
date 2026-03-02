@@ -238,7 +238,6 @@ public partial class PriceFlowDbContext : DbContext
 
             entity.HasIndex(e => e.PortfolioId, "un_IzvestuvanjaPortfolija_PortfolioId").IsUnique();
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Frekvencija)
                 .HasMaxLength(10)
                 .HasDefaultValue("Weekly");
@@ -251,30 +250,23 @@ public partial class PriceFlowDbContext : DbContext
 
         modelBuilder.Entity<IzvestuvanjaPromenaCena>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Izvestuvanja_PromenaCena");
+            entity.HasKey(e => e.Id).HasName("pk_Izvestuvanja_PromenaCena");
 
-            entity.HasIndex(e => new { e.KorisnikId, e.Procitano }, "IX_Izvestuvanja_PromenaCena_Procitano");
-
-            entity.HasIndex(e => new { e.KorisnikId, e.Hvid, e.DatumTrguvanje }, "UX_Izvestuvanja_PromenaCena").IsUnique();
-
-            entity.HasIndex(e => e.Hvid, "UX_Izvestuvanja_PromenaCena_HVId").IsUnique();
+            entity.ToTable("Izvestuvanja_PromenaCena");
 
             entity.Property(e => e.DateModified)
                 .HasDefaultValueSql("(sysutcdatetime())")
                 .HasColumnType("datetime");
             entity.Property(e => e.DatumTrguvanje).HasColumnType("datetime");
             entity.Property(e => e.Hvid).HasColumnName("HVId");
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.Poraka).HasMaxLength(500);
             entity.Property(e => e.ProcentPromena).HasColumnType("decimal(18, 2)");
 
-            entity.HasOne(d => d.Hv).WithOne()
-                .HasForeignKey<IzvestuvanjaPromenaCena>(d => d.Hvid)
+            entity.HasOne(d => d.Hv).WithMany(p => p.IzvestuvanjaPromenaCena)
+                .HasForeignKey(d => d.Hvid)
                 .HasConstraintName("fk__Izvestuvanja_PromenaCena_HartiiOdVrednost");
 
-            entity.HasOne(d => d.Korisnik).WithMany()
+            entity.HasOne(d => d.Korisnik).WithMany(p => p.IzvestuvanjaPromenaCena)
                 .HasForeignKey(d => d.KorisnikId)
                 .HasConstraintName("fk_Izvestuvanja_PromenaCena_Korisnici");
         });

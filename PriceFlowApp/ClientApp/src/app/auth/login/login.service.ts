@@ -87,4 +87,10 @@ export class LoginService {
       map(roles => roles.includes('Инвеститор'))
     );
   }
+
+  isAnalysst(): Observable<boolean> {
+    return this.userRoles.asObservable().pipe(
+      map(roles => roles.includes('Аналитичар'))
+    );
+  }
 }

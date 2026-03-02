@@ -4,7 +4,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { BrokersComponent } from './brokers/brokers.component';
 import { AdminComponent } from './admin/admin.component';
-import { EditUserComponent } from './admin/manage-users/forms/edit-user.component';
+import { EditUserComponent } from './admin/manage-users/edit-user/edit-user.component';
 import { VerifyEmailComponent } from './auth/register/verify-email.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SecuritiesComponent } from './securities/securities.component';
