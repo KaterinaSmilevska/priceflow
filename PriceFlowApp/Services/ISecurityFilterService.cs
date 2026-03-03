@@ -26,7 +26,5 @@ namespace PriceFlowApp.Services
         Task<IEnumerable<Sector>> FindMostProfitableSectorsByProfitAsync();
 
         Task<IEnumerable<FilteredSecurity>> FindSecuritiesValuationAsync();
-
-        Task<IEnumerable<FilteredSecurity>> SearchByCode(string searchTerm);
     }
 }

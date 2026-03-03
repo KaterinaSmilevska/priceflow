@@ -18,6 +18,8 @@ import { PortfolioDetailsComponent } from './portfolios/portfolio-details/portfo
 import { ThresholdComponent } from './thresholds/threshold.component';
 import { ManageUsersComponent } from './admin/manage-users/manage-users.component';
 import { ManageBrokersComponent } from './admin/manage-brokers/manage-brokers.component';
+import { SecurityFilterComponent } from './security-filter/security-filter.component';
+import { AnalystGuard } from './security-filter/analyst.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -35,5 +37,6 @@ export const routes: Routes = [
   { path: 'portfolios', component: PortfoliosComponent, canActivate: [InvestorGuard] },
   { path: 'portfolios/:id', component: PortfolioDetailsComponent, canActivate: [InvestorGuard] },
   { path: 'price-alerts', component: ThresholdComponent, canActivate: [InvestorGuard] },
+  { path: 'security-filter', component: SecurityFilterComponent, canActivate: [AnalystGuard] },
   { path: '**', redirectTo: '' },
 ];

@@ -164,13 +164,6 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<HartiiOdVrednost>> SearchByCode(string searchTerm)
-        {
-            return await _dbContext.HartiiOdVrednost
-                .Where(hv => hv.Kod.Contains(searchTerm))
-                .ToListAsync();
-        }
-
         public async Task<IEnumerable<HartiiOdVrednost>> GetMostLiquidSecuritiesByTradedQuantityAsync()
         {
             {

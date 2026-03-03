@@ -275,22 +275,10 @@ namespace PriceFlowApp.Services
                 {
                     SecurityId = s.Id,
                     SecurityCode = s.Kod,
-                    Value = priceOscillation
+                    Value = Math.Round(priceOscillation, 4)
                 };
             })
             .Where(x => x.Value > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<FilteredSecurity>> SearchByCode(string searchTerm)
-        {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.SearchByCode(searchTerm);
-
-            return securities.Select(s => new FilteredSecurity
-            {
-                SecurityId = s.Id,
-                SecurityCode = s.Kod
-            })
             .ToList();
         }
     }

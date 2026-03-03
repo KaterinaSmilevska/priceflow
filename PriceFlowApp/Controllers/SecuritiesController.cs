@@ -117,5 +117,19 @@ namespace PriceFlowApp.Controllers
                 return StatusCode(500, new { message = "Error fetching latest prices.", detail = ex.Message });
             }
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Security>>> SearchByCode([FromQuery] string searchTerm)
+        {
+            try
+            {
+                IEnumerable<Security> securities = await _securitiesService.SearchByCodeAsync(searchTerm);
+                return Ok(securities);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching securities.", detail = ex.Message });
+            }
+        }
     }
 }

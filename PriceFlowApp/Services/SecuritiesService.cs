@@ -169,5 +169,21 @@ namespace PriceFlowApp.Services
                 AveragePrice = averagePrice
             };
         }
+
+        public async Task<IEnumerable<Security>> SearchByCodeAsync(string searchTerm)
+        {
+            IEnumerable<HartiiOdVrednost> securities = await _securitiesRepository.SearchByCodeAsync(searchTerm);
+
+            return securities.Select(s => new Security
+            {
+                Id = s.Id,
+                Isin = s.Isin,
+                Code = s.Kod,
+                TypeSecurityName = s.TipHv.Ime,
+                IssuerName = s.Izdavach.Ime,
+                TotalNumShares = s.VkupenBrojAkcii
+            })
+            .ToList();
+        }
     }
 }

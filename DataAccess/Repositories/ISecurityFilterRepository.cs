@@ -31,8 +31,6 @@ namespace DataAccess.Repositories
 
         Task<IEnumerable<HartiiOdVrednost>> GetSecuritiesValuationAsync();
 
-        Task<IEnumerable<HartiiOdVrednost>> SearchByCode(string searchTerm);
-
         Task<int> GetLatestYearAsync();
 
         Task<DateTime> GetLatestDateAsync();

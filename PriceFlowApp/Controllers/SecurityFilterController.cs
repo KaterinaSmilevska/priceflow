@@ -170,19 +170,5 @@ namespace PriceFlowApp.Controllers
                 return StatusCode(500, new { message = "Error fetching securities.", detail = ex.Message });
             }
         }
-
-        [HttpGet("securities/search")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> SearchByCode([FromQuery] string? code)
-        {
-            try
-            {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.SearchByCode(code);
-                return Ok(securities);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching securities.", detail = ex.Message });
-            }
-        }
     }
 }

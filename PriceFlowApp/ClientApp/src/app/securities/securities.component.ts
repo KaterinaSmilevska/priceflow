@@ -23,6 +23,9 @@ export class SecuritiesComponent implements OnInit {
 
   isAdmin = false;
 
+  searchTerm: string = '';
+  loadingSearch = false;
+
   constructor(private securitiesService: SecuritiesService, public loginService: LoginService) { }
 
   ngOnInit(): void {
@@ -92,5 +95,31 @@ export class SecuritiesComponent implements OnInit {
     } else {
       this.securities.push(updatedSecurity);
     }
+  }
+
+  onSearch(): void {
+    const searchTerm = this.searchTerm.trim();
+    if (!searchTerm) {
+      this.loadSecurities();
+      return;
+    }
+    this.loadingSearch = true;
+
+    this.securitiesService.searchByCode(searchTerm)
+      .subscribe({
+        next: (res) => {
+          this.securities = res;
+          this.loadingSearch = false;
+        },
+        error: () => {
+          this.securities = [];
+          this.loadingSearch = false;
+        }
+     });
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.loadSecurities();
   }
 }

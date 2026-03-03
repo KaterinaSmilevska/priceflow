@@ -24,5 +24,7 @@ namespace PriceFlowApp.Services
         Task<Security> UpdateAsync(int id, CreateSecurity security);
 
         Task<SecurityDailyPrices?> GetLatestPricesAsync(string securityCode, DateTime date);
+
+        Task<IEnumerable<Security>> SearchByCodeAsync(string searchTerm);
     }
 }

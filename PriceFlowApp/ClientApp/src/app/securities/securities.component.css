@@ -84,3 +84,40 @@ table {
   .btn-secondary:hover {
     background-color: #d1d5db;
   }
+
+  .search-panel {
+      display: flex;
+      justify-content: flex-end;
+  }
+
+  .search-panel input {
+      max-width: 250px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      padding: 6px 10px;
+  }
+
+  .search-input-wrapper {
+      position: relative;
+      display: inline-block;
+  }
+
+  .search-input-wrapper input {
+      padding-right: 30px;
+  }
+
+  .clear-btn {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      cursor: pointer;
+      color: #6b7280;
+  }
+
+  .clear-btn:hover {
+      color: #111827;
+  }

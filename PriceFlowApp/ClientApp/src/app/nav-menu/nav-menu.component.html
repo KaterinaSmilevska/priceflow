@@ -43,6 +43,12 @@
                routerLink="/price-alerts"
                routerLinkActive="active-link">Price Alerts</a>
           </li>
+
+          <li *ngIf="(loginService.isLoggedIn() | async) && (loginService.isAnalyst() | async)" class="nav-item">
+            <a class="nav-link text-white fw-bold"
+               routerLink="/security-filter"
+               routerLinkActive="active-link">Market Dashboard</a>
+          </li>
         </ul>
 
         <div class="d-flex align-items-center justify-content-end position-relative">

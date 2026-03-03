@@ -1,0 +1,80 @@
+<div class="analytics-container">
+  <div class="dashboard-header">
+    <h1>Market Dashboard</h1>
+    <p>Advanced analytics overview</p>
+  </div>
+  <div class="control-panel">
+    <div class="control-group">
+      <label>Metric</label>
+      <select [ngModel]="selectedMetric" (change)="loadMetric(selectedMetric)">
+        <option value="">Select Metric</option>
+        <option value="mostProfitableSecuritiesByDividendYield">Most Profitable Securities (Dividend Yield)</option>
+        <option value="mostProfitableSecuritiesByDividendPerShare">Most Profitable Securities (Dividend Per Share)</option>
+        <option value="securitiesWithBiggestPriceOscillations">Securities (Biggest Price Oscillations)</option>
+        <option value="securitiesWithSmallestPriceOscillations">Securities (Smallest Price Oscillations)</option>
+        <option value="mostLiquidSecuritiesByTradedQuantity">Most Liquid Securities (Traded Quantity)</option>
+        <option value="leastLiquidSecuritiesByNumTradedQuantity">Least Liquid Securities (Traded Quantity)</option>
+        <option value="mostLiquidSecuritiesByNumTradingDays">Most Liquid Securities (Trading Days)</option>
+        <option value="leastLiquidSecuritiesByNumTradingDays">Least Liquid Securities (Trading Days)</option>
+        <option value="mostProfitableSectorsByDividendYield">Most Profitable Sectors (Dividend Yield)</option>
+        <option value="mostProfitableSectorsByProfit">Most Profitable Sectors (Profit)</option>
+        <option value="securitiesValuation" >Securities Valuation</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Top Results</label>
+      <input type="number" [(ngModel)]="topN" min="3" max="16" />
+    </div>
+  </div>
+  <div *ngIf="loading" class="loading-panel">
+    Loading analytics... 
+  </div>
+  <div *ngIf="!loading && data.length > 0" class="analytics-body">
+    <div class="chart-card">
+      <canvas baseChart
+                [data]="chartData"
+                [options]="chartOptions"
+                [type]="'bar'">
+      </canvas>
+      <div *ngIf="selectedMetric === 'securitiesValuation'"
+           class="valuation-legend">
+        <div class="legend-term">
+          <span class="legend-color overvalued"></span>
+          <span>▼ Overvalued</span>
+        </div>
+        <div class="legend-term">
+          <span class="legend-color undervalued"></span>
+          <span>▲ Undervalued</span>
+        </div>
+        <div class="legend-term">
+          <span class="legend-color neutral"></span>
+          <span>Fairly priced</span>
+        </div>
+      </div>
+    </div>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item.securityCode || item.sectorName }}</td>
+            <td [ngClass]="getValuationClass(item)">
+              {{ item.value || item.totalValue | number: (selectedMetric === 'securitiesValuation' ? '1.4-4' : '1.2-2') }}
+              <span *ngIf="selectedMetric === 'securitiesValuation'">
+                {{ ((item.value || item.totalValue) > 1) ? '▼' : ((item.value || item.totalValue) < 1 ? '▲': '') }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
