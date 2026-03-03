@@ -62,6 +62,12 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
+        public async Task<DateTime> GetLatestDateAsync()
+        {
+            return await _dbContext.DnevenPromet
+                .MaxAsync(dp => dp.Datum);
+        }
+
         public async Task<decimal> GetLatestPriceAsync(int securityId, DateOnly date)
         {
             return (decimal)await _dbContext.DnevenPromet

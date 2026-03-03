@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,6 +88,15 @@ namespace DataAccess.Repositories
         {
             _dbContext.HartiiOdVrednost.Update(security);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<HartiiOdVrednost>> SearchByCodeAsync(string searchTerm)
+        {
+            return await _dbContext.HartiiOdVrednost
+                .Include(hv => hv.TipHv)
+                .Include(hv => hv.Izdavach)
+                .Where(hv => hv.Kod.Contains(searchTerm))
+                .ToListAsync();
         }
     }
 }

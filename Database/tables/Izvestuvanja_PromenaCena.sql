@@ -6,7 +6,7 @@
     [ProcentPromena] DECIMAL(18, 2) NOT NULL,
     [DatumTrguvanje] DATETIME NOT NULL,
     [Poraka] NVARCHAR(500) NOT NULL,
-    [Procitano] BIT NOT NULL CONSTRAINT df_Izvestuvanja_Procitano DEFAULT (0),
+    [Procitano] BIT NOT NULL CONSTRAINT df_Izvestuvanja_PromenaCena_Procitano DEFAULT (0),
     [DateModified] DATETIME NOT NULL CONSTRAINT df_Izvestuvanja_PromenaCena_DateModified DEFAULT (SYSUTCDATETIME()),
 
     CONSTRAINT pk_Izvestuvanja_PromenaCena PRIMARY KEY (Id),

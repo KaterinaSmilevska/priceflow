@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { EditUserComponent } from './forms/edit-user.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
 import { AdminService } from '../admin.service';
 import { User } from './User';
 import { Router, RouterModule } from '@angular/router';

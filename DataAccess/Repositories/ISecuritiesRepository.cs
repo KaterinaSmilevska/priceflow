@@ -28,5 +28,7 @@ namespace DataAccess.Repositories
         Task DeleteAsync(int id);
 
         Task UpdateAsync(HartiiOdVrednost security);
+
+        Task<IEnumerable<HartiiOdVrednost>> SearchByCodeAsync(string searchTerm);
     }
 }

@@ -63,6 +63,8 @@ builder.Services.AddScoped<IPortfolioReportExportService, PortfolioReportExportS
 builder.Services.AddScoped<IPortfoliosNotificationsRepository, PortfoliosNotificationsRepository>();
 builder.Services.AddScoped<IPortfoliosNotificationsService, PortfoliosNotificationsService>();
 builder.Services.AddHostedService<NotificationBackgroundService>();
+builder.Services.AddScoped<ISecurityFilterRepository, SecurityFilterRepository>();
+builder.Services.AddScoped<ISecurityFilterService, SecurityFilterService>();
 
 //builder.Services.AddDistributedMemoryCache();
 //builder.Services.AddSession(options =>

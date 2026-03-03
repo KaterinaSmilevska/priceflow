@@ -83,4 +83,9 @@ export class SecuritiesService {
     return this.http.get<SecurityDailyPrices>(`${this.apiUrl}/prices/`,
       { params: { securityCode, date }, withCredentials: true });
   }
+
+  searchByCode(searchTerm: string): Observable<Security[]> {
+    return this.http.get<Security[]>(`${this.apiUrl}/search`,
+      { params: { searchTerm } });
+  }
 }

@@ -25,6 +25,7 @@ namespace DataAccess.Repositories
             foreach(DnevenPromet dp in dailyTurnover)
             {
                 List<HvPromenaCena> alerts = await _dbContext.HvPromenaCena
+                    .Include(a => a.Hv)
                     .Where(a => a.Hvid == dp.Hvid)
                     .ToListAsync();
 
@@ -59,7 +60,7 @@ namespace DataAccess.Repositories
                             ProcentPromena = dp.ProcentPromena.Value,
                             DatumTrguvanje = tradingDate,
                             Poraka =
-                                $"Security changed {dp.ProcentPromena:F2}%" +
+                                $"Security {alert.Hv.Kod} changed {dp.ProcentPromena:F2}%" +
                                 $"(Threshold: {alert.DolnaGranica}% / {alert.GornaGranica}%)",
                             Procitano = false
                         };

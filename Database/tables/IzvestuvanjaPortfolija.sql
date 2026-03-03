@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[IzvestuvanjaPortfolija]
 (
-	[Id] INT NOT NULL,
+	[Id] INT IDENTITY(1, 1) NOT NULL,
 	[PortfolioId] INT NOT NULL,
 	[Ovozmozeno] BIT NOT NULL,
 	[Frekvencija] NVARCHAR(10) NOT NULL CONSTRAINT df_IzvestuvanjaPortfolija_Frekvencija DEFAULT 'Weekly',

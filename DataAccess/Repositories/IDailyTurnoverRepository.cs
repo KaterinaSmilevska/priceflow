@@ -19,5 +19,7 @@ namespace DataAccess.Repositories
         Task<bool> ExistsForDateAsync(DateTime date);
 
         Task<decimal> GetLatestPriceAsync(int securityId, DateOnly date);
+
+        Task<DateTime> GetLatestDateAsync();
     }
 }
