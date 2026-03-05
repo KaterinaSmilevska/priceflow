@@ -2,7 +2,7 @@
   <h2 class="text-center mt-4">Securities</h2>
 
   <div class="text-md-end mb-3" *ngIf="isAdmin">
-    <button class="btn btn-success btn-sm" (click)="openAddModal()">Add Security</button>
+    <button class="btn btn-success" (click)="openAddModal()">Add Security</button>
   </div>
 
   <div class="search-panel mb-3">
@@ -10,8 +10,7 @@
       <input type="text"
              placeholder="Search by code..."
              [(ngModel)]="searchTerm"
-             (input)="onSearch()"
-             class="form-control" />
+             (input)="onSearch()"/>
       <button *ngIf="searchTerm"
               class="clear-btn"
               (click)="clearSearch()">
@@ -21,8 +20,8 @@
   </div>
 
   <div *ngIf="securities.length > 0; else noData">
-    <table class="table table-striped table-hover mt-3">
-      <thead class="table-primary">
+    <table>
+      <thead>
         <tr>
           <th>Code</th>
           <th>ISIN</th>
@@ -40,8 +39,8 @@
           <td>{{ sec.issuerName }}</td>
           <td>{{ sec.totalNumShares | number }}</td>
           <td *ngIf="isAdmin">
-            <button class="btn btn-warning btn-sm me-1" (click)="openEditModal(sec)">Edit</button>
-            <button class="btn btn-danger btn-sm" (click)="openDeleteModal(sec)">Delete</button>
+            <button class="btn btn-warning" (click)="openEditModal(sec)">Edit</button>
+            <button class="btn btn-danger" (click)="openDeleteModal(sec)">Delete</button>
           </td>
         </tr>
       </tbody>

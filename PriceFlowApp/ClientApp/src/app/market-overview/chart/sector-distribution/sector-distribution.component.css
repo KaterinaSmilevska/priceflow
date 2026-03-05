@@ -1,0 +1,28 @@
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 6px var(--shadow-color);
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.chart-header {
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.no-data-message {
+  color: var(--disabled-text);
+  font-size: 1rem;
+  text-align: center;
+  padding: 20px;
+}

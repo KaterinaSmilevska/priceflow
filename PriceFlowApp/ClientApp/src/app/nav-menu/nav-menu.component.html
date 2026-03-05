@@ -72,10 +72,16 @@
               Welcome, {{ (loginService.getUsername() | async) || 'User' }}!
             </div>
 
-             <app-price-change-notifications *ngIf="(loginService.isLoggedIn() | async) && (loginService.isInvestor() | async)"></app-price-change-notifications>
+            <app-price-change-notifications *ngIf="(loginService.isLoggedIn() | async) && (loginService.isInvestor() | async)"></app-price-change-notifications>
 
             <button (click)="loginService.logout();$event.stopPropagation()" class="btn btn-secondary ms-3 login">
               LOGOUT
+            </button>
+          </div>
+          <div class="m-3">
+            <button (click)="themeService.toggleDarkMode()"
+                    class="btn btn-secondary btn-lg bg-transparent border-0">
+              {{ themeService.isDarkMode() ? '☀️' : '🌙'}}
             </button>
           </div>
         </div>

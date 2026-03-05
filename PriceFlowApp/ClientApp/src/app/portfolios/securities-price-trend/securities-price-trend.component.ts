@@ -31,7 +31,12 @@ export class SecuritiesPriceTrendComponent implements OnInit {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: true }
+      legend: {
+        display: true,
+      },
+      datalabels: {
+        display: false
+      }
     },
     scales: {
       x: {
@@ -99,13 +104,17 @@ export class SecuritiesPriceTrendComponent implements OnInit {
 
     this.chartData = {
       labels: allDates,
-      datasets: Array.from(grouped.entries()).map(([code, values]) => ({
+      datasets: Array.from(grouped.entries()).map(([code, values], idx) => ({
         label: code,
         data: allDates.map(date => {
           const v = values.find(d => d.date === date);
           return v ? v.price : null;
         }),
-        tension: 0.3
+        tension: 0.35,
+        borderWidth: 3,
+        pointRadius: 0,
+        borderColor: `hsl(${(idx * 160) % 360}, 85%, 55%)`,
+        backgroundColor: `hsla(${(idx * 160) % 360}, 85%, 55%, 0.25)`
       }))
     };
     this.chart?.update();

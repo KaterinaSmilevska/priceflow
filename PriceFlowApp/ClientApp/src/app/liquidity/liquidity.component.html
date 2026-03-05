@@ -3,12 +3,12 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h5 class="mb-1 fw-semibold">Market Liquidity Overview</h5>
-      <div class="text-muted small">
+      <div class="info">
         Ranked securities based on trading activity
       </div>
     </div>
 
-    <select class="form-select form-select-sm w-auto"
+    <select class="form-select form-select-sm w-auto me-3"
             [(ngModel)]="months"
             (change)="loadLiquidity()">
       <option [value]="3">Last 3 months</option>

@@ -35,7 +35,7 @@ export class SecurityFilterComponent implements OnInit {
     plugins: {
       datalabels: {
         display: (context) => {
-          return this.selectedMetric !== 'securitiesValuation';
+          return this.selectedMetric !== 'Market price : Book value';
         }
       },
       tooltip: {
@@ -43,7 +43,7 @@ export class SecurityFilterComponent implements OnInit {
           label: (context): string => {
             const value = Number(context.raw);
 
-            const formatted = this.selectedMetric === 'securitiesValuation'
+            const formatted = this.selectedMetric === 'Market price : Book value'
               ? value.toFixed(4)
               : value;
 
@@ -57,7 +57,7 @@ export class SecurityFilterComponent implements OnInit {
   constructor(private securityFilterService: SecurityFilterService) { }
 
   ngOnInit(): void {
-    this.selectedMetric = 'securitiesValuation';
+    this.selectedMetric = 'Market price : Book value';
     this.loadMetric(this.selectedMetric);
   }
 
@@ -110,7 +110,7 @@ export class SecurityFilterComponent implements OnInit {
       case 'mostProfitableSectorsByProfit':
         request = this.securityFilterService.getMostProfitableSectorsByProfit();
         break;
-      case 'securitiesValuation':
+      case 'Market price : Book value':
         request = this.securityFilterService.getSecuritiesValuation();
         break;
       default:
@@ -139,7 +139,7 @@ export class SecurityFilterComponent implements OnInit {
 
     this.chartData.datasets[0].label = this.selectedMetric;
 
-    if (this.selectedMetric === 'securitiesValuation') {
+    if (this.selectedMetric === 'Market price : Book value') {
       this.chartData.datasets[0].backgroundColor = values.map(v => {
         if (v > 1) return '#dc2626';
         if (v < 1) return '#16a34a';
@@ -151,7 +151,7 @@ export class SecurityFilterComponent implements OnInit {
   }
 
   getValuationClass(item: any): string {
-    if (this.selectedMetric !== 'securitiesValuation') {
+    if (this.selectedMetric !== 'Market price : Book value') {
       return '';
     }
     const value = item.value || item.totalValue;

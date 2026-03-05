@@ -11,11 +11,7 @@
   </div>
 
   <div class="bottom-row">
-      <div class="export-section">
-        <app-performance-export [portfolioId]="selectedPortfolio.id"></app-performance-export>
-      </div>
-      <div class="notifications-section">
-        <app-portfolio-notifications [portfolioId]="selectedPortfolio.id"></app-portfolio-notifications>
-      </div>     
-    </div>
+    <app-performance-export [portfolioId]="selectedPortfolio.id"></app-performance-export>
+    <app-portfolio-notifications [portfolioId]="selectedPortfolio.id"></app-portfolio-notifications>
+  </div>
 </div>

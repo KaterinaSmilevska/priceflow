@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { PriceTrendComponent } from './price-trend.component';
-import { SectorDistributionComponent } from './sector-distribution.component';
+import { PriceTrendComponent } from './price-trend/price-trend.component';
+import { SectorDistributionComponent } from './sector-distribution/sector-distribution.component';
 import { FormsModule } from "@angular/forms";
 import { ChartService, Security } from "./chart.service";
 

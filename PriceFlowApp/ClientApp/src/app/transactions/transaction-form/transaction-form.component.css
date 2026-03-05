@@ -25,7 +25,8 @@
 }
 
 .modal-content {
-  background: white;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   padding: 1.5rem;
   border-radius: 8px;
   min-width: 320px;
@@ -38,4 +39,74 @@
   gap: 0.5rem;
 }
 
+.modal-content label {
+  font-weight: 500;
+  color: var(--label-color);
+  margin-bottom: 5px;
+}
+
+.modal-content .form-control,
+.modal-content .form-select {
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+  .modal-content .form-control:focus,
+  .modal-content .form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color)33;
+  }
+
+.modal-content input[readonly],
+.modal-content input:disabled {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+
+.modal-content .btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-content .btn-primary {
+  background-color: var(--primary-color);
+  color: var(--card-bg);
+}
+
+  .modal-content .btn-primary:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+  }
+
+.modal-content .btn-secondary {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+}
+
+  .modal-content .btn-secondary:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+  }
+
+.text-danger {
+  color: var(--danger-bg);
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.alert-danger {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+}
 

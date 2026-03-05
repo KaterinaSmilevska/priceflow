@@ -1,17 +1,19 @@
 .analytics-container {
   padding: 30px;
-  background: #f4f6f9;
+  background: var(--page-bg);
   min-height: 100vh;
+  color: var(--text-color);
 }
 
 .dashboard-header h1 {
   margin: 0;
   font-size: 26px;
   font-weight: 600;
+  color: var(--text-color);
 }
 
 .dashboard-header p {
-  color: #777;
+  color: var(--text-muted);
   margin-bottom: 25px;
 }
 
@@ -24,15 +26,30 @@
 .control-group {
   display: flex;
   flex-direction: column;
+  gap: 6px;
 }
+
+  .control-group label {
+    font-weight: 500;
+    color: var(--text-color);
+  }
 
   .control-group select,
   .control-group input {
-    padding: 8px;
+    padding: 8px 10px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--text-color);
     min-width: 220px;
+    transition: border 0.15s ease;
   }
+
+    .control-group select:focus,
+    .control-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
 
 .analytics-body {
   display: grid;
@@ -42,83 +59,91 @@
 
 .chart-card,
 .table-card {
-  background: white;
+  background: var(--card-bg);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: var(--card-shadow);
   max-height: fit-content;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+  .table-card table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-color);
+  }
 
-th {
-  text-align: left;
-  padding: 10px;
-  background: #1e293b;
-  color: white;
-}
+  .table-card th {
+    text-align: left;
+    padding: 10px;
+    background: var(--table-header-bg);
+    color: var(--text-color);
+    border-bottom: 2px solid var(--input-border);
+  }
 
-td {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-}
+  .table-card td {
+    padding: 10px;
+    border-bottom: 1px solid var(--input-border);
+  }
 
-tr:hover {
-  background: #f1f5f9;
-}
+  .table-card tbody tr {
+    background: var(--card-bg);
+    transition: background 0.15s ease;
+  }
+
+    .table-card tbody tr:hover {
+      background: var(--hover-bg);
+    }
 
 .loading-panel {
   padding: 40px;
   text-align: center;
   font-weight: 500;
+  color: var(--text-muted);
 }
 
 .overvalued {
-    color: #dc2626;
-    font-weight: 600;
+  color: var(--error-color);
+  font-weight: 600;
 }
 
 .undervalued {
-    color: #16a34a;
-    font-weight: 600;
+  color: var(--success-text);
+  font-weight: 600;
 }
 
 .neutral {
-    color: #6b7280;
+  color: var(--text-muted);
 }
 
 .valuation-legend {
-    margin-top: 20px;
-    display: flex;
-    gap: 25px;
-    flex-wrap: wrap;
-    font-size: 14px;
+  margin-top: 20px;
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  font-size: 14px;
 }
 
 .legend-term {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .legend-color {
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
-    display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
 }
 
   .legend-color.overvalued {
-    background-color: #dc2626;
+    background-color: var(--error-color);
   }
 
   .legend-color.undervalued {
-    background-color: #16a34a;
+    background-color: var(--success-text);
   }
 
   .legend-color.neutral {
-    background-color: #6b7280;
+    background-color: var(--disabled-text);
   }

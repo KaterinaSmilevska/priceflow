@@ -1,10 +1,120 @@
 .export-container {
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 400px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 450px;
+  box-shadow: 0 6px 18px var(--shadow-color);
 }
 
+  .export-container h3 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 16px;
+}
+
+label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--label-color);
+}
+
+input.form-control,
+select.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+  input.form-control:focus,
+  select.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
+  }
+
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+  .btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--card-bg);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+.summary-preview {
+  margin-top: 24px;
+  color: var(--text-color);
+}
+
+  .summary-preview h5 {
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .summary-preview p {
+    font-size: 0.95rem;
+    margin: 4px 0;
+  }
+
+.text-success {
+  color: var(--success-bg);
+  font-weight: 600;
+}
+
+.text-danger {
+  color: var(--danger-bg);
+  font-weight: 600;
+}
+
+  .text-danger.mt-2 {
+    margin-top: 12px;
+    font-size: 0.9rem;
+  }
+
+@media (max-width: 650px) {
+  .export-container {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    margin-top: 8px;
+  }
 }

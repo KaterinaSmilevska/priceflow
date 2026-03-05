@@ -1,4 +1,65 @@
 .card {
-    height: 500px;
-    width: auto;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  border: 1px solid var(--input-border);
+  padding: 1rem;
+  margin: 10px 10px;
+  max-width: 1490px;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 1rem;
+}
+
+  .card-header h5 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .card-header select.form-select {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    width: 100%;
+    max-width: 200px;
+  }
+
+    .card-header select.form-select option {
+      background-color: var(--input-bg);
+      color: var(--text-color);
+    }
+
+.card-body {
+  flex: 1;
+  padding-top: 0;
+}
+
+  .card-body canvas {
+    width: 100% !important;
+    height: 350px !important;
+  }
+
+@media (max-width: 650px) {
+  .card-header {
+    gap: 6px;
+  }
+
+    .card-header select.form-select {
+      max-width: 100%;
+      font-size: 0.85rem;
+    }
+
+  .card-body canvas {
+    height: 250px !important;
+  }
 }

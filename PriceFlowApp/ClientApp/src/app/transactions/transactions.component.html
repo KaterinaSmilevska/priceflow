@@ -45,28 +45,28 @@
           <div class="row text-center g-3">
 
             <div class="col-md-3">
-              <h6 class="text-muted">Revenue</h6>
+              <h6>Revenue</h6>
               <h3 class="text-success fw-semibold">
                 {{ analytics?.totalRevenue | number:'1.2-2' }} ден.
               </h3>
             </div>
 
             <div class="col-md-3">
-              <h6 class="text-muted">Expenses</h6>
+              <h6>Expenses</h6>
               <h3 class="text-danger fw-semibold">
                 {{ analytics?.totalExpenses | number:'1.2-2' }} ден.
               </h3>
             </div>
 
             <div class="col-md-3">
-              <h6 class="text-muted">Taxes</h6>
+              <h6>Taxes</h6>
               <h3 class="text-danger fw-semibold">
                 {{ analytics?.taxes | number:'1.2-2' }} ден.
               </h3>
             </div>
 
             <div class="col-md-3">
-              <h6 class="text-muted">Balance</h6>
+              <h6>Balance</h6>
               <h3 class="fw-bold"
                   [class.text-success]="analytics?.balance! >= 0"
                   [class.text-danger]="analytics?.balance! < 0">
@@ -84,15 +84,15 @@
         </div>
       </div>
 
-      <button class="btn btn-success btn-sm mb-3" (click)="openAddModal()">
+      <button class="btn btn-success mb-3" (click)="openAddModal()">
         Add Transaction
       </button>
 
       <div class="row g-4" *ngIf="!loading && transactions.length">
         <div class="col-xl-9 col-lg-8">
           <div class="table-responsive">
-            <table class="table table-hover align-middle transactions-table">
-              <thead class="table-light">
+            <table class="transactions-table">
+              <thead>
                 <tr>
                   <th>Date</th>
                   <th>Security</th>
@@ -164,7 +164,7 @@
           <div class="text-center mt-3"
                *ngIf="filteredTableView.length > displayLimit">
 
-            <button class="btn btn-secondary btn-sm"
+            <button class="btn btn-secondary"
                     (click)="toggleShowAll()">
               {{ showAll ? 'Show less' : 'See more' }}
             </button>
@@ -220,7 +220,7 @@
 
     <div class="tab-pane fade" id="worth">
         <div class="table-responsive mt-3">
-          <table class="table table-hover align-middle">
+          <table>
             <thead>
               <tr>
                 <th>Security</th>
