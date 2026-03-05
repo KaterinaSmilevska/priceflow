@@ -1,14 +1,124 @@
 .securities-section {
   padding: 2rem 4rem;
-  background-color: #f9fafb;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 table {
   width: 100%;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-collapse: collapse;
 }
+
+thead {
+  background-color: var(--secondary-color);
+}
+
+  thead th {
+    color: var(--text-color);
+    font-weight: 600;
+    padding: 10px 15px;
+  }
+
+tbody td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--input-border);
+}
+
+tbody tr:hover {
+  background-color: var(--secondary-color);
+}
+
+.btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.1s ease;
+  border: none;
+  margin: 5px;
+}
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--btn-text);
+}
+
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+  }
+
+.btn-success {
+  background-color: var(--success-bg);
+  color: var(--btn-text);
+}
+
+  .btn-success:hover {
+    background-color: var(--success-text);
+  }
+
+.btn-danger {
+  background-color: var(--danger-bg);
+  color: var(--btn-text);
+}
+
+  .btn-danger:hover {
+    background-color: var(--error-color);
+  }
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+  .btn-secondary:hover {
+    background-color: var(--input-border);
+  }
+
+.search-panel {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+  .search-input-wrapper input {
+    max-width: 250px;
+    padding: 6px 30px 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--input-text);
+  }
+
+.clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--disabled-text);
+}
+
+  .clear-btn:hover {
+    color: var(--text-color);
+  }
 
 .modal-overlay {
   position: fixed;
@@ -16,33 +126,31 @@ table {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1050;
 }
 
 .modal-content {
-  background: #fff;
+  background: var(--card-bg);
+  color: var(--text-color);
   border-radius: 12px;
   padding: 25px 30px;
   width: 320px;
   max-width: 90%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px var(--shadow-color);
   text-align: center;
-  font-family: 'Inter', sans-serif;
 }
 
   .modal-content h3 {
     margin-top: 0;
-    color: #111827;
     font-size: 1.25rem;
     font-weight: 600;
   }
 
   .modal-content p {
-    color: #374151;
     margin: 10px 0 20px;
     font-size: 0.95rem;
   }
@@ -52,72 +160,3 @@ table {
   justify-content: center;
   gap: 10px;
 }
-
-.btn {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out, transform 0.1s ease;
-}
-
-  .btn:hover {
-    transform: translateY(-1px);
-  }
-
-.btn-danger {
-  background-color: #ef4444;
-  color: white;
-}
-
-  .btn-danger:hover {
-    background-color: #dc2626;
-  }
-
-.btn-secondary {
-  background-color: #e5e7eb;
-  color: #111827;
-}
-
-  .btn-secondary:hover {
-    background-color: #d1d5db;
-  }
-
-  .search-panel {
-      display: flex;
-      justify-content: flex-end;
-  }
-
-  .search-panel input {
-      max-width: 250px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      padding: 6px 10px;
-  }
-
-  .search-input-wrapper {
-      position: relative;
-      display: inline-block;
-  }
-
-  .search-input-wrapper input {
-      padding-right: 30px;
-  }
-
-  .clear-btn {
-      position: absolute;
-      right: 5px;
-      top: 50%;
-      transform: translateY(-50%);
-      border: none;
-      background: transparent;
-      font-size: 14px;
-      cursor: pointer;
-      color: #6b7280;
-  }
-
-  .clear-btn:hover {
-      color: #111827;
-  }

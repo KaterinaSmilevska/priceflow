@@ -7,6 +7,7 @@ import { LoginService } from '../auth/login/login.service';
 import { PriceChangeNotificationsService } from '../notifications/price-change/price-change-notifications.service';
 import { PriceChangeNotification } from '../notifications/price-change/PriceChangeNotification';
 import { PriceChangeNotificationsComponent } from '../notifications/price-change/price-change-notifications.component';
+import { ThemeService } from '../theme.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -26,7 +27,8 @@ export class NavMenuComponent implements OnInit {
   unreadCount = 0;
   showDropdown = false;
 
-  constructor(public loginService: LoginService, private notificationsService: PriceChangeNotificationsService) {
+  constructor(public loginService: LoginService, private notificationsService: PriceChangeNotificationsService,
+    public themeService: ThemeService) {
     this.isAdmin$ = this.loginService.getUserRoles().pipe(
       map(roles => roles.includes('Администратор')));
   }

@@ -7,17 +7,18 @@
 }
 
 .performer-table {
-  background: linear-gradient(145deg, #ffffff, #f1f3f6);
+  background-color: var(--card-bg);
+  color: var(--text-color);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 15px var(--shadow-color);
   width: 320px;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
   .performer-table:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+    box-shadow: 0 10px 20px var(--shadow-color);
   }
 
   .performer-table h4 {
@@ -31,6 +32,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
+  color: var(--text-color);
 }
 
 th, td {
@@ -39,21 +41,21 @@ th, td {
 }
 
 th {
-  border-bottom: 2px solid #007bff33;
+  border-bottom: 2px solid var(--primary-color);
   font-weight: 500;
 }
 
 tr:nth-child(even) {
-  background-color: #f5f6fa;
+  background-color: var(--secondary-color);
 }
 
 .positive {
-  color: #28a745;
+  color: var(--success-bg);
   font-weight: bold;
 }
 
 .negative {
-  color: #dc3545;
+  color: var(--danger-bg);
   font-weight: bold;
 }
 
@@ -62,7 +64,7 @@ tr:nth-child(even) {
   margin: 40px;
   font-weight: bold;
   font-size: 1.2rem;
-  color: #007bff;
+  color: var(--primary-color);
 }
 
 @media (max-width: 1000px) {

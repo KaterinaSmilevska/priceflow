@@ -55,8 +55,7 @@
               "RelativeToolTip": "PriceFlowApp\\Controllers\\SecuritiesController.cs",
               "ViewState": "AgIAAGcAAAAAAAAAAAAAwHkAAABeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-03T16:59:04.162Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-03T16:59:04.162Z"
             },
             {
               "$type": "Document",
@@ -68,8 +67,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\securities\\securities.service.ts",
               "ViewState": "AgIAADsAAAAAAAAAAAAAwD4AAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-03-03T16:46:59.437Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-03T16:46:59.437Z"
             },
             {
               "$type": "Document",
@@ -81,8 +79,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\securities\\securities.component.ts",
               "ViewState": "AgIAAF0AAAAAAAAAAAAAwGQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-03-03T16:06:40.348Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-03T16:06:40.348Z"
             }
           ]
         }

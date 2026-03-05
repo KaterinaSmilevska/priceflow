@@ -1,0 +1,13 @@
+.container-fluid {
+    color: var(--text-color);
+}
+
+.info {
+    color: var(--disabled-text);
+}
+
+.form-select {
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--input-text);
+}

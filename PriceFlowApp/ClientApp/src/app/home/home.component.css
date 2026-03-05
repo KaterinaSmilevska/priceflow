@@ -43,8 +43,8 @@ p {
 .get-started-btn {
   padding: 1rem 2rem;
   font-size: 1.2rem;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--btn-text);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -52,7 +52,7 @@ p {
 }
 
   .get-started-btn:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-hover);
   }
 
 .market-overview {
@@ -65,18 +65,19 @@ p {
 }
 
 .overview-card {
-  background: #ffffff;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background: var(--card-bg);
+  box-shadow: 0 2px 10px var(--shadow-color);
   border-radius: 10px;
   width: 220px;
   padding: 20px;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: var(--text-color);
 }
 
   .overview-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 20px var(--shadow-color);
   }
 
   .overview-card .icon {
@@ -86,14 +87,14 @@ p {
 
   .overview-card h3 {
     font-size: 16px;
-    color: #333;
+    color: var(--text-color);
     margin-bottom: 8px;
   }
 
   .overview-card .value {
     font-size: 20px;
     font-weight: bold;
-    color: #007bff;
+    color: var(--text-color);
   }
 
   .overview-card .change {
@@ -102,11 +103,11 @@ p {
   }
 
   .overview-card .positive {
-    color: #28a745;
+    color: var(--success-text);
   }
 
   .overview-card .negative {
-    color: #dc3545;
+    color: var(--error-color);
   }
 
 @media (max-width: 768px) {
@@ -118,10 +119,11 @@ p {
 
 
 .footer {
-  background-color: #1a1a1a;
-  color: #f2f2f2;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   padding: 40px 0 20px;
   margin-top: 60px;
+  border-top: 1px solid var(--secondary-color);
 }
 
 .footer-content {
@@ -134,18 +136,18 @@ p {
 }
 
 .footer h3, .footer h4 {
-  color: #ffffff;
+  color: var(--text-color);
   margin-bottom: 15px;
 }
 
 .footer p, .footer a {
-  color: #ccc;
+  color: var(--text-color);
   text-decoration: none;
   font-size: 14px;
 }
 
   .footer a:hover {
-    color: #00bcd4;
+    color: var(--primary-color);
   }
 
 .footer-center ul {
@@ -160,17 +162,16 @@ p {
 
 .footer-bottom {
   text-align: center;
-  border-top: 1px solid #333;
+  border-top: 1px solid var(--secondary-color);
   margin-top: 20px;
   padding-top: 10px;
   font-size: 13px;
-  color: #999;
-
+/*  color: #999;*/
 }
 
 .footer-bottom .disclaimer {
     font-size: 0.75rem;
-    color: #cbd5e1;
+/*    color: #cbd5e1;*/
     max-width: 900px;
     margin: 0 auto 6px;
     line-height: 1.4;

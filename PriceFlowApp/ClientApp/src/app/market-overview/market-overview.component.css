@@ -7,24 +7,25 @@
 }
 
   .market-cards .card {
-    background: #ffffff;
+    background-color: var(--card-bg);
+    color: var(--text-color);
     border-radius: 12px;
     padding: 20px;
     width: 180px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 10px var(--shadow-color);
     transition: transform 0.2s, box-shadow 0.2s;
   }
 
     .market-cards .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      box-shadow: 0 8px 20px var(--shadow-color);
     }
 
 .card-icon {
   font-size: 2rem;
   margin-bottom: 10px;
-  color: #007bff;
+  color: var(--primary-color);
 }
 
 .market-card-cap .card-icon {
@@ -36,22 +37,22 @@
 }
 
 .market-card-gainer .card-icon {
-  color: #198754;
+  color: var(--success-text);
 }
 
 .market-card-loser .card-icon {
-  color: #dc3545;
+  color: var(--danger-bg);
 }
 
 .market-card-securities .card-icon {
-  color: #0d6efd;
+  color: var(--primary-color);
 }
 
 .badge-up {
   display: inline-block;
   padding: 2px 6px;
-  background-color: #198754;
-  color: #fff;
+  background-color: var(--success-bg);
+  color: var(--success-text);
   border-radius: 4px;
   font-size: 0.8rem;
   margin-left: 5px;
@@ -60,9 +61,16 @@
 .badge-down {
   display: inline-block;
   padding: 2px 6px;
-  background-color: #dc3545;
-  color: #fff;
+  background-color: var(--danger-bg);
+  color: var(--btn-text);
   border-radius: 4px;
   font-size: 0.8rem;
   margin-left: 5px;
+}
+
+.text-center {
+  text-align: center;
+  color: var(--text-color);
+  font-weight: 500;
+  margin: 20px 0;
 }

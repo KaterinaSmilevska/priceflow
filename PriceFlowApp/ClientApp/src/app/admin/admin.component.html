@@ -1,8 +1,9 @@
-<h2 class="text-2xl font-bold text-center mb-6">Admin Panel</h2>
+<h2 class="text-2xl font-bold text-center mb-6 admin-title">Admin Panel</h2>
 
 <nav class="admin-nav">
   <a routerLink="users"
-     routerLinkActive="active">Manage Users</a>
+     routerLinkActive="active"
+     [routerLinkActiveOptions]="{exact: true}">Manage Users</a>
   <a routerLink="brokers"
      routerLinkActive="active">Manage Brokers</a>
 </nav>

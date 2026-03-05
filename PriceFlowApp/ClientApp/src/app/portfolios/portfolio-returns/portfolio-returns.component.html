@@ -45,12 +45,12 @@
     <hr />
 
     <div *ngIf="summary" class="text-center">
-      <div class="small text-muted">Total Dividends</div>
+      <div class="small">Total Dividends</div>
       <div class="fw-bold text-success">
         {{ summary.totalDividends | number:'1.2-2' }} ден.
       </div>
 
-      <div class="small text-muted mt-2">Total Taxes</div>
+      <div class="small mt-2">Total Taxes</div>
       <div class="fw-bold text-warning">
         {{ summary.totalTaxes | number:'1.2-2' }} ден.
       </div>

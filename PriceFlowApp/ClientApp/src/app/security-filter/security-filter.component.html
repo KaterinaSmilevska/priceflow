@@ -6,7 +6,7 @@
   <div class="control-panel">
     <div class="control-group">
       <label>Metric</label>
-      <select [ngModel]="selectedMetric" (change)="loadMetric(selectedMetric)">
+      <select [ngModel]="selectedMetric" (ngModelChange)="loadMetric($event)">
         <option value="">Select Metric</option>
         <option value="mostProfitableSecuritiesByDividendYield">Most Profitable Securities (Dividend Yield)</option>
         <option value="mostProfitableSecuritiesByDividendPerShare">Most Profitable Securities (Dividend Per Share)</option>

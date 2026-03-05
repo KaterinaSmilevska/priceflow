@@ -1,18 +1,90 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg-color: #f3f4f6;
+  --card-bg: #ffffff;
+  --text-color: #111827;
+  --label-color: #1e3a8a;
+  --input-bg: #ffffff;
+  --input-border: #93c5fd;
+  --input-text: #111827;
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --error-color: #dc2626;
+  --info-bg: #0ea5e9;
+  --warning-bg: #f59e0b;
+  --success-bg: #11ab5c;
+  --success-text: #065f46;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --navbar-bg: #1e3a8a;
+  --navbar-text: white;
+  --navbar-hover: rgba(59, 130, 246, 0.1);
+  --navbar-active: rgba(59, 130, 246, 0.2);
+  --secondary-color: #e5e7eb;
+  --btn-text: #ffffff;
+  --danger-bg: #ef4444;
+  --toast-bg: #daf5d7;
+  --toast-text: #27632a;
+  --toast-border: #4caf50;
+  --disabled-bg: #d1d5db;
+  --disabled-text: #6b7280;
+  --checkbox-checked: #3b82f6;
+}
+
+.dark-theme {
+  --bg-color: #111827;
+  --card-bg: #1f2937;
+  --text-color: #f3f4f6;
+  --label-color: #93c5fd;
+  --input-bg: #374151;
+  --input-border: #4b5563;
+  --input-text: #f9fafb;
+  --primary-color: #3b82f6;
+  --primary-hover: #60a5fa;
+  --error-color: #f87171;
+  --info-bg: #0ea5e9;
+  --warning-bg: #f59e0b;
+  --success-bg: #22c974;
+  --success-text: #a7f3d0;
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  --navbar-bg: #1e3a8a;
+  --navbar-text: white;
+  --navbar-hover: rgba(255,255,255,0.08);
+  --navbar-active: rgba(255,255,255,0.15);
+  --secondary-color: #374151;
+  --btn-text: #ffffff;
+  --danger-bg: #b91c1c;
+  --toast-bg: #14532d;
+  --toast-text: #a7f3d0;
+  --toast-border: #166534;
+  --disabled-bg: #4b5563;
+  --disabled-text: #9ca3af;
+  --checkbox-checked: #60a5fa;
+  --close-filter: invert(1);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 a {
-  color: #0366d6;
+  /*  color: #0366d6;*/
+  color: var(--primary-color);
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/*  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;*/
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--primary-color);
 }
 
 code {
@@ -20,17 +92,28 @@ code {
 }
 
 .btn-primary {
-  color: #fff;
+/*  color: #fff;
   background-color: #1b6ec2;
-  border-color: #1861ac;
+  border-color: #1861ac;*/
+  color: var(--btn-text);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-danger {
+  background-color: var(--danger-bg);
+  color: var(--btn-text);
 }
 
 .success-message {
   margin-top: 10px;
   padding: 10px;
-  background-color: #daf5d7;
+/*  background-color: #daf5d7;
   border: 1px solid #4caf50;
-  color: #27632a;
+  color: #27632a;*/
+  background-color: var(--success-bg);
+  border: 1px solid var(--success-text);
+  color: var(--success-text);
   border-radius: 6px;
   font-weight: 500;
   text-align: center;

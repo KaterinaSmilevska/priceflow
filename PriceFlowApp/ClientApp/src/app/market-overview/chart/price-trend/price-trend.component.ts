@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Chart, ChartData, ChartType, registerables } from 'chart.js';
-import { ChartService } from './chart.service';
+import { Chart, ChartConfiguration, ChartData, ChartType, registerables } from 'chart.js';
+import { ChartService } from '../chart.service';
 import { BaseChartDirective } from 'ng2-charts';
 
 Chart.register(...registerables);
@@ -93,10 +93,11 @@ export class PriceTrendComponent implements OnInit {
             {
               label: 'Price',
               data: res.map((d) => d.price),
-              borderColor: 'blue',
-              backgroundColor: 'rgba(0,0,255,0.3)',
+              borderColor: 'green',
+              backgroundColor: 'rgba(123, 182, 98, 0.7)',
               tension: 0.2,
               fill: true,
+              datalabels: { display: false },
             },
           ],
         };

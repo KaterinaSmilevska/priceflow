@@ -13,9 +13,10 @@
 }
 
 .dropdown-item {
-    padding: 0.75rem 1rem;
-    white-space: normal;
-    word-wrap: break-word;
+  padding: 0.75rem 1rem;
+  white-space: normal;
+  word-wrap: break-word;
+  color: var(--primary-color);
 }
 
 .dropdown-item:hover {

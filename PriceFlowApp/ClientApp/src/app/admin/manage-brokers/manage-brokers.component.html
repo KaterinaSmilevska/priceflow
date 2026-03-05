@@ -1,7 +1,7 @@
 <div class="brokers-container">
-  <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Manage Brokers</h2>
+  <h2 class="page-title">Manage Brokers</h2>
 
-  <div *ngIf="errorMessage" class="error mb-4 p-2">
+  <div *ngIf="errorMessage" class="error-message">
     <p>{{ errorMessage }}</p>
   </div>
 
@@ -13,9 +13,9 @@
   </div>
 
   <div class="overflow-x-auto">
-    <table class="min-w-full bg-white border border-gray-200">
+    <table class="brokers-table">
       <thead>
-        <tr class="bg-gray-100">
+        <tr>
           <th class="py-2 px-4 border-b">Company</th>
           <th class="py-2 px-4 border-b">Commission (%)</th>
           <th class="py-2 px-4 border-b">Actions</th>
@@ -26,13 +26,16 @@
           <td class="py-2 px-4 border-b">{{ broker.company }}</td>
           <td class="py-2 px-4 border-b">{{ broker.commissionPercent }}</td>
           <td class="py-2 px-4 border-b">
-            <button class="btn btn-warning me-1" (click)="openEditModal(broker)">Edit</button>
+            <button class="btn btn-warning me-3" (click)="openEditModal(broker)">Edit</button>
             <button class="btn btn-danger" (click)="openDeleteModal(broker)">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <p class="mt-4 text-center">
+    <a [routerLink]="['/']" class="page-link">Back to Home</a>
+  </p>
 </div>
 
 <app-edit-broker *ngIf="showEditModal"

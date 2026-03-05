@@ -1,38 +1,107 @@
 .card {
-    border-radius: 16px;
-    background: #ffffff;
+  border-radius: 16px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  box-shadow: 0 2px 6px var(--shadow-color);
 }
 
 .card-body {
-    padding: 1.5rem;
+  padding: 1.5rem;
 }
 
-.liquidity-table thead {
-    background: #f8f9fa;
+.fw-semibold {
+  font-weight: 600;
+  color: var(--text-color);
 }
 
-.liquidity-table thead th {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05rem;
-    color: #6c757d;
-    border-bottom: 1px solid #e9ecef;
+.text-muted {
+  color: var(--disabled-text);
+  font-size: 0.85rem;
 }
 
-.liquidity-table tbody tr {
-    border-bottom: 1px solid #f1f3f5;
-    transition: background-color 0.15s ease;
+.liquidity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  background-color: var(--card-bg);
+  color: var(--text-color);
 }
 
-.liquidity-table tbody tr:hover {
-    background-color: #eef2f7;
-}
+  .liquidity-table thead {
+    background-color: var(--input-bg);
+  }
 
-.liquidity-table td {
-    padding-top: 0.6rem;
-    padding-bottom: 0.6rem;
-}
+    .liquidity-table thead th {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05rem;
+      color: var(--text-color);
+      border-bottom: 1px solid var(--input-border);
+      text-align: center;
+      padding: 0.5rem;
+    }
+
+  .liquidity-table tbody tr {
+    border-bottom: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+    .liquidity-table tbody tr:hover {
+      background-color: var(--primary-color);
+      color: var(--card-bg);
+    }
+
+  .liquidity-table td {
+    padding: 0.5rem;
+    color: var(--text-color);
+  }
+
+    .liquidity-table td:first-child {
+      text-align: left;
+    }
+
+    .liquidity-table td:nth-child(2) {
+      text-align: right;
+    }
+
+    .liquidity-table td:nth-child(3) {
+      text-align: center;
+    }
+
+  .no-data,
+  .liquidity-table + ng-template .text-muted {
+    color: var(--disabled-text);
+    text-align: center;
+    padding: 1rem 0;
+  }
 
 .tracking {
-    letter-spacing: 0.05rem;
+  letter-spacing: 0.05rem;
+  color: var(--disabled-text);
 }
+
+@media (max-width: 650px) {
+  .liquidity-table thead th,
+  .liquidity-table td {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.25rem;
+  }
+}
+
+.container-fluid {
+  color: var(--text-color);
+}
+
+  .container-fluid h5,
+  .container-fluid .text-muted {
+    color: var(--text-color);
+  }
+
+  .container-fluid select.form-select {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+  }

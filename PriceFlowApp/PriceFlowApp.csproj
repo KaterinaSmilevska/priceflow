@@ -38,6 +38,7 @@
     <None Remove="ClientApp\src\app\security-filter\FilteredSecurity.ts" />
     <None Remove="ClientApp\src\app\security-filter\Sector.ts" />
     <None Remove="ClientApp\src\app\security-filter\security-filter.service.ts" />
+    <None Remove="ClientApp\src\app\theme.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +52,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\security-filter\FilteredSecurity.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\security-filter\Sector.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\security-filter\security-filter.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\theme.service.ts" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

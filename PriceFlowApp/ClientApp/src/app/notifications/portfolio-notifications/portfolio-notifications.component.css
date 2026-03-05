@@ -1,16 +1,127 @@
 .notification-card {
-    background-color: #ffffff;
-    border-radius: 10px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 18px var(--shadow-color);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+  .notification-card .card-header {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--input-border);
+    padding-bottom: 8px;
+  }
+
+  .notification-card .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+.form-check-label {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+input.form-check-input {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  accent-color: var(--primary-color);
+  transition: all 0.2s ease;
+}
+
+  input.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+
+.form-label {
+  font-weight: 500;
+  color: var(--label-color);
+  display: block;
+  margin-bottom: 6px;
+}
+
+select.form-select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+  select.form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
+  }
+
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+  .btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--card-bg);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.alert {
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+}
+
+.alert-success {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-bg);
+  text-align: center;
+}
+
+.alert-danger {
+  background-color: var(--danger-bg);
+  color: var(--error-color);
+  border: 1px solid var(--danger-bg);
+}
+
+@media (max-width: 650px) {
+  .notification-card {
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-top: 20px;
-}
+  }
 
-.card-header h5 {
-    margin: 0;
-    font-weight: 600
-}
-
-.card-body {
-   margin-top: 15px;
+  .btn {
+    width: 100%;
+  }
 }

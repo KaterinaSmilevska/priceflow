@@ -14,7 +14,7 @@
     <form [formGroup]="form">
       <div class="mb-3">
         <label class="form-label">Security</label>
-
+          
         <select class="form-select"
                 formControlName="hvId">
 
@@ -61,35 +61,36 @@
 
   <hr>
 
-  <h5>My Price Alerts</h5>
+  <div class="card p-4 shadow-sm mt-4">
+    <h5>My Price Alerts</h5>
 
-  <table class="table table-bordered mt-3">
-    <thead>
-      <tr>
-        <th>Security Code</th>
-        <th>Lower %</th>
-        <th>Upper %</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let t of thresholds">
-        <td>{{ t.hvCode }}</td>
-        <td>{{ t.lowerThreshold }}%</td>
-        <td>{{ t.upperThreshold }}%</td>
-        <td>
-          <button class="btn btn-warning btn-sm me-2"
-                  (click)="edit(t)">
-            Edit
-          </button>
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>Security Code</th>
+          <th>Lower %</th>
+          <th>Upper %</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of thresholds">
+          <td>{{ t.hvCode }}</td>
+          <td>{{ t.lowerThreshold }}%</td>
+          <td>{{ t.upperThreshold }}%</td>
+          <td>
+            <button class="btn btn-warning btn-sm me-2"
+                    (click)="edit(t)">
+              Edit
+            </button>
 
-          <button class="btn btn-danger btn-sm"
-                  (click)="delete(t.id)">
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
+            <button class="btn btn-danger btn-sm"
+                    (click)="delete(t.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -34,7 +34,7 @@
         <option value="max">Max price</option>
       </select>
 
-      <div class="text-muted small mt-1" *ngIf="dailyPrices">
+      <div class="small mt-1" *ngIf="dailyPrices">
         Selected price:
         <strong>{{ form.get('sharesUnitPrice')?.value | number:'1.2-2' }} ден.</strong>
       </div>
@@ -51,21 +51,21 @@
           </i>
         </div>
 
-        <div class="text-muted small">
+        <div class="small">
           Stock Exchange:
           <span class="float-end">
             {{ stockExchangeFee | number:'1.2-2' }} ден.
           </span>
         </div>
 
-        <div class="text-muted small">
+        <div class="small">
           Brokerage:
           <span class="float-end">
             {{ brokerageFee | number:'1.2-2' }} ден.
           </span>
         </div>
 
-        <div class="text-muted small">
+        <div class="small">
           CDHV:
           <span class="float-end">
             {{ cdhvFee | number:'1.2-2' }} ден.
