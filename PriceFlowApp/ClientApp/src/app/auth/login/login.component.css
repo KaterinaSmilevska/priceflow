@@ -2,10 +2,8 @@
   max-width: 400px;
   margin: 3rem auto;
   padding: 2rem;
-  /*  background-color: #ffffff;*/
   background-color: var(--card-bg);
   border-radius: 12px;
-  /*  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
   box-shadow: 0 8px 20px var(--shadow-color);
   transition: background-color 0.3s, box-shadow 0.3s;
 }
@@ -17,7 +15,6 @@
 .login-container label {
   display: block;
   margin-bottom: 0.5rem;
-  /*  color: #1e3a8a;*/
   color: var(--label-color);
   font-weight: 500;
 }
@@ -25,7 +22,6 @@
 .login-container input {
   width: 100%;
   padding: 0.5rem;
-  /*  border: 1px solid #93c5fd;*/
   border: 1px solid var(--input-border);
   border-radius: 5px;
   background-color: var(--input-bg);
@@ -33,15 +29,14 @@
   transition: border 0.3s, background-color 0.3s;
 }
 
-.login-container input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-}
+  .login-container input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
 
 .login-btn {
   padding: 0.75rem 1.5rem;
-    background-color: #3b82f6;
-/*  background-color: var(--primary-color);*/
+  background-color: #3b82f6;
   color: white;
   border: none;
   border-radius: 8px;
@@ -51,12 +46,10 @@
 }
 
   .login-btn:hover {
-        background-color: #2563eb;
-/*    background-color: var(--primary-hover);*/
+    background-color: #2563eb;
   }
 
 .error {
-  background-color: var(--danger-bg);
   color: var(--error-color);
   border-radius: 5px;
   margin-top: 1rem;
@@ -73,7 +66,6 @@
 
 .forgot-password-link a,
 .register-link a {
-  /*  color: #3b82f6;*/
   color: var(--primary-color);
   text-decoration: none;
 }

@@ -166,12 +166,10 @@ p {
   margin-top: 20px;
   padding-top: 10px;
   font-size: 13px;
-/*  color: #999;*/
 }
 
 .footer-bottom .disclaimer {
     font-size: 0.75rem;
-/*    color: #cbd5e1;*/
     max-width: 900px;
     margin: 0 auto 6px;
     line-height: 1.4;

@@ -67,7 +67,6 @@ tbody tr:hover {
 
 .btn-warning {
   background-color: var(--warning-bg);
-/*  color: var(--text-color);*/
 }
 
 .btn-danger {

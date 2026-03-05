@@ -66,10 +66,6 @@
   background-color: var(--warning-bg);
 }
 
-/*  .btn-warning:hover {
-    background-color: var(--primary-hover);
-  }*/
-
 .btn-danger {
   background-color: var(--danger-bg);
   color: white;

@@ -78,12 +78,10 @@ html, body {
 }
 
 a {
-  /*  color: #0366d6;*/
   color: var(--primary-color);
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-/*  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;*/
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--primary-color);
 }
 
@@ -92,9 +90,6 @@ code {
 }
 
 .btn-primary {
-/*  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;*/
   color: var(--btn-text);
   background-color: var(--primary-color);
   border-color: var(--primary-color);
@@ -108,9 +103,6 @@ code {
 .success-message {
   margin-top: 10px;
   padding: 10px;
-/*  background-color: #daf5d7;
-  border: 1px solid #4caf50;
-  color: #27632a;*/
   background-color: var(--success-bg);
   border: 1px solid var(--success-text);
   color: var(--success-text);

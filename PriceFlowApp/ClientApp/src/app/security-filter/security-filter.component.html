@@ -18,7 +18,7 @@
         <option value="leastLiquidSecuritiesByNumTradingDays">Least Liquid Securities (Trading Days)</option>
         <option value="mostProfitableSectorsByDividendYield">Most Profitable Sectors (Dividend Yield)</option>
         <option value="mostProfitableSectorsByProfit">Most Profitable Sectors (Profit)</option>
-        <option value="securitiesValuation" >Securities Valuation</option>
+        <option value="Market price : Book value" >Market price : Book value</option>
       </select>
     </div>
     <div class="control-group">
@@ -36,7 +36,7 @@
                 [options]="chartOptions"
                 [type]="'bar'">
       </canvas>
-      <div *ngIf="selectedMetric === 'securitiesValuation'"
+      <div *ngIf="selectedMetric === 'Market price : Book value'"
            class="valuation-legend">
         <div class="legend-term">
           <span class="legend-color overvalued"></span>
@@ -67,8 +67,8 @@
             <td>{{ i + 1 }}</td>
             <td>{{ item.securityCode || item.sectorName }}</td>
             <td [ngClass]="getValuationClass(item)">
-              {{ item.value || item.totalValue | number: (selectedMetric === 'securitiesValuation' ? '1.4-4' : '1.2-2') }}
-              <span *ngIf="selectedMetric === 'securitiesValuation'">
+              {{ item.value || item.totalValue | number: (selectedMetric === 'Market price : Book value' ? '1.4-4' : '1.2-2') }}
+              <span *ngIf="selectedMetric === 'Market price : Book value'">
                 {{ ((item.value || item.totalValue) > 1) ? '▼' : ((item.value || item.totalValue) < 1 ? '▲': '') }}
               </span>
             </td>
