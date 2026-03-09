@@ -2,12 +2,12 @@
   <button class="btn btn-outline-primary"
           [class.active]="isReal"
           (click)="setMode(true)">
-    Real
+    {{ 'TRANSACTIONS.REAL' | translate }}
   </button>
   <button class="btn btn-outline-secondary"
           [class.active]="isReal"
           (click)="setMode(false)">
-    Simulated
+    {{ 'TRANSACTIONS.SIMULATED' | translate }}
   </button>
 </div>
 
@@ -16,7 +16,7 @@
       <button class="nav-link active"
               data-bs-toggle="tab"
               data-bs-target="#overview">
-        Overview
+        {{ 'OVERVIEW' | translate }}
       </button>
     </li>
 
@@ -24,7 +24,7 @@
       <button class="nav-link"
               data-bs-toggle="tab"
               data-bs-target="#analytics">
-        Analytics
+        {{ 'ANALYTICS' | translate }}
       </button>
     </li>
 
@@ -33,7 +33,7 @@
               data-bs-toggle="tab"
               data-bs-target="#worth"
               (click)="loadPortfolioValue()">
-        Current Value
+        {{ 'PORTFOLIOS.CURRENT_VALUE' | translate }}
       </button>
     </li>
   </ul>
@@ -45,38 +45,38 @@
           <div class="row text-center g-3">
 
             <div class="col-md-3">
-              <h6>Revenue</h6>
+              <h6>{{ 'PORTFOLIOS.REVENUE' | translate }}</h6>
               <h3 class="text-success fw-semibold">
-                {{ analytics?.totalRevenue | number:'1.2-2' }} ден.
+                {{ analytics?.totalRevenue | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
               </h3>
             </div>
 
             <div class="col-md-3">
-              <h6>Expenses</h6>
+              <h6>{{ 'PORTFOLIOS.EXPENSES' | translate }}</h6>
               <h3 class="text-danger fw-semibold">
-                {{ analytics?.totalExpenses | number:'1.2-2' }} ден.
+                {{ analytics?.totalExpenses | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
               </h3>
             </div>
 
             <div class="col-md-3">
-              <h6>Taxes</h6>
+              <h6>{{ 'PORTFOLIOS.TAXES' | translate }}</h6>
               <h3 class="text-danger fw-semibold">
-                {{ analytics?.taxes | number:'1.2-2' }} ден.
+                {{ analytics?.taxes | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
               </h3>
             </div>
 
             <div class="col-md-3">
-              <h6>Balance</h6>
+              <h6>{{ 'PORTFOLIOS.BALANCE' | translate }}</h6>
               <h3 class="fw-bold"
                   [class.text-success]="analytics?.balance! >= 0"
                   [class.text-danger]="analytics?.balance! < 0">
-                {{ analytics?.balance | number:'1.2-2' }} ден.
+                {{ analytics?.balance | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
               </h3>
 
               <small class="fw-semibold"
                      [class.text-success]="analytics?.balance! >= 0"
                      [class.text-danger]="analytics?.balance! < 0">
-                {{ analytics?.balance! >= 0 ? 'Profit' : 'Loss' }}
+                {{ (analytics?.balance! >= 0 ? 'PORTFOLIOS.PROFIT' : 'PORTFOLIOS.LOSS') | translate }}
               </small>
             </div>
 
@@ -85,7 +85,7 @@
       </div>
 
       <button class="btn btn-success mb-3" (click)="openAddModal()">
-        Add Transaction
+        {{ 'ADD.ACTION_NAME' | translate }} {{ 'TRANSACTIONS.TRANSACTION' | translate }}
       </button>
 
       <div class="row g-4" *ngIf="!loading && transactions.length">
@@ -94,14 +94,14 @@
             <table class="transactions-table">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Security</th>
-                  <th>Type</th>
-                  <th class="text-end">Qty</th>
-                  <th class="text-end">Unit Price</th>
-                  <th class="text-end">Trade value</th>
-                  <th class="text-end">Commission</th>
-                  <th class="text-end">Cash flow</th>
+                  <th>{{ 'CHART.DATE' | translate }}</th>
+                  <th>{{ 'SECURITIES.TITLE' | translate }}</th>
+                  <th>{{ 'SECURITIES.TYPE' | translate }}</th>
+                  <th class="text-end">{{ 'QUANTITY' | translate }}</th>
+                  <th class="text-end">{{ 'TRANSACTIONS.UNIT_PRICE' | translate }}</th>
+                  <th class="text-end">{{ 'TRANSACTIONS.TRADE_VALUE' | translate }}</th>
+                  <th class="text-end">{{ 'PORTFOLIOS.COMMISSION' | translate }}</th>
+                  <th class="text-end">{{ 'TRANSACTIONS.CASH_FLOW' | translate }}</th>
                   <th class="text-center"></th>
                 </tr>
               </thead>
@@ -112,7 +112,7 @@
                   <td>{{ t.date | date:'dd.MM.yyyy' }}</td>
                   <td>
                     <span class="fw-semibold text-primary">{{ t.hvCode }}</span>
-                    <span *ngIf="!t.isReal" class="badge bg-secondary ms-2">Simulated</span>
+                    <span *ngIf="!t.isReal" class="badge bg-secondary ms-2">{{ 'TRANSACTIONS.SIMULATED' | translate }}</span>
                   </td>
 
                   <td>
@@ -134,25 +134,25 @@
                   </td>
 
                   <td class="text-end fw-bold">
-                    {{ t.amount | number:'1.2-10' }} ден.
+                    {{ t.amount | number:'1.2-10' }} {{ 'CURRENCY.MKD' | translate }}
                   </td>
                   <td class="text-end fw-bold">
-                    {{ t.commission ? (t.commission | number: '1.2-2') + ' ден.': '-'  }}
+                    {{ t.commission ? (t.commission | number: '1.2-2') + ' ' + ('CURRENCY.MKD' | translate) : '-'  }}
                   </td>
                   <td class="text-end fw-bold"
                       [class.text-danger]="t.cashFlow < 0"
                       [class.text-success]="t.cashFlow > 0">
-                    {{ t.cashFlow | number: '1.2-2'}} ден.
+                    {{ t.cashFlow | number: '1.2-2'}} {{ 'CURRENCY.MKD' | translate }}
                   </td>
                   <td class="text-center">
                     <div class="action-buttons" *ngIf="t.transactionId">
                       <button class="btn btn-warning btn-sm me-1"
                               (click)="editFromTable(t.transactionId)">
-                        Edit
+                        {{ 'EDIT.ACTION_NAME' | translate }}
                       </button>
                       <button class="btn btn-danger btn-sm"
                               (click)="deleteFromTable(t.transactionId)">
-                        Delete
+                        {{ 'DELETE.ACTION_NAME' | translate }}
                       </button>
                     </div>
                   </td>
@@ -166,7 +166,7 @@
 
             <button class="btn btn-secondary"
                     (click)="toggleShowAll()">
-              {{ showAll ? 'Show less' : 'See more' }}
+              {{ (showAll ? 'SHOW_LESS' : 'SEE_MORE') | translate }}
             </button>
           </div>
         </div>
@@ -190,16 +190,16 @@
 
       <div *ngIf="showDeleteModal" class="modal-overlay">
         <div class="modal-content animate-in">
-          <h3>Confirm Delete</h3>
+          <h3>{{ 'DELETE.CONFIRM' | translate }}</h3>
           <p>
-            Are you sure you want to delete transaction for
+            {{ 'DELETE.DELETE_TRANSACTION_MESSAGE' | translate }}
             <strong>{{ transactionToDelete?.hvCode }}</strong>
-            on
+            {{ 'ON' | translate }}
             <strong>{{ transactionToDelete?.date | date: 'dd.MM.yyyy' }}</strong>?
           </p>
           <div class="modal-actions">
-            <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
-            <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+            <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
+            <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>
           </div>
         </div>
       </div>
@@ -223,10 +223,10 @@
           <table>
             <thead>
               <tr>
-                <th>Security</th>
-                <th class="text-end">Quantity</th>
-                <th class="text-end">Last price</th>
-                <th class="text-end">Current value</th>
+                <th>{{ 'SECURITIES.TITLE' | translate }}</th>
+                <th class="text-end">{{ 'QUANTITY' | translate }}</th>
+                <th class="text-end">{{ 'TRANSACTIONS.LAST_PRICE' | translate }}</th>
+                <th class="text-end">{{ 'PORTFOLIOS.CURRENT_VALUE' | translate }}</th>
               </tr>
             </thead>
 
@@ -235,10 +235,10 @@
                 <td class="fw-semibold text-primary">{{ v.hvCode }}</td>
                 <td class="text-end">{{ v.totalQuantity }}</td>
                 <td class="text-end">
-                  {{ v.lastPrice | number:'1.2-2' }} ден.
+                  {{ v.lastPrice | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
                 </td>
                 <td class="text-end fw-bold">
-                  {{ v.currentValue | number:'1.2-2' }} ден.
+                  {{ v.currentValue | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
                 </td>
               </tr>
 

@@ -3,11 +3,12 @@ import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges } from '@
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Broker } from '../Broker';
 import { AdminService } from '../../admin.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-broker',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './edit-broker.component.html',
   styleUrl: './edit-broker.component.css',
 })

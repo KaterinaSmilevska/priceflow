@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Portfolio, PortfoliosService } from '../portfolios.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TransactionsComponent } from '../../transactions/transactions.component';
 import { switchMap } from 'rxjs';
 import { PerformanceExportComponent } from '../performance-export/performance-export.component';
 import { PortfolioNotificationsComponent } from '../../notifications/portfolio-notifications/portfolio-notifications.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-portfolio-details',
   standalone: true,
-  imports: [CommonModule, TransactionsComponent, PerformanceExportComponent, PortfolioNotificationsComponent],
+  imports: [CommonModule, RouterModule, TransactionsComponent, PerformanceExportComponent, PortfolioNotificationsComponent, TranslateModule],
   templateUrl: './portfolio-details.component.html',
   styleUrl: './portfolio-details.component.css',
 })

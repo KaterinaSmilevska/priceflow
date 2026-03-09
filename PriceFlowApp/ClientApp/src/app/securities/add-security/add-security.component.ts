@@ -3,11 +3,12 @@ import { CreateSecurity, Issuer, SecuritiesService, Security, TypeSecurity } fro
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-security',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './add-security.component.html',
   styleUrls: ['./add-security.component.css']
 })

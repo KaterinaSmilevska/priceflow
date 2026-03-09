@@ -52,13 +52,6 @@ export class SectorDistributionComponent implements OnInit {
     else {
       this.loadChart();
     }
-    //this.chartService.getSecurities().subscribe(security => {
-    //  this.securities = security.map(s => ({ id: s.id, code: s.code }));
-    //  if (this.securities.length > 0) {
-    //    this.date = this.chartService.formatDate(this.date);
-    //    this.loadChart();
-    //  }
-    //});
   }
 
   loadChart(): void {

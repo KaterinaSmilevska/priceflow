@@ -1,98 +1,98 @@
 <div class="modal-overlay">
   <div class="modal-content">
 
-    <h5>{{ transaction ? 'Edit Transaction' : 'Add Transaction' }}</h5>
+    <h5>{{ (transaction ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'PORTFOLIOS.PORTFOLIO' | translate }}</h5>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-      <label>Security</label>
+      <label>{{ 'SECURITIES.TITLE' | translate }}</label>
       <select formControlName="hvCode" class="form-select">
         <option *ngFor="let s of securities" [value]="s.code">
           {{ s.code }}
         </option>
       </select>
 
-      <label>Transaction Type</label>
+      <label>{{ 'TRANSACTIONS.TYPE' | translate }}</label>
       <select formControlName="typeTransaction" class="form-select">
-        <option value="Купување">Купување</option>
-        <option value="Продавање">Продавање</option>
+        <option value="Купување">{{ 'TRANSACTIONS.BUY' | translate }}</option>
+        <option value="Продавање">{{ 'TRANSACTIONS.SELL' | translate }}</option>
       </select>
 
-      <label>Quantity</label>
+      <label>{{ 'QUANTITY' | translate }}</label>
       <input type="number" formControlName="sharesQuantity" class="form-control">
       <div *ngIf="sellLimitExceeded" class="text-danger mt-1">
-        You can sell at most {{ ownedShares }} shares.
+        {{ 'TRANSACTIONS.SELL_MESSAGE' | translate }} {{ ownedShares }} {{ 'SHARES' | translate }}.
       </div>
       <div *ngIf="buyLimitExceeded" class="text-danger mt-1">
-        You can buy at most {{ remainingShares }} shares.
+        {{ 'TRANSACTIONS.BUY_MESSAGE' | translate }} {{ remainingShares }} {{ 'SHARES' | translate }}.
       </div>
 
-      <label>Price Type</label>
+      <label>{{ 'SECURITIES.PRICE_TYPE' | translate }}</label>
       <select formControlName="selectedPriceType" class="form-select">
-        <option value="min">Min price</option>
-        <option value="average">Average price</option>
-        <option value="max">Max price</option>
+        <option value="min">{{ 'MIN' | translate }} {{ 'PRICE' | translate }}</option>
+        <option value="average">{{ 'AVERAGE' | translate }} {{ 'PRICE' | translate }}</option>
+        <option value="max">{{ 'MAX' | translate }} {{ 'PRICE' | translate }}</option>
       </select>
 
       <div class="small mt-1" *ngIf="dailyPrices">
-        Selected price:
-        <strong>{{ form.get('sharesUnitPrice')?.value | number:'1.2-2' }} ден.</strong>
+        {{ 'SECURITIES.SELECTED_PRICE' | translate }}:
+        <strong>{{ form.get('sharesUnitPrice')?.value | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }} </strong>
       </div>
 
       <div class="mt-3 border-top pt-2">
 
         <div class="d-flex align-items-center mb-1">
-          <span class="text-muted small">Commissions</span>
+          <span class="text-muted small">{{ 'TRANSACTIONS.COMMISSIONS' | translate }}</span>
 
           <i class="bi bi-question-circle ms-2 text-secondary"
              data-bs-toggle="tooltip"
              data-bs-placement="right"
-             title="Commission percentages are indicative and used for calculation of the amount.">
+             title="{{'TRANSACTIONS.COMMISSION_MESSAGE' | translate}}.">
           </i>
         </div>
 
         <div class="small">
-          Stock Exchange:
+          {{'TRANSACTIONS.STOCK_EXCHANGE' | translate}}:
           <span class="float-end">
-            {{ stockExchangeFee | number:'1.2-2' }} ден.
+            {{ stockExchangeFee | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
           </span>
         </div>
 
         <div class="small">
-          Brokerage:
+          {{'TRANSACTIONS.BROKERAGE' | translate}}:
           <span class="float-end">
-            {{ brokerageFee | number:'1.2-2' }} ден.
+            {{ brokerageFee | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
           </span>
         </div>
 
         <div class="small">
-          CDHV:
+          {{'TRANSACTIONS.CDHV' | translate}}:
           <span class="float-end">
-            {{ cdhvFee | number:'1.2-2' }} ден.
+            {{ cdhvFee | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
           </span>
         </div>
 
         <div class="fw-bold mt-2 d-flex justify-content-between">
-          <span>Total Commission</span>
-          <span>{{ totalCommission | number:'1.2-2' }} ден.</span>
+          <span>{{'TRANSACTIONS.TOTAL_COMMISSION' | translate}}</span>
+          <span>{{ totalCommission | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}</span>
         </div>
       </div>
 
-      <label>Date</label>
+      <label>{{'DATE' | translate}}</label>
       <input type="date" formControlName="date" class="form-control">
 
-      <label>Total Amount</label>
+      <label>{{ 'TRANSACTIONS.TOTAL_AMOUNT' | translate }}</label>
       <input type="text" [value]="form.get('amount')?.value | number: '1.2-2'" class="form-control" readonly disabled>
 
       <div class="form-check mt-2">
         <input class="form-check-input" type="checkbox" formControlName="isReal">
-        <label class="form-check-label">Real transaction</label>
+        <label class="form-check-label">{{ 'TRANSACTIONS.REAL_TRANSACTION' | translate }}</label>
       </div>
 
       <div class="text-end mt-3">
-        <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
         <button type="submit" class="btn btn-primary" [disabled]="form.invalid || sellLimitExceeded || buyLimitExceeded || dateSellInvalid">
-          {{ transaction ? 'Save Changes' : 'Add Transaction' }}
+          {{ (transaction ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}
         </button>
       </div>
 
@@ -100,9 +100,9 @@
         {{ form.errors?.backend }}
       </div>
 
-      <div *ngIf="dateSellInvalid" class="text-danger mt-1">
-        On the selected date you own only {{ ownedSharesAtDate }} shares.
-      </div>
+      <!--<div *ngIf="dateSellInvalid" class="text-danger mt-1">
+        {{ 'TRANSACTIONS.OWNED_SHARES_MESSAGE' | translate }} {{ ownedSharesAtDate }} {{ 'SHARES' | translate }}.
+      </div>-->
     </form>
   </div>
 </div>

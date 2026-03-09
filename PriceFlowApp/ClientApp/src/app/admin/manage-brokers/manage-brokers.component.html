@@ -1,5 +1,5 @@
 <div class="brokers-container">
-  <h2 class="page-title">Manage Brokers</h2>
+  <h2 class="page-title">{{ 'ADMIN.MANAGE' | translate }} {{ 'BROKERS.TITLE' | translate }}</h2>
 
   <div *ngIf="errorMessage" class="error-message">
     <p>{{ errorMessage }}</p>
@@ -8,7 +8,7 @@
   <div class="mb-4 text-end">
     <button class="btn btn-success"
             (click)="openAddModal()">
-      Add broker
+      {{ 'ADD.ACTION_NAME' | translate }} {{ 'BROKERS.BROKER' | translate }}
     </button>
   </div>
 
@@ -16,9 +16,9 @@
     <table class="brokers-table">
       <thead>
         <tr>
-          <th class="py-2 px-4 border-b">Company</th>
-          <th class="py-2 px-4 border-b">Commission (%)</th>
-          <th class="py-2 px-4 border-b">Actions</th>
+          <th class="py-2 px-4 border-b">{{ 'BROKERS.COMPANY' | translate }}</th>
+          <th class="py-2 px-4 border-b">{{ 'BROKERS.COMMISSION' | translate }} (%)</th>
+          <th class="py-2 px-4 border-b">{{ 'ACTIONS' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -26,15 +26,15 @@
           <td class="py-2 px-4 border-b">{{ broker.company }}</td>
           <td class="py-2 px-4 border-b">{{ broker.commissionPercent }}</td>
           <td class="py-2 px-4 border-b">
-            <button class="btn btn-warning me-3" (click)="openEditModal(broker)">Edit</button>
-            <button class="btn btn-danger" (click)="openDeleteModal(broker)">Delete</button>
+            <button class="btn btn-warning me-3" (click)="openEditModal(broker)">{{ 'EDIT.ACTION_NAME' | translate }}</button>
+            <button class="btn btn-danger" (click)="openDeleteModal(broker)">{{ 'DELETE.ACTION_NAME' | translate }}</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
   <p class="mt-4 text-center">
-    <a [routerLink]="['/']" class="page-link">Back to Home</a>
+    <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
   </p>
 </div>
 
@@ -45,11 +45,11 @@
 
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">
-    <h3>Confirm Delete</h3>
-    <p>Are you sure you want to delete broker <strong>{{ brokerToDelete?.company }}</strong>?</p>
+    <h3>{{ 'DELETE.CONFIRM' | translate }}</h3>
+    <p>{{ 'DELETE.DELETE_BROKER_MESSAGE' | translate }} <strong>{{ brokerToDelete?.company }}</strong>?</p>
     <div class="modal-actions">
-      <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
-      <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
+      <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>
     </div>
   </div>
 </div>

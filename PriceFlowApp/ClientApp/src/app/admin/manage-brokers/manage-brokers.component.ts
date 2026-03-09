@@ -5,11 +5,12 @@ import { AdminService } from '../admin.service';
 import { Broker } from './Broker';
 import { EditBrokerComponent } from './edit-broker/edit-broker.component';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-brokers',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, EditBrokerComponent],
+  imports: [CommonModule, FormsModule, RouterModule, EditBrokerComponent, TranslateModule],
   templateUrl: './manage-brokers.component.html',
   styleUrl: './manage-brokers.component.css',
 })

@@ -13,41 +13,41 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-4 me-auto">
+        <ul class="navbar-nav me-auto">
           <li class="nav-item" *ngIf="isAdmin()">
             <a class="nav-link text-white fw-bold"
                routerLink="/admin/users"
                routerLinkActive="active-link"
-               [routerLinkActiveOptions]="{ exact: true }">Users</a>
+               [routerLinkActiveOptions]="{ exact: true }">{{ 'NAV.USERS' | translate }}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-white fw-bold"
                routerLink="/securities"
                routerLinkActive="active-link"
-               [routerLinkActiveOptions]="{ exact: true }">Securities</a>
+               [routerLinkActiveOptions]="{ exact: true }">{{ 'NAV.SECURITIES' | translate }}</a>
           </li>
           <li class="nav-item" *ngIf="isAdmin()">
             <a class="nav-link text-white fw-bold"
                routerLink="/admin/brokers"
                routerLinkActive="active-link"
-               [routerLinkActiveOptions]="{ exact: true }">Brokers</a>
+               [routerLinkActiveOptions]="{ exact: true }">{{ 'NAV.BROKERS' | translate }}</a>
           </li>
           <li *ngIf="(loginService.isLoggedIn() | async) && (loginService.isInvestor() | async)" class="nav-item">
             <a class="nav-link text-white fw-bold"
                routerLink="/portfolios"
-               routerLinkActive="active-link">My Portfolios</a>
+               routerLinkActive="active-link">{{ 'NAV.PORTFOLIOS' | translate }}</a>
           </li>
 
           <li *ngIf="(loginService.isLoggedIn() | async) && (loginService.isInvestor() | async)" class="nav-item">
             <a class="nav-link text-white fw-bold"
                routerLink="/price-alerts"
-               routerLinkActive="active-link">Price Alerts</a>
+               routerLinkActive="active-link">{{ 'NAV.PRICE_ALERTS' | translate }}</a>
           </li>
 
           <li *ngIf="(loginService.isLoggedIn() | async) && (loginService.isAnalyst() | async)" class="nav-item">
             <a class="nav-link text-white fw-bold"
                routerLink="/security-filter"
-               routerLinkActive="active-link">Market Dashboard</a>
+               routerLinkActive="active-link">{{ 'MARKET_DASHBOARD' | translate }}</a>
           </li>
         </ul>
 
@@ -56,26 +56,19 @@
             {{ successMessage }}
           </div>
 
-          <div class="language-switch-container">
-            <label class="language-switch">
-              <input type="checkbox" id="languageToggle" (change)="toggleLanguage()">
-              <span class="language-slider"></span>
-            </label>
-          </div>
-
           <div *ngIf="!(loginService.isLoggedIn() | async)" class="d-flex align-items-center">
-            <button (click)="openLoginModal()" class="btn btn-primary ms-3 login">LOGIN</button>
+            <button (click)="openLoginModal()" class="btn btn-primary ms-3 login">{{ 'NAV.LOGIN' | translate }}</button>
           </div>
 
           <div *ngIf="(loginService.isLoggedIn() | async)" class="d-flex align-items-center">
             <div class="text-white me-3" style="font-size: 1.2rem; padding: 0.5rem 1rem;">
-              Welcome, {{ (loginService.getUsername() | async) || 'User' }}!
+              {{ 'NAV.WELCOME' | translate }}, {{ (loginService.getUsername() | async) || 'User' }}!
             </div>
 
             <app-price-change-notifications *ngIf="(loginService.isLoggedIn() | async) && (loginService.isInvestor() | async)"></app-price-change-notifications>
 
             <button (click)="loginService.logout();$event.stopPropagation()" class="btn btn-secondary ms-3 login">
-              LOGOUT
+              {{ 'NAV.LOGOUT' | translate }}
             </button>
           </div>
           <div class="m-3">
@@ -83,6 +76,13 @@
                     class="btn btn-secondary btn-lg bg-transparent border-0">
               {{ themeService.isDarkMode() ? '☀️' : '🌙'}}
             </button>
+          </div>
+
+          <div class="language-switch-container">
+            <label class="language-switch">
+              <input type="checkbox" id="languageToggle" (change)="toggleLanguage()">
+              <span class="language-slider"></span>
+            </label>
           </div>
         </div>
       </div>

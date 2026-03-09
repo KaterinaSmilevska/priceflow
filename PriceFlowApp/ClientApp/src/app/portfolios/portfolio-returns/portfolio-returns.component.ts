@@ -3,11 +3,12 @@ import { SecuritiesService, Security } from '../../securities/securities.service
 import { PortfolioReturnsSummary, PortfolioReturnsService } from './portfolio-returns.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-portfolio-returns',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './portfolio-returns.component.html',
   styleUrl: './portfolio-returns.component.css',
 })

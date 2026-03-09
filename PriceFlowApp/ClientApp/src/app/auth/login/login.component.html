@@ -1,25 +1,25 @@
 <div class="login-container">
-  <h2>Login</h2>
+  <h2>{{ 'AUTH.LOGIN' | translate }}</h2>
   <form (ngSubmit)="onLogin()" class="login-form">
     <div>
-      <label for="username">Username:</label>
+      <label for="username">{{ 'AUTH.USERNAME' | translate }}:</label>
       <input type="text" id="username" [(ngModel)]="username" name="username" required>
     </div>
     <div>
-      <label for="password">Password:</label>
+      <label for="password">{{ 'AUTH.PASSWORD' | translate }}:</label>
       <input type="password" id="password" [(ngModel)]="password" name="password" required>
     </div>
-    <button type="submit" class="login-btn">Login</button>
+    <button type="submit" class="login-btn">{{ 'AUTH.LOG_IN' | translate }}</button>
     <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
   </form>
   <div *ngIf="loginService.isLoggedIn() | async" class="success">
-    Success! You are logged in as {{ loginService.getUsername() | async }}.
+    {{ 'LOGIN_SUCCESS' | translate }} {{ 'AS' | translate }} {{ loginService.getUsername() | async }}.
     <div *ngIf="roles?.length">Roles: {{ roles.join(', ') }}</div>
   </div>
   <p class="forgot-password-link mt-4 text-center text-gray-600">
-    <a [routerLink]="['/forgot-password']" class="text-blue-600 hover:text-blue-800 hover:underline">Forgot Password?</a>
+    <a [routerLink]="['/forgot-password']" class="text-blue-600 hover:text-blue-800 hover:underline">{{ 'AUTH.FORGOT_PASSWORD' | translate }}?</a>
   </p>
   <p class="register-link text-center mt-4 text-gray-600">
-    Don't have an account? <a [routerLink]="['/register']" class="text-blue hover:text-blue-800 hover:underline">Register</a>
+    {{ 'AUTH.DONT_HAVE_ACCOUNT_MESSAGE' | translate }}? <a [routerLink]="['/register']" class="text-blue hover:text-blue-800 hover:underline">{{ 'AUTH.REGISTER' | translate }}</a>
   </p>
 </div>

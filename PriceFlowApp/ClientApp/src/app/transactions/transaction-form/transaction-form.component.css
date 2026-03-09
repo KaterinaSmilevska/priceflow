@@ -40,7 +40,7 @@
 }
 
 .modal-content label {
-  font-weight: 500;
+  font-weight: 300;
   color: var(--label-color);
   margin-bottom: 5px;
 }

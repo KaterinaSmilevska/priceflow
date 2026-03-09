@@ -1,7 +1,7 @@
 <div class="hero-section">
-  <h1>Welcome to PriceFlow</h1>
-  <p>Analyze the latest trends and make informed decisions</p>
-  <button class="get-started-btn" (click)="onGetStarted()">Get Started</button>
+  <h1>{{'HOME.WELCOME_TO' | translate }} PriceFlow</h1>
+  <p>{{'HOME.DESCRIPTION' | translate }}</p>
+  <button class="get-started-btn" (click)="onGetStarted()">{{'HOME.GET_STARTED' | translate }}</button>
 </div>
 
 <app-brokers *ngIf="(loginService.isInvestor() | async)"></app-brokers>
@@ -19,31 +19,39 @@
   <div class="footer-content">
     <div class="footer-left">
       <h3>PriceFlow</h3>
-      <p>Your trusted platform for market insights and analysis.</p>
+      <p>{{'FOOTER.DESCRIPTION' | translate}}</p>
     </div>
 
     <div class="footer-center">
-      <h4>Quick Links</h4>
+      <h4>{{ 'FOOTER.LINKS' | translate }}</h4>
       <ul>
-        <li><a routerLink="/">Home</a></li>
-        <li><a routerLink="/securities">Securities</a></li>
+        <!--<li><a routerLink="/"
+               routerLinkActive="active-link"
+               [routerLinkActiveOptions]="{ exact: true }">
+            {{ 'FOOTER.HOME_LINK' | translate }}
+            </a>
+        </li>-->
+        <li><a routerLink="/securities"
+               routerLinkActive="active-link"
+               [routerLinkActiveOptions]="{ exact: true }">
+            {{ 'FOOTER.SECURITIES_LINK' | translate }}
+          </a>
+        </li>
       </ul>
     </div>
 
     <div class="footer-right">
-      <h4>Contact</h4>
-      <p>Email: <a href="mailto:support@priceflow.com">support&#64;priceflow.com</a></p>
-      <p>Phone: +389 2 123 4567</p>
-      <p>Skopje, Macedonia</p>
+      <h4>{{'FOOTER.CONTACT' | translate }}</h4>
+      <p>{{ 'FOOTER.EMAIL' | translate }}: <a href="mailto:support@priceflow.com">support&#64;priceflow.com</a></p>
+      <p>{{ 'FOOTER.PHONE_NUMBER' | translate }}: +389 2 123 4567</p>
+      <p>{{ 'FOOTER.LOCATION' | translate }}</p>
     </div>
   </div>
 
   <div class="footer-bottom">
     <p class="disclaimer">
-      PriceFlow does not provide investment advice, financial advice, or recommendations of any kind. 
-      All data, analytics, and insights are provided for informational purposes only.
-      Investment decisions are made solely by the user.
+      {{ 'FOOTER.DISCLAIMER' | translate }}
     </p>
-    <p>© 2025 PriceFlow. All rights reserved.</p>
+    <p>© 2025 PriceFlow. {{ 'FOOTER.ALL_RIGHTS_RESERVED' | translate }}.</p>
   </div>
 </footer>

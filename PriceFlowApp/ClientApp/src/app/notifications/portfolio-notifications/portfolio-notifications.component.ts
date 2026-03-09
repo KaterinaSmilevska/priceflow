@@ -3,11 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PortfolioNotificationsService } from './portfolio-notifications.service';
 import { PortfolioNotification } from './PortfolioNotification';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-portfolio-notifications',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './portfolio-notifications.component.html',
   styleUrl: './portfolio-notifications.component.css',
 })

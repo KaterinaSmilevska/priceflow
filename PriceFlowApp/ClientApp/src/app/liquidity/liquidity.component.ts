@@ -5,11 +5,12 @@ import { MarketOverviewService } from '../market-overview/market-overview.servic
 import { FormsModule } from '@angular/forms';
 import { LiquidityOverview } from './LiquidityOverview';
 import { LiquidityTableComponent } from './liquidity-table/liquidity-table.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-liquidity',
   standalone: true,
-  imports: [CommonModule, FormsModule, LiquidityTableComponent],
+  imports: [CommonModule, FormsModule, LiquidityTableComponent, TranslateModule],
   templateUrl: './liquidity.component.html',
   styleUrl: './liquidity.component.css',
 })

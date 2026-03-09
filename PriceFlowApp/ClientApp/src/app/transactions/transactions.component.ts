@@ -8,11 +8,13 @@ import { PortfolioReturnsComponent } from '../portfolios/portfolio-returns/portf
 import { PortfolioReturns, PortfolioReturnsService } from '../portfolios/portfolio-returns/portfolio-returns.service';
 import { SecuritiesService } from '../securities/securities.service';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, TransactionFormComponent, PortfolioIncomeComponent, PortfolioSecurityAllocationComponent, PortfolioReturnsComponent],
+  imports: [CommonModule, TransactionFormComponent, PortfolioIncomeComponent,
+    PortfolioSecurityAllocationComponent, PortfolioReturnsComponent, TranslateModule],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
 })

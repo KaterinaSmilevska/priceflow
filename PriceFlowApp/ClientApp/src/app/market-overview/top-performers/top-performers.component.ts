@@ -3,11 +3,12 @@ import { MarketOverviewService, SecurityPerformance } from '../market-overview.s
 import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-top-performers',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './top-performers.component.html',
   styleUrls: ['./top-performers.component.css']
 })

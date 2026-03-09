@@ -5,11 +5,12 @@ import { EditUserComponent } from './edit-user/edit-user.component';
 import { AdminService } from '../admin.service';
 import { User } from './User';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-users',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, EditUserComponent],
+  imports: [CommonModule, FormsModule, RouterModule, EditUserComponent, TranslateModule],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.css',
 })

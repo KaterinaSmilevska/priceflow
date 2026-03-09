@@ -3,11 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PortfoliosService } from '../portfolios.service';
 import { PortfolioPerformanceSummary } from './PortfolioPerformanceSummary';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-performance-export',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './performance-export.component.html',
   styleUrl: './performance-export.component.css',
 })

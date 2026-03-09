@@ -4,11 +4,12 @@ import { LoginService } from '../auth/login/login.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddSecurityComponent } from './add-security/add-security.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-securities',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddSecurityComponent],
+  imports: [CommonModule, FormsModule, AddSecurityComponent, TranslateModule],
   templateUrl: './securities.component.html',
   styleUrls: ['./securities.component.css']
 })

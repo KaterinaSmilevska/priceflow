@@ -8,11 +8,12 @@ import { PriceChangeNotificationsService } from '../notifications/price-change/p
 import { PriceChangeNotification } from '../notifications/price-change/PriceChangeNotification';
 import { PriceChangeNotificationsComponent } from '../notifications/price-change/price-change-notifications.component';
 import { ThemeService } from '../theme.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-nav-menu',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, PriceChangeNotificationsComponent],
+  imports: [CommonModule, FormsModule, RouterModule, PriceChangeNotificationsComponent, TranslateModule],
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css', '../../styles.css']
 })
@@ -28,7 +29,7 @@ export class NavMenuComponent implements OnInit {
   showDropdown = false;
 
   constructor(public loginService: LoginService, private notificationsService: PriceChangeNotificationsService,
-    public themeService: ThemeService) {
+    public themeService: ThemeService, public translateService: TranslateService) {
     this.isAdmin$ = this.loginService.getUserRoles().pipe(
       map(roles => roles.includes('Администратор')));
   }
@@ -77,12 +78,6 @@ export class NavMenuComponent implements OnInit {
     this.isExpanded = !this.isExpanded;
   }
 
-  toggleLanguage() {
-    const langToggle = document.getElementById('languageToggle') as HTMLInputElement;
-    const isMacedonian = langToggle.checked;
-    console.log('Language toggled to:', isMacedonian ? 'Macedonian' : 'English');
-  }
-
   openLoginModal() {
     window.location.href = '/login';
   }
@@ -92,5 +87,14 @@ export class NavMenuComponent implements OnInit {
     setTimeout(() => {
       this.successMessage = null;
     }, 3000);
+  }
+
+  toggleLanguage() {
+    const current = this.translateService.getCurrentLang();
+
+    const next = current === 'en' ? 'mk' : 'en';
+
+    this.translateService.use(next);
+    localStorage.setItem('lang', next);
   }
 }
