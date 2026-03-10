@@ -8,10 +8,12 @@ import { CommonModule } from '@angular/common';
 import { LoginService } from '../auth/login/login.service';
 import { SecuritiesPriceTrendComponent } from '../portfolios/securities-price-trend/securities-price-trend.component';
 import { LiquidityComponent } from '../liquidity/liquidity.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, BrokersComponent, MarketOverviewComponent, TopPerformersComponent, ChartComponent, SecuritiesPriceTrendComponent, LiquidityComponent],
+  imports: [CommonModule, RouterModule, BrokersComponent, MarketOverviewComponent, TopPerformersComponent,
+    ChartComponent, SecuritiesPriceTrendComponent, LiquidityComponent, TranslateModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

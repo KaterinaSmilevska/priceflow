@@ -2,45 +2,47 @@
 
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
-      <h5 class="mb-1 fw-semibold">Market Liquidity Overview</h5>
+      <h5 class="mb-1 fw-semibold">{{ 'LIQUIDITY.MARKET_LIQUIDITY_OVERVIEW' | translate }}</h5>
       <div class="info">
-        Ranked securities based on trading activity
+        {{ 'LIQUIDITY.DESCRIPTION' | translate }}
       </div>
     </div>
 
     <select class="form-select form-select-sm w-auto me-3"
             [(ngModel)]="months"
             (change)="loadLiquidity()">
-      <option [value]="3">Last 3 months</option>
-      <option [value]="6">Last 6 months</option>
-      <option [value]="12">Last 12 months</option>
+      <option [value]="3">{{ 'LAST' | translate }} 3 {{ 'MONTHS' | translate }}</option>
+      <option [value]="6">{{ 'LAST' | translate }} 6 {{ 'MONTHS' | translate }}</option>
+      <option [value]="12">{{ 'LAST' | translate }} 12 {{ 'MONTHS' | translate }}</option>
     </select>
   </div>
 
   <div class="row g-3">
     <div class="col-md-6">
-      <app-liquidity-table [title]="'Most Liquid (Traded Quantity)'"
+      <app-liquidity-table [title]="('MOST' | translate) + ('LIQUIDITY.LIQUID' | translate) + ' (' + ('LIQUIDITY.TRADED_QTY' | translate) + ')'"
                            [data]="liquidity.mostByTradedQuantity">
       </app-liquidity-table>
     </div>
 
     <div class="col-md-6">
-      <app-liquidity-table [title]="'Least Liquid (Traded Quantity)'"
+      <app-liquidity-table [title]="('LEAST' | translate) + ' ' + ('LIQUIDITY.LIQUID' | translate) + ' (' + ('LIQUIDITY.TRADED_QTY' | translate) + ')'"
                            [data]="liquidity.leastByTradedQuantity">
       </app-liquidity-table>
     </div>
 
     <div class="col-md-6">
-      <app-liquidity-table [title]="'Most Active (Trading Days)'"
+      <app-liquidity-table [title]="('MOST' | translate) + ('LIQUIDITY.LIQUID' | translate) + ' (' + ('LIQUIDITY.TRADING_DAYS' | translate) + ')'"
                            [data]="liquidity.mostByTradingDays">
       </app-liquidity-table>
     </div>
 
     <div class="col-md-6">
-      <app-liquidity-table [title]="'Least Active (Trading Days)'"
+      <app-liquidity-table [title]="('LEAST' | translate) + ' ' + ('LIQUIDITY.LIQUID' | translate) + ' (' + ('LIQUIDITY.TRADING_DAYS' | translate) + ')'"
                            [data]="liquidity.leastByTradingDays">
       </app-liquidity-table>
     </div>
+
+    <div *ngIf="noDataMessage" class="error mt-2">{{ noDataMessage | translate }}</div>
 
   </div>
 </div>

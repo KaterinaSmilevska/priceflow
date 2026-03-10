@@ -3,6 +3,7 @@ import { RegisterService, RegisterRequest, RegisterResponse, UsernameCheckRespon
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface Task {
   description: string;
@@ -13,7 +14,7 @@ interface Task {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -24,11 +25,11 @@ export class RegisterComponent implements OnInit {
   password: string = '';
   confirmPassword: string = '';
   tasks: Task[] = [
-    { description: 'Manage portfolios and transactions', roleName: 'Инвеститор', selected: false },
-    { description: 'Analyze data trends', roleName: 'Аналитичар', selected: false },
-    { description: 'Filter and compare current and historic data trends', roleName: 'Аналитичар', selected: false },
-    { description: 'View current and historic data trends', roleName: 'Обичен корисник', selected: false },
-    { description: 'Do basic filtering and limited searching', roleName: 'Обичен корисник', selected: false }
+    { description: 'AUTH.SITE_ACTION_1', roleName: 'Инвеститор', selected: false },
+    { description: 'AUTH.SITE_ACTION_2', roleName: 'Аналитичар', selected: false },
+    { description: 'AUTH.SITE_ACTION_3', roleName: 'Аналитичар', selected: false },
+    { description: 'AUTH.SITE_ACTION_4', roleName: 'Обичен корисник', selected: false },
+    { description: 'AUTH.SITE_ACTION_5', roleName: 'Обичен корисник', selected: false }
   ];
   roleNames: string[] = [];
   response: RegisterResponse | null = null;
@@ -44,7 +45,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private registerService: RegisterService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -61,12 +63,11 @@ export class RegisterComponent implements OnInit {
     this.registerService.checkUsername(this.username).subscribe({
       next: (response: UsernameCheckResponse) => {
         this.isUsernameValid = !response.exists;
-        this.usernameError = response.exists ? 'Username already exists' : null;
+        this.usernameError = response.exists ? 'USERS.USERNAME_TAKEN' : null;
       },
       error: (err: any) => {
-        console.error('Username check failed:', err);
         this.isUsernameValid = true;
-        this.usernameError = null;
+        this.usernameError = 'USERS.USERNAME_CHECK_ERROR';
       }
     });
   }
@@ -83,9 +84,8 @@ export class RegisterComponent implements OnInit {
         this.emailError = response.isValid ? null : response.message;
       },
       error: (err: any) => {
-        console.error('Email validation failed:', err);
         this.isEmailValid = true;
-        this.emailError = null;
+        this.emailError = 'USERS.EMAIL_VALIDATION_ERROR';
       }
     });
   }
@@ -114,9 +114,8 @@ export class RegisterComponent implements OnInit {
         }
       },
       error: (err: any) => {
-        console.error('Password validation failed:', err);
         this.isPasswordValid = true;
-        this.passwordError = null;
+        this.passwordError = 'USERS.PASSWORD_VALIDATION_ERROR';
         this.confirmPasswordError = null;
       }
     });
@@ -161,9 +160,8 @@ export class RegisterComponent implements OnInit {
         this.resetForm();
       },
       error: (err: any) => {
-        console.error('Registration error: ', err);
         this.response = null;
-        this.generalError = err.error?.message || 'Registration failed';
+        this.generalError = err.error?.message || 'AUTH.REGISTER_ERROR';
       }
     });
   }

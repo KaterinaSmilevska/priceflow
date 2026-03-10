@@ -1,33 +1,33 @@
 <div class="analytics-container">
   <div class="dashboard-header">
-    <h1>Market Dashboard</h1>
-    <p>Advanced analytics overview</p>
+    <h1>{{ 'MARKET_DASHBOARD' | translate }}</h1>
+    <p>{{ 'ADVANCED_ANALYTICS_OVERVIEW' | translate }}</p>
   </div>
   <div class="control-panel">
     <div class="control-group">
-      <label>Metric</label>
+      <label>{{ 'METRIC.TITLE' | translate }}</label>
       <select [ngModel]="selectedMetric" (ngModelChange)="loadMetric($event)">
-        <option value="">Select Metric</option>
-        <option value="mostProfitableSecuritiesByDividendYield">Most Profitable Securities (Dividend Yield)</option>
-        <option value="mostProfitableSecuritiesByDividendPerShare">Most Profitable Securities (Dividend Per Share)</option>
-        <option value="securitiesWithBiggestPriceOscillations">Securities (Biggest Price Oscillations)</option>
-        <option value="securitiesWithSmallestPriceOscillations">Securities (Smallest Price Oscillations)</option>
-        <option value="mostLiquidSecuritiesByTradedQuantity">Most Liquid Securities (Traded Quantity)</option>
-        <option value="leastLiquidSecuritiesByNumTradedQuantity">Least Liquid Securities (Traded Quantity)</option>
-        <option value="mostLiquidSecuritiesByNumTradingDays">Most Liquid Securities (Trading Days)</option>
-        <option value="leastLiquidSecuritiesByNumTradingDays">Least Liquid Securities (Trading Days)</option>
-        <option value="mostProfitableSectorsByDividendYield">Most Profitable Sectors (Dividend Yield)</option>
-        <option value="mostProfitableSectorsByProfit">Most Profitable Sectors (Profit)</option>
-        <option value="Market price : Book value" >Market price : Book value</option>
+        <option value="">{{ 'SELECT' | translate }} {{ 'METRIC.TITLE' | translate }}</option>
+        <option value="mostProfitableSecuritiesByDividendYield">{{ 'METRIC.MOST_PROFITABLE_SECURITIES_DIVIDEND_YIELD' | translate }}</option>
+        <option value="mostProfitableSecuritiesByDividendPerShare">{{ 'METRIC.MOST_PROFITABLE_SECURITIES_DIVIDEND_PER_SHARE' | translate }}</option>
+        <option value="securitiesWithBiggestPriceOscillations">{{ 'METRIC.BIGGEST_PRICE_OSCILLATIONS' | translate }}</option>
+        <option value="securitiesWithSmallestPriceOscillations">{{ 'METRIC.SMALLEST_PRICE_OSCILLATIONS' | translate }}</option>
+        <option value="mostLiquidSecuritiesByTradedQuantity">{{ 'METRIC.MOST_LIQUID_SECURITIES_TRADED_QTY' | translate }}</option>
+        <option value="leastLiquidSecuritiesByNumTradedQuantity">{{ 'METRIC.LEAST_LIQUID_SECURITIES_TRADED_QTY' | translate }}</option>
+        <option value="mostLiquidSecuritiesByNumTradingDays">{{ 'METRIC.MOST_LIQUID_SECURITIES_TRADING_DAYS' | translate }}</option>
+        <option value="leastLiquidSecuritiesByNumTradingDays">{{ 'METRIC.LEAST_LIQUID_SECURITIES_TRADING_DAYS' | translate }}</option>
+        <option value="mostProfitableSectorsByDividendYield">{{ 'METRIC.MOST_PROFITABLE_SECTORS_DIVIDEND_YIELD' | translate }}</option>
+        <option value="mostProfitableSectorsByProfit">{{ 'METRIC.MOST_PROFITABLE_SECTORS_PROFIT' | translate }}</option>
+        <option value="Market price : Book value">{{ 'METRIC.SECURITIES_VALUATION' | translate }}</option>
       </select>
     </div>
     <div class="control-group">
-      <label>Top Results</label>
+      <label>{{ 'TOP_RESULTS' | translate }}</label>
       <input type="number" [(ngModel)]="topN" min="3" max="16" />
     </div>
   </div>
   <div *ngIf="loading" class="loading-panel">
-    Loading analytics... 
+    {{ 'LOADING_ANALYTICS' | translate }}... 
   </div>
   <div *ngIf="!loading && data.length > 0" class="analytics-body">
     <div class="chart-card">
@@ -40,15 +40,15 @@
            class="valuation-legend">
         <div class="legend-term">
           <span class="legend-color overvalued"></span>
-          <span>▼ Overvalued</span>
+          <span>▼ {{ 'OVERVALUED' | translate }}</span>
         </div>
         <div class="legend-term">
           <span class="legend-color undervalued"></span>
-          <span>▲ Undervalued</span>
+          <span>▲ {{ 'UNDERVALUED' | translate }}</span>
         </div>
         <div class="legend-term">
           <span class="legend-color neutral"></span>
-          <span>Fairly priced</span>
+          <span>{{ 'FAIRLY_PRICED' | translate }}</span>
         </div>
       </div>
     </div>
@@ -57,9 +57,9 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Name</th>
+            <th>{{ 'SECURITIES.CODE' | translate }}</th>
 
-            <th>Value</th>
+            <th>{{ 'VALUE' | translate }}</th>
           </tr>
         </thead>
         <tbody>

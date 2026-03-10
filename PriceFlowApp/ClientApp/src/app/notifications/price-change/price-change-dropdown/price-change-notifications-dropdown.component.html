@@ -1,12 +1,12 @@
 <div class="notification-dropdown shadow show">
   <div *ngIf="notifications.length === 0"
        class="dropdown-item text-muted text-center">
-    No notifications.
+    {{ 'NO_NOTIFICATIONS' | translate }}
   </div>
   <div *ngFor="let n of notifications"
        [class.bg-light]="!n.isRead"
        class="dropdown-item">
-    <div class="small fw-bold">
+    <div class="small fw-bold percent">
       {{ n.changePercent }} %
     </div>
     <div class="small text-muted">
@@ -18,7 +18,7 @@
     <button *ngIf="!n.isRead"
             class="btn btn-sm btn-primary mt-1"
             (click)="onMarkAsRead(n.id)">
-      Mark as read
+      {{ 'MARK_AS_READ' | translate }}
     </button>
   </div>
 </div>

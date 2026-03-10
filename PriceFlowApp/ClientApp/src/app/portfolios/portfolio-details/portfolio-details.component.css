@@ -97,3 +97,12 @@
   color: var(--disabled-text);
   text-align: center;
 }
+
+.page-link {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+  .page-link:hover {
+    text-decoration: underline;
+  }

@@ -8,11 +8,13 @@ import { PortfolioReturnsComponent } from '../portfolios/portfolio-returns/portf
 import { PortfolioReturns, PortfolioReturnsService } from '../portfolios/portfolio-returns/portfolio-returns.service';
 import { SecuritiesService } from '../securities/securities.service';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, TransactionFormComponent, PortfolioIncomeComponent, PortfolioSecurityAllocationComponent, PortfolioReturnsComponent],
+  imports: [CommonModule, TransactionFormComponent, PortfolioIncomeComponent,
+    PortfolioSecurityAllocationComponent, PortfolioReturnsComponent, TranslateModule],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
 })
@@ -62,7 +64,7 @@ export class TransactionsComponent implements OnInit {
         this.buildTableView();
       },
       error: () => {
-        this.errorMessage = 'Failed to load transactions';
+        this.errorMessage = 'LOADING_DATA_ERROR';
         this.loading = false;
       }
     });
@@ -147,8 +149,7 @@ export class TransactionsComponent implements OnInit {
         this.closeDeleteModal();
       },
       error: (err) => {
-        console.error('Failed to delete transaction:', err);
-        this.errorMessage = 'Failed to delete transaction.';
+        this.errorMessage = 'TRANSACTIONS.DELETE_ERROR';
         this.closeDeleteModal();
       }
     });
@@ -212,7 +213,6 @@ export class TransactionsComponent implements OnInit {
   }
 
   getCashFlow(t: Transaction): number {
-    //const base = t.sharesQuantity * t.sharesUnitPrice;
     const commission = this.getTotalCommission(t);
 
     if (t.typeTransaction === 'Купување') {

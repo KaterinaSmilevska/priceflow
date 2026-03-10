@@ -2,20 +2,20 @@
 
   <div class="chart-section">
     <div class="filters">
-      <h3>&#x1F4C8; Price Trend Filters</h3>
+      <h3>&#x1F4C8; {{ 'CHART.PRICE_TREND' | translate }}</h3>
 
-      <label>Security:</label>
+      <label>{{ 'SECURITIES.TITLE' | translate }}:</label>
       <select [(ngModel)]="selectedSecurityId">
         <option *ngFor="let s of securities" [value]="s.id">{{ s.code }}</option>
       </select>
 
-      <label>Start Date:</label>
+      <label>{{ 'CHART.START' | translate }} {{ 'CHART.DATE' | translate }}:</label>
       <input type="date" [(ngModel)]="startDate" />
 
-      <label>End Date:</label>
+      <label>{{ 'CHART.END' | translate }} {{ 'CHART.DATE' | translate }}:</label>
       <input type="date" [(ngModel)]="endDate" />
 
-      <button (click)="onFilterChange()">Apply Filters</button>
+      <button (click)="onFilterChange()">{{ 'CHART.APPLY' | translate }} {{ 'CHART.FILTERS' | translate }}</button>
     </div>
 
     <app-price-trend [securityId]="selectedSecurityId"
@@ -26,12 +26,12 @@
 
   <div class="chart-section">
     <div class="filters">
-      <h3>&#x1F3E2; Sector Distribution Filters</h3>
+      <h3>&#x1F3E2; {{ 'CHART.SECTOR_DISTRIBUTION' | translate }}</h3>
 
-      <label>Date:</label>
+      <label>{{ 'CHART.DATE' | translate }}:</label>
       <input type="date" [(ngModel)]="sectorDate" />
 
-      <button (click)="onFilterChange()">Apply Filters</button>
+      <button (click)="onFilterChange()">{{ 'CHART.APPLY' | translate }} {{ 'CHART.FILTERS' | translate }}</button>
     </div>
 
     <app-sector-distribution [date]="sectorDate"></app-sector-distribution>

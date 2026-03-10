@@ -3,11 +3,12 @@ import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges } from '@
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Broker } from '../Broker';
 import { AdminService } from '../../admin.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-broker',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './edit-broker.component.html',
   styleUrl: './edit-broker.component.css',
 })
@@ -41,20 +42,20 @@ export class EditBrokerComponent implements OnInit {
       this.adminService.addBroker(updatedBroker)
         .subscribe({
           next: (b) => {
-            this.successMessage = 'Broker added successfully!';
+            this.successMessage = 'BROKERS.ADD_SUCCESS';
             setTimeout(() => this.close.emit(b), 800);
           },
-          error: () => this.errorMessage = 'Failed to add broker.'
+          error: () => this.errorMessage = 'BROKERS.ADD_ERROR'
         });
     }
         else {
         this.adminService.updateBroker(updatedBroker)
           .subscribe({
             next: () => {
-              this.successMessage = 'Broker updated successfully!';
+              this.successMessage = 'BROKERS.UPDATE_SUCCESS';
               setTimeout(() => this.close.emit(updatedBroker), 800);
             },
-            error: () => this.errorMessage = 'Failed to update broker.'
+            error: () => this.errorMessage = 'BROKERS.UPDATE_ERROR'
           });
       }
   }

@@ -4,7 +4,7 @@
 
       <div class="modal-header">
         <h5 class="modal-title">
-          {{ portfolioToEdit ? 'Edit Portfolio' : 'Add Portfolio' }}
+          {{ (portfolioToEdit ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'PORTFOLIOS.PORTFOLIO' | translate }}
         </h5>
         <button type="button" class="btn-close" (click)="onCancel()"></button>
       </div>
@@ -13,10 +13,10 @@
 
         <div class="modal-body">
 
-          <label class="form-label">Portfolio Name</label>
+          <label class="form-label">{{ 'PORTFOLIOS.NAME' | translate }}</label>
           <input class="form-control mb-3" formControlName="name">
 
-          <label class="form-label">Description</label>
+          <label class="form-label">{{ 'PORTFOLIOS.DESCRIPTION' | translate }}</label>
           <textarea class="form-control portfolio-textarea"
                     maxlength="100"
                     formControlName="description"></textarea>
@@ -28,14 +28,12 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+          <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
           <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
-            {{ portfolioToEdit ? 'Save Changes' : 'Add Portfolio' }}
+            {{ (portfolioToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}
           </button>
         </div>
-
       </form>
-
     </div>
   </div>
 </div>

@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MarketOverview, MarketOverviewService } from './market-overview.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-market-overview',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './market-overview.component.html',
   styleUrls: ['./market-overview.component.css']
 })

@@ -4,12 +4,12 @@ import { ThresholdService } from './threshold.service';
 import { Threshold } from './Threshold';
 import { OwnedSecurity } from './OwnedSecurity';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TransactionsService } from '../transactions/transactions.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-threshold',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './threshold.component.html',
   styleUrl: './threshold.component.css',
 })
@@ -54,7 +54,7 @@ export class ThresholdComponent implements OnInit {
     const upper = this.form.value.upperThreshold!;
 
     if (lower >= upper) {
-      this.errorMessage = 'Lower threshold must be less than upper threshold.';
+      this.errorMessage = 'THRESHOLD_VALIDATION_ERROR';
       return;
     }
 
@@ -84,7 +84,7 @@ export class ThresholdComponent implements OnInit {
               this.loadThresholds();
             },
             error: err => {
-              this.errorMessage = err.error?.message || 'Threshold already exists.';
+              this.errorMessage = err.error?.message || 'THRESHOLD_EXISTS';
             }
           });
         }

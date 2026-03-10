@@ -14,4 +14,7 @@
     <app-performance-export [portfolioId]="selectedPortfolio.id"></app-performance-export>
     <app-portfolio-notifications [portfolioId]="selectedPortfolio.id"></app-portfolio-notifications>
   </div>
+  <p class="mt-4 text-center">
+    <a [routerLink]="['/portfolios']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'PORTFOLIOS.TITLE' | translate }}</a>
+  </p>
 </div>

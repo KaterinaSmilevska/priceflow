@@ -4,6 +4,8 @@
   border-bottom: 1px solid var(--input-border);
   box-shadow: 0 4px 12px var(--shadow-color);
   transition: background-color 0.3s, box-shadow 0.3s;
+  text-align: center;
+  text-wrap: nowrap;
 }
 
 .navbar-brand {
@@ -37,7 +39,7 @@
 .navbar-nav .nav-link {
   color: var(--navbar-text) !important;
   font-weight: 500;
-  padding: 8px 14px;
+  padding: 8px;
   border-radius: 8px;
   border-radius: 8px;
   transition: background-color 0.3s, color 0.3s;
@@ -139,11 +141,12 @@ input:checked + .language-slider {
   }
 
   input:checked + .language-slider:before {
-    background-image: url('../../assets/mk_flag.png');
+    background-image: url('../../assets/gb_flag.png');
+    
   }
 
 input:not(:checked) + .language-slider:before {
-  background-image: url('../../assets/gb_flag.png');
+  background-image: url('../../assets/mk_flag.png');
 }
 
 .login {

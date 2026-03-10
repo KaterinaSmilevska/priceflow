@@ -3,11 +3,12 @@ import { CreateSecurity, Issuer, SecuritiesService, Security, TypeSecurity } fro
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-security',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './add-security.component.html',
   styleUrls: ['./add-security.component.css']
 })
@@ -71,24 +72,22 @@ loadIssuers(): void {
     if (this.securityToEdit) {
       this.securitiesService.updateSecurity(this.securityToEdit.id, security).subscribe({
         next: (updated) => {
-          this.successMessage = 'Security updated successfully!';
+          this.successMessage = 'SECURITIES.UPDATE_SUCCESS';
           setTimeout(() => this.close.emit(updated), 1000);
         },
         error: (err) => {
-          console.error('Failed to update security:', err);
-          this.errorMessage = 'Failed to update security.';
+          this.errorMessage = 'SECURITIES.UPDATE_ERROR';
           setTimeout(() => this.close.emit(err), 1000);
         }
        });
     } else {
       this.securitiesService.addSecurity(security).subscribe({
         next: (newSecurity) => {
-          this.successMessage = 'Security added successfully!';
+          this.successMessage = 'SECURITIES.ADD_SUCCESS';
           setTimeout(() => this.close.emit(newSecurity), 1000);
         },
         error: (err) => {
-          console.error('Failed to update security:', err);
-          this.errorMessage = 'Failed to update security.';
+          this.errorMessage = 'SECURITIES.ADD_ERROR';
           setTimeout(() => this.close.emit(err), 1000);
         }
       });

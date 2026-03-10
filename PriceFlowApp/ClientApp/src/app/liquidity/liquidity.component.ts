@@ -5,11 +5,12 @@ import { MarketOverviewService } from '../market-overview/market-overview.servic
 import { FormsModule } from '@angular/forms';
 import { LiquidityOverview } from './LiquidityOverview';
 import { LiquidityTableComponent } from './liquidity-table/liquidity-table.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-liquidity',
   standalone: true,
-  imports: [CommonModule, FormsModule, LiquidityTableComponent],
+  imports: [CommonModule, FormsModule, LiquidityTableComponent, TranslateModule],
   templateUrl: './liquidity.component.html',
   styleUrl: './liquidity.component.css',
 })
@@ -36,14 +37,14 @@ export class LiquidityComponent {
       .subscribe({
         next: (res) => {
           if (!res) {
-            this.noDataMessage = 'No data available for the selected period.'
+            this.noDataMessage = 'NO_DATA_AVAILABLE_FOR_PERIOD'
             return;
           }
           this.liquidity = res;
         },
         error: (err) => {
           console.error(err);
-          this.noDataMessage = 'Error loading security liquidity data.'
+          this.noDataMessage = 'LOADING_DATA_ERROR'
         }
       });
   }

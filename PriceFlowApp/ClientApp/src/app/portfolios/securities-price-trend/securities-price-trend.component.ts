@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions } from 'chart.js';
 import { PortfoliosService, SecuritiesPriceTrend } from '../portfolios.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-securities-price-trend',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective],
+  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule],
   templateUrl: './securities-price-trend.component.html',
   styleUrl: './securities-price-trend.component.css',
 })

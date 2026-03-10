@@ -4,11 +4,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Transaction, TransactionsService } from '../transactions.service';
 import { SecurityDailyPrices, SecuritiesService, Security } from '../../securities/securities.service';
 import { Tooltip } from 'bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-transaction-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.css',
 })

@@ -5,11 +5,12 @@ import { ChartConfiguration } from 'chart.js';
 import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { Observable } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-security-filter',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective],
+  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule],
   templateUrl: './security-filter.component.html',
   styleUrl: './security-filter.component.css',
 })
@@ -124,7 +125,7 @@ export class SecurityFilterComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.error = 'Failed to load data.';
+        this.error = 'LOADING_DATA_ERROR';
         this.loading = false;
       }
     });

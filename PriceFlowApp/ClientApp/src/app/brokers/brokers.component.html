@@ -1,10 +1,10 @@
 <div class="brokers-wrapper" *ngIf="!loading && brokers.length > 0">
-  <h3>🏦 Brokerage Companies</h3>
+  <h3>🏦 {{ 'BROKERS.BROKERAGE' | translate }} {{ 'BROKERS.COMPANIES' | translate }}</h3>
   <table class="brokers-table">
     <thead>
       <tr>
-        <th>Company</th>
-        <th>Commission (%)</th>
+        <th>{{ 'BROKERS.COMPANY' | translate }}</th>
+        <th>{{ 'BROKERS.COMMISSION' | translate }} (%)</th>
       </tr>
     </thead>
     <tbody>
@@ -16,10 +16,12 @@
   </table>
 </div>
 
+<div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+
 <div *ngIf="loading" class="loading">
-  Loading brokers...
+  {{ 'LOADING' | translate }} {{ 'BROKERS.TITLE' | translate }}...
 </div>
 
 <div *ngIf="!loading && brokers.length === 0" class="loading">
-  No brokers found.
+  {{ 'BROKERS.NOT_FOUND_MESSAGE' | translate }}.
 </div>

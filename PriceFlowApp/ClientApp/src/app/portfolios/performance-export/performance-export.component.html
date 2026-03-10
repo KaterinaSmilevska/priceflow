@@ -1,25 +1,25 @@
 <div class="export-container">
 
-  <h3>Portfolio Performance Report</h3>
+  <h3>{{ 'PORTFOLIOS.PORTFOLIO_PERFORMANCE_REPORT' | translate }}</h3>
 
   <form [formGroup]="form">
 
     <div class="form-group">
-      <label>From</label>
+      <label>{{ 'FROM' | translate }}</label>
       <input type="date" formControlName="from" class="form-control">
     </div>
 
     <div class="form-group">
-      <label>To</label>
+      <label>{{ 'TO' | translate }}</label>
       <input type="date" formControlName="to" class="form-control">
     </div>
 
     <div *ngIf="form.errors?.dateInvalid" class="text-danger">
-      From date must be before To date.
+      {{ 'DATE_VALIDATION_MESSAGE' | translate }}.
     </div>
 
     <div class="form-group">
-      <label>Format</label>
+      <label>{{ 'PORTFOLIOS.FORMAT' | translate }}</label>
       <select formControlName="format" class="form-control">
         <option value="csv">CSV</option>
         <option value="excel">Excel</option>
@@ -29,39 +29,39 @@
 
     <button *ngIf="!form.invalid"
             type="button"
-            class="btn btn-secondary"
+            class="btn btn-secondary me-2"
             (click)="fetchSummary()"
             [disabled]="loading">
-      {{ loading ? 'Loading...' : 'Preview Summary' }}
+      {{ (loading ? 'LOADING...' : 'PREVIEW') | translate }}
     </button>
 
     <button type="button"
-            class="btn btn-primary ms-2"
+            class="btn btn-primary"
             (click)="export()"
             [disabled]="exporting || !summary">
-      {{ exporting ? 'Exporting...' : 'Export' }}
+      {{ (exporting ? 'EXPORTING' : 'EXPORT') | translate }}
     </button>
 
   </form>
 
   <div *ngIf="summary" class="summary-preview mt-4">
-    <h5>Summary Preview</h5>
-    <p><strong>Portfolio:</strong> {{ summary.portfolioName }}</p>
-    <p><strong>Period:</strong> {{ summary.fromDate | date }} - {{ summary.toDate | date }}</p>
-    <p><strong>Starting Value:</strong> {{ summary.startingValue | number: '1.2-2' }} ден.</p>
-    <p><strong>Ending Value:</strong> {{ summary.endingValue | number: '1.2-2' }} ден.</p>
-    <p><strong>Dividends:</strong> {{ summary.dividends | number: '1.2-2' }} ден.</p>
-    <p><strong>Commissions:</strong> {{ summary.commissions | number: '1.2-2' }} ден.</p>
+    <h5>{{ 'PREVIEW' | translate }}</h5>
+    <p><strong>{{ 'PORTFOLIOS.PORTFOLIO' | translate }}:</strong> {{ summary.portfolioName }}</p>
+    <p><strong>{{ 'PORTFOLIOS.PERIOD' | translate }}:</strong> {{ summary.fromDate | date }} - {{ summary.toDate | date }}</p>
+    <p><strong>{{ 'PORTFOLIOS.STARTING_VALUE' | translate }}:</strong> {{ summary.startingValue | number: '1.2-2' }} {{ 'CURRENCY.MKD' | translate }}</p>
+    <p><strong>{{ 'PORTFOLIOS.ENDING_VALUE' | translate }}:</strong> {{ summary.endingValue | number: '1.2-2' }} {{ 'CURRENCY.MKD' | translate }}</p>
+    <p><strong>{{ 'PORTFOLIOS.DIVIDEND' | translate }}:</strong> {{ summary.dividends | number: '1.2-2' }} {{ 'CURRENCY.MKD' | translate }}</p>
+    <p><strong>{{ 'TRANSACTIONS.COMMISSIONS' | translate }}:</strong> {{ summary.commissions | number: '1.2-2' }} {{ 'CURRENCY.MKD' | translate }}</p>
     <p>
       <strong>Absolute Return:</strong>
       <span [ngClass]="summary.absoluteReturn >= 0 ? 'text-success' : 'text-danger'">
-        {{ summary.absoluteReturn | number: '1.2-2' }} ден.
+        {{ summary.absoluteReturn | number: '1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
       </span>
     </p>
   </div>
 
   <div *ngIf="errorMessage" class="text-danger mt-2">
-    {{ errorMessage }}
+    {{ errorMessage | translate }}
   </div>
 
 </div>

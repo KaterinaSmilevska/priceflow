@@ -8,8 +8,8 @@
     <div class="register-card w-full max-w-3xl">
       <div *ngIf="response && !isEmailVerified" class="mb-6 p-4 bg-yellow-100 border border-yellow-300 rounded-md animate-fade-in flex justify-between items-center">
         <div>
-          <p class="text-green-700 font-medium">Registration successful</p>
-          <p class="text-green-700 text-sm mt-1">Please check your email to verify your account.</p>
+          <p class="text-green-700 font-medium">{{ 'AUTH.REGISTRATION_SUCCESS' | translate }}</p>
+          <p class="text-green-700 text-sm mt-1">{{ 'AUTH.EMAIL_VERIFICATION_MESSAGE' | translate }}.</p>
         </div>
         <button (click)="clearSuccessMessage()" class="text-green-700 hover:text-green-900">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -20,44 +20,44 @@
       <div *ngIf="isEmailVerified" class="mb-6 p-4 bg-green-100 border border-green-300 rounded-md animate-fade-in">
         <p class="text-green-700 font-medium">Email successfully verified. You can now log in.</p>
       </div>
-      <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Register</h2>
+      <h2>{{ 'AUTH.REGISTER' | translate }}</h2>
       <div class="register-container">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label for="name" class="form-label">Name</label>
-            <input id="name" [(ngModel)]="name" placeholder="Enter Name" required
+            <label for="name" class="form-label">{{ 'AUTH.NAME' | translate }}</label>
+            <input id="name" [(ngModel)]="name" placeholder="{{ 'ENTER' | translate }} {{ 'AUTH.NAME' | translate }}" required
                    class="form-input" />
           </div>
           <div>
-            <label for="username" class="form-label">Username</label>
-            <input id="username" [(ngModel)]="username" placeholder="Enter Username" required
+            <label for="username" class="form-label">{{ 'AUTH.USERNAME' | translate }}</label>
+            <input id="username" [(ngModel)]="username" placeholder="{{ 'ENTER' | translate }} {{ 'AUTH.USERNAME' | translate }}" required
                    (ngModelChange)="validateUsername()"
                    class="form-input" />
             <div *ngIf="usernameError" class="error mt-2 p-2 bg-red-100 border border-red-300 rounded-md animate-fade-in">
-              <p class="text-red-700 text-sm">{{ usernameError }}</p>
+              <p class="text-red-700 text-sm">{{ usernameError | translate }}</p>
             </div>
           </div>
           <div>
-            <label for="email" class="form-label">Email</label>
-            <input id="email" type="email" [(ngModel)]="email" placeholder="Enter Email" required
+            <label for="email" class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
+            <input id="email" type="email" [(ngModel)]="email" placeholder="{{ 'ENTER' | translate }} {{ 'AUTH.EMAIL' | translate }}" required
                    (ngModelChange)="validateEmail()"
                    class="form-input" />
             <div *ngIf="emailError" class="error mt-2 p-2 bg-red-100 border border-red-300 rounded-md animate-fade-in">
-              <p class="text-red-700 text-sm">{{ emailError }}</p>
+              <p class="text-red-700 text-sm">{{ emailError | translate }}</p>
             </div>
           </div>
           <div>
-            <label for="password" class="form-label">Password</label>
-            <input id="password" type="password" [(ngModel)]="password" placeholder="Enter Password" required
+            <label for="password" class="form-label">{{ 'AUTH.PASSWORD' | translate }}</label>
+            <input id="password" type="password" [(ngModel)]="password" placeholder="{{ 'ENTER' | translate }} {{ 'AUTH.PASSWORD' | translate }}" required
                    (ngModelChange)="validatePassword()"
                    class="form-input" />
             <div *ngIf="passwordError" class="error mt-2 p-2 bg-red-100 border border-red-300 rounded-md animate-fade-in">
-              <p class="text-red-700 text-sm">{{ passwordError }}</p>
+              <p class="text-red-700 text-sm">{{ passwordError | translate }}</p>
             </div>
           </div>
           <div>
-            <label for="confirmPassword" class="form-label">Confirm Password</label>
-            <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword" placeholder="Confirm Password" required
+            <label for="confirmPassword" class="form-label">{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</label>
+            <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword" placeholder="{{ 'AUTH.CONFIRM_PASSWORD' | translate }}" required
                    (ngModelChange)="validatePassword()"
                    class="form-input" />
             <div *ngIf="confirmPasswordError" class="error mt-2 p-2 bg-red-100 border border-red-300 rounded-md animate-fade-in">
@@ -66,27 +66,27 @@
           </div>
         </div>
         <div class="mt-4">
-          <label class="checkbox-wrapper">What would you like to do on the site?</label>
+          <label class="checkbox-wrapper">{{ 'AUTH.SITE_ACTIONS_MESSAGE' | translate }}?</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
             <div *ngFor="let task of tasks; let i = index" class="task-checkbox">
               <input type="checkbox"
                      [id]="'task-' + i"
                      [(ngModel)]="task.selected"
-                     (change)="updateRoleNames()"/>
-              <span>{{ task.description }}</span>
+                     (change)="updateRoleNames()" />
+              <span>{{ task.description | translate }}</span>
             </div>
           </div>
         </div>
         <button (click)="register()" [disabled]="!isFormValid()"
                 class="register-btn mt-6 w-full">
-          Register
+          {{ 'AUTH.REGISTER' | translate }}
         </button>
       </div>
       <div *ngIf="generalError" class="error mt-4 p-4 bg-red-100 border border-red-300 rounded-md animate-fade-in">
         <p class="text-red-700">{{ generalError }}</p>
       </div>
       <p class="login-link text-center mt-4">
-        Already have an account? <a [routerLink]="['/login']" class="auth-link">Log in</a>
+        {{ 'AUTH.HAVE_ACCOUNT_MESSAGE' | translate }}? <a [routerLink]="['/login']" class="auth-link">{{ 'AUTH.LOG_IN' | translate }}</a>
       </p>
     </div>
   </div>

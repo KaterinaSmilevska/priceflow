@@ -5,11 +5,12 @@ import { AdminService } from '../admin.service';
 import { Broker } from './Broker';
 import { EditBrokerComponent } from './edit-broker/edit-broker.component';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-manage-brokers',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, EditBrokerComponent],
+  imports: [CommonModule, FormsModule, RouterModule, EditBrokerComponent, TranslateModule],
   templateUrl: './manage-brokers.component.html',
   styleUrl: './manage-brokers.component.css',
 })
@@ -34,7 +35,7 @@ export class ManageBrokersComponent implements OnInit {
   loadBrokers(): void {
     this.adminService.getBrokers().subscribe({
       next: (data) => this.brokers = data,
-      error: () => this.errorMessage = "Failed to load brokers."
+      error: () => this.errorMessage = 'LOADING_DATA_ERROR'
     });
   }
 
@@ -78,7 +79,7 @@ export class ManageBrokersComponent implements OnInit {
         this.closeDeleteModal();
       },
       error: () => {
-        this.errorMessage = "Failed to delete broker.";
+        this.errorMessage = 'BROKERS.DELETE_ERROR';
         this.closeDeleteModal();
       }
     });

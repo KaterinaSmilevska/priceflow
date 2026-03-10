@@ -1,17 +1,17 @@
 <div class="users-container">
-  <h2 class="page-title">Manage Users</h2>
+  <h2 class="page-title">{{ 'ADMIN.MANAGE' | translate }} {{ 'USERS.TITLE' | translate }}</h2>
   <div *ngIf="errorMessage" class="error-message">
-    <p class="text-red-700">{{ errorMessage }}</p>
+    <p class="text-red-700">{{ errorMessage | translate }}</p>
   </div>
   <div class="overflow-x-auto">
     <table class="users-table">
       <thead>
         <tr class="">
-          <th class="py-2 px-4 border-b">Name</th>
-          <th class="py-2 px-4 border-b">Username</th>
-          <th class="py-2 px-4 border-b">Email</th>
-          <th class="py-2 px-4 border-b">Roles</th>
-          <th class="py-2 px-4 border-b">Actions</th>
+          <th class="py-2 px-4 border-b">{{ 'USERS.NAME' | translate }}</th>
+          <th class="py-2 px-4 border-b">{{ 'USERS.USERNAME' | translate }}</th>
+          <th class="py-2 px-4 border-b">{{ 'USERS.EMAIL' | translate }}</th>
+          <th class="py-2 px-4 border-b">{{ 'ADMIN.ROLES' | translate }}</th>
+          <th class="py-2 px-4 border-b">{{ 'ACTIONS' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -23,13 +23,13 @@
           <td class="py-2 px-4 border-b">
             <button (click)="editUser(user.id)"
                     class="btn btn-warning btn-sm me-3">
-              Edit
+              {{ 'EDIT.ACTION_NAME' | translate }}
             </button>
 
             <button *ngIf="currentUserId !== null && user.id !== currentUserId"
                     (click)="openDeleteModal(user)"
                     class="btn btn-danger">
-              Delete
+              {{ 'DELETE.ACTION_NAME' | translate }}
             </button>
           </td>
         </tr>
@@ -37,7 +37,7 @@
     </table>
   </div>
   <p class="mt-4 text-center">
-    <a [routerLink]="['/']" class="page-link">Back to Home</a>
+    <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
   </p>
 </div>
 
@@ -48,12 +48,12 @@
 
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">
-    <h3>Confirm Delete</h3>
-    <p>Are you sure you want to delete user <strong>{{ userToDelete?.username }}</strong>?</p>
+    <h3>{{ 'DELETE.CONFIRM' | translate }}</h3>
+    <p>{{ 'DELETE.DELETE_USER_MESSAGE' | translate }} <strong>{{ userToDelete?.username }}</strong>?</p>
 
     <div class="modal-actions">
-      <button class="btn btn-danger" (click)="confirmDelete()">Delete</button>
-      <button class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
+      <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>
     </div>
   </div>
 </div>

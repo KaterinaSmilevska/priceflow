@@ -181,6 +181,47 @@ td.fw-bold {
   white-space: nowrap;
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 12px;
+  padding: 25px 30px;
+  width: 320px;
+  max-width: 90%;
+  box-shadow: 0 10px 25px var(--shadow-color);
+  text-align: center;
+}
+
+  .modal-content h3 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .modal-content p {
+    margin: 10px 0 20px;
+    font-size: 0.95rem;
+  }
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
 .charts-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

@@ -4,11 +4,12 @@ import { PriceTrendComponent } from './price-trend/price-trend.component';
 import { SectorDistributionComponent } from './sector-distribution/sector-distribution.component';
 import { FormsModule } from "@angular/forms";
 import { ChartService, Security } from "./chart.service";
+import { TranslateModule } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-chart',
   standalone: true,
-  imports: [CommonModule, FormsModule, PriceTrendComponent, SectorDistributionComponent],
+  imports: [CommonModule, FormsModule, PriceTrendComponent, SectorDistributionComponent, TranslateModule],
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css'],
 })

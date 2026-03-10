@@ -3,8 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\styles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\styles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\assets\\i18n\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\assets\\i18n\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\assets\\i18n\\mk.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\assets\\i18n\\mk.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,24 +18,38 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{a83394e3-39c2-4678-a3c8-364b69d78fd3}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "styles.css",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\styles.css",
-              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\styles.css",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\styles.css",
-              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\styles.css",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2026-03-05T15:51:30.374Z",
+              "Title": "en.json",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
+              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
+              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
+              "ViewState": "AgIAAOYAAAAAAAAAAAAAAPwAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-06T18:52:52.224Z",
+              "IsPinned": true,
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "mk.json",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
+              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
+              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
+              "ViewState": "AgIAAOAAAAAAAAAAAADwv/IAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-09T16:12:30.92Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a83394e3-39c2-4678-a3c8-364b69d78fd3}"
             }
           ]
         }

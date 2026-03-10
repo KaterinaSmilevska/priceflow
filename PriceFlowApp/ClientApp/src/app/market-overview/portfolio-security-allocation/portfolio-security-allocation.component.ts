@@ -5,13 +5,14 @@ import { Chart, ChartData, ChartOptions, ChartType, registerables } from 'chart.
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { TranslateModule } from '@ngx-translate/core';
 
 Chart.register(...registerables, ChartDataLabels);
 
 @Component({
   selector: 'app-portfolio-security-allocation',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective],
+  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule],
   templateUrl: './portfolio-security-allocation.component.html',
   styleUrl: './portfolio-security-allocation.component.css',
 })
@@ -73,7 +74,7 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
       next: (res) => {
         if (!res || res.length === 0) {
           this.data = { labels: [], datasets: [] };
-          this.noDataMessage = "No holdings found.";
+          this.noDataMessage = 'NO_HOLDINGS_DATA_AVAILABLE';
           this.chart?.update();
           return;
         }
@@ -94,7 +95,7 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-        this.noDataMessage = "An error occured while loading data.";
+        this.noDataMessage = 'LOADING_DATA_ERROR';
       }
     });
   }

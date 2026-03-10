@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AddPortfolioComponent } from './add-portfolio/add-portfolio.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-portfolios',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddPortfolioComponent],
+  imports: [CommonModule, FormsModule, AddPortfolioComponent, TranslateModule],
   templateUrl: './portfolios.component.html',
   styleUrl: './portfolios.component.css',
 })
@@ -31,7 +32,7 @@ export class PortfoliosComponent implements OnInit {
   loadPortfolios() {
     this.portfoliosService.getAll().subscribe({
       next: res => this.portfolios = res,
-      error: () => this.errorMessage = "Error loading portfolios"
+      error: () => this.errorMessage = "LOADING_DATA_ERROR"
     });
   }
 

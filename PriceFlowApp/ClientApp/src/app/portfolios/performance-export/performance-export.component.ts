@@ -3,11 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PortfoliosService } from '../portfolios.service';
 import { PortfolioPerformanceSummary } from './PortfolioPerformanceSummary';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-performance-export',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './performance-export.component.html',
   styleUrl: './performance-export.component.css',
 })
@@ -57,7 +58,7 @@ export class PerformanceExportComponent implements OnInit {
           this.loading = false;
         },
         error: () => {
-          this.errorMessage = 'Error fetching summary';
+          this.errorMessage = 'LOADING_DATA_ERROR';
           this.loading = false;
         }
       });
@@ -88,7 +89,7 @@ export class PerformanceExportComponent implements OnInit {
           this.exporting = false;
         },
         error: () => {
-          this.errorMessage = 'Error exporting report.';
+          this.errorMessage = 'EXPORT_ERROR';
           this.exporting = false;
         }
       });

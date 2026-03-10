@@ -1,9 +1,9 @@
 <div class="top-performers" *ngIf="!loading">
   <div class="performer-table">
-    <h4><i class="bi bi-graph-up-arrow text-success"></i> Top Gainers</h4>
+    <h4><i class="bi bi-graph-up-arrow text-success"></i> {{ 'MARKET_OVERVIEW.TOP_GAINERS' | translate }}</h4>
     <table>
       <thead>
-        <tr><th>Code</th><th>% Change</th></tr>
+        <tr><th>{{ 'SECURITIES.CODE' | translate }}</th><th>% {{ 'MARKET_OVERVIEW.CHANGE' | translate }}</th></tr>
       </thead>
       <tbody>
         <tr *ngFor="let s of topGainers">
@@ -15,10 +15,10 @@
   </div>
 
   <div class="performer-table">
-    <h4><i class="bi bi-graph-down-arrow text-danger"></i> Top Losers</h4>
+    <h4><i class="bi bi-graph-down-arrow text-danger"></i> {{ 'MARKET_OVERVIEW.TOP_LOSERS' | translate }}</h4>
     <table>
       <thead>
-        <tr><th>Code</th><th>% Change</th></tr>
+        <tr><th>{{ 'SECURITIES.CODE' | translate }}</th><th>% {{ 'MARKET_OVERVIEW.CHANGE' | translate }}</th></tr>
       </thead>
       <tbody>
         <tr *ngFor="let s of topLosers">
@@ -30,10 +30,10 @@
   </div>
 
   <div class="performer-table">
-    <h4><i class="bi bi-cash-coin text-warning"></i> Most Traded</h4>
+    <h4><i class="bi bi-cash-coin text-warning"></i> {{ 'MARKET_OVERVIEW.MOST_TRADED' | translate }}</h4>
     <table>
       <thead>
-        <tr><th>Code</th><th>Volume</th></tr>
+        <tr><th>{{ 'SECURITIES.CODE' | translate }}</th><th>{{ 'MARKET_OVERVIEW.VOLUME' | translate }}</th></tr>
       </thead>
       <tbody>
         <tr *ngFor="let s of mostTraded">
@@ -44,5 +44,4 @@
     </table>
   </div>
 </div>
-
-<div *ngIf="loading" class="loading">Loading performance data...</div>
+<div *ngIf="loading" class="loading">{{ 'LOADING' | translate }} {{ 'MARKET_OVERVIEW.PERFORMANCE' | translate }}...</div>
