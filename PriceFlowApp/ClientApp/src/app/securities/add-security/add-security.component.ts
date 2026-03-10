@@ -72,24 +72,22 @@ loadIssuers(): void {
     if (this.securityToEdit) {
       this.securitiesService.updateSecurity(this.securityToEdit.id, security).subscribe({
         next: (updated) => {
-          this.successMessage = 'Security updated successfully!';
+          this.successMessage = 'SECURITIES.UPDATE_SUCCESS';
           setTimeout(() => this.close.emit(updated), 1000);
         },
         error: (err) => {
-          console.error('Failed to update security:', err);
-          this.errorMessage = 'Failed to update security.';
+          this.errorMessage = 'SECURITIES.UPDATE_ERROR';
           setTimeout(() => this.close.emit(err), 1000);
         }
        });
     } else {
       this.securitiesService.addSecurity(security).subscribe({
         next: (newSecurity) => {
-          this.successMessage = 'Security added successfully!';
+          this.successMessage = 'SECURITIES.ADD_SUCCESS';
           setTimeout(() => this.close.emit(newSecurity), 1000);
         },
         error: (err) => {
-          console.error('Failed to update security:', err);
-          this.errorMessage = 'Failed to update security.';
+          this.errorMessage = 'SECURITIES.ADD_ERROR';
           setTimeout(() => this.close.emit(err), 1000);
         }
       });

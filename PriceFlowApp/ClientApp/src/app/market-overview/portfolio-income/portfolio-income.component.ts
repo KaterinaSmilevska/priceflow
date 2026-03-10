@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ChartType, ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-portfolio-income',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective],
+  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule],
   templateUrl: './portfolio-income.component.html',
   styleUrl: './portfolio-income.component.css',
 })
@@ -70,7 +71,7 @@ export class PortfolioIncomeComponent implements OnInit {
       next: (res) => {
         if (!res || res.length === 0) {
           this.data = { labels: [], datasets: [] };
-          this.noDataMessage = "No transactions found.";
+          this.noDataMessage = 'NO_TRANSACTIONS_DATA_AVAILABLE';
           this.chart?.update();
           return;
         }
@@ -96,7 +97,7 @@ export class PortfolioIncomeComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-        this.noDataMessage = "An error occured while loading data.";
+        this.noDataMessage = 'LOADING_DATA_ERROR';
       }
     });
   }

@@ -42,6 +42,7 @@ label {
   padding: 8px;
   border-radius: 6px;
   color: var(--error-color);
+  text-align: center;
 }
 
 .form-control {
@@ -84,4 +85,5 @@ label {
   padding: 8px;
   border-radius: 6px;
   color: #065f46;
+  text-align: center;
 }

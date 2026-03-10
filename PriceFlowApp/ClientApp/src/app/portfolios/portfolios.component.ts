@@ -32,7 +32,7 @@ export class PortfoliosComponent implements OnInit {
   loadPortfolios() {
     this.portfoliosService.getAll().subscribe({
       next: res => this.portfolios = res,
-      error: () => this.errorMessage = "Error loading portfolios"
+      error: () => this.errorMessage = "LOADING_DATA_ERROR"
     });
   }
 

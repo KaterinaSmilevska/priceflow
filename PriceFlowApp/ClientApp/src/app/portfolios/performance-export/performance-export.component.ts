@@ -58,7 +58,7 @@ export class PerformanceExportComponent implements OnInit {
           this.loading = false;
         },
         error: () => {
-          this.errorMessage = 'Error fetching summary';
+          this.errorMessage = 'LOADING_DATA_ERROR';
           this.loading = false;
         }
       });
@@ -89,7 +89,7 @@ export class PerformanceExportComponent implements OnInit {
           this.exporting = false;
         },
         error: () => {
-          this.errorMessage = 'Error exporting report.';
+          this.errorMessage = 'EXPORT_ERROR';
           this.exporting = false;
         }
       });

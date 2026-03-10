@@ -35,7 +35,7 @@ export class ManageBrokersComponent implements OnInit {
   loadBrokers(): void {
     this.adminService.getBrokers().subscribe({
       next: (data) => this.brokers = data,
-      error: () => this.errorMessage = "Failed to load brokers."
+      error: () => this.errorMessage = 'LOADING_DATA_ERROR'
     });
   }
 
@@ -79,7 +79,7 @@ export class ManageBrokersComponent implements OnInit {
         this.closeDeleteModal();
       },
       error: () => {
-        this.errorMessage = "Failed to delete broker.";
+        this.errorMessage = 'BROKERS.DELETE_ERROR';
         this.closeDeleteModal();
       }
     });

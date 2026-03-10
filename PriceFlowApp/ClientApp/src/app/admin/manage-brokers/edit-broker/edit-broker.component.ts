@@ -42,20 +42,20 @@ export class EditBrokerComponent implements OnInit {
       this.adminService.addBroker(updatedBroker)
         .subscribe({
           next: (b) => {
-            this.successMessage = 'Broker added successfully!';
+            this.successMessage = 'BROKERS.ADD_SUCCESS';
             setTimeout(() => this.close.emit(b), 800);
           },
-          error: () => this.errorMessage = 'Failed to add broker.'
+          error: () => this.errorMessage = 'BROKERS.ADD_ERROR'
         });
     }
         else {
         this.adminService.updateBroker(updatedBroker)
           .subscribe({
             next: () => {
-              this.successMessage = 'Broker updated successfully!';
+              this.successMessage = 'BROKERS.UPDATE_SUCCESS';
               setTimeout(() => this.close.emit(updatedBroker), 800);
             },
-            error: () => this.errorMessage = 'Failed to update broker.'
+            error: () => this.errorMessage = 'BROKERS.UPDATE_ERROR'
           });
       }
   }

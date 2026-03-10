@@ -179,7 +179,7 @@
       </div>
 
       <div *ngIf="!loading && !transactions.length" class="text-muted">
-        No transactions yet.
+        {{ 'NO_TRANSACTIONS_DATA_AVAILABLE' | translate }}
       </div>
 
       <app-transaction-form *ngIf="showEditModal"

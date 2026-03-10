@@ -57,24 +57,22 @@ export class EditUserComponent implements OnInit {
     this.adminService.checkUsername(updatedUser.username).subscribe({
       next: (res) => {
         if (res.exists && updatedUser.username !== this.originalUsername) {
-          this.errorMessage = 'Username is already taken.';
+          this.errorMessage = 'USERS.USERNAME_TAKEN';
           return;
         }
 
         this.adminService.updateUser(updatedUser).subscribe({
           next: () => {
-            this.successMessage = 'User updated successfully!';
+            this.successMessage = 'USERS.UPDATE_SUCCESS';
             setTimeout(() => this.close.emit(updatedUser), 800);
           },
           error: (err) => {
-            console.error('Failed to update user:', err);
-            this.errorMessage = 'Failed to update user.';
+            this.errorMessage = 'USERS.UPDATE_ERROR';
           }
         });
       },
       error: (err) => {
-        console.error('Failed to check username:', err);
-        this.errorMessage = 'Error checking username availability.';
+        this.errorMessage = 'USERS.USERNAME_CHECK_ERROR';
       }
     });
   }

@@ -44,7 +44,7 @@ export class SecuritiesComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        this.errorMessage = 'Could not load securities.';
+        this.errorMessage = 'LOADING_DATA_ERROR';
         this.loading = false;
       }
     });
@@ -69,8 +69,7 @@ export class SecuritiesComponent implements OnInit {
         this.closeDeleteModal();
       },
       error: (err) => {
-        console.error('Failed to delete security:', err);
-        this.errorMessage = 'Failed to delete security.';
+        this.errorMessage = 'SECURITIES.DELETE_ERROR';
         this.closeDeleteModal();
       }
     });

@@ -42,5 +42,7 @@
       </app-liquidity-table>
     </div>
 
+    <div *ngIf="noDataMessage" class="error mt-2">{{ noDataMessage | translate }}</div>
+
   </div>
 </div>

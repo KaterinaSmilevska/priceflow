@@ -37,14 +37,14 @@ export class LiquidityComponent {
       .subscribe({
         next: (res) => {
           if (!res) {
-            this.noDataMessage = 'No data available for the selected period.'
+            this.noDataMessage = 'NO_DATA_AVAILABLE_FOR_PERIOD'
             return;
           }
           this.liquidity = res;
         },
         error: (err) => {
           console.error(err);
-          this.noDataMessage = 'Error loading security liquidity data.'
+          this.noDataMessage = 'LOADING_DATA_ERROR'
         }
       });
   }

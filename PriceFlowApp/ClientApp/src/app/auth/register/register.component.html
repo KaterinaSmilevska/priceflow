@@ -34,7 +34,7 @@
                    (ngModelChange)="validateUsername()"
                    class="form-input" />
             <div *ngIf="usernameError" class="error mt-2 p-2 bg-red-100 border border-red-300 rounded-md animate-fade-in">
-              <p class="text-red-700 text-sm">{{ usernameError }}</p>
+              <p class="text-red-700 text-sm">{{ usernameError | translate }}</p>
             </div>
           </div>
           <div>
@@ -43,7 +43,7 @@
                    (ngModelChange)="validateEmail()"
                    class="form-input" />
             <div *ngIf="emailError" class="error mt-2 p-2 bg-red-100 border border-red-300 rounded-md animate-fade-in">
-              <p class="text-red-700 text-sm">{{ emailError }}</p>
+              <p class="text-red-700 text-sm">{{ emailError | translate }}</p>
             </div>
           </div>
           <div>
@@ -52,7 +52,7 @@
                    (ngModelChange)="validatePassword()"
                    class="form-input" />
             <div *ngIf="passwordError" class="error mt-2 p-2 bg-red-100 border border-red-300 rounded-md animate-fade-in">
-              <p class="text-red-700 text-sm">{{ passwordError }}</p>
+              <p class="text-red-700 text-sm">{{ passwordError | translate }}</p>
             </div>
           </div>
           <div>

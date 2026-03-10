@@ -64,7 +64,7 @@ export class TransactionsComponent implements OnInit {
         this.buildTableView();
       },
       error: () => {
-        this.errorMessage = 'Failed to load transactions';
+        this.errorMessage = 'LOADING_DATA_ERROR';
         this.loading = false;
       }
     });
@@ -149,8 +149,7 @@ export class TransactionsComponent implements OnInit {
         this.closeDeleteModal();
       },
       error: (err) => {
-        console.error('Failed to delete transaction:', err);
-        this.errorMessage = 'Failed to delete transaction.';
+        this.errorMessage = 'TRANSACTIONS.DELETE_ERROR';
         this.closeDeleteModal();
       }
     });
@@ -214,7 +213,6 @@ export class TransactionsComponent implements OnInit {
   }
 
   getCashFlow(t: Transaction): number {
-    //const base = t.sharesQuantity * t.sharesUnitPrice;
     const commission = this.getTotalCommission(t);
 
     if (t.typeTransaction === 'Купување') {

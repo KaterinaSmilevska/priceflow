@@ -32,7 +32,7 @@ export class BrokersComponent implements OnInit {
           this.loading = false;
       },
       error: err => {
-        this.errorMessage = 'Error loading brokers.';
+        this.errorMessage = 'LOADING_DATA_ERROR';
         this.loading = false;
       }
     });

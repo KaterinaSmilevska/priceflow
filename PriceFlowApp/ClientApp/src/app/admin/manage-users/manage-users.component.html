@@ -1,7 +1,7 @@
 <div class="users-container">
   <h2 class="page-title">{{ 'ADMIN.MANAGE' | translate }} {{ 'USERS.TITLE' | translate }}</h2>
   <div *ngIf="errorMessage" class="error-message">
-    <p class="text-red-700">{{ errorMessage }}</p>
+    <p class="text-red-700">{{ errorMessage | translate }}</p>
   </div>
   <div class="overflow-x-auto">
     <table class="users-table">

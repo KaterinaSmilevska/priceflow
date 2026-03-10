@@ -23,8 +23,8 @@
         <button type="submit" class="btn btn-primary">{{ 'SAVE_CHANGES' | translate }}</button>
       </div>
 
-      <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage }}</div>
-      <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+      <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage | translate }}</div>
     </form>
   </div>
 </div>

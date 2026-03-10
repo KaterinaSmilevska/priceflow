@@ -4,13 +4,14 @@ import { Chart, ChartData, ChartType, registerables } from "chart.js";
 import { ChartService } from "../chart.service";
 import { BaseChartDirective } from 'ng2-charts';
 import { FormsModule } from "@angular/forms";
+import { TranslateModule, TranslateService } from "@ngx-translate/core";
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-sector-distribution',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective],
+  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule],
   templateUrl: './sector-distribution.component.html',
 })
 
@@ -29,7 +30,7 @@ export class SectorDistributionComponent implements OnInit {
   public noDataMessage: string | null = null;
   public defaultDate = new Date().getDay() - 7;
 
-  constructor(private chartService: ChartService) { }
+  constructor(private chartService: ChartService, private translateService: TranslateService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['date'] && !changes['date'].firstChange) {
@@ -45,7 +46,7 @@ export class SectorDistributionComponent implements OnInit {
           this.loadChart();
         },
         error: () => {
-          this.noDataMessage = "No sector data available.";
+          this.noDataMessage = 'NO_SECTOR_DATA_AVAILABLE';
         }
       });
     }
@@ -61,7 +62,7 @@ export class SectorDistributionComponent implements OnInit {
       next: (res) => {
         if (!res || res.length === 0) {
           this.data = { labels: [], datasets: [] };
-          this.noDataMessage = `No data available for ${this.date}.`;
+          this.noDataMessage = this.translateService.instant('NO_DATA_AVAILABLE_FOR', { date: this.date });
           this.chart?.update();
           return;
         }
@@ -81,7 +82,7 @@ export class SectorDistributionComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this.noDataMessage = "An error occured while loading data.";
+        this.noDataMessage = 'LOADING_DATA_ERROR';
       },
     });
   }

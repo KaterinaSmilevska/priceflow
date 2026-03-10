@@ -10,7 +10,7 @@
       <input type="password" id="password" [(ngModel)]="password" name="password" required>
     </div>
     <button type="submit" class="login-btn">{{ 'AUTH.LOG_IN' | translate }}</button>
-    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage | translate }}</div>
   </form>
   <div *ngIf="loginService.isLoggedIn() | async" class="success">
     {{ 'LOGIN_SUCCESS' | translate }} {{ 'AS' | translate }} {{ loginService.getUsername() | async }}.

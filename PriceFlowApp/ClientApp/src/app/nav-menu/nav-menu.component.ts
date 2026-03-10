@@ -39,9 +39,9 @@ export class NavMenuComponent implements OnInit {
        if (this.previousLoginState != currentState) {
          if (currentState) {
            this.loadNotifications();
-           this.showSuccessMessage('Logged in successfully!');
+           this.showSuccessMessage(this.translateService.instant('AUTH.LOGIN_SUCCESS_TOOLTIP'));
          } else if (this.previousLoginState) {
-           this.showSuccessMessage('Logged out successfully!');
+           this.showSuccessMessage(this.translateService.instant('AUTH.LOGOUT_SUCCESS_TOOLTIP'));
          }
        }
        this.previousLoginState = currentState;

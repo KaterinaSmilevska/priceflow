@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { Chart, ChartConfiguration, ChartData, ChartType, registerables } from 'chart.js';
 import { ChartService } from '../chart.service';
 import { BaseChartDirective } from 'ng2-charts';
+import { TranslateModule } from '@ngx-translate/core';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-price-trend',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective, FormsModule],
+  imports: [CommonModule, BaseChartDirective, FormsModule, TranslateModule],
   templateUrl: './price-trend.component.html',
 })
 
@@ -53,26 +54,13 @@ export class PriceTrendComponent implements OnInit {
           this.loadChart();
         },
         error: () => {
-          this.noDataMessage = "No available trading data.";
+          this.noDataMessage = 'NO_TRADING_DATA_AVAILABLE';
         },
       });
     }
     else {
       this.loadChart();
     }
-
-    //if (this.securityId && this.startDate && this.endDate) {
-    //  this.chartService.getSecurities().subscribe(security => {
-    //    this.securities = security.map(s => ({ id: s.id, code: s.code }));
-    //    if (this.securities.length > 0) {
-    //      this.securityId = this.securities[0].id;
-    //      const today = new Date();
-    //      this.startDate = this.chartService.formatDate(new Date(today.getFullYear(), today.getMonth() - 3, today.getDate()));
-    //      this.endDate = this.chartService.formatDate(today);
-    //      this.loadChart();
-    //    }
-    //  });
-    //}
   }
 
   loadChart(): void {
@@ -83,7 +71,7 @@ export class PriceTrendComponent implements OnInit {
       next: (res) => {
         if (!res || res.length === 0) {
           this.data = { labels: [], datasets: [] };
-          this.noDataMessage = `No data available for this period.`;
+          this.noDataMessage = 'NO_DATA_AVAILABLE_FOR_PERIOD';
           this.chart?.update();
           return;
         }
@@ -105,7 +93,7 @@ export class PriceTrendComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this.noDataMessage = "Error loading price trend data.";
+        this.noDataMessage = "LOADING_DATA_ERROR";
       },
       
     });

@@ -36,7 +36,16 @@
     "REGISTRATION_SUCCESS": "Registration successfull",
     "EMAIL_VERIFICATION_MESSAGE": "Please check your email to verify your account",
     "VERIFICATION_SUCCESS": "Email successfully verified. You can now log in",
-    "LOGIN_SUCCESS": "You are successfuly logged in as"
+    "LOGIN_SUCCESS": "You are successfuly logged in as",
+    "REGISTER_ERROR": "Registration failed.",
+    "INVALID_CREDENTIALS": "Invalid username or password.",
+    "LOGIN_SUCCESS_TOOLTIP": "Logged in successfully!",
+    "LOGOUT_SUCCESS_TOOLTIP": "Logged out successfully!",
+    "RESET_LINK_SUCCESS": "Reset link has been sent to your email.",
+    "RESET_LINK_ERROR": "Failed to send reset link.",
+    "RESET_PASSWORD_ERROR": "Failed to reset password.",
+    "PASSWORD_MISSMATCH": "Passwords do not match."
+
   },
   "CURRENCY": {
     "MKD": "MKD"
@@ -62,7 +71,15 @@
     "USER": "User",
     "NAME": "Name",
     "USERNAME": "Username",
-    "EMAIL": "Email"
+    "EMAIL": "Email",
+    "USERNAME_CHECK_ERROR": "Error checking username availability.",
+    "EMAIL_VALIDATION_ERROR": "Email validation failed.",
+    "PASSWORD_VALIDATION_ERROR": "Password validation failed.",
+    "USERNAME_TAKEN": "Username is already taken.",
+    "UPDATE_SUCCESS": "User updated successfully!",
+    "UPDATE_ERROR": "Failed to update user.",
+    "DELETE_ERROR": "Failed to delete user.",
+    "USER_STATUS_ERROR": "Failed to get user status."
   },
   "BROKERS": {
     "TITLE": "brokers",
@@ -71,7 +88,13 @@
     "COMMISSION": "Commission",
     "BROKERAGE": "Brokerage",
     "COMPANIES": "Companies",
-    "NOT_FOUND_MESSAGE": "No brokers found"
+    "NOT_FOUND_MESSAGE": "No brokers found",
+    "ADD_SUCCESS": "Broker added successfully!",
+    "ADD_ERROR": "Failed to add broker.",
+    "UPDATE_SUCCESS": "Broker updated successfully!",
+    "UPDATE_ERROR": "Failed to update broker.",
+    "DELETE_ERROR": "Failed to delete broker."
+
   },
   "SECURITIES": {
     "TITLE": "Securities",
@@ -81,7 +104,12 @@
     "ISSUER": "Issuer",
     "TOTAL_SHARES": "Total shares",
     "PRICE_TYPE": "Price type",
-    "SELECTED_PRICE": "Selected price"
+    "SELECTED_PRICE": "Selected price",
+    "ADD_SUCCESS": "Security added successfully!",
+    "ADD_ERROR": "Failed to add security.",
+    "UPDATE_SUCCESS": "Security updated successfully!",
+    "UPDATE_ERROR": "Failed to update security.",
+    "DELETE_ERROR": "Failed to delete security."
   },
   "PORTFOLIOS": {
     "TITLE": "Portfolios",
@@ -133,7 +161,8 @@
     "CDHV": "CDHV",
     "TOTAL_COMMISSION": "Total Commission",
     "TOTAL_AMOUNT": "Total Amount",
-    "REAL_TRANSACTION": "Real Transaction"
+    "REAL_TRANSACTION": "Real Transaction",
+    "DELETE_ERROR": "Failed to delete transaction."
   },
   "ACTIONS": "Actions",
   "VIEW": {
@@ -182,13 +211,14 @@
   },
   "CHART": {
     "PRICE_TREND": "Price trend",
-    "SECTOR_DISTRIBUTION": "Sector distribution",
+    "SECTOR_DISTRIBUTION_MESSAGE": "Sector distribution",
     "APPLY": "Apply",
     "FILTERS": "Filters",
     "START": "Start",
     "END": "End",
     "DATE": "Date",
-    "NO_DATA_AVAILABLE": "No data available for"
+    "NO_DATA_AVAILABLE": "No data available.",
+    "PORTFOLIO_INCOME_MESSAGE": "Portfolio income over time"
   },
   "CANCEL": "Cancel",
   "SAVE_CHANGES": "Save changes",
@@ -257,5 +287,22 @@
   "OVERVALUED": "Overvalued",
   "UNDERVALUED": "Undervalued",
   "FAIRLY_PRICED": "Fairly priced",
-  "VALUE": "Value"
+  "VALUE": "Value",
+  "NO_DATA_AVAILABLE_FOR_PERIOD": "No data available for the selected period.",
+  "NO_DATA_AVAILABLE_FOR": "No data available for {{date}}.",
+  "NO_SECTOR_DATA_AVAILABLE": "No sector data available.",
+  "NO_TRADING_DATA_AVAILABLE": "No trading data available.",
+  "NO_PORTFOLIOS_DATA_AVAILABLE": "No portfolios data available.",
+  "NO_TRANSACTIONS_DATA_AVAILABLE": "No transactions data available.",
+  "NO_HOLDINGS_DATA_AVAILABLE": "No holdings data available.",
+  "LOADING_DATA_ERROR": "An error occured while laoding data.",
+  "NO_NOTIFICATIONS": "No notifications.",
+  "MARK_AS_READ": "Mark as read.",
+  "EXPORT_ERROR": "Failed to export data.",
+  "THRESHOLD_VALIDATION_ERROR": "Lower threshold must be less than upper threshold.",
+  "THRESHOLD_EXISTS": "Threshold already exists.",
+  "PRICE_ALERTS": "My Price Alerts",
+  "LOWER": "Lower",
+  "UPPER": "Upper",
+  "THRESHOLD": "threshold"
 }

@@ -16,6 +16,8 @@
   </table>
 </div>
 
+<div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+
 <div *ngIf="loading" class="loading">
   {{ 'LOADING' | translate }} {{ 'BROKERS.TITLE' | translate }}...
 </div>

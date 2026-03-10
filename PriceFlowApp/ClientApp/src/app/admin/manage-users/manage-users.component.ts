@@ -38,8 +38,7 @@ export class ManageUsersComponent implements OnInit {
         this.users = users;
       },
       error: (err) => {
-        console.error('Failed to load users:', err);
-        this.errorMessage = 'Failed to load users.';
+        this.errorMessage = 'LOADING_DATA_ERROR';
       }
     });
   }
@@ -52,7 +51,7 @@ export class ManageUsersComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Failed to get user status:', err);
+        this.errorMessage = 'USERS.USER_STATUS_ERROR';
       }
     });
   }
@@ -97,8 +96,7 @@ export class ManageUsersComponent implements OnInit {
         this.closeDeleteModal();
       },
       error: (err) => {
-        console.error('Failed to delete user:', err);
-        this.errorMessage = 'Failed to delete user.';
+        this.errorMessage = 'USERS.DELETE_ERROR';
         this.closeDeleteModal();
       }
     });

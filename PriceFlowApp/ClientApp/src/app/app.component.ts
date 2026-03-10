@@ -16,13 +16,13 @@ export class AppComponent {
 
   constructor(public translateService: TranslateService) {
     translateService.addLangs(['mk', 'en']);
-    translateService.setDefaultLang('en');
+    translateService.setDefaultLang('mk');
 
     const browserLang = translateService.getBrowserLang();
 
-    translateService.use(browserLang?.match(/en|mk/) ? browserLang : 'en');
+    translateService.use(browserLang?.match(/mk|en/) ? browserLang : 'mk');
 
-    const savedLang = localStorage.getItem('lang') || 'en';
+    const savedLang = localStorage.getItem('lang') || 'mk';
     translateService.use(savedLang);
   }
 }

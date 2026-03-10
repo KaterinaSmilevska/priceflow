@@ -63,12 +63,11 @@ export class RegisterComponent implements OnInit {
     this.registerService.checkUsername(this.username).subscribe({
       next: (response: UsernameCheckResponse) => {
         this.isUsernameValid = !response.exists;
-        this.usernameError = response.exists ? 'Username already exists' : null;
+        this.usernameError = response.exists ? 'USERS.USERNAME_TAKEN' : null;
       },
       error: (err: any) => {
-        console.error('Username check failed:', err);
         this.isUsernameValid = true;
-        this.usernameError = null;
+        this.usernameError = 'USERS.USERNAME_CHECK_ERROR';
       }
     });
   }
@@ -85,9 +84,8 @@ export class RegisterComponent implements OnInit {
         this.emailError = response.isValid ? null : response.message;
       },
       error: (err: any) => {
-        console.error('Email validation failed:', err);
         this.isEmailValid = true;
-        this.emailError = null;
+        this.emailError = 'USERS.EMAIL_VALIDATION_ERROR';
       }
     });
   }
@@ -116,9 +114,8 @@ export class RegisterComponent implements OnInit {
         }
       },
       error: (err: any) => {
-        console.error('Password validation failed:', err);
         this.isPasswordValid = true;
-        this.passwordError = null;
+        this.passwordError = 'USERS.PASSWORD_VALIDATION_ERROR';
         this.confirmPasswordError = null;
       }
     });
@@ -163,9 +160,8 @@ export class RegisterComponent implements OnInit {
         this.resetForm();
       },
       error: (err: any) => {
-        console.error('Registration error: ', err);
         this.response = null;
-        this.generalError = err.error?.message || 'Registration failed';
+        this.generalError = err.error?.message || 'AUTH.REGISTER_ERROR';
       }
     });
   }

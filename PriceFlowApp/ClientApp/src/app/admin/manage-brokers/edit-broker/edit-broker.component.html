@@ -14,8 +14,8 @@
         <button type="button" class="btn btn-secondary me-2" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
         <button type="submit" class="btn btn-primary">{{ (brokerToEdit.id === 0 ? 'ADD.ACTION_NAME' : 'SAVE_CHANGES') | translate}}</button>
       </div>
-      <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage }}</div>
-      <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+      <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage | translate }}</div>
     </form>
   </div>
 </div>

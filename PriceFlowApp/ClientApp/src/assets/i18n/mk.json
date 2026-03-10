@@ -36,7 +36,15 @@
     "REGISTRATION_SUCCESS": "Успешно се регистриравте",
     "EMAIL_VERIFICATION_MESSAGE": "Проверете емаил за да ја верификувате вашата корисничка сметка",
     "VERIFICATION_SUCCESS": "Верификацијата е успешна. Можете да се најавите",
-    "LOGIN_SUCCESS": "Успешно се најавивте како"
+    "LOGIN_SUCCESS": "Успешно се најавивте како",
+    "REGISTER_ERROR": "Регистрацијата е неуспешна.",
+    "INVALID_CREDENTIALS": "Невалидно корисничко име и/или лозинка.",
+    "LOGIN_SUCCESS_TOOLTIP": "Успешно се најавивте!",
+    "LOGOUT_SUCCESS_TOOLTIP": "Успешно се одјавивте!",
+    "RESET_LINK_SUCCESS": "Линк за промена на лозинката е испратен на вашиот емаил.",
+    "RESET_LINK_ERROR": "Грешка при испраќање на линкот за промена на лозинката.",
+    "RESET_PASSWORD_ERROR": "Грешка при промена на лозинката.",
+    "PASSWORD_MISSMATCH": "Лозинките не се идентични."
   },
   "CURRENCY": {
     "MKD": "ден."
@@ -62,7 +70,15 @@
     "USER": "Корисник",
     "NAME": "Име",
     "USERNAME": "Корисничко име",
-    "EMAIL": "Емаил"
+    "EMAIL": "Емаил",
+    "USERNAME_CHECK_ERROR": "Грешка при проверка на достапност на корисничко име .",
+    "EMAIL_VALIDATION_ERROR": "Валидацијата на емаил-от е неуспешна.",
+    "PASSWORD_VALIDATION_ERROR": "Валидацијата на лозинката е неуспешна.",
+    "USERNAME_TAKEN": "Корисничкото име веќе постои.",
+    "UPDATE_SUCCESS": "Корисникот е успешно ажуриран!",
+    "UPDATE_ERROR": "Грешка при ажурирање на корисникот.",
+    "DELETE_ERROR": "Грешка при бришење на корисникот.",
+    "USER_STATUS_ERROR": "Грешка при преземањето на корисничкиот статус."
   },
   "BROKERS": {
     "TITLE": "брокери",
@@ -71,7 +87,12 @@
     "COMMISSION": "Провизија",
     "BROKERAGE": "Брокерски",
     "COMPANIES": "Фирми",
-    "NOT_FOUND_MESSAGE": "Не се пронајдени брокери"
+    "NOT_FOUND_MESSAGE": "Не се пронајдени брокери",
+    "ADD_SUCCESS": "Брокерот е успешно додаден!",
+    "ADD_ERROR": "Грешка при додавањето на брокерот.",
+    "UPDATE_SUCCESS": "Брокерот е успешно ажуриран!",
+    "UPDATE_ERROR": "Грешка при ажурирањето на брокерот.",
+    "DELETE_ERROR": "Грешка при бришењето на брокерот."
   },
   "SECURITIES": {
     "TITLE": "Хартии од вредност",
@@ -81,7 +102,12 @@
     "ISSUER": "Издавач",
     "TOTAL_SHARES": "Вкупен бр. акции",
     "PRICE_TYPE": "Тип на цена",
-    "SELECTED_PRICE": "Избрана цена"
+    "SELECTED_PRICE": "Избрана цена",
+    "ADD_SUCCESS": "Хартиите од вредност се успешно додадени!",
+    "ADD_ERROR": "Грешка при додавањето на хартии од вредност.",
+    "UPDATE_SUCCESS": "Хартиите од вредност се успешно ажурирани!",
+    "UPDATE_ERROR": "Грешка при ажурирањето на хартиите од вредност.",
+    "DELETE_ERROR": "Грешка при бришењето на хартиите од вредност."
   },
   "PORTFOLIOS": {
     "TITLE": "Портфолија",
@@ -133,7 +159,8 @@
     "CDHV": "ЦДХВ",
     "TOTAL_COMMISSION": "Вкупна провизија",
     "TOTAL_AMOUNT": "Вкупен износ",
-    "REAL_TRANSACTION": "Реална трансакција"
+    "REAL_TRANSACTION": "Реална трансакција",
+    "DELETE_ERROR": "Грешка при бришењето на трансакцијата."
   },
   "ACTIONS": "Акции",
   "VIEW": {
@@ -182,13 +209,14 @@
   },
   "CHART": {
     "PRICE_TREND": "Тренд на цени",
-    "SECTOR_DISTRIBUTION": "Дистрибуција на сектори",
+    "SECTOR_DISTRIBUTION_MESSAGE": "Дистрибуција на сектори",
     "APPLY": "Примени",
     "FILTERS": "Филтри",
     "START": "Почетен",
     "END": "Краен",
     "DATE": "Датум",
-    "NO_DATA_AVAILABLE": "Нема достапни податоци за"
+    "NO_DATA_AVAILABLE": "Нема достапни податоци",
+    "PORTFOLIO_INCOME_MESSAGE": "Приходи на портфолиото"
   },
   "CANCEL": "Откажи",
   "SAVE_CHANGES": "Зачувај промени",
@@ -257,5 +285,22 @@
   "OVERVALUED": "Преценети",
   "UNDERVALUED": "Потценети",
   "FAIRLY_PRICED": "Фер цена",
-  "VALUE": "Вредност"
+  "VALUE": "Вредност",
+  "NO_DATA_AVAILABLE_FOR_PERIOD": "Нема достапни податоци за избраниот период.",
+  "NO_DATA_AVAILABLE_FOR": "Нема достапни податоци за {{date}}.",
+  "NO_SECTOR_DATA_AVAILABLE": "Нема достапни податоци за сектори.",
+  "NO_TRADING_DATA_AVAILABLE": "Нема достапни податоци за тргување.",
+  "NO_PORTFOLIOS_DATA_AVAILABLE": "Нема достапни податоци за портфолија.",
+  "NO_TRANSACTIONS_DATA_AVAILABLE": "Нема достапни податоци за трансакции.",
+  "NO_HOLDINGS_DATA_AVAILABLE": "Нема достапни податоци за акции.",
+  "LOADING_DATA_ERROR": "Грешка при вчитувањето на податоците.",
+  "NO_NOTIFICATIONS": "Нема нотификации.",
+  "MARK_AS_READ": "Означи за прочитано.",
+  "EXPORT_ERROR": "Грешка при извезувањето на податоците.",
+  "THRESHOLD_VALIDATION_ERROR": "Долната граница мора да биде помала од горната граница.",
+  "THRESHOLD_EXISTS": "Границата веќе постои.",
+  "PRICE_ALERTS": "Мои граници за промена на цени",
+  "LOWER": "Долна",
+  "UPPER": "Горна",
+  "THRESHOLD": "граница"
 }
