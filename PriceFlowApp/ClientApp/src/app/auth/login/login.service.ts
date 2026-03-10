@@ -3,19 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
-export interface LoginRequest {
-  username: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  id: number;
-  username: string;
-  email: string;
-  roles: string[];
-  message: string;
-}
+import { LoginRequest } from './LoginRequest';
+import { LoginResponse } from './LoginResponse';
 
 @Injectable({
   providedIn: 'root'

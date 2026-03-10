@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Portfolio, PortfoliosService } from '../portfolios.service';
+import { PortfoliosService } from '../portfolios.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { Portfolio } from '../Portfolio';
 
 @Component({
   selector: 'app-add-portfolio',

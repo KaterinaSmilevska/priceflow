@@ -1,19 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { PortfolioReturns } from "./PortfolioReturns";
+import { PortfolioReturnsSummary } from "./PortfolioReturnsSummary";
 
-export interface PortfolioReturns {
-  date: string;
-  netAmount: number;
-  tax: number;
-  portfolioId: number;
-  hvId: number;
-}
-
-export interface PortfolioReturnsSummary {
-  totalDividends: number;
-  totalTaxes: number;
-}
 
 @Injectable({ providedIn: 'root' })
 export class PortfolioReturnsService {

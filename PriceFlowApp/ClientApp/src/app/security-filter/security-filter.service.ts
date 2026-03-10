@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Sector } from "./Sector";
 import { FilteredSecurity } from "./FilteredSecurity";
-import { Security } from "../securities/securities.service";
 
 @Injectable({
   providedIn: 'root'

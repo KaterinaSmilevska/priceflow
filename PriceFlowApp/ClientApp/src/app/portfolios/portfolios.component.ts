@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { PortfoliosService, Portfolio, CreatePortfolio } from './portfolios.service';
+import { PortfoliosService } from './portfolios.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AddPortfolioComponent } from './add-portfolio/add-portfolio.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { Portfolio } from './Portfolio';
 
 @Component({
   selector: 'app-portfolios',

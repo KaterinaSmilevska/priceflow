@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Broker, BrokersService } from './brokers.service';
+import { BrokersService } from './brokers.service';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../auth/login/login.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { Broker } from './Broker';
 
 @Component({
   selector: 'app-brokers',

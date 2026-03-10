@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MarketOverview, MarketOverviewService } from './market-overview.service';
+import { MarketOverviewService } from './market-overview.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { MarketOverview } from './MarketOverview';
 
 @Component({
   selector: 'app-market-overview',

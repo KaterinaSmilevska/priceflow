@@ -3,12 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from './manage-users/User';
 import { Broker } from './manage-brokers/Broker';
-
-export interface AuthStatus {
-  isLoggedIn: boolean;
-  username?: string;
-  userId?: number;
-}
+import { AuthStatus } from './AuthStatus';
 
 @Injectable({
   providedIn: 'root'

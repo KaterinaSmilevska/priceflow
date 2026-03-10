@@ -1,32 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-
-export interface Security {
-  id: number;
-  code: string;
-}
-
-export interface PriceTrend {
-  date: string;
-  price: number;
-}
-
-export interface SectorDistribution {
-  sectorName: string;
-  marketCap: number;
-}
-
-export interface PortfolioIncome {
-  month: number;
-  year: number;
-  income: number;
-}
-
-export interface SecurityAllocation {
-  securityCode: string;
-  quantity: number;
-}
+import { PriceTrend } from "./PriceTrend";
+import { Security } from "./Security";
+import { PortfolioIncome } from "./PortfolioIncome";
+import { SectorDistribution } from "./SectorDistribution";
+import { SecurityAllocation } from "./SecurityAllocation";
 
 @Injectable({
   providedIn: 'root'

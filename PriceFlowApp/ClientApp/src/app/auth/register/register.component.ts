@@ -1,9 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RegisterService, RegisterRequest, RegisterResponse, UsernameCheckResponse, PasswordValidationResponse, EmailValidationResponse } from './register.service';
+import { RegisterService} from './register.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { EmailValidationResponse } from './EmailValidationResponse';
+import { PasswordValidationResponse } from './PasswordValidationResponse';
+import { RegisterRequest } from './RegisterRequest';
+import { RegisterResponse } from './RegisterResponse';
+import { UsernameCheckResponse } from './UsernameCheckResponse';
 
 interface Task {
   description: string;

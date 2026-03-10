@@ -1,47 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { PortfolioAnalytics } from "../portfolios/portfolios.service";
-
-export interface Transaction {
-  id: number;
-  hvCode: string;
-  sharesQuantity: number;
-  sharesUnitPrice: number;
-  amount: number;
-  typeTransaction: 'Купување' | 'Продавање';
-  isReal: boolean;
-  stockExchangeCommission: number;
-  brokerageCommission: number;
-  cdhvCommission: number;
-  date: string;
-}
-
-export interface PortfolioTableView {
-  date: string;
-  hvCode: string;
-  type: 'Купување' | 'Продавање' | 'Дивиденден принос';
-
-  sharesQuantity?: number;
-  sharesUnitPrice?: number;
-
-  amount: number;
-  commission?: number;
-  cashFlow: number;
-
-  isReal: boolean;
-
-  transactionId?: number;
-}
-
-export interface PortfolioValue {
-  hvid: number;
-  hvCode: string;
-  totalQuantity: number;
-  lastPrice: number;
-  currentValue: number;
-  isReal: boolean;
-}
+import { PortfolioAnalytics } from "../portfolios/PortfolioAnalytics";
+import { PortfolioValue } from "./PortfolioValue";
+import { Transaction } from "./Transaction";
 
 @Injectable({
   providedIn: 'root'

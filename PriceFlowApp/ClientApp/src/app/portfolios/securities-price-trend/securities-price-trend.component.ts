@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions } from 'chart.js';
-import { PortfoliosService, SecuritiesPriceTrend } from '../portfolios.service';
+import { PortfoliosService } from '../portfolios.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { SecuritiesPriceTrend } from '../SecuritiesPriceTrend';
 
 @Component({
   selector: 'app-securities-price-trend',

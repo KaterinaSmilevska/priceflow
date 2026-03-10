@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { LoginRequest, LoginResponse, LoginService } from './login.service';
+import { LoginService } from './login.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { LoginRequest } from './LoginRequest';
+import { LoginResponse } from './LoginResponse';
 
 @Component({
   selector: 'app-login',

@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SecuritiesService, Security } from '../../securities/securities.service';
-import { PortfolioReturnsSummary, PortfolioReturnsService } from './portfolio-returns.service';
+import { SecuritiesService } from '../../securities/securities.service';
+import { PortfolioReturnsService } from './portfolio-returns.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { PortfolioReturnsSummary } from './PortfolioReturnsSummary';
+import { Security } from '../../securities/Security';
 
 @Component({
   selector: 'app-portfolio-returns',

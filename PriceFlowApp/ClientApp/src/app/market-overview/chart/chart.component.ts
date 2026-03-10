@@ -3,8 +3,9 @@ import { Component, OnInit } from "@angular/core";
 import { PriceTrendComponent } from './price-trend/price-trend.component';
 import { SectorDistributionComponent } from './sector-distribution/sector-distribution.component';
 import { FormsModule } from "@angular/forms";
-import { ChartService, Security } from "./chart.service";
+import { ChartService } from "./chart.service";
 import { TranslateModule } from "@ngx-translate/core";
+import { Security } from "./Security";
 
 @Component({
   selector: 'app-chart',
