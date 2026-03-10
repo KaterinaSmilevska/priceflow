@@ -2,22 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LiquidityOverview } from '../liquidity/LiquidityOverview';
-
-export interface MarketOverview {
-  totalMarketCap: number;
-  averageDailyVolume: number;
-  topGainer: string;
-  topGainerChange: number;
-  topLoser: string;
-  topLoserChange: number;
-  totalSecurities: number;
-}
-
-export interface SecurityPerformance {
-  code: string;
-  changePercent: number;
-  volume: number;
-}
+import { MarketOverview } from './MarketOverview';
+import { SecurityPerformance } from './SecurityPerformance';
 
 @Injectable({
   providedIn: 'root'

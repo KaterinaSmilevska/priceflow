@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { SecuritiesService, Security } from './securities.service';
+import { SecuritiesService } from './securities.service';
 import { LoginService } from '../auth/login/login.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddSecurityComponent } from './add-security/add-security.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { Security } from './Security';
 
 @Component({
   selector: 'app-securities',

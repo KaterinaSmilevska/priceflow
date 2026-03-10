@@ -1,9 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
-import { CreateSecurity, Issuer, SecuritiesService, Security, TypeSecurity } from '../securities.service';
+import { SecuritiesService } from '../securities.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { Security } from '../Security';
+import { TypeSecurity } from '../TypeSecurity';
+import { CreateSecurity } from '../CreateSecurity';
+import { Issuer } from '../Issuer';
 
 @Component({
   selector: 'app-add-security',

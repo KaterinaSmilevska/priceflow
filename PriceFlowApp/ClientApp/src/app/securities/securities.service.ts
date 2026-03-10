@@ -1,40 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Security {
-  id: number;
-  isin: string;
-  code: string;
-  typeSecurityName: string;
-  issuerName: string;
-  totalNumShares: number;
-}
-
-export interface CreateSecurity {
-  isin: string,
-  code: string,
-  typeSecurityId: number,
-  issuerId: number,
-  totalNumShares: number
-}
-
-export interface TypeSecurity {
-  id: number;
-  name: string;
-}
-
-export interface Issuer {
-  id: number;
-  name: string;
-}
-
-export interface SecurityDailyPrices {
-  securityCode: string;
-  minPrice: number | null;
-  maxPrice: number | null;
-  averagePrice: number | null;
-}
+import { Security } from './Security';
+import { CreateSecurity } from './CreateSecurity';
+import { Issuer } from './Issuer';
+import { SecurityDailyPrices } from './SecurityDailyPrices';
+import { TypeSecurity } from './TypeSecurity';
 
 @Injectable({
   providedIn: 'root'

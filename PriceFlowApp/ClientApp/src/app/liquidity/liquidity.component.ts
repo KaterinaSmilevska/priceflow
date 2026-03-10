@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { SecurityLiquidity } from './SecurityLiquidity';
 import { MarketOverviewService } from '../market-overview/market-overview.service';
 import { FormsModule } from '@angular/forms';
 import { LiquidityOverview } from './LiquidityOverview';

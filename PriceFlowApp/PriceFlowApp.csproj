@@ -33,12 +33,45 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\admin\AuthStatus.ts" />
+    <None Remove="ClientApp\src\app\auth\login\LoginRequest.ts" />
+    <None Remove="ClientApp\src\app\auth\login\LoginResponse.ts" />
+    <None Remove="ClientApp\src\app\auth\register\EmailValidationRequest.ts" />
+    <None Remove="ClientApp\src\app\auth\register\EmailValidationResponse.ts" />
+    <None Remove="ClientApp\src\app\auth\register\PasswordValidationRequest.ts" />
+    <None Remove="ClientApp\src\app\auth\register\PasswordValidationResponse.ts" />
+    <None Remove="ClientApp\src\app\auth\register\RegisterRequest.ts" />
+    <None Remove="ClientApp\src\app\auth\register\RegisterResponse.ts" />
+    <None Remove="ClientApp\src\app\auth\register\UsernameCheckResponse.ts" />
+    <None Remove="ClientApp\src\app\brokers\Broker.ts" />
+    <None Remove="ClientApp\src\app\market-overview\chart\PortfolioIncome.ts" />
+    <None Remove="ClientApp\src\app\market-overview\chart\PriceTrend.ts" />
+    <None Remove="ClientApp\src\app\market-overview\chart\SectorDistribution.ts" />
+    <None Remove="ClientApp\src\app\market-overview\chart\Security.ts" />
+    <None Remove="ClientApp\src\app\market-overview\chart\SecurityAllocation.ts" />
+    <None Remove="ClientApp\src\app\market-overview\MarketOverview.ts" />
+    <None Remove="ClientApp\src\app\market-overview\SecurityPerformance.ts" />
+    <None Remove="ClientApp\src\app\portfolios\CreatePortfolio.ts" />
+    <None Remove="ClientApp\src\app\portfolios\portfolio-returns\PortfolioReturns.ts" />
+    <None Remove="ClientApp\src\app\portfolios\portfolio-returns\PortfolioReturnsSummary.ts" />
+    <None Remove="ClientApp\src\app\portfolios\Portfolio.ts" />
+    <None Remove="ClientApp\src\app\portfolios\PortfolioAnalytics.ts" />
+    <None Remove="ClientApp\src\app\portfolios\SecuritiesPriceTrend.ts" />
+    <None Remove="ClientApp\src\app\portfolios\UpdatePortfolio.ts" />
     <None Remove="ClientApp\src\app\register.service.ts" />
+    <None Remove="ClientApp\src\app\securities\CreateSecurity.ts" />
+    <None Remove="ClientApp\src\app\securities\Issuer.ts" />
+    <None Remove="ClientApp\src\app\securities\Security.ts" />
+    <None Remove="ClientApp\src\app\securities\SecurityDailyPrices.ts" />
+    <None Remove="ClientApp\src\app\securities\TypeSecurity.ts" />
     <None Remove="ClientApp\src\app\security-filter\analyst.guard.ts" />
     <None Remove="ClientApp\src\app\security-filter\FilteredSecurity.ts" />
     <None Remove="ClientApp\src\app\security-filter\Sector.ts" />
     <None Remove="ClientApp\src\app\security-filter\security-filter.service.ts" />
     <None Remove="ClientApp\src\app\theme.service.ts" />
+    <None Remove="ClientApp\src\app\transactions\PortfolioTableView.ts" />
+    <None Remove="ClientApp\src\app\transactions\PortfolioValue.ts" />
+    <None Remove="ClientApp\src\app\transactions\Transaction.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,12 +80,45 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\admin\AuthStatus.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\auth\login\LoginRequest.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\auth\login\LoginResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\auth\register\EmailValidationRequest.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\auth\register\EmailValidationResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\auth\register\PasswordValidationRequest.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\auth\register\PasswordValidationResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\auth\register\register.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\auth\register\RegisterRequest.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\auth\register\RegisterResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\auth\register\UsernameCheckResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\brokers\Broker.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\market-overview\chart\PortfolioIncome.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\market-overview\chart\PriceTrend.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\market-overview\chart\SectorDistribution.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\market-overview\chart\Security.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\market-overview\chart\SecurityAllocation.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\market-overview\MarketOverview.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\market-overview\SecurityPerformance.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\portfolios\CreatePortfolio.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\portfolios\portfolio-returns\PortfolioReturns.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\portfolios\portfolio-returns\PortfolioReturnsSummary.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\portfolios\Portfolio.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\portfolios\PortfolioAnalytics.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\portfolios\SecuritiesPriceTrend.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\portfolios\UpdatePortfolio.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\securities\CreateSecurity.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\securities\Issuer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\securities\Security.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\securities\SecurityDailyPrices.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\securities\TypeSecurity.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\security-filter\analyst.guard.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\security-filter\FilteredSecurity.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\security-filter\Sector.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\security-filter\security-filter.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\theme.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\transactions\PortfolioTableView.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\transactions\PortfolioValue.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\transactions\Transaction.ts" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

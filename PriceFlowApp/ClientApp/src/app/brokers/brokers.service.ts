@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Broker {
-  id: number;
-  company: string;
-  commissionPercent: number;
-}
+import { Broker } from './Broker';
 
 @Injectable({
   providedIn: 'root'

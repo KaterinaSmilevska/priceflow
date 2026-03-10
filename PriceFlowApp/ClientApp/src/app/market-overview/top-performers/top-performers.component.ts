@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MarketOverviewService, SecurityPerformance } from '../market-overview.service';
+import { MarketOverviewService } from '../market-overview.service';
 import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { SecurityPerformance } from '../SecurityPerformance';
 
 @Component({
   selector: 'app-top-performers',

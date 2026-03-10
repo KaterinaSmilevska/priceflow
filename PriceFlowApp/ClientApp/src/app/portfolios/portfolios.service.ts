@@ -1,37 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SecurityLiquidity } from '../liquidity/SecurityLiquidity';
 import { PortfolioPerformanceSummary } from './performance-export/PortfolioPerformanceSummary';
-
-export interface Portfolio {
-  id: number;
-  name: string;
-  description: string | null;
-}
-
-export interface CreatePortfolio {
-  name: string;
-  description: string | null;
-}
-
-export interface UpdatePortfolio {
-  name: string;
-  description: string | null;
-}
-
-export interface PortfolioAnalytics {
-  totalRevenue: number;
-  totalExpenses: number;
-  balance: number;
-  taxes: number;
-}
-
-export interface SecuritiesPriceTrend {
-  date: string;
-  securityCode: string;
-  price: number;
-}
+import { Portfolio } from './Portfolio';
+import { CreatePortfolio } from './CreatePortfolio';
+import { UpdatePortfolio } from './UpdatePortfolio';
+import { SecuritiesPriceTrend } from './SecuritiesPriceTrend';
 
 @Injectable({ providedIn: 'root' })
 export class PortfoliosService {

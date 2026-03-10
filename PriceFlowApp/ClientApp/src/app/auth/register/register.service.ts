@@ -1,46 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface RegisterRequest {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  roleNames: string[];
-}
-
-export interface RegisterResponse {
-  id: number;
-  username: string;
-  email: string;
-  roles: string[];
-  message: string;
-}
-
-export interface UsernameCheckResponse {
-  exists: boolean;
-}
-
-export interface PasswordValidationRequest {
-  password: string;
-  confirmPassword: string;
-}
-
-export interface PasswordValidationResponse {
-  isValid: boolean;
-  message: string;
-}
-
-export interface EmailValidationRequest {
-  email: string;
-}
-
-export interface EmailValidationResponse {
-  isValid: boolean;
-  message: string;
-}
+import { RegisterRequest } from './RegisterRequest';
+import { RegisterResponse } from './RegisterResponse';
+import { UsernameCheckResponse } from './UsernameCheckResponse';
+import { PasswordValidationRequest } from './PasswordValidationRequest';
+import { PasswordValidationResponse } from './PasswordValidationResponse';
+import { EmailValidationRequest } from './EmailValidationRequest';
+import { EmailValidationResponse } from './EmailValidationResponse';
 
 @Injectable({
   providedIn: 'root'

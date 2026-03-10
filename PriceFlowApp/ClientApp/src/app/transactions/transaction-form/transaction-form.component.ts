@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Transaction, TransactionsService } from '../transactions.service';
-import { SecurityDailyPrices, SecuritiesService, Security } from '../../securities/securities.service';
+import { TransactionsService } from '../transactions.service';
+import { SecuritiesService } from '../../securities/securities.service';
 import { Tooltip } from 'bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { Transaction } from '../Transaction';
+import { Security } from '../../securities/Security';
+import { SecurityDailyPrices } from '../../securities/SecurityDailyPrices';
 
 @Component({
   selector: 'app-transaction-form',

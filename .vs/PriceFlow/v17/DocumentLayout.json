@@ -18,8 +18,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a83394e3-39c2-4678-a3c8-364b69d78fd3}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -28,7 +32,7 @@
               "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
               "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
-              "ViewState": "AgIAAIYAAAAAAAAAAAAAAKIAAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAAJ4AAAAAAAAAAAAAALIAAABVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2026-03-10T14:56:12.88Z",
               "EditorCaption": ""
@@ -43,12 +47,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
               "ViewState": "AgIAABMBAAAAAAAAAAAiwCIBAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-03-10T14:47:38.048Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{a83394e3-39c2-4678-a3c8-364b69d78fd3}"
+              "WhenOpened": "2026-03-10T14:47:38.048Z"
             }
           ]
         }
