@@ -52,7 +52,7 @@
   display: inline-block;
   padding: 2px 6px;
   background-color: var(--success-bg);
-  color: var(--success-text);
+  color: var(--btn-text);
   border-radius: 4px;
   font-size: 0.8rem;
   margin-left: 5px;

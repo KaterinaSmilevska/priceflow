@@ -13,7 +13,7 @@
     <div *ngIf="errorMessage" class="error">{{ errorMessage | translate }}</div>
   </form>
   <div *ngIf="loginService.isLoggedIn() | async" class="success">
-    {{ 'LOGIN_SUCCESS' | translate }} {{ 'AS' | translate }} {{ loginService.getUsername() | async }}.
+    {{ 'AUTH.LOGIN_SUCCESS' | translate }} {{ 'AS' | translate }} {{ loginService.getUsername() | async }}.
     <div *ngIf="roles?.length">Roles: {{ roles.join(', ') }}</div>
   </div>
   <p class="forgot-password-link mt-4 text-center text-gray-600">

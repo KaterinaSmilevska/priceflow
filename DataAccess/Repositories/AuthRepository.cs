@@ -6,12 +6,10 @@ namespace DataAccess.Repositories
     public class AuthRepository: IAuthRepository
     {
         private readonly PriceFlowDbContext _dbContext;
-        private readonly IUsersRolesRepository _usersRolesRepository;
 
-        public AuthRepository(PriceFlowDbContext context, IUsersRolesRepository usersRolesRepository)
+        public AuthRepository(PriceFlowDbContext context)
         {
             _dbContext = context;
-            _usersRolesRepository = usersRolesRepository;
         }
 
         public async Task<Korisnici?> GetByIdAsync(int id)

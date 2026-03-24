@@ -36,13 +36,13 @@
     "REGISTRATION_SUCCESS": "Registration successfull",
     "EMAIL_VERIFICATION_MESSAGE": "Please check your email to verify your account",
     "VERIFICATION_SUCCESS": "Email successfully verified. You can now log in",
-    "LOGIN_SUCCESS": "You are successfuly logged in as",
+    "LOGIN_SUCCESS": "You are successfuly logged in",
     "REGISTER_ERROR": "Registration failed.",
     "INVALID_CREDENTIALS": "Invalid username or password.",
     "LOGIN_SUCCESS_TOOLTIP": "Logged in successfully!",
     "LOGOUT_SUCCESS_TOOLTIP": "Logged out successfully!",
     "RESET_LINK_SUCCESS": "Reset link has been sent to your email.",
-    "RESET_LINK_ERROR": "Failed to send reset link.",
+    "RESET_LINK_ERROR": "The username does not exist.",
     "RESET_PASSWORD_ERROR": "Failed to reset password.",
     "PASSWORD_MISSMATCH": "Passwords do not match."
 
@@ -137,7 +137,8 @@
     "ENDING_VALUE": "Ending value",
     "ABSOLUTE_RETURN": "Absolute Return",
     "PORTFOLIO_PERFORMANCE_NOTIFICATIONS": "Portfolio Performance Notifications",
-    "ENABLE_NOTIFICATIONS": "Enable Notifications"
+    "ENABLE_NOTIFICATIONS": "Enable Notifications",
+    "PORTFOLIO_INCOME": "Portfolio income ({{start_date}} - {{end_date}})"
   },
   "TRANSACTIONS": {
     "TITLE": "Transactions",
@@ -290,6 +291,8 @@
   "VALUE": "Value",
   "NO_DATA_AVAILABLE_FOR_PERIOD": "No data available for the selected period.",
   "NO_DATA_AVAILABLE_FOR": "No data available for {{date}}.",
+  "NO_OWNED_SECURITIES_DATA_AVAILABLE": "No owned securities data available.",
+  "NO_SECURITIES_DATA_AVAILABLE": "No securities data available.",
   "NO_SECTOR_DATA_AVAILABLE": "No sector data available.",
   "NO_TRADING_DATA_AVAILABLE": "No trading data available.",
   "NO_PORTFOLIOS_DATA_AVAILABLE": "No portfolios data available.",
@@ -297,7 +300,7 @@
   "NO_HOLDINGS_DATA_AVAILABLE": "No holdings data available.",
   "LOADING_DATA_ERROR": "An error occured while laoding data.",
   "NO_NOTIFICATIONS": "No notifications.",
-  "MARK_AS_READ": "Mark as read.",
+  "MARK_AS_READ": "Mark as read",
   "EXPORT_ERROR": "Failed to export data.",
   "THRESHOLD_VALIDATION_ERROR": "Lower threshold must be less than upper threshold.",
   "THRESHOLD_EXISTS": "Threshold already exists.",

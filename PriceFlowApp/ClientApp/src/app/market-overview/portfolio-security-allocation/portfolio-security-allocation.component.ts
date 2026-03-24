@@ -43,11 +43,11 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
         },
         padding: {
           top: 10,
-          bottom: 20
+          bottom: 10
         }
       },
       legend: {
-        position: 'bottom'
+        position: 'top'
       }
     }
   };

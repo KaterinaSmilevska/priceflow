@@ -36,13 +36,13 @@
     "REGISTRATION_SUCCESS": "Успешно се регистриравте",
     "EMAIL_VERIFICATION_MESSAGE": "Проверете емаил за да ја верификувате вашата корисничка сметка",
     "VERIFICATION_SUCCESS": "Верификацијата е успешна. Можете да се најавите",
-    "LOGIN_SUCCESS": "Успешно се најавивте како",
+    "LOGIN_SUCCESS": "Успешно се најавивте",
     "REGISTER_ERROR": "Регистрацијата е неуспешна.",
     "INVALID_CREDENTIALS": "Невалидно корисничко име и/или лозинка.",
     "LOGIN_SUCCESS_TOOLTIP": "Успешно се најавивте!",
     "LOGOUT_SUCCESS_TOOLTIP": "Успешно се одјавивте!",
     "RESET_LINK_SUCCESS": "Линк за промена на лозинката е испратен на вашиот емаил.",
-    "RESET_LINK_ERROR": "Грешка при испраќање на линкот за промена на лозинката.",
+    "RESET_LINK_ERROR": "Корисничкото име не постои.",
     "RESET_PASSWORD_ERROR": "Грешка при промена на лозинката.",
     "PASSWORD_MISSMATCH": "Лозинките не се идентични."
   },
@@ -135,7 +135,8 @@
     "ENDING_VALUE": "Крајна вредност",
     "ABSOLUTE_RETURN": "Апсолутни приноси",
     "PORTFOLIO_PERFORMANCE_NOTIFICATIONS": "Известувања за перформанси на портфолиото",
-    "ENABLE_NOTIFICATIONS": "Овозможи известувања"
+    "ENABLE_NOTIFICATIONS": "Овозможи известувања",
+    "PORTFOLIO_INCOME": "Приходи на портфолиото ({{start_date}} - {{end_date}})"
   },
   "TRANSACTIONS": {
     "TITLE": "Трансакции",
@@ -288,6 +289,8 @@
   "VALUE": "Вредност",
   "NO_DATA_AVAILABLE_FOR_PERIOD": "Нема достапни податоци за избраниот период.",
   "NO_DATA_AVAILABLE_FOR": "Нема достапни податоци за {{date}}.",
+  "NO_OWNED_SECURITIES_DATA_AVAILABLE": "Не поседувате никакви акции.",
+  "NO_SECURITIES_DATA_AVAILABLE": "Нема достапни податоци за хартии од вредност.",
   "NO_SECTOR_DATA_AVAILABLE": "Нема достапни податоци за сектори.",
   "NO_TRADING_DATA_AVAILABLE": "Нема достапни податоци за тргување.",
   "NO_PORTFOLIOS_DATA_AVAILABLE": "Нема достапни податоци за портфолија.",
@@ -295,7 +298,7 @@
   "NO_HOLDINGS_DATA_AVAILABLE": "Нема достапни податоци за акции.",
   "LOADING_DATA_ERROR": "Грешка при вчитувањето на податоците.",
   "NO_NOTIFICATIONS": "Нема нотификации.",
-  "MARK_AS_READ": "Означи за прочитано.",
+  "MARK_AS_READ": "Означи за прочитано",
   "EXPORT_ERROR": "Грешка при извезувањето на податоците.",
   "THRESHOLD_VALIDATION_ERROR": "Долната граница мора да биде помала од горната граница.",
   "THRESHOLD_EXISTS": "Границата веќе постои.",

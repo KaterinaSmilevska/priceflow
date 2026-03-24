@@ -17,7 +17,7 @@ namespace PriceFlowApp.Services
 
         Task DeleteAsync(int id);
 
-        Task<PortfolioAnalytics> GetAnalyticsAsync(int portfolioid, bool isReal);
+        Task<PortfolioAnalytics> GetAnalyticsAsync(int portfolioId, bool isReal);
 
         Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod period, int periodsBack = 12);
     }

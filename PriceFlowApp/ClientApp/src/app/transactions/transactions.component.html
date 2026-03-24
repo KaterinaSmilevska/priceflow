@@ -219,38 +219,36 @@
     </div>
 
     <div class="tab-pane fade" id="worth">
-        <div class="table-responsive mt-3">
-          <table>
-            <thead>
-              <tr>
-                <th>{{ 'SECURITIES.TITLE' | translate }}</th>
-                <th class="text-end">{{ 'QUANTITY' | translate }}</th>
-                <th class="text-end">{{ 'TRANSACTIONS.LAST_PRICE' | translate }}</th>
-                <th class="text-end">{{ 'PORTFOLIOS.CURRENT_VALUE' | translate }}</th>
-              </tr>
-            </thead>
+      <div *ngIf="portfolioValue.length" class="table-responsive mt-3">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'SECURITIES.TITLE' | translate }}</th>
+              <th class="text-end">{{ 'QUANTITY' | translate }}</th>
+              <th class="text-end">{{ 'TRANSACTIONS.LAST_PRICE' | translate }}</th>
+              <th class="text-end">{{ 'PORTFOLIOS.CURRENT_VALUE' | translate }}</th>
+            </tr>
+          </thead>
 
-            <tbody>
-              <tr *ngFor="let v of portfolioValue">
-                <td class="fw-semibold text-primary">{{ v.hvCode }}</td>
-                <td class="text-end">{{ v.totalQuantity }}</td>
-                <td class="text-end">
-                  {{ v.lastPrice | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
-                </td>
-                <td class="text-end fw-bold">
-                  {{ v.currentValue | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
-                </td>
-              </tr>
-
-              <tr *ngIf="!portfolioValue.length && !loadingValue">
-                <td colspan="4" class="text-center text-muted">
-                  No owned securities.
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <tbody>
+            <tr *ngFor="let v of portfolioValue">
+              <td class="fw-semibold text-primary">{{ v.hvCode }}</td>
+              <td class="text-end">{{ v.totalQuantity }}</td>
+              <td class="text-end">
+                {{ v.lastPrice | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
+              </td>
+              <td class="text-end fw-bold">
+                {{ v.currentValue | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
+      <div *ngIf="!portfolioValue.length && !loadingValue" class="text-center">
+        <span colspan="4">
+          {{ 'NO_OWNED_SECURITIES_DATA_AVAILABLE' | translate }}
+        </span>
+      </div>
     </div>
   </div>
 

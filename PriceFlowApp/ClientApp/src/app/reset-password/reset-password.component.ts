@@ -31,7 +31,7 @@ export class ResetPasswordComponent implements OnInit {
         this.errorMessage = 'AUTH.RESET_LINK_SUCCESS';
       },
       error: (err) => {
-        this.errorMessage = err.error.message || 'AUTH.RESET_LINK_ERROR';
+        this.errorMessage = 'AUTH.RESET_LINK_ERROR';
       }
     });
   }

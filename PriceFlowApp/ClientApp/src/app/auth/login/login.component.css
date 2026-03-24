@@ -51,16 +51,18 @@
 
 .error {
   color: var(--error-color);
-  border-radius: 5px;
   margin-top: 1rem;
+  padding: 0.75rem;
   text-align: center;
+  border-radius: 6px;
+  background-color: rgba(220, 38, 38, 0.1);
 }
 
 .success {
   background-color: var(--success-bg);
-  border-radius: 5px;
-  color: var(--success-text);
+  border-radius: 6px;
   margin-top: 1rem;
+  padding: 0.75rem;
   text-align: center;
 }
 
