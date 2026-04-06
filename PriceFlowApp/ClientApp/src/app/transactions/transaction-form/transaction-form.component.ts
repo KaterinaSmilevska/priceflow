@@ -188,6 +188,29 @@ export class TransactionFormComponent implements OnInit {
       });
   }
 
+  private inferPriceType() {
+    if (!this.dailyPrices || !this.transaction) return;
+
+    const unitPrice = this.transaction.sharesUnitPrice;
+
+    const min = this.dailyPrices.minPrice;
+    const average = this.dailyPrices.averagePrice;
+    const max = this.dailyPrices.maxPrice;
+
+    const isClose = (a: number, b: number) => Math.abs(a - b) < 0.0001;
+
+    let type: 'min' | 'average' | 'max' = 'average';
+
+    if (min != null && isClose(unitPrice, min)) {
+      type = 'min';
+    } else if (max != null && isClose(unitPrice, max)) {
+      type = 'max';
+    } else if (average != null && isClose(unitPrice, average)) {
+      type = 'average';
+    }
+    this.form.patchValue({ selectedPriceType: type }, { emitEvent: false });
+  }
+
   private loadPrices(): void {
     const code = this.form.get('hvCode')?.value;
     const date = this.form.get('date')?.value;
@@ -196,7 +219,12 @@ export class TransactionFormComponent implements OnInit {
 
     this.securitiesService.getLatestPrices(code, date).subscribe(prices => {
       this.dailyPrices = prices;
-      this.applySelectedPrice();
+      if (this.transaction) {
+        this.inferPriceType();
+      } else {
+        this.applySelectedPrice();
+      }
+      
     })
   }
 
