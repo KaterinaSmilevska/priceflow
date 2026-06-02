@@ -38,6 +38,7 @@ export class TransactionFormComponent implements OnInit {
   isReal = true;
 
   dailyPrices?: SecurityDailyPrices;
+  priceWarning: string | null = null;
 
   constructor(private fb: FormBuilder,
     private transactionsService: TransactionsService,
@@ -47,8 +48,7 @@ export class TransactionFormComponent implements OnInit {
     this.form = this.fb.group({
       hvCode: ['', Validators.required],
       sharesQuantity: [1, [Validators.required, Validators.min(1)]],
-      sharesUnitPrice: [{ value: 0, disabled: true }],
-      selectedPriceType: ['average', Validators.required],
+      sharesUnitPrice: [0, [Validators.required, Validators.min(0.01)]],
       typeTransaction: ['Купување', Validators.required],
       isReal: [true],
       stockExchangeCommission: [{ value: 0.2, disabled: true }],
@@ -70,9 +70,6 @@ export class TransactionFormComponent implements OnInit {
       this.loadPrices();
     });
 
-    this.form.get('selectedPriceType')?.valueChanges
-      .subscribe(() => this.applySelectedPrice());
-
     this.form.get('date')?.valueChanges
       .subscribe(() => this.loadPrices());
 
@@ -82,6 +79,11 @@ export class TransactionFormComponent implements OnInit {
       this.calculateAmountPreview();
       this.evaluateLimits();
       this.validateSellDate();
+    })
+
+    this.form.get('sharesUnitPrice')?.valueChanges.subscribe(() => {
+      this.validatePriceRange();
+      this.calculateAmountPreview();
     })
 
     if (this.transaction) {
@@ -188,29 +190,6 @@ export class TransactionFormComponent implements OnInit {
       });
   }
 
-  private inferPriceType() {
-    if (!this.dailyPrices || !this.transaction) return;
-
-    const unitPrice = this.transaction.sharesUnitPrice;
-
-    const min = this.dailyPrices.minPrice;
-    const average = this.dailyPrices.averagePrice;
-    const max = this.dailyPrices.maxPrice;
-
-    const isClose = (a: number, b: number) => Math.abs(a - b) < 0.0001;
-
-    let type: 'min' | 'average' | 'max' = 'average';
-
-    if (min != null && isClose(unitPrice, min)) {
-      type = 'min';
-    } else if (max != null && isClose(unitPrice, max)) {
-      type = 'max';
-    } else if (average != null && isClose(unitPrice, average)) {
-      type = 'average';
-    }
-    this.form.patchValue({ selectedPriceType: type }, { emitEvent: false });
-  }
-
   private loadPrices(): void {
     const code = this.form.get('hvCode')?.value;
     const date = this.form.get('date')?.value;
@@ -219,39 +198,27 @@ export class TransactionFormComponent implements OnInit {
 
     this.securitiesService.getLatestPrices(code, date).subscribe(prices => {
       this.dailyPrices = prices;
-      if (this.transaction) {
-        this.inferPriceType();
-      } else {
-        this.applySelectedPrice();
-      }
-      
+
+      this.validatePriceRange();
     })
   }
 
-  private applySelectedPrice(): void {
+  private validatePriceRange(): void {
+    this.priceWarning = null;
+
     if (!this.dailyPrices) return;
 
-    const type = this.form.get('selectedPriceType')?.value;
-    let price: number | null = null;
+    const price = Number(this.form.get('sharesUnitPrice')?.value);
 
-    switch (type) {
-      case 'min':
-        price = this.dailyPrices.minPrice;
-        break;
-      case 'max':
-        price = this.dailyPrices.maxPrice;
-        break;
-      default:
-        price = this.dailyPrices.averagePrice;
+    if (!price) return;
+
+    if (this.dailyPrices.minPrice != null && price < this.dailyPrices.minPrice) {
+      this.priceWarning = `The entered price is lower than the today's min price of trading (${this.dailyPrices.minPrice.toFixed(2)} MKD).`;
     }
 
-    if (price == null) return;
-
-    this.form.patchValue(
-      { sharesUnitPrice: price },
-      { emitEvent: false }
-    );
-    this.calculateAmountPreview();
+    if (this.dailyPrices.maxPrice != null && price > this.dailyPrices.maxPrice) {
+      this.priceWarning = `The entered price is higher than the today's max price of trading (${this.dailyPrices.maxPrice.toFixed(2)} MKD).`;
+    }
   }
 
   onSubmit(): void {

@@ -1,7 +1,7 @@
 <div class="modal-overlay">
   <div class="modal-content">
 
-    <h5>{{ (transaction ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'PORTFOLIOS.PORTFOLIO' | translate }}</h5>
+    <h5>{{ (transaction ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'TRANSACTIONS.TITLE' | translate }}</h5>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
@@ -27,12 +27,14 @@
         {{ 'TRANSACTIONS.BUY_MESSAGE' | translate }} {{ remainingShares }} {{ 'SHARES' | translate }}.
       </div>
 
-      <label>{{ 'SECURITIES.PRICE_TYPE' | translate }}</label>
-      <select formControlName="selectedPriceType" class="form-select">
-        <option value="min">{{ 'MIN' | translate }} {{ 'PRICE' | translate }}</option>
-        <option value="average">{{ 'AVERAGE' | translate }} {{ 'PRICE' | translate }}</option>
-        <option value="max">{{ 'MAX' | translate }} {{ 'PRICE' | translate }}</option>
-      </select>
+      <label>{{'PRICE' | translate }}</label>
+      <input
+        type="number"
+        formControlName="sharesUnitPrice"
+        class="form-control"/>
+      <div *ngIf="priceWarning" class="alert alert-warning mt-2">
+        {{ priceWarning }}
+      </div>
 
       <div class="small mt-1" *ngIf="dailyPrices">
         {{ 'SECURITIES.SELECTED_PRICE' | translate }}:
