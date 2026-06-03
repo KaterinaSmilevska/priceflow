@@ -18,6 +18,7 @@ export class ResetPasswordComponent implements OnInit {
   confirmPassword: string = '';
   resetToken: string | null = null;
   errorMessage: string = '';
+  successMessage: string = '';
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
 
@@ -26,9 +27,12 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   sendResetLink(): void {
+    this.successMessage = '';
+    this.errorMessage = '';
+
     this.http.post('/api/auth/forgot-password', { username: this.username }).subscribe({
       next: () => {
-        this.errorMessage = 'AUTH.RESET_LINK_SUCCESS';
+        this.successMessage = 'AUTH.RESET_LINK_SUCCESS';
       },
       error: (err) => {
         this.errorMessage = 'AUTH.RESET_LINK_ERROR';

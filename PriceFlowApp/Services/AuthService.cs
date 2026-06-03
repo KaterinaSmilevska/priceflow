@@ -160,7 +160,7 @@ namespace PriceFlowApp.Services
                     return new PasswordValidationResponse
                     {
                         IsValid = false,
-                        Message = "Password must contain at least 8 characters long, " +
+                        Message = "Password must contain at least 8 characters, " +
                         "with one lowercase letter, one uppercase letter, one number, one special character and no spaces."
                     };
                 }
@@ -332,13 +332,19 @@ namespace PriceFlowApp.Services
             if (user == null || user.ResetPasswordTokenExpiry < DateTime.UtcNow)
                 throw new Exception("Invalid or expired token");
 
-            if(PasswordHelper.ValidatePasswordStrength(newPassword))
+            var passwordValidation = await ValidatePasswordAsync(new PasswordValidationRequest
             {
-                user.PasswordHash = PasswordHelper.CalculateHashAndSalt(newPassword);
-                user.ResetPasswordToken = null;
-                user.ResetPasswordTokenExpiry = null;
-                await _authRepository.UpdateAsync(user);
-            }
+                Password = newPassword,
+                ConfirmPassword = newPassword
+            });
+            if (!passwordValidation.IsValid)
+                throw new ArgumentException(passwordValidation.Message);
+
+            user.PasswordHash = PasswordHelper.CalculateHashAndSalt(newPassword);
+            user.ResetPasswordToken = null;
+            user.ResetPasswordTokenExpiry = null;
+            await _authRepository.UpdateAsync(user);
+            
         }
     }
 }
