@@ -145,6 +145,7 @@
     "REAL": "Real",
     "SIMULATED": "Simulated",
     "TRANSACTION": "Transaction",
+    "ENTERED_PRICE": "Еntered price",
     "UNIT_PRICE": "Unit Price",
     "TRADE_VALUE": "Trade Value",
     "LAST_PRICE": "Last Price",

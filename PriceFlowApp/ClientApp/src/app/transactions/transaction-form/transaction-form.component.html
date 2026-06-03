@@ -32,12 +32,12 @@
         type="number"
         formControlName="sharesUnitPrice"
         class="form-control"/>
-      <div *ngIf="priceWarning" class="alert alert-warning mt-2">
+      <div *ngIf="priceWarning" class="price-warning alert alert-warning mt-2">
         {{ priceWarning }}
       </div>
 
       <div class="small mt-1" *ngIf="dailyPrices">
-        {{ 'SECURITIES.SELECTED_PRICE' | translate }}:
+        {{ 'TRANSACTIONS.ENTERED_PRICE' | translate }}:
         <strong>{{ form.get('sharesUnitPrice')?.value | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }} </strong>
       </div>
 
