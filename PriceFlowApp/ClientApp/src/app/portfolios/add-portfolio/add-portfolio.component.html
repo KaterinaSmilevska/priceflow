@@ -29,7 +29,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
-          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+          <button type="submit" class="btn btn-success" [disabled]="form.invalid">
             {{ (portfolioToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}
           </button>
         </div>

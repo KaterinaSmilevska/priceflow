@@ -5,7 +5,7 @@ import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 Chart.register(...registerables, ChartDataLabels);
 
@@ -36,7 +36,7 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
     plugins: {
       title: {
         display: true,
-        text: 'Security allocation',
+        text: this.translateService.instant('CHART.SECURITY_ALLOCATION_MESSAGE'),
         font: {
           size: 16,
           weight: 'bold'
@@ -52,7 +52,7 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
     }
   };
 
-  constructor(private chartService: ChartService) { }
+  constructor(private chartService: ChartService, private translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.loadChart();

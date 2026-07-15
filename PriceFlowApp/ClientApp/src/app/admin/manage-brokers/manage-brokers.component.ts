@@ -6,11 +6,12 @@ import { Broker } from './Broker';
 import { EditBrokerComponent } from './edit-broker/edit-broker.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { BrokersTranslatePipe } from '../../shared/brokers-translate.pipe';
 
 @Component({
   selector: 'app-manage-brokers',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, EditBrokerComponent, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, EditBrokerComponent, TranslateModule, BrokersTranslatePipe],
   templateUrl: './manage-brokers.component.html',
   styleUrl: './manage-brokers.component.css',
 })

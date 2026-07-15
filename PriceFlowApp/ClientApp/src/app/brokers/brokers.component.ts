@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { LoginService } from '../auth/login/login.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { Broker } from './Broker';
+import { BrokersTranslatePipe } from '../shared/brokers-translate.pipe';
 
 @Component({
   selector: 'app-brokers',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, BrokersTranslatePipe],
   templateUrl: './brokers.component.html',
   styleUrls: ['./brokers.component.css']
 })

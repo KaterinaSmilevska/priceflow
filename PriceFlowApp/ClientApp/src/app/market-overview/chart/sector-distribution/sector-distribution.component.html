@@ -1,6 +1,6 @@
 <div class="chart-container">
   <div class="chart-header" *ngIf="date && !noDataMessage">
-    <span>Showing data for {{ date }}</span>
+    <span>{{'CHART.SHOWING_DATA_FOR' | translate}} {{ date }}</span>
   </div>
 
   <ng-container *ngIf="!noDataMessage; else noData">

@@ -160,3 +160,8 @@ tbody tr:hover {
   justify-content: center;
   gap: 10px;
 }
+
+.page-link {
+  color: var(--primary-color);
+  text-decoration: none;
+}

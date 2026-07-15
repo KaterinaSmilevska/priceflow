@@ -5,11 +5,13 @@ import { Threshold } from './Threshold';
 import { OwnedSecurity } from './OwnedSecurity';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { ThresholdFormComponent } from './threshold-form/threshold-form.component';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-threshold',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule, ThresholdFormComponent],
   templateUrl: './threshold.component.html',
   styleUrl: './threshold.component.css',
 })
@@ -18,10 +20,15 @@ export class ThresholdComponent implements OnInit {
   owned: OwnedSecurity[] = [];
   thresholds: Threshold[] = [];
 
+  showEditModal = false;
+  thresholdToEdit?: Threshold;
+  showDeleteModal = false;
+  thresholdToDelete?: Threshold;
+
   editingId: number | null = null;
   errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private thresholdService: ThresholdService) { }
+  constructor(private fb: FormBuilder, private thresholdService: ThresholdService, private router: Router) { }
 
   form = this.fb.group({
     hvId: [null as number | null, Validators.required,],
@@ -44,67 +51,48 @@ export class ThresholdComponent implements OnInit {
       .subscribe(data => this.thresholds = data);
   }
 
-  submit() {
-    this.errorMessage = null;
-
-    if (this.form.invalid) return;
-
-    const hvId = this.form.value.hvId!;
-    const lower = this.form.value.lowerThreshold!;
-    const upper = this.form.value.upperThreshold!;
-
-    if (lower >= upper) {
-      this.errorMessage = 'THRESHOLD_VALIDATION_ERROR';
-      return;
-    }
-
-    if (this.editingId) {
-      const updatePayload = {
-        lowerThreshold: lower,
-        upperThreshold: upper
-      };
-
-      this.thresholdService.updateThreshold(this.editingId, updatePayload)
-        .subscribe(() => {
-          this.resetForm();
-          this.loadThresholds();
-        });
-    }
-    else {
-      const createPayload = {
-        hvId: hvId,
-        lowerThreshold: lower,
-        upperThreshold: upper
-      };
-
-      this.thresholdService.addThreshold(createPayload)
-          .subscribe({
-            next: () => {
-              this.resetForm();
-              this.loadThresholds();
-            },
-            error: err => {
-              this.errorMessage = err.error?.message || 'THRESHOLD_EXISTS';
-            }
-          });
-        }
+  openAddModal() {
+    this.thresholdToEdit = undefined;
+    this.showEditModal = true;
   }
 
-    edit(th: Threshold) {
-      this.editingId = th.id;
+  openEditModal(threshold: Threshold) {
+    this.thresholdToEdit = threshold;
+    this.showEditModal = true;
+  }
 
-      this.form.patchValue({
-        hvId: th.hvId,
-        lowerThreshold: th.lowerThreshold,
-        upperThreshold: th.upperThreshold
+  onEditModalClose() {
+    this.showEditModal = false;
+    this.thresholdToEdit = undefined;
+  }
+
+  onSaved() {
+    this.showEditModal = false;
+    this.thresholdToEdit = undefined;
+    this.loadThresholds();
+  }
+
+  openDeleteModal(threshold: Threshold) {
+    this.thresholdToDelete = threshold;
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete() {
+    if (!this.thresholdToDelete) return;
+
+    this.thresholdService
+      .deleteThreshold(this.thresholdToDelete.id)
+      .subscribe(() => {
+        this.showDeleteModal = false;
+        this.thresholdToDelete = undefined;
+
+        this.loadThresholds();
       });
-
-      this.form.get('hvId')?.disable();
   }
 
-  delete(id: number) {
-    this.thresholdService.deleteThreshold(id)
-      .subscribe(() => this.loadThresholds());
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.thresholdToDelete = undefined;
   }
 
     resetForm() {
@@ -112,9 +100,5 @@ export class ThresholdComponent implements OnInit {
       this.form.reset();
 
       this.form.get('hvId')?.enable();
-  }
-
-  isSecurityAlreadyUsed(hvId: number): boolean {
-    return this.thresholds.some(t => t.hvId === hvId);
   }
 }

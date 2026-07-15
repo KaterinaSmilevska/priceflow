@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Chart, ChartData, ChartType, registerables } from 'chart.js';
 import { ChartService } from '../chart.service';
 import { BaseChartDirective } from 'ng2-charts';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 Chart.register(...registerables);
 
@@ -30,7 +30,7 @@ export class PriceTrendComponent implements OnInit {
   public securities: { id: number, code: string }[] = [];
   public noDataMessage: string | null = null;
 
-  constructor(private chartService: ChartService) { }
+  constructor(private chartService: ChartService, private translateService: TranslateService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -79,7 +79,7 @@ export class PriceTrendComponent implements OnInit {
           labels: res.map((d) => new Date(d.date).toLocaleDateString()),
           datasets: [
             {
-              label: 'Price',
+              label: this.translateService.instant('PRICE'),
               data: res.map((d) => d.price),
               borderColor: 'green',
               backgroundColor: 'rgba(123, 182, 98, 0.7)',

@@ -63,6 +63,7 @@
     "ALL_RIGHTS_RESERVED": "All rights reserved"
   },
   "ADMIN": {
+    "TITLE": "Admin",
     "MANAGE": "Manage",
     "ROLES": "Roles"
   },
@@ -81,6 +82,14 @@
     "DELETE_ERROR": "Failed to delete user.",
     "USER_STATUS_ERROR": "Failed to get user status."
   },
+  "SECTORS": {
+    "BANKING": "Banking",
+    "SERVICES": "Services",
+    "TRADING": "Trading",
+    "INDUSTRY": "Industry",
+    "CONSTRUCTION": "Construction",
+    "HOSPITALITY": "Hospitality"
+  },
   "BROKERS": {
     "TITLE": "brokers",
     "BROKER": "Broker",
@@ -93,8 +102,34 @@
     "ADD_ERROR": "Failed to add broker.",
     "UPDATE_SUCCESS": "Broker updated successfully!",
     "UPDATE_ERROR": "Failed to update broker.",
-    "DELETE_ERROR": "Failed to delete broker."
+    "DELETE_ERROR": "Failed to delete broker.",
+    "TRANSLATE_NAMES": {
+      "KOMERCIJALNA_BANKA": "Komercijalna banka AD Skopje",
+      "STOPANSKA_BANKA": "Stopanska banka AD Skopje",
+      "ILIRIKA_INVESTMENTS": "Ilirika Investments AD Skopje",
+      "FERSHPED_BROKER": "Fershped broker AD Skopje",
+      "EUROHAUS": "Eurohaus AD Skopje"
+    }
 
+  },
+  "ISSUERS": {
+    "TRANSLATE_NAMES": {
+      "ALKALOID": "Alkaloid AD Skopje",
+      "KOMERCIJALNA_BANKA": "Komercijalna banka AD Skopje",
+      "STOPANSKA_BANKA": "Stopanska banka AD Skopje",
+      "ZHITO_LUKS": "Zhito Luks AD Skopje",
+      "TTK_BANKA": "TTK banka AD Skopje",
+      "GRANIT": "Granit AD Skopje",
+      "NLB_Banka": "NLB banka AD Skopje",
+      "MAKPETROL": "Makpetrol AD Skopje",
+      "REPLEK": "Replek AD Skopje",
+      "MK_TELEKOM": "Makedonski Telekom AD Skopje",
+      "PELISTERKA": "Pelisterka AD Skopje",
+      "MAKEDONIJATURIST": "Makedonijaturist AD Skopje",
+      "ALTA_BANKA": "Alta banka AD Bitola",
+      "VITAMINKA": "Vitaminka AD Prilep",
+      "FERSHPED": "Fershped AD Skopje"
+    }
   },
   "SECURITIES": {
     "TITLE": "Securities",
@@ -138,7 +173,8 @@
     "ABSOLUTE_RETURN": "Absolute Return",
     "PORTFOLIO_PERFORMANCE_NOTIFICATIONS": "Portfolio Performance Notifications",
     "ENABLE_NOTIFICATIONS": "Enable Notifications",
-    "PORTFOLIO_INCOME": "Portfolio income ({{start_date}} - {{end_date}})"
+    "PORTFOLIO_INCOME": "Portfolio income",
+    "INCOME": "Income"
   },
   "TRANSACTIONS": {
     "TITLE": "Transactions",
@@ -164,7 +200,9 @@
     "TOTAL_COMMISSION": "Total Commission",
     "TOTAL_AMOUNT": "Total Amount",
     "REAL_TRANSACTION": "Real Transaction",
-    "DELETE_ERROR": "Failed to delete transaction."
+    "DELETE_ERROR": "Failed to delete transaction.",
+    "PRICE_BELOW_MIN_WARNING": "The entered price is lower than the today's min price of trading ({{price}} MKD).",
+    "PRICE_ABOVE_MAX_WARNING": "The entered price is higher than the today's max price of trading ({{price}} MKD)."
   },
   "ACTIONS": "Actions",
   "VIEW": {
@@ -183,12 +221,13 @@
     "DELETE_BROKER_MESSAGE": "Are you sure you want to delete broker",
     "DELETE_SECURITY_MESSAGE": "Are you sure you want to delete security",
     "DELETE_PORTFOLIO_MESSAGE": "Are you sure you want to delete portfolio",
-    "DELETE_TRANSACTION_MESSAGE": "Are you sure you want to delete transaction for"
+    "DELETE_TRANSACTION_MESSAGE": "Are you sure you want to delete transaction for",
+    "DELETE_THRESHOLD_MESSAGE": "Are you sure you want to delete thresholds for"
   },
   "MARKET_OVERVIEW": {
     "TITLE": "market overview",
     "TOTAL_MARKET_CAP": "Total Market Cap",
-    "AVG_DAILY_VOLUME": "Avg Daily Volume",
+    "AVG_DAILY_VOLUME": "Average Daily Volume",
     "TOP_GAINER": "Top Gainer",
     "TOP_LOSER": "Top Loser",
     "TOTAL_SECURITIES": "Total Securities",
@@ -220,13 +259,18 @@
     "END": "End",
     "DATE": "Date",
     "NO_DATA_AVAILABLE": "No data available.",
-    "PORTFOLIO_INCOME_MESSAGE": "Portfolio income over time"
+    "PORTFOLIO_INCOME_MESSAGE": "Portfolio income ({{start}} - {{end}})",
+    "SECURITY_ALLOCATION_MESSAGE": "Security allocation",
+    "SHOWING_DATA_FOR": "Showing data for"
   },
+  "INVESTOR": "Investor",
+  "ANALYST": "Analyst",
   "CANCEL": "Cancel",
   "SAVE_CHANGES": "Save changes",
-  "BACK_TO_HOME": "Back to Home",
+  "BACK_TO": "Back to",
   "SEARCH": "Search",
   "BY": "by",
+  "FOR": "for",
   "WITH": "with",
   "CLEAR": "Clear",
   "AS": "as",
@@ -246,12 +290,13 @@
   "MY": "My",
   "ANALYTICS": "Analytics",
   "OVERVIEW": "Overview",
-  "QUANTITY": "Qty",
+  "QUANTITY": "Quantity",
   "SHOW_LESS": "Show less",
   "SEE_MORE": "See more",
   "ON": "on",
   "SHARES": "shares",
-  "PRICE": "price",
+  "BONDS": "bonds",
+  "PRICE": "Price",
   "MIN": "Min",
   "MAX": "Max",
   "AVERAGE": "Avg",
@@ -308,5 +353,10 @@
   "PRICE_ALERTS": "My Price Alerts",
   "LOWER": "Lower",
   "UPPER": "Upper",
-  "THRESHOLD": "threshold"
+  "THRESHOLD": {
+    "TITLE": "threshold",
+    "ADD_SUCCESS": "Threshold added successfully!",
+    "UPDATE_SUCCESS": "Threshold updated successfully!"
+  },
+  "THRESHOLDS": "thresholds"
 }

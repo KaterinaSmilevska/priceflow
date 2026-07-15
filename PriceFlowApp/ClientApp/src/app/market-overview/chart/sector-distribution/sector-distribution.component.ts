@@ -5,13 +5,14 @@ import { ChartService } from "../chart.service";
 import { BaseChartDirective } from 'ng2-charts';
 import { FormsModule } from "@angular/forms";
 import { TranslateModule, TranslateService } from "@ngx-translate/core";
+import { SectorsTranslatePipe } from "../../../shared/sectors-translate.pipe";
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-sector-distribution',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule],
+  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule, SectorsTranslatePipe],
   templateUrl: './sector-distribution.component.html',
 })
 
@@ -30,7 +31,8 @@ export class SectorDistributionComponent implements OnInit {
   public noDataMessage: string | null = null;
   public defaultDate = new Date().getDay() - 7;
 
-  constructor(private chartService: ChartService, private translateService: TranslateService) { }
+  constructor(private chartService: ChartService, private translateService: TranslateService,
+    private sectorsTranslatePipe: SectorsTranslatePipe) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['date'] && !changes['date'].firstChange) {
@@ -70,7 +72,9 @@ export class SectorDistributionComponent implements OnInit {
         const values = res.map((x) => x.marketCap);
         const colors = this.chartService.generateColors(values.length);
         this.data = {
-          labels: res.map((x) => x.sectorName),
+          labels: res.map((x) =>
+            this.translateService.instant(this.sectorsTranslatePipe.transform(x.sectorName))
+          ),
           datasets: [
             {
               data: values,

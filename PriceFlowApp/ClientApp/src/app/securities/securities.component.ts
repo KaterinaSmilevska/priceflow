@@ -6,11 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { AddSecurityComponent } from './add-security/add-security.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { Security } from './Security';
+import { Router, RouterModule } from '@angular/router';
+import { DbValueTranslatePipe } from '../shared/db-value-translate.pipe';
+import { IssuersTranslatePipe } from '../shared/issuers-translate.pipe';
 
 @Component({
   selector: 'app-securities',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddSecurityComponent, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, AddSecurityComponent, TranslateModule, DbValueTranslatePipe, IssuersTranslatePipe],
   templateUrl: './securities.component.html',
   styleUrls: ['./securities.component.css']
 })
@@ -28,7 +31,7 @@ export class SecuritiesComponent implements OnInit {
   searchTerm: string = '';
   loadingSearch = false;
 
-  constructor(private securitiesService: SecuritiesService, public loginService: LoginService) { }
+  constructor(private securitiesService: SecuritiesService, public loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadSecurities();

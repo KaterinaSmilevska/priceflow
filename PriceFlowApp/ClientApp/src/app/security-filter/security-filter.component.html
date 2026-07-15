@@ -56,20 +56,17 @@
       <table>
         <thead>
           <tr>
-            <th>#</th>
             <th>{{ 'SECURITIES.CODE' | translate }}</th>
-
             <th>{{ 'VALUE' | translate }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of data; let i = index">
-            <td>{{ i + 1 }}</td>
+          <tr *ngFor="let item of data">
             <td>{{ item.securityCode || item.sectorName }}</td>
             <td [ngClass]="getValuationClass(item)">
               {{ item.value || item.totalValue | number: (selectedMetric === 'Market price : Book value' ? '1.4-4' : '1.2-2') }}
               <span *ngIf="selectedMetric === 'Market price : Book value'">
-                {{ ((item.value || item.totalValue) > 1) ? '▼' : ((item.value || item.totalValue) < 1 ? '▲': '') }}
+                {{ ((item.value || item.totalValue) > 1.05) ? '▼' : ((item.value || item.totalValue) < 0.95 ? '▲': '') }}
               </span>
             </td>
           </tr>

@@ -8,9 +8,10 @@
   box-shadow: 0 6px 18px var(--shadow-color);
 }
 
-  .export-container h3 {
+  .export-container .card-header {
     margin-bottom: 20px;
     font-weight: 600;
+    font-size: 1.1rem;
     color: var(--text-color);
   }
 
@@ -59,9 +60,9 @@ select.form-control {
     opacity: 0.95;
   }
 
-.btn-primary {
-  background-color: var(--primary-color);
-  color: var(--card-bg);
+.btn-success {
+  background-color: var(--success-bg);
+  color: white;
 }
 
 .btn-secondary {

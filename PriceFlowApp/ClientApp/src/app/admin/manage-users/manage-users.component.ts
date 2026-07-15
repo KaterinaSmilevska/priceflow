@@ -6,11 +6,12 @@ import { AdminService } from '../admin.service';
 import { User } from './User';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { DbValueTranslatePipe } from '../../shared/db-value-translate.pipe';
 
 @Component({
   selector: 'app-manage-users',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, EditUserComponent, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, EditUserComponent, TranslateModule, DbValueTranslatePipe],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.css',
 })

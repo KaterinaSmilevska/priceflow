@@ -35,8 +35,8 @@
         <tr *ngFor="let sec of securities">
           <td>{{ sec.code }}</td>
           <td>{{ sec.isin }}</td>
-          <td>{{ sec.typeSecurityName }}</td>
-          <td>{{ sec.issuerName }}</td>
+          <td>{{ sec.typeSecurityName | dbTranslate | translate }}</td>
+          <td>{{ sec.issuerName | issuersTranslate | translate }}</td>
           <td>{{ sec.totalNumShares | number }}</td>
           <td *ngIf="isAdmin">
             <button class="btn btn-warning" (click)="openEditModal(sec)">{{ 'EDIT.ACTION_NAME' | translate }} </button>
@@ -45,6 +45,9 @@
         </tr>
       </tbody>
     </table>
+    <p class="mt-4 text-center">
+      <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
+    </p>
   </div>
 
   <ng-template #noData>
@@ -66,8 +69,8 @@
       <strong>{{ securityToDelete?.code }}</strong>?
     </p>
     <div class="modal-actions">
-      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }} </button>
       <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }} </button>
+      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }} </button>
     </div>
   </div>
 </div>

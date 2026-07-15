@@ -63,10 +63,19 @@
   background: var(--card-bg);
 }
 
-.btn-primary {
-  background: var(--primary-color);
+.btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
   border: none;
-  color: var(--btn-text-light);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-success {
+  background: var(--success-bg);
+  color: white;
 }
 
   .btn-primary:hover {

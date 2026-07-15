@@ -49,21 +49,25 @@
     background-color: #2563eb;
   }
 
-.error {
-  color: var(--error-color);
+.error, .success {
   margin-top: 1rem;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   text-align: center;
-  border-radius: 6px;
-  background-color: rgba(220, 38, 38, 0.1);
+  border: 1px solid;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.error {
+  background-color: var(--error-bg-light);
+  color: var(--error-color);
+  border-color: var(--error-color);
 }
 
 .success {
-  background-color: var(--success-bg);
-  border-radius: 6px;
-  margin-top: 1rem;
-  padding: 0.75rem;
-  text-align: center;
+  background-color: var(--success-bg-light);
+  color: var(--success-bg);
+  border-color: var(--success-bg);
 }
 
 .forgot-password-link a,

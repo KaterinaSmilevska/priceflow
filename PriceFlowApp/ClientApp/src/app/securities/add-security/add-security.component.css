@@ -69,14 +69,10 @@
     transform: translateY(-1px);
   }
 
-  .modal-content button.btn-primary {
-    background-color: var(--primary-color);
-    color: var(--btn-text);
-  }
-
-    .modal-content button.btn-primary:hover {
-      background-color: var(--primary-hover);
-    }
+.modal-content button.btn-success {
+  background-color: var(--success-bg);
+  color: white;
+}
 
   .modal-content button.btn-secondary {
     background-color: var(--secondary-color);
@@ -112,11 +108,10 @@ label {
 }
 
 .success-message {
-  background-color: var(--success-bg);
-  border: 1px solid var(--success-text);
-  color: var(--success-text);
+  background: #d1fae5;
+  border: 1px solid #10b981;
   padding: 8px;
   border-radius: 6px;
-  font-weight: 500;
+  color: #065f46;
   text-align: center;
 }

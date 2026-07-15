@@ -74,7 +74,7 @@
           </span>
         </div>
 
-        <div class="fw-bold mt-2 d-flex justify-content-between">
+        <div class="fw-bold mt-2 mb-2 d-flex justify-content-between">
           <span>{{'TRANSACTIONS.TOTAL_COMMISSION' | translate}}</span>
           <span>{{ totalCommission | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}</span>
         </div>
@@ -93,7 +93,7 @@
 
       <div class="text-end mt-3">
         <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
-        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || sellLimitExceeded || buyLimitExceeded || dateSellInvalid">
+        <button type="submit" class="btn btn-success" [disabled]="form.invalid || sellLimitExceeded || buyLimitExceeded || dateSellInvalid">
           {{ (transaction ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}
         </button>
       </div>

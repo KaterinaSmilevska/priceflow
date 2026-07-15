@@ -9,7 +9,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let b of brokers">
-        <td>{{ b.company }}</td>
+        <td>{{ b.company | brokersTranslate | translate }}</td>
         <td>{{ b.commissionPercent | number:'1.2-2' }}</td>
       </tr>
     </tbody>

@@ -97,7 +97,6 @@
 
 .success-message {
   background-color: rgba(22, 163, 74, 0.1);
-  color: var(--success-color);
 }
 
 .auth-link {

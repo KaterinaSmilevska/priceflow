@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TransactionsService } from '../transactions.service';
 import { SecuritiesService } from '../../securities/securities.service';
 import { Tooltip } from 'bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Transaction } from '../Transaction';
 import { Security } from '../../securities/Security';
 import { SecurityDailyPrices } from '../../securities/SecurityDailyPrices';
@@ -42,7 +42,8 @@ export class TransactionFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private transactionsService: TransactionsService,
-    private securitiesService: SecuritiesService) { }
+    private securitiesService: SecuritiesService,
+    private translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -213,11 +214,11 @@ export class TransactionFormComponent implements OnInit {
     if (!price) return;
 
     if (this.dailyPrices.minPrice != null && price < this.dailyPrices.minPrice) {
-      this.priceWarning = `The entered price is lower than the today's min price of trading (${this.dailyPrices.minPrice.toFixed(2)} MKD).`;
+      this.priceWarning = this.translateService.instant('TRANSACTIONS.PRICE_BELOW_MIN_WARNING', { price: this.dailyPrices.minPrice.toFixed(2) });
     }
 
     if (this.dailyPrices.maxPrice != null && price > this.dailyPrices.maxPrice) {
-      this.priceWarning = `The entered price is higher than the today's max price of trading (${this.dailyPrices.maxPrice.toFixed(2)} MKD).`;
+      this.priceWarning = this.translateService.instant('TRANSACTIONS.PRICE_ABOVE_MAX_WARNING', { price: this.dailyPrices.maxPrice.toFixed(2) });
     }
   }
 

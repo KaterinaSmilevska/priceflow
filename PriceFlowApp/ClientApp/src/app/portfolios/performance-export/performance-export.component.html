@@ -1,6 +1,6 @@
 <div class="export-container">
 
-  <h3>{{ 'PORTFOLIOS.PORTFOLIO_PERFORMANCE_REPORT' | translate }}</h3>
+  <div class="card-header">{{ 'PORTFOLIOS.PORTFOLIO_PERFORMANCE_REPORT' | translate }}</div>
 
   <form [formGroup]="form">
 
@@ -36,7 +36,7 @@
     </button>
 
     <button type="button"
-            class="btn btn-primary"
+            class="btn btn-success"
             (click)="export()"
             [disabled]="exporting || !summary">
       {{ (exporting ? 'EXPORTING' : 'EXPORT') | translate }}
@@ -53,8 +53,8 @@
     <p><strong>{{ 'PORTFOLIOS.DIVIDEND' | translate }}:</strong> {{ summary.dividends | number: '1.2-2' }} {{ 'CURRENCY.MKD' | translate }}</p>
     <p><strong>{{ 'TRANSACTIONS.COMMISSIONS' | translate }}:</strong> {{ summary.commissions | number: '1.2-2' }} {{ 'CURRENCY.MKD' | translate }}</p>
     <p>
-      <strong>Absolute Return:</strong>
-      <span [ngClass]="summary.absoluteReturn >= 0 ? 'text-success' : 'text-danger'">
+      <strong>{{'PORTFOLIOS.ABSOLUTE_RETURN' | translate}}:</strong>
+      <span [ngClass]="summary.absoluteReturn > 0 ? 'text-success' : (summary.absoluteReturn < 0 ? 'text-danger' : '')">
         {{ summary.absoluteReturn | number: '1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
       </span>
     </p>

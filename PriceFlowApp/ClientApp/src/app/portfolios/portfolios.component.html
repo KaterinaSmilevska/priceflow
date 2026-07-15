@@ -27,6 +27,9 @@
       </tbody>
     </table>
   </div>
+  <p class="mt-4 text-center">
+    <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
+  </p>
 
   <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
 
@@ -48,8 +51,8 @@
       <strong>{{ portfolioToDelete?.name }}</strong>?
     </p>
     <div class="modal-actions">
-      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
       <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>
+      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
     </div>
   </div>
 </div>

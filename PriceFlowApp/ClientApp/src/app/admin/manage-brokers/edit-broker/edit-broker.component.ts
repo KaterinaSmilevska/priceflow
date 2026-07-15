@@ -4,11 +4,12 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Broker } from '../Broker';
 import { AdminService } from '../../admin.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { BrokersTranslatePipe } from '../../../shared/brokers-translate.pipe';
 
 @Component({
   selector: 'app-edit-broker',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, BrokersTranslatePipe],
   templateUrl: './edit-broker.component.html',
   styleUrl: './edit-broker.component.css',
 })

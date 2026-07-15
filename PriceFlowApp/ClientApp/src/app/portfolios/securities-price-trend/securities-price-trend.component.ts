@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions } from 'chart.js';
 import { PortfoliosService } from '../portfolios.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SecuritiesPriceTrend } from '../SecuritiesPriceTrend';
 
 @Component({
@@ -44,7 +44,7 @@ export class SecuritiesPriceTrendComponent implements OnInit {
       x: {
         title: {
           display: true,
-          text: 'Date',
+          text: this.translateService.instant('DATE'),
           font: {
             weight: 'bold'
           }
@@ -58,7 +58,7 @@ export class SecuritiesPriceTrendComponent implements OnInit {
       y: {
         title: {
           display: true,
-          text: 'Price (MKD)',
+          text: this.translateService.instant('PRICE') + ' (' + this.translateService.instant('CURRENCY.MKD') + ')',
           font: {
             weight: 'bold'
           }
@@ -68,7 +68,7 @@ export class SecuritiesPriceTrendComponent implements OnInit {
     }
   };
 
-  constructor(private portfoliosService: PortfoliosService) { }
+  constructor(private portfoliosService: PortfoliosService, private translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.loadData();

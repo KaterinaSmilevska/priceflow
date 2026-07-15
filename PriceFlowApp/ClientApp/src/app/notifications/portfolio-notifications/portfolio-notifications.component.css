@@ -81,9 +81,9 @@ select.form-select {
     opacity: 0.95;
   }
 
-.btn-primary {
-  background-color: var(--primary-color);
-  color: var(--card-bg);
+.btn-success {
+  background-color: var(--success-bg);
+  color: white;
 }
 
 .btn-secondary {

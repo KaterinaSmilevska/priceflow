@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-portfolio-income',
@@ -33,7 +33,7 @@ export class PortfolioIncomeComponent implements OnInit {
     plugins: {
       title: {
         display: true,
-        text: 'Portfolio income over time',
+        text: this.translateService.instant('PORTFOLIOS.PORTFOLIO_INCOME'),
         font: {
           size: 16,
           weight: 'bold'
@@ -41,7 +41,7 @@ export class PortfolioIncomeComponent implements OnInit {
         padding: {
           top: 10,
           bottom: 20
-        }
+        },
       },
       legend: {
         display: true
@@ -49,7 +49,7 @@ export class PortfolioIncomeComponent implements OnInit {
     }
   };
 
-  constructor(private chartService: ChartService) { }
+  constructor(private chartService: ChartService, private translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.loadChart();
@@ -81,7 +81,7 @@ export class PortfolioIncomeComponent implements OnInit {
           labels,
           datasets: [
             {
-              label: 'Income',
+              label: this.translateService.instant('PORTFOLIOS.INCOME'),
               data: res.map(x => x.income),
               borderColor: '#007bff',
               backgroundColor: 'rgba(0,123,255,0.2)',
@@ -91,8 +91,10 @@ export class PortfolioIncomeComponent implements OnInit {
           ],
         };
 
-        (this.options as any).plugins.title.text =
-          `Portfolio income (${labels[0]} - ${labels[labels.length - 1]})`;
+        (this.options as any).plugins.title.text = this.translateService.instant(
+          'CHART.PORTFOLIO_INCOME_MESSAGE',
+          { start: labels[0], end: labels[labels.length - 1] }
+        );
         this.chart?.update();
       },
       error: (err) => {

@@ -60,7 +60,7 @@ namespace DataAccess.Repositories
                             ProcentPromena = dp.ProcentPromena.Value,
                             DatumTrguvanje = tradingDate,
                             Poraka =
-                                $"Security {alert.Hv.Kod} changed {dp.ProcentPromena:F2}%" +
+                                $"Security {alert.Hv.Kod} changed {dp.ProcentPromena:F2}% " +
                                 $"(Threshold: {alert.DolnaGranica}% / {alert.GornaGranica}%)",
                             Procitano = false
                         };

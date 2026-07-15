@@ -82,14 +82,9 @@
 }
 
 .modal-content .btn-primary {
-  background-color: var(--primary-color);
-  color: var(--card-bg);
+  background-color: var(--success-bg);
+  color: white;
 }
-
-  .modal-content .btn-primary:hover {
-    opacity: 0.95;
-    transform: translateY(-1px);
-  }
 
 .modal-content .btn-secondary {
   background-color: var(--secondary-color);

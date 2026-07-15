@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PortfoliosService } from './portfolios.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AddPortfolioComponent } from './add-portfolio/add-portfolio.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { Portfolio } from './Portfolio';
@@ -10,7 +10,7 @@ import { Portfolio } from './Portfolio';
 @Component({
   selector: 'app-portfolios',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddPortfolioComponent, TranslateModule],
+  imports: [CommonModule, FormsModule, AddPortfolioComponent, TranslateModule, RouterModule],
   templateUrl: './portfolios.component.html',
   styleUrl: './portfolios.component.css',
 })

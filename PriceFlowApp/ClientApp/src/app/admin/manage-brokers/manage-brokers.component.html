@@ -23,7 +23,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let broker of brokers" class="hover:bg-gray-50">
-          <td class="py-2 px-4 border-b">{{ broker.company }}</td>
+          <td class="py-2 px-4 border-b">{{ broker.company | brokersTranslate | translate }}</td>
           <td class="py-2 px-4 border-b">{{ broker.commissionPercent }}</td>
           <td class="py-2 px-4 border-b">
             <button class="btn btn-warning me-3" (click)="openEditModal(broker)">{{ 'EDIT.ACTION_NAME' | translate }}</button>
@@ -33,10 +33,10 @@
       </tbody>
     </table>
   </div>
-  <p class="mt-4 text-center">
-    <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
-  </p>
 </div>
+<p class="mt-4 text-center">
+  <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
+</p>
 
 <app-edit-broker *ngIf="showEditModal"
                  [brokerToEdit]="brokerToEdit!"
@@ -46,10 +46,10 @@
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">
     <h3>{{ 'DELETE.CONFIRM' | translate }}</h3>
-    <p>{{ 'DELETE.DELETE_BROKER_MESSAGE' | translate }} <strong>{{ brokerToDelete?.company }}</strong>?</p>
+    <p>{{ 'DELETE.DELETE_BROKER_MESSAGE' | translate }} <strong>{{ brokerToDelete?.company | brokersTranslate | translate }}</strong>?</p>
     <div class="modal-actions">
-      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
       <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>
+      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
     </div>
   </div>
 </div>

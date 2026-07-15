@@ -1,6 +1,6 @@
 .brokers-container {
   max-width: 1000px;
-  margin: 60px auto;
+  margin: 40px auto;
   padding: 30px;
   background-color: var(--card-bg);
   border-radius: 16px;
@@ -71,9 +71,9 @@
     opacity: 0.9;
   }
 
-.btn-warning {
+/*.btn-warning {
   background-color: var(--warning-bg);
-}
+}*/
 
 .btn-danger {
   background-color: var(--danger-bg);

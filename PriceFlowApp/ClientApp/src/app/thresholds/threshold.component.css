@@ -1,130 +1,133 @@
-.container {
-  color: var(--text-color);
-}
-
-.card {
+.thresholds-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
   background-color: var(--card-bg);
-  color: var(--text-color);
-  border: 1px solid var(--input-border);
-  border-radius: 14px;
-  box-shadow: 0 6px 18px var(--shadow-color);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px var(--shadow-color);
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-h5 {
-  color: var(--text-color);
+.page-title {
+  text-align: center;
+  font-size: 1.8rem;
   font-weight: 600;
+  margin-bottom: 2rem;
 }
 
-.form-label {
-  color: var(--text-color);
-  font-weight: 500;
-}
-
-.form-control,
-.form-select {
-  background-color: var(--input-bg);
-  color: var(--text-color);
-  border: 1px solid var(--input-border);
+.error-message {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
   border-radius: 8px;
-  padding: 10px 12px;
-  transition: all 0.2s ease;
+  background-color: rgba(220, 38, 38, 0.1);
+  color: var(--error-color);
 }
 
-  .form-control:focus,
-  .form-select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px var(--primary-color)33;
-    outline: none;
+.thresholds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  color: var(--text-color);
+}
+
+  .thresholds-table th {
+    text-align: left;
+    padding: 14px;
+    font-weight: 600;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+  }
+
+  .thresholds-table td {
+    padding: 14px;
+    border-top: 1px solid var(--input-border);
+  }
+
+  .thresholds-table tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.08);
+    transition: background 0.2s ease-in-out;
   }
 
 .btn {
-  border-radius: 8px;
-  font-weight: 500;
   padding: 8px 14px;
-  transition: all 0.2s ease;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease-in-out;
 }
 
   .btn:hover {
     transform: translateY(-1px);
   }
 
-.btn-primary {
-  background-color: var(--primary-color);
-  border: none;
+.btn-success {
+  background-color: var(--success-bg);
   color: white;
 }
+
+  .btn-success:hover {
+    opacity: 0.9;
+  }
+
+.btn-danger {
+  background-color: var(--danger-bg);
+  color: white;
+}
+
+  .btn-danger:hover {
+    opacity: 0.9;
+  }
 
 .btn-secondary {
   background-color: var(--secondary-color);
   color: var(--text-color);
-  border: 1px solid var(--input-border);
 }
 
-.btn-warning {
-  background-color: var(--warning-bg);
-  border: none;
-  color: black;
+  .btn-secondary:hover {
+    opacity: 0.9;
+  }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.btn-danger {
-  background-color: var(--danger-bg);
-  border: none;
-  color: white;
+.modal-content {
+  background-color: var(--card-bg);
+  padding: 30px;
+  border-radius: 12px;
+  width: 350px;
+  box-shadow: 0 12px 30px var(--shadow-color);
+  text-align: center;
 }
 
-.alert {
-  border-radius: 8px;
-  border: none;
-}
+  .modal-content h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
 
-.alert-danger {
-  background-color: var(--danger-bg);
-  color: white;
-}
-
-.table {
-  width: 100%;
-  color: var(--text-color);
-  border-collapse: collapse;
-}
-
-  .table thead th {
-    background: var(--table-header-bg);
+  .modal-content p {
+    margin: 15px 0 20px;
     color: var(--text-color);
-    border-bottom: 2px solid var(--input-border);
-    padding: 12px;
   }
 
-  .table tbody {
-    background: var(--card-bg);
-  }
-
-    .table tbody tr {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--input-border);
-      transition: background 0.15s ease;
-    }
-
-    .table tbody td {
-      background: var(--card-bg);
-      color: var(--text-color);
-      padding: 10px 12px;
-    }
-
-tbody tr:hover {
-  background-color: var(--secondary-color);
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
 }
 
-.table-bordered {
-  border: 1px solid var(--input-border);
-}
-
-  .table-bordered th,
-  .table-bordered td {
-    border: 1px solid var(--input-border);
-  }
-
-hr {
-  border-color: var(--input-border);
-  opacity: 0.6;
+.page-link {
+  color: var(--primary-color);
+  text-decoration: none;
 }

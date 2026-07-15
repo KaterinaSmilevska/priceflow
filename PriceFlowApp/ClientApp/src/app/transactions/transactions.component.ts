@@ -13,12 +13,13 @@ import { PortfolioReturns } from '../portfolios/portfolio-returns/PortfolioRetur
 import { PortfolioTableView } from './PortfolioTableView';
 import { PortfolioValue } from './PortfolioValue';
 import { Transaction } from './Transaction';
+import { DbValueTranslatePipe } from '../shared/db-value-translate.pipe';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
   imports: [CommonModule, TransactionFormComponent, PortfolioIncomeComponent,
-    PortfolioSecurityAllocationComponent, PortfolioReturnsComponent, TranslateModule],
+    PortfolioSecurityAllocationComponent, PortfolioReturnsComponent, TranslateModule, DbValueTranslatePipe],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
 })

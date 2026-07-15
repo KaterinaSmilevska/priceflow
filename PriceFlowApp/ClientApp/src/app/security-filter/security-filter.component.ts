@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+  import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { SecurityFilterService } from './security-filter.service';
 import { ChartConfiguration } from 'chart.js';
@@ -142,8 +142,8 @@ export class SecurityFilterComponent implements OnInit {
 
     if (this.selectedMetric === 'Market price : Book value') {
       this.chartData.datasets[0].backgroundColor = values.map(v => {
-        if (v > 1) return '#dc2626';
-        if (v < 1) return '#16a34a';
+        if (v > 1.05) return '#dc2626';
+        if (v < 0.95) return '#16a34a';
         return '#6b7280';
       });
     } else {
@@ -157,10 +157,10 @@ export class SecurityFilterComponent implements OnInit {
     }
     const value = item.value || item.totalValue;
 
-    if (value > 1) {
+    if (value > 1.05) {
       return 'overvalued';
     }
-    if (value < 1) {
+    if (value < 0.95) {
       return 'undervalued';
     }
     return 'neutral';
