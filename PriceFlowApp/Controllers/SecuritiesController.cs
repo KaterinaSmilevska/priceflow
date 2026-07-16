@@ -22,6 +22,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<Security> securities = await _securitiesService.FindAllAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -56,6 +57,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 int? totalShares = await _securitiesService.FindTotalNumSharesAsync(code);
+
                 return Ok(totalShares);
             }
             catch (Exception ex)
@@ -71,6 +73,7 @@ namespace PriceFlowApp.Controllers
                 return BadRequest(ModelState);
 
             var createdSecurity = await _securitiesService.AddAsync(security);
+
             return CreatedAtAction(nameof(GetById), new { id = createdSecurity.Id }, createdSecurity);
         }
 
@@ -80,6 +83,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 await _securitiesService.DeleteAsync(id);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -94,6 +98,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 Security security = await _securitiesService.UpdateAsync(id, updatedSecurity);
+
                 return Ok(security);
             }
             catch (Exception ex)
@@ -124,6 +129,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<Security> securities = await _securitiesService.SearchByCodeAsync(searchTerm);
+
                 return Ok(securities);
             }
             catch (Exception ex)

@@ -53,17 +53,17 @@
     transition: background-color 0.15s ease, color 0.15s ease;
   }
 
-  .liquidity-table tbody tr:nth-child(even) {
+    .liquidity-table tbody tr:nth-child(even) {
       filter: brightness(0.97);
-  }
+    }
 
     .liquidity-table tbody tr:hover {
       background: var(--liquidity-hover);
     }
 
-    .liquidity-table tbody tr:hover td {
+      .liquidity-table tbody tr:hover td {
         color: var(--text-color);
-    }
+      }
 
   .liquidity-table td {
     padding: 0.5rem;
@@ -116,4 +116,3 @@
     color: var(--text-color);
     border: 1px solid var(--input-border);
   }
-

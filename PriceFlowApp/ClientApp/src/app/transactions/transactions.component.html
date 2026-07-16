@@ -1,258 +1,244 @@
 <div class="mode-toggle mb-3">
-  <div
-          class="btn"
-          [class.active]="isReal"
-          [class.inactive]="!isReal"
-          (click)="setMode(true)">
+  <div class="btn"
+       [class.active]="isReal"
+       [class.inactive]="!isReal"
+       (click)="setMode(true)">
     {{ 'TRANSACTIONS.REAL' | translate }}
   </div>
-  <div
-          class="btn"
-          [class.active]="!isReal"
-          [class.inactive]="isReal"
-          (click)="setMode(false)">
+  <div class="btn"
+       [class.active]="!isReal"
+       [class.inactive]="isReal"
+       (click)="setMode(false)">
     {{ 'TRANSACTIONS.SIMULATED' | translate }}
   </div>
 </div>
 
 <ul class="nav nav-tabs mb-4">
-    <li class="nav-item">
-      <button class="nav-link active"
-              data-bs-toggle="tab"
-              data-bs-target="#overview">
-        {{ 'OVERVIEW' | translate }}
-      </button>
-    </li>
+  <li class="nav-item">
+    <button class="nav-link active"
+            data-bs-toggle="tab"
+            data-bs-target="#overview">
+      {{ 'OVERVIEW' | translate }}
+    </button>
+  </li>
 
-    <li class="nav-item">
-      <button class="nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#analytics">
-        {{ 'ANALYTICS' | translate }}
-      </button>
-    </li>
+  <li class="nav-item">
+    <button class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#analytics">
+      {{ 'ANALYTICS' | translate }}
+    </button>
+  </li>
 
-    <li class="nav-item">
-      <button class="nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#worth"
-              (click)="loadPortfolioValue()">
-        {{ 'PORTFOLIOS.CURRENT_VALUE' | translate }}
-      </button>
-    </li>
-  </ul>
+  <li class="nav-item">
+    <button class="nav-link"
+            data-bs-toggle="tab"
+            data-bs-target="#worth"
+            (click)="loadPortfolioValue()">
+      {{ 'PORTFOLIOS.CURRENT_VALUE' | translate }}
+    </button>
+  </li>
+</ul>
 
-  <div class="tab-content">
-    <div class="tab-pane fade show active" id="overview">
-      <div class="card mt-4 mb-4 summary-card">
-        <div class="card-body">
-          <div class="row text-center g-3">
-
-            <div class="col-md-3">
-              <h6>{{ 'PORTFOLIOS.REVENUE' | translate }}</h6>
-              <h3 class="text-success fw-semibold">
-                {{ analytics?.totalRevenue | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
-              </h3>
-            </div>
-
-            <div class="col-md-3">
-              <h6>{{ 'PORTFOLIOS.EXPENSES' | translate }}</h6>
-              <h3 class="text-danger fw-semibold">
-                {{ analytics?.totalExpenses | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
-              </h3>
-            </div>
-
-            <div class="col-md-3">
-              <h6>{{ 'PORTFOLIOS.TAXES' | translate }}</h6>
-              <h3 class="text-danger fw-semibold">
-                {{ analytics?.taxes | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
-              </h3>
-            </div>
-
-            <div class="col-md-3">
-              <h6>{{ 'PORTFOLIOS.BALANCE' | translate }}</h6>
-              <h3 class="fw-bold"
-                  [class.text-success]="analytics?.balance! > 0"
-                  [class.text-danger]="analytics?.balance! < 0">
-                {{ analytics?.balance | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
-              </h3>
-
-              <small class="fw-semibold"
-                     [class.text-success]="analytics?.balance! > 0"
-                     [class.text-danger]="analytics?.balance! < 0">
-                {{ (analytics?.balance! > 0 ? 'PORTFOLIOS.PROFIT' : (analytics?.balance! < 0 ? 'PORTFOLIOS.LOSS' : '')) | translate }}
-              </small>
-            </div>
-
+<div class="tab-content">
+  <div class="tab-pane fade show active" id="overview">
+    <div class="card mt-4 mb-4 summary-card">
+      <div class="card-body">
+        <div class="row text-center g-3">
+          <div class="col-md-3">
+            <h6>{{ 'PORTFOLIOS.REVENUE' | translate }}</h6>
+            <h3 class="text-success fw-semibold">
+              {{ analytics?.totalRevenue | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
+            </h3>
+          </div>
+          <div class="col-md-3">
+            <h6>{{ 'PORTFOLIOS.EXPENSES' | translate }}</h6>
+            <h3 class="text-danger fw-semibold">
+              {{ analytics?.totalExpenses | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
+            </h3>
+          </div>
+          <div class="col-md-3">
+            <h6>{{ 'PORTFOLIOS.TAXES' | translate }}</h6>
+            <h3 class="text-danger fw-semibold">
+              {{ analytics?.taxes | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
+            </h3>
+          </div>
+          <div class="col-md-3">
+            <h6>{{ 'PORTFOLIOS.BALANCE' | translate }}</h6>
+            <h3 class="fw-bold"
+                [class.text-success]="analytics?.balance! > 0"
+                [class.text-danger]="analytics?.balance! < 0">
+              {{ analytics?.balance | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
+            </h3>
+            <small class="fw-semibold"
+                   [class.text-success]="analytics?.balance! > 0"
+                   [class.text-danger]="analytics?.balance! < 0">
+              {{ (analytics?.balance! > 0 ? 'PORTFOLIOS.PROFIT' : (analytics?.balance! < 0 ? 'PORTFOLIOS.LOSS' : '')) | translate }}
+            </small>
           </div>
         </div>
       </div>
+    </div>
 
-      <button class="btn btn-success mb-3" (click)="openAddModal()">
-        {{ 'ADD.ACTION_NAME' | translate }} {{ 'TRANSACTIONS.TRANSACTION' | translate }}
-      </button>
+    <button class="btn btn-success mb-3" (click)="openAddModal()">
+      {{ 'ADD.ACTION_NAME' | translate }} {{ 'TRANSACTIONS.TRANSACTION' | translate }}
+    </button>
 
-      <div class="row g-4" *ngIf="!loading && transactions.length">
-        <div class="col-xl-9 col-lg-8">
-          <div class="table-responsive">
-            <table class="transactions-table">
-              <thead>
-                <tr>
-                  <th>{{ 'CHART.DATE' | translate }}</th>
-                  <th>{{ 'SECURITIES.TITLE' | translate }}</th>
-                  <th>{{ 'SECURITIES.TYPE' | translate }}</th>
-                  <th>{{ 'QUANTITY' | translate }}</th>
-                  <th>{{ 'TRANSACTIONS.UNIT_PRICE' | translate }}</th>
-                  <th>{{ 'TRANSACTIONS.TRADE_VALUE' | translate }}</th>
-                  <th>{{ 'PORTFOLIOS.COMMISSION' | translate }}</th>
-                  <th>{{ 'TRANSACTIONS.CASH_FLOW' | translate }}</th>
-                  <th class="text-center"></th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr *ngFor="let t of visibleTableView" [class.table-secondary]="!t.isReal">
-
-                  <td>{{ t.date | date:'dd.MM.yyyy' }}</td>
-                  <td>
-                    <span class="fw-semibold text-primary">{{ t.hvCode }}</span>
-                    <span *ngIf="!t.isReal" class="badge bg-secondary ms-2">{{ 'TRANSACTIONS.SIMULATED' | translate }}</span>
-                  </td>
-
-                  <td>
-                    <span class="badge rounded-pill px-3"
-                          [ngClass]="{
+    <div class="row g-4" *ngIf="!loading && transactions.length">
+      <div class="col-xl-9 col-lg-8">
+        <div class="table-responsive">
+          <table class="transactions-table">
+            <thead>
+              <tr>
+                <th>{{ 'CHART.DATE' | translate }}</th>
+                <th>{{ 'SECURITIES.TITLE' | translate }}</th>
+                <th>{{ 'SECURITIES.TYPE' | translate }}</th>
+                <th>{{ 'QUANTITY' | translate }}</th>
+                <th>{{ 'TRANSACTIONS.UNIT_PRICE' | translate }}</th>
+                <th>{{ 'TRANSACTIONS.TRADE_VALUE' | translate }}</th>
+                <th>{{ 'PORTFOLIOS.COMMISSION' | translate }}</th>
+                <th>{{ 'TRANSACTIONS.CASH_FLOW' | translate }}</th>
+                <th class="text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let t of visibleTableView" [class.table-secondary]="!t.isReal">
+                <td>{{ t.date | date:'dd.MM.yyyy' }}</td>
+                <td>
+                  <span class="fw-semibold text-primary">{{ t.hvCode }}</span>
+                  <span *ngIf="!t.isReal" class="badge bg-secondary ms-2">{{ 'TRANSACTIONS.SIMULATED' | translate }}</span>
+                </td>
+                <td>
+                  <span class="badge rounded-pill px-3"
+                        [ngClass]="{
                      'bg-success-subtle text-success': t.type === 'Купување',
                      'bg-danger-subtle text-danger': t.type === 'Продавање',
                      'bg-info-subtle text-info': t.type === 'Дивиденден принос'
                    }">
-                      {{ t.type | dbTranslate | translate }}
-                    </span>
-                  </td>
-                  <td class="text-end">
-                    {{ t.sharesQuantity ?? '-' }}
-                  </td>
-
-                  <td class="text-end">
-                    {{ t.sharesUnitPrice ? (t.sharesUnitPrice | number:'1.2-2'): '-' }}
-                  </td>
-
-                  <td class="text-end fw-bold">
-                    {{ t.amount | number:'1.2-10' }} {{ 'CURRENCY.MKD' | translate }}
-                  </td>
-                  <td class="text-end fw-bold">
-                    {{ t.commission ? (t.commission | number: '1.2-2') + ' ' + ('CURRENCY.MKD' | translate) : '-'  }}
-                  </td>
-                  <td class="text-end fw-bold"
-                      [class.text-danger]="t.cashFlow < 0"
-                      [class.text-success]="t.cashFlow > 0">
-                    {{ t.cashFlow | number: '1.2-2'}} {{ 'CURRENCY.MKD' | translate }}
-                  </td>
-                  <td class="text-center">
-                    <div class="action-buttons" *ngIf="t.transactionId">
-                      <button class="btn btn-warning btn-sm me-1"
-                              (click)="editFromTable(t.transactionId)">
-                        {{ 'EDIT.ACTION_NAME' | translate }}
-                      </button>
-                      <button class="btn btn-danger btn-sm"
-                              (click)="deleteFromTable(t.transactionId)">
-                        {{ 'DELETE.ACTION_NAME' | translate }}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="text-center mt-3"
-               *ngIf="filteredTableView.length > displayLimit">
-
-            <button class="btn btn-secondary"
-                    (click)="toggleShowAll()">
-              {{ (showAll ? 'SHOW_LESS' : 'SEE_MORE') | translate }}
-            </button>
-          </div>
+                    {{ t.type | dbTranslate | translate }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  {{ t.sharesQuantity ?? '-' }}
+                </td>
+                <td class="text-end">
+                  {{ t.sharesUnitPrice ? (t.sharesUnitPrice | number:'1.2-2'): '-' }}
+                </td>
+                <td class="text-end fw-bold">
+                  {{ t.amount | number:'1.2-10' }} {{ 'CURRENCY.MKD' | translate }}
+                </td>
+                <td class="text-end fw-bold">
+                  {{ t.commission ? (t.commission | number: '1.2-2') + ' ' + ('CURRENCY.MKD' | translate) : '-'  }}
+                </td>
+                <td class="text-end fw-bold"
+                    [class.text-danger]="t.cashFlow < 0"
+                    [class.text-success]="t.cashFlow > 0">
+                  {{ t.cashFlow | number: '1.2-2'}} {{ 'CURRENCY.MKD' | translate }}
+                </td>
+                <td class="text-center">
+                  <div class="action-buttons" *ngIf="t.transactionId">
+                    <button class="btn btn-warning btn-sm me-1"
+                            (click)="editFromTable(t.transactionId)">
+                      {{ 'EDIT.ACTION_NAME' | translate }}
+                    </button>
+                    <button class="btn btn-danger btn-sm"
+                            (click)="deleteFromTable(t.transactionId)">
+                      {{ 'DELETE.ACTION_NAME' | translate }}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="col-xl-3 col-lg-4">
-          <app-portfolio-returns [portfolioId]="portfolioId"
-                                 (updated)="reloadAll()">
-          </app-portfolio-returns>
+        <div class="text-center mt-3"
+             *ngIf="filteredTableView.length > displayLimit">
+
+          <button class="btn btn-secondary"
+                  (click)="toggleShowAll()">
+            {{ (showAll ? 'SHOW_LESS' : 'SEE_MORE') | translate }}
+          </button>
         </div>
       </div>
 
-      <div *ngIf="!loading && !transactions.length" class="text-muted">
-        {{ 'NO_TRANSACTIONS_DATA_AVAILABLE' | translate }}
-      </div>
-
-      <app-transaction-form *ngIf="showEditModal"
-                            [portfolioId]="portfolioId"
-                            [transaction]="transactionToEdit"
-                            (close)="onModalClose($event)">
-      </app-transaction-form>
-
-      <div *ngIf="showDeleteModal" class="modal-overlay">
-        <div class="modal-content animate-in">
-          <h3>{{ 'DELETE.CONFIRM' | translate }}</h3>
-          <p>
-            {{ 'DELETE.DELETE_TRANSACTION_MESSAGE' | translate }}
-            <strong>{{ transactionToDelete?.hvCode }}</strong>
-            {{ 'ON' | translate }}
-            <strong>{{ transactionToDelete?.date | date: 'dd.MM.yyyy' }}</strong>?
-          </p>
-          <div class="modal-actions">
-            <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>
-            <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
-          </div>
-        </div>
+      <div class="col-xl-3 col-lg-4">
+        <app-portfolio-returns [portfolioId]="portfolioId"
+                               (updated)="reloadAll()">
+        </app-portfolio-returns>
       </div>
     </div>
 
-    <div class="tab-pane fade" id="analytics">
-      <div class="charts-grid">
-        <div class="chart-card income">
-          <app-portfolio-income [portfolioId]="portfolioId" [isReal]="isReal"></app-portfolio-income>
-        </div>
-
-        <div class="chart-card allocation">
-          <app-portfolio-security-allocation [portfolioId]="portfolioId" [isReal]="isReal">
-          </app-portfolio-security-allocation>
-        </div>
-      </div>
+    <div *ngIf="!loading && !transactions.length" class="text-muted">
+      {{ 'NO_TRANSACTIONS_DATA_AVAILABLE' | translate }}
     </div>
 
-    <div class="tab-pane fade" id="worth">
-      <div *ngIf="portfolioValue.length" class="table-responsive mt-3">
-        <table class="current-value-table">
-          <thead>
-            <tr>
-              <th>{{ 'SECURITIES.TITLE' | translate }}</th>
-              <th class="text-end">{{ 'QUANTITY' | translate }}</th>
-              <th class="text-end">{{ 'TRANSACTIONS.LAST_PRICE' | translate }}</th>
-              <th class="text-end">{{ 'PORTFOLIOS.CURRENT_VALUE' | translate }}</th>
-            </tr>
-          </thead>
+    <app-transaction-form *ngIf="showEditModal"
+                          [portfolioId]="portfolioId"
+                          [transaction]="transactionToEdit"
+                          (close)="onModalClose($event)">
+    </app-transaction-form>
 
-          <tbody>
-            <tr *ngFor="let v of portfolioValue">
-              <td class="fw-semibold text-primary">{{ v.hvCode }}</td>
-              <td class="text-end">{{ v.totalQuantity }}</td>
-              <td class="text-end">
-                {{ v.lastPrice | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
-              </td>
-              <td class="text-end fw-bold">
-                {{ v.currentValue | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div *ngIf="!portfolioValue.length && !loadingValue" class="text-center">
-        <span colspan="4">
-          {{ 'NO_OWNED_SECURITIES_DATA_AVAILABLE' | translate }}
-        </span>
+    <div *ngIf="showDeleteModal" class="modal-overlay">
+      <div class="modal-content animate-in">
+        <h3>{{ 'DELETE.CONFIRM' | translate }}</h3>
+        <p>
+          {{ 'DELETE.DELETE_TRANSACTION_MESSAGE' | translate }}
+          <strong>{{ transactionToDelete?.hvCode }}</strong>
+          {{ 'ON' | translate }}
+          <strong>{{ transactionToDelete?.date | date: 'dd.MM.yyyy' }}</strong>?
+        </p>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>
+          <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <div class="tab-pane fade" id="analytics">
+    <div class="charts-grid">
+      <div class="chart-card income">
+        <app-portfolio-income [portfolioId]="portfolioId" [isReal]="isReal"></app-portfolio-income>
+      </div>
+
+      <div class="chart-card allocation">
+        <app-portfolio-security-allocation [portfolioId]="portfolioId" [isReal]="isReal">
+        </app-portfolio-security-allocation>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-pane fade" id="worth">
+    <div *ngIf="portfolioValue.length" class="table-responsive mt-3">
+      <table class="current-value-table">
+        <thead>
+          <tr>
+            <th>{{ 'SECURITIES.TITLE' | translate }}</th>
+            <th class="text-end">{{ 'QUANTITY' | translate }}</th>
+            <th class="text-end">{{ 'TRANSACTIONS.LAST_PRICE' | translate }}</th>
+            <th class="text-end">{{ 'PORTFOLIOS.CURRENT_VALUE' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let v of portfolioValue">
+            <td class="fw-semibold text-primary">{{ v.hvCode }}</td>
+            <td class="text-end">{{ v.totalQuantity }}</td>
+            <td class="text-end">
+              {{ v.lastPrice | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
+            </td>
+            <td class="text-end fw-bold">
+              {{ v.currentValue | number:'1.2-2' }} {{ 'CURRENCY.MKD' | translate }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="!portfolioValue.length && !loadingValue" class="text-center">
+      <span colspan="4">
+        {{ 'NO_OWNED_SECURITIES_DATA_AVAILABLE' | translate }}
+      </span>
+    </div>
+  </div>
+</div>
 

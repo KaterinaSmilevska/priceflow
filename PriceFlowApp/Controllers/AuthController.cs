@@ -1,12 +1,10 @@
-﻿using DataAccess.Models;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace PriceFlowApp.Controllers
 {
@@ -31,6 +29,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var response = await _authService.RegisterAsync(registerRequest);
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -48,6 +47,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var response = await _authService.LoginAsync(request);
+
                 return Ok(response);
             }
             catch (ArgumentException ex)
@@ -60,6 +60,7 @@ namespace PriceFlowApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             return Ok(new { success = true, message = "Logged out successfully." });
         }
 
@@ -69,6 +70,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var roles = await _rolesService.FindNamesAsync();
+
                 return Ok(roles);
             }
             catch (Exception ex)
@@ -83,6 +85,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var exists = await _authService.UsernameExistsAsync(username);
+
                 return Ok(new { exists });
             }
             catch (Exception ex)
@@ -97,6 +100,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var response = await _authService.ValidatePasswordAsync(request);
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -111,6 +115,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var response = await _authService.ValidateEmailAsync(request);
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -125,6 +130,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 await _authService.ForgotPasswordAsync(request.Username);
+
                 return Ok(new { message = "Reset link has been sent to your email. " });
             }
             catch (Exception ex)
@@ -139,6 +145,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 await _authService.ResetPasswordAsync(request.Token, request.NewPassword);
+
                 return Ok(new { message = "Password reset successful." });
             }
             catch (Exception ex)
@@ -175,6 +182,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var users = await _authService.FindAllAsync();
+
                 return Ok(users);
             }
             catch (Exception ex)
@@ -223,6 +231,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 await _authService.DeleteAsync(id);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -237,6 +246,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var brokers = await _brokersService.FindAllAsync();
+
                 return Ok(brokers);
             }
             catch (Exception ex)
@@ -251,6 +261,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 Broker result = await _brokersService.AddAsync(broker);
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -265,6 +276,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 BrokerResponse result = await _brokersService.UpdateAsync(broker);
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -279,6 +291,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 await _brokersService.DeleteAsync(id);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -320,6 +333,7 @@ namespace PriceFlowApp.Controllers
             var userId = HttpContext.Session.GetString("UserId");
             var username = HttpContext.Session.GetString("Username");
             var roles = HttpContext.Session.GetString("Roles");
+
             return Ok(new { userId, username, roles });
         }
     }

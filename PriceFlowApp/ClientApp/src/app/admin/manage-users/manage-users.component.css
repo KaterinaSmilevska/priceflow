@@ -62,10 +62,6 @@
     transform: translateY(-1px);
   }
 
-/*.btn-warning {
-  background-color: var(--warning-bg);
-}*/
-
 .btn-danger {
   background-color: var(--danger-bg);
   color: white;

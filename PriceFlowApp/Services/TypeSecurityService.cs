@@ -8,7 +8,10 @@ namespace PriceFlowApp.Services
     {
         private readonly ITypeSecurityRepository _typeSecurityRepository;
 
-        public TypeSecurityService(ITypeSecurityRepository typeSecurityRepository) => _typeSecurityRepository = typeSecurityRepository;
+        public TypeSecurityService(ITypeSecurityRepository typeSecurityRepository)
+        {
+            _typeSecurityRepository = typeSecurityRepository;
+        }
 
         public async Task<IEnumerable<TypeSecurity>> FindAllAsync()
         {

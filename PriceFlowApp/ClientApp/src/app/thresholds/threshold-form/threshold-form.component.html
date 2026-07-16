@@ -1,7 +1,9 @@
 <div class="modal-overlay">
   <div class="modal-content">
-    <h4>{{ (thresholdToEdit ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'THRESHOLDS' | translate }}
-    {{ 'FOR' | translate }} {{ 'NAV.PRICE_ALERTS' | translate }}</h4>
+    <h4>
+      {{ (thresholdToEdit ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'THRESHOLDS' | translate }}
+      {{ 'FOR' | translate }} {{ 'NAV.PRICE_ALERTS' | translate }}
+    </h4>
 
     <form [formGroup]="editForm" (ngSubmit)="saveThreshold()">
       <div class="mb-3">

@@ -1,10 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -12,7 +7,10 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public BrokersRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
+        public BrokersRepository(PriceFlowDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task<Brokeri?> GetByIdAsync(int id)
         {
@@ -52,6 +50,7 @@ namespace DataAccess.Repositories
         {
             await _dbContext.Brokeri.AddAsync(broker);
             await _dbContext.SaveChangesAsync();
+
             return broker;
         }
     }

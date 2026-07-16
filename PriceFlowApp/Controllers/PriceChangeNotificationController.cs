@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
@@ -28,6 +27,7 @@ namespace PriceFlowApp.Controllers
                 await _notificationService.CheckAndGenerateNotificationsAsync();
 
                 List<PriceChangeNotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
+
                 return Ok(notifications);
             }
             catch (Exception ex)
@@ -46,6 +46,7 @@ namespace PriceFlowApp.Controllers
                 await _notificationService.CheckAndGenerateNotificationsAsync();
 
                 List<PriceChangeNotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
+
                 return Ok(notifications);
             }
             catch (Exception ex)
@@ -62,6 +63,7 @@ namespace PriceFlowApp.Controllers
                 int userId = User.GetUserId();
 
                 int unread = await _notificationService.GetUnreadNotificationCountAsync(userId);
+
                 return Ok(unread);
             }
             catch (Exception ex)
@@ -76,6 +78,7 @@ namespace PriceFlowApp.Controllers
             try
             { 
                 await _notificationService.MarkNotificationAsReadAsync(id);
+
                 return NoContent();
             }
             catch (Exception ex)

@@ -113,6 +113,7 @@
 
 .neutral {
   color: var(--text-muted);
+  font-weight: 600;
 }
 
 .valuation-legend {
@@ -127,6 +128,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  font-weight: 500;
 }
 
 .legend-color {

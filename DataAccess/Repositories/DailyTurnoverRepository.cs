@@ -1,12 +1,6 @@
 ﻿using DataAccess.Enums;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -14,7 +8,10 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public DailyTurnoverRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
+        public DailyTurnoverRepository(PriceFlowDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task<bool> ExistsForDateAsync(DateTime date)
         {
@@ -87,7 +84,6 @@ namespace DataAccess.Repositories
                 query = query.Where(dp => securityIds.Contains(dp.Hvid) && dp.KolicinaIstrguvaniAkcii > 0);
 
             return await query.ToListAsync();
-                
         }
     }
 }

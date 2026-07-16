@@ -13,7 +13,7 @@
 }
 
 .percent {
-    text-align: center;
+  text-align: center;
 }
 
 .dropdown-item {
@@ -24,15 +24,15 @@
   text-align: left;
 }
 
-.dropdown-item:hover {
+  .dropdown-item:hover {
     background-color: #f1f3f5;
     cursor: pointer;
-}
+  }
 
-.dropdown-item:not(.bg-light) {
+  .dropdown-item:not(.bg-light) {
     font-weight: 500;
-}
+  }
 
 .bg-light {
-    background-color: #f8f9fa !important;
+  background-color: #f8f9fa !important;
 }

@@ -1,10 +1,8 @@
 ﻿using DataAccess.Enums;
-using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
-using PriceFlowSecurity;
 
 namespace PriceFlowApp.Controllers
 {
@@ -33,6 +31,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 IEnumerable<Portfolio> portfolios = await _portfoliosService.FindUserPortfoliosAsync(userId);
+
                 return Ok(portfolios);
             }
             catch (Exception ex)
@@ -48,6 +47,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 Portfolio portfolio = await _portfoliosService.FindById(id);
+
                 return Ok(portfolio);
             }
             catch (Exception ex)
@@ -63,6 +63,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 Portfolio createdPortfolio = await _portfoliosService.CreatePortfolio(userId, portfolio);
+
                 return Ok(createdPortfolio);
             }
             catch (Exception ex)
@@ -78,6 +79,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 Portfolio updatedPortfolio = await _portfoliosService.UpdatePortfolio(id, userId, portfolio);
+
                 return Ok(updatedPortfolio);
             }
             catch (Exception ex)
@@ -93,6 +95,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 await _portfoliosService.DeletePortfolio(id, userId);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -108,6 +111,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 List<OwnedSecuritiesPriceTrend> result = await _transactionsService.FindPriceTrendAsync(userId, period, periodsBack);
+
                 return Ok(result);
             }
             catch (Exception ex)

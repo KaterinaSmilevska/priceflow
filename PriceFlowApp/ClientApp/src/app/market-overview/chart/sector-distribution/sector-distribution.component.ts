@@ -1,24 +1,27 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { Chart, ChartData, ChartType, registerables } from "chart.js";
 import { ChartService } from "../chart.service";
 import { BaseChartDirective } from 'ng2-charts';
 import { FormsModule } from "@angular/forms";
 import { TranslateModule, TranslateService } from "@ngx-translate/core";
 import { SectorsTranslatePipe } from "../../../shared/sectors-translate.pipe";
+import { Subscription } from "rxjs";
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-sector-distribution',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule, SectorsTranslatePipe],
+  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule],
   templateUrl: './sector-distribution.component.html',
 })
 
-export class SectorDistributionComponent implements OnInit {
+export class SectorDistributionComponent implements OnInit, OnDestroy {
   @Input() date!: string;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  private langSubscription?: Subscription;
 
   public type: ChartType = 'pie';
   public data: ChartData<'pie', number[], string> = {
@@ -55,6 +58,13 @@ export class SectorDistributionComponent implements OnInit {
     else {
       this.loadChart();
     }
+    this.langSubscription = this.translateService.onLangChange.subscribe(() => {
+      this.loadChart();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.langSubscription?.unsubscribe();
   }
 
   loadChart(): void {

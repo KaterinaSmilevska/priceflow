@@ -333,7 +333,7 @@
   "LOADING_ANALYTICS": "Loading analytics",
   "OVERVALUED": "Overvalued",
   "UNDERVALUED": "Undervalued",
-  "FAIRLY_PRICED": "Fairly priced",
+  "REALISTIC_PRICE": "Realistic price (1 ± 5%)",
   "VALUE": "Value",
   "NO_DATA_AVAILABLE_FOR_PERIOD": "No data available for the selected period.",
   "NO_DATA_AVAILABLE_FOR": "No data available for {{date}}.",

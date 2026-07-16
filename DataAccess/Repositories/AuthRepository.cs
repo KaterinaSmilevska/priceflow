@@ -47,25 +47,7 @@ namespace DataAccess.Repositories
         }
 
         public async Task DeleteAsync(Korisnici user)
-        {
-            //if (user == null) return;
-
-            //List<Portfolija> portfolios = await _dbContext.Portfolija
-            //    .Where(p => p.KorisnikId == user.Id)
-            //    .Include(p => p.Transakcii)
-            //    .Include(p => p.PortfolioPrinosi)
-            //    .ToListAsync();
-
-            //foreach(Portfolija portfolio in portfolios)
-            //{
-            //    _dbContext.Transakcii.RemoveRange(portfolio.Transakcii);
-            //    _dbContext.PortfolioPrinosi.RemoveRange(portfolio.PortfolioPrinosi);
-            //}
-
-            //_dbContext.Portfolija.RemoveRange(portfolios);
-
-            //await _usersRolesRepository.RemoveByUserIdAsync(user.Id);
-
+        { 
             _dbContext.Korisnici.Remove(user);
             await _dbContext.SaveChangesAsync();
         }

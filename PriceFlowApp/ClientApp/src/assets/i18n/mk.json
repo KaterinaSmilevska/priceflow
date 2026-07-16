@@ -142,10 +142,7 @@
     "ADD_ERROR": "Грешка при додавањето на хартии од вредност.",
     "UPDATE_SUCCESS": "Хартиите од вредност се успешно ажурирани!",
     "UPDATE_ERROR": "Грешка при ажурирањето на хартиите од вредност.",
-    "DELETE_ERROR": "Грешка при бришењето на хартиите од вредност.",
-    "METRICS_TRANSLATE": {
-      "MOST_PROFITABLE_SECURITIES_DIVIDEND_YIELD": "Најпрофитабилни ХодВ според дивиденден принос"
-    }
+    "DELETE_ERROR": "Грешка при бришењето на хартиите од вредност."
   },
   "PORTFOLIOS": {
     "TITLE": "Портфолија",
@@ -334,7 +331,7 @@
   "LOADING_ANALYTICS": "Вчитување аналитика",
   "OVERVALUED": "Преценети",
   "UNDERVALUED": "Потценети",
-  "FAIRLY_PRICED": "Фер цена",
+  "REALISTIC_PRICE": "Реалистична цена (1 ± 5%)",
   "VALUE": "Вредност",
   "NO_DATA_AVAILABLE_FOR_PERIOD": "Нема достапни податоци за избраниот период.",
   "NO_DATA_AVAILABLE_FOR": "Нема достапни податоци за {{date}}.",

@@ -33,7 +33,7 @@
 label {
   color: var(--label-color);
   font-weight: 500;
-  margin-bottom: 5px; 
+  margin-bottom: 5px;
 }
 
 .error {

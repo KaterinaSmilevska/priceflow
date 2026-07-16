@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 Chart.register(...registerables, ChartDataLabels);
 
@@ -16,9 +17,11 @@ Chart.register(...registerables, ChartDataLabels);
   templateUrl: './portfolio-security-allocation.component.html',
   styleUrl: './portfolio-security-allocation.component.css',
 })
-export class PortfolioSecurityAllocationComponent implements OnInit {
+export class PortfolioSecurityAllocationComponent implements OnInit, OnChanges, OnDestroy {
   @Input() portfolioId!: number;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  private langSubscription?: Subscription;
 
   @Input() isReal: boolean = true;
 
@@ -56,6 +59,9 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadChart();
+    this.langSubscription = this.translateService.onLangChange.subscribe(() => {
+      this.loadChart();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -65,6 +71,10 @@ export class PortfolioSecurityAllocationComponent implements OnInit {
     if (changes['isReal'] && !changes['isReal'].firstChange) {
       this.loadChart();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.langSubscription?.unsubscribe();
   }
 
   loadChart(): void {

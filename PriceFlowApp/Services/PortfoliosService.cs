@@ -6,7 +6,6 @@ namespace PriceFlowApp.Services
 {
     public class PortfoliosService : IPortfoliosService
     {
-
         private readonly IPortfoliosRepository _portfolijaRepository;
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
@@ -146,6 +145,7 @@ namespace PriceFlowApp.Services
                     ? t.KolicinaAkcii
                     : -t.KolicinaAkcii;
             }
+
             return holdings;
         }
 
@@ -158,12 +158,14 @@ namespace PriceFlowApp.Services
                 decimal? price = await GetLatestPriceAsync(holding.Key, date);
                 totalValue += (decimal)(holding.Value * price);
             }
+
             return totalValue;
         }
 
         private async Task<decimal> GetLatestPriceAsync(int securityId, DateOnly date)
         {
             decimal price = await _dailyTurnoverRepository.GetLatestPriceAsync(securityId, date);
+
             return price;
         }
 

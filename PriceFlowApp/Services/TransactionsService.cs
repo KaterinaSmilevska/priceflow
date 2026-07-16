@@ -1,13 +1,8 @@
 ﻿using DataAccess.Enums;
 using DataAccess.Models;
 using DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.Intrinsics.Arm;
-using System.Threading.Tasks;
 
 namespace PriceFlowApp.Services
 {
@@ -49,6 +44,7 @@ namespace PriceFlowApp.Services
                 Datum = transaction.Date
             };
              entity = await _transactionsRepository.AddAsync(entity);
+
             return new Transaction
             {
                 Id = entity.Id,
@@ -108,7 +104,6 @@ namespace PriceFlowApp.Services
             foundTransaction.Hvid = security.Id;
             foundTransaction.KolicinaAkcii = transaction.SharesQuantity;
             foundTransaction.EdinecnaCenaAkcija = transaction.SharesUnitPrice;
-            //foundTransaction.Iznos = transaction.Amount;
             foundTransaction.TipTransakcija = transaction.TypeTransaction;
             foundTransaction.Realna = transaction.IsReal;
             foundTransaction.BerzanskaProvizija = transaction.StockExchangeCommission;
@@ -159,8 +154,8 @@ namespace PriceFlowApp.Services
             {
                 totalRevenue += summary.TotalDividends;
                 taxes = summary.TotalTaxes;
-
             }
+
             return new PortfolioAnalytics
             {
                 TotalRevenue = totalRevenue,
@@ -241,19 +236,6 @@ namespace PriceFlowApp.Services
                 .Sum(t => t.KolicinaAkcii);
 
             int owned = totalBought - totalSold;
-
-            //if (transaction.TypeTransaction == "Продавање" && transaction.SharesQuantity > owned)
-            //{
-            //    throw new InvalidOperationException($"Cannot sell {transaction.SharesQuantity} shares of '{security.Kod}'." +
-            //        $"You own only {owned}.");
-            //}
-
-            //if(transaction.TypeTransaction == "Купување" && totalBought + transaction.SharesQuantity > security.VkupenBrojAkcii)
-            //{
-            //    int available = security.VkupenBrojAkcii - totalBought;
-            //    throw new InvalidOperationException($"Cannot buy {transaction.SharesQuantity} shares of '{security.Kod}'." +
-            //        $"Only {available} available.");
-            //}
         }
 
         public async Task<int> FindOwnedSharesAtDateAsync(int portfolioId, string securityCode, bool isReal, DateOnly date)

@@ -1,32 +1,32 @@
 .mode-toggle {
-    display: inline-flex;
-    border: 1px solid var(--input-border);
-    border-radius: 10px;
-    overflow: hidden;
-    background: var(--card-bg);
+  display: inline-flex;
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--card-bg);
 }
 
-.mode-toggle .btn {
+  .mode-toggle .btn {
     border: none;
     border-radius: 0;
     min-width: 150px;
     font-weight: 500;
     transition: all .2s ease;
-}
-
-  .mode-toggle .btn.active {
-    background-color: var(--primary-color);
-    color: white;
   }
 
-  .mode-toggle .btn.inactive {
-    background-color: var(--card-bg);
-    color: var(--text-color);
-  }
+    .mode-toggle .btn.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
 
-.mode-toggle .btn.inactive:hover {
-    background-color: var(--secondary-color);
-}
+    .mode-toggle .btn.inactive {
+      background-color: var(--card-bg);
+      color: var(--text-color);
+    }
+
+      .mode-toggle .btn.inactive:hover {
+        background-color: var(--secondary-color);
+      }
 
 .btn {
   padding: 8px 16px;
@@ -91,11 +91,11 @@
       border-bottom: none;
     }
 
-    .tab-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-    }
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
 
 .summary-card {
   background-color: var(--card-bg);
@@ -234,31 +234,31 @@ td.fw-bold {
 }
 
 .charts-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    align-items: stretch;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: stretch;
 }
 
 .chart-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 4px 14px var(--shadow-color);
-    max-height: 450px;
-    text-align: center;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 14px var(--shadow-color);
+  max-height: 450px;
+  text-align: center;
 }
 
 .current-value-table {
-    width: 100%;
+  width: 100%;
 }
 
-.current-value-table tbody tr:hover {
-  background-color: var(--secondary-color);
-}
+  .current-value-table tbody tr:hover {
+    background-color: var(--secondary-color);
+  }
 
 @media(max-width: 992px) {
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
 }

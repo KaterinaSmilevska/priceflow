@@ -23,7 +23,6 @@
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-
   color: white;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   margin: 0;
@@ -168,10 +167,10 @@ p {
   font-size: 13px;
 }
 
-.footer-bottom .disclaimer {
+  .footer-bottom .disclaimer {
     font-size: 0.75rem;
     max-width: 900px;
     margin: 0 auto 6px;
     line-height: 1.4;
     padding-bottom: 20px;
-}
+  }

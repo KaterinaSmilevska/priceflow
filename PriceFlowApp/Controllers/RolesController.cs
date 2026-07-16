@@ -9,7 +9,10 @@ namespace PriceFlowApp.Controllers
     {
         private readonly RolesService _rolesService;
 
-        public RolesController(RolesService roleService) => _rolesService = roleService;
+        public RolesController(RolesService roleService)
+        {
+            _rolesService = roleService;
+        }
 
         [HttpGet("{name}")]
         public async Task<IActionResult> GetRole(string name)
@@ -17,6 +20,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var response = await _rolesService.FindByNameAsync(name);
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -31,6 +35,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 var response = await _rolesService.FindNamesAsync();
+
                 return Ok(response);
             }
             catch (Exception ex)

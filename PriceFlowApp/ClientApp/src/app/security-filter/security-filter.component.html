@@ -33,7 +33,7 @@
     <div class="chart-card">
       <canvas baseChart
                 [data]="chartData"
-                [options]="chartOptions"
+              [options]="chartOptions"
                 [type]="'bar'">
       </canvas>
       <div *ngIf="selectedMetric === 'Market price : Book value'"
@@ -43,12 +43,12 @@
           <span>▼ {{ 'OVERVALUED' | translate }}</span>
         </div>
         <div class="legend-term">
-          <span class="legend-color undervalued"></span>
-          <span>▲ {{ 'UNDERVALUED' | translate }}</span>
+          <span class="legend-color neutral"></span>
+          <span>{{ 'REALISTIC_PRICE' | translate }}</span>
         </div>
         <div class="legend-term">
-          <span class="legend-color neutral"></span>
-          <span>{{ 'FAIRLY_PRICED' | translate }}</span>
+          <span class="legend-color undervalued"></span>
+          <span>▲ {{ 'UNDERVALUED' | translate }}</span>
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of data">
-            <td>{{ item.securityCode || item.sectorName }}</td>
+            <td>{{ (item.securityCode || item.sectorName) | sectorsTranslate | translate }}</td>
             <td [ngClass]="getValuationClass(item)">
               {{ item.value || item.totalValue | number: (selectedMetric === 'Market price : Book value' ? '1.4-4' : '1.2-2') }}
               <span *ngIf="selectedMetric === 'Market price : Book value'">

@@ -71,10 +71,6 @@
     opacity: 0.9;
   }
 
-/*.btn-warning {
-  background-color: var(--warning-bg);
-}*/
-
 .btn-danger {
   background-color: var(--danger-bg);
   color: white;

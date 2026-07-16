@@ -1,7 +1,6 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
-using static QuestPDF.Helpers.Colors;
 
 namespace PriceFlowApp.Services
 {

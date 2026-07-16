@@ -25,6 +25,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<Transaction> transactions = await _transactionsService.FindByPortfolioIdAsync(portfolioId);
+
                 return Ok(transactions);
             }
             catch (Exception ex)
@@ -39,6 +40,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 int ownedShares = await _transactionsService.FindOwnedSharesAsync(portfolioId, code, isReal);
+
                 return Ok(ownedShares);
             }
             catch (Exception ex)
@@ -54,6 +56,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 int ownedSharesAtDate = await _transactionsService.FindOwnedSharesAtDateAsync(portfolioId, code, isReal, date);
+
                 return Ok(ownedSharesAtDate);
             }
             catch (Exception ex)
@@ -68,6 +71,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 Transaction createdTransaction = await _transactionsService.AddAsync(portfolioId, transaction);
+
                 return Ok(createdTransaction);
             }
             catch(InvalidOperationException ex)
@@ -86,6 +90,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 Transaction updatedTransaction = await _transactionsService.UpdateAsync(id, transaction);
+
                 return Ok(updatedTransaction);
             }
             catch (InvalidOperationException ex)
@@ -104,6 +109,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 await _transactionsService.DeleteAsync(id);
+
                 return NoContent();
             }
             catch (Exception ex)
@@ -119,6 +125,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 PortfolioAnalytics analytics = await _transactionsService.GetAnalyticsAsync(portfolioId, isReal);
+
                 return Ok(analytics);
             }
             catch (Exception ex)
@@ -133,6 +140,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 List<PortfolioValue> result = await _portfolioValueService.GetCurrentValueAsync(portfolioId, isReal);
+
                 return Ok(result);
             }
             catch (Exception ex)

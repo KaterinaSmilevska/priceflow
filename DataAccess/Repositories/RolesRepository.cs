@@ -7,7 +7,10 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public RolesRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
+        public RolesRepository(PriceFlowDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task<Ulogi?> GetByIdAsync(int id)
         {

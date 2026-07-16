@@ -23,6 +23,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 PortfolioNotification? notification = await _portfoliosNotificationsService.FindByPortfolioId(portfolioId);
+
                 return Ok(notification);
             }
             catch (Exception ex)
@@ -37,6 +38,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 PortfolioNotification result = await _portfoliosNotificationsService.UpdateAsync(notification);
+
                 return Ok(result);
             }
             catch (Exception ex)

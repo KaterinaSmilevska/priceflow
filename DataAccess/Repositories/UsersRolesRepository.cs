@@ -6,7 +6,10 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public UsersRolesRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
+        public UsersRolesRepository(PriceFlowDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        } 
 
         public async Task AddAsync(KorisniciUlogi userRole)
         {
@@ -18,7 +21,6 @@ namespace DataAccess.Repositories
         {
             _dbContext.KorisniciUlogi.RemoveRange(_dbContext.KorisniciUlogi
                .Where(ku => ku.KorisnikId == id));
-
             await _dbContext.SaveChangesAsync(); 
         }
     }

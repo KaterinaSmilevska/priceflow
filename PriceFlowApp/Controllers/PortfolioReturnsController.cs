@@ -10,9 +10,10 @@ namespace PriceFlowApp.Controllers
     {
         private readonly IPortfolioReturnsService _portfolioReturnsService;
 
-        public PortfolioReturnsController(IPortfolioReturnsService portfolioReturnsService )
-        => _portfolioReturnsService = portfolioReturnsService;
-        
+        public PortfolioReturnsController(IPortfolioReturnsService portfolioReturnsService)
+        {
+            _portfolioReturnsService = portfolioReturnsService;
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(PortfolioReturns portfolioReturns)
@@ -20,6 +21,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 PortfolioReturns returns = await _portfolioReturnsService.CreateAsync(portfolioReturns);
+
                 return Ok(returns);
             }
             catch (Exception ex)
@@ -34,6 +36,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 PortfolioReturnsSummary summary = await _portfolioReturnsService.CalculateSummaryAsync(portfolioId);
+
                 return Ok(summary);
             }
             catch (Exception ex)
@@ -48,6 +51,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<PortfolioReturns> returns = await _portfolioReturnsService.FindByPortfolioId(portfolioId);
+
                 return Ok(returns);
             }
             catch (Exception ex)

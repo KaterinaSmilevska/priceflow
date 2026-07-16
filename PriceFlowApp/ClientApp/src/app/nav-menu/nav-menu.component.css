@@ -20,21 +20,21 @@
     background-color: var(--navbar-hover);
   }
 
-.navbar-brand .logo {
-  height: 55px;
-  width: 55px;
-  transition: transform 0.3s ease;
-  border-radius: 50%;
-  object-fit: cover;
-}
+  .navbar-brand .logo {
+    height: 55px;
+    width: 55px;
+    transition: transform 0.3s ease;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 
-.navbar-brand:hover .logo {
-  transform: scale(1.05);
-}
+  .navbar-brand:hover .logo {
+    transform: scale(1.05);
+  }
 
-.navbar-brand .text-white {
-  color: #ffffff !important;
-}
+  .navbar-brand .text-white {
+    color: #ffffff !important;
+  }
 
 .navbar-nav .nav-link {
   color: var(--navbar-text) !important;
@@ -74,12 +74,12 @@
   transition: all 0.3s ease-in-out;
 }
 
-  .navbar-nav .nav-link:hover,
-  .navbar-brand:hover {
-    color: white !important;
-    background-color: rgba(0, 180, 216, 0.1);
-    box-shadow: 0 0 8px rgba(0, 180, 216, 0.2);
-  }
+.navbar-nav .nav-link:hover,
+.navbar-brand:hover {
+  color: white !important;
+  background-color: rgba(0, 180, 216, 0.1);
+  box-shadow: 0 0 8px rgba(0, 180, 216, 0.2);
+}
 
 
 .container {
@@ -142,7 +142,6 @@ input:checked + .language-slider {
 
   input:checked + .language-slider:before {
     background-image: url('../../assets/gb_flag.png');
-    
   }
 
 input:not(:checked) + .language-slider:before {
@@ -161,7 +160,7 @@ input:not(:checked) + .language-slider:before {
 }
 
   .login:hover {
-        background-color: #0056b3;
+    background-color: #0056b3;
   }
 
 @media (max-width: 768px) {
@@ -214,23 +213,23 @@ input:not(:checked) + .language-slider:before {
 
 
 @keyframes fadeInOut {
-    0% {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 
-    10% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    90% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    100% {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }

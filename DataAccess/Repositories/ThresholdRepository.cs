@@ -1,10 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -21,12 +16,12 @@ namespace DataAccess.Repositories
         {
            await _dbContext.HvPromenaCena.AddAsync(entity);
            await _dbContext.SaveChangesAsync();
-            return entity;
+
+           return entity;
         }
 
         public async Task DeleteAsync(HvPromenaCena entity)
         {
-
            _dbContext.HvPromenaCena.Remove(entity);
            await _dbContext.SaveChangesAsync();
 
@@ -57,8 +52,8 @@ namespace DataAccess.Repositories
         {
             _dbContext.HvPromenaCena.Update(entity);
             await _dbContext.SaveChangesAsync();
-            return entity;
 
+            return entity;
         }
     }
 }

@@ -5,7 +5,6 @@ namespace PriceFlowSecurity
 {
     public class PasswordHelper
     {
-
         private const int HashLengthInBytes = 32;
         private const int SaltLengthInBytes = 16;
         private const int HashInterations = 100000;
@@ -13,7 +12,6 @@ namespace PriceFlowSecurity
         public static byte[] GenerateSalt()
         {
             return RandomNumberGenerator.GetBytes(16);
-
         }
 
         public static byte[] CalculateHashAndSalt(string password)
@@ -26,7 +24,6 @@ namespace PriceFlowSecurity
             Buffer.BlockCopy(saltBytes, 0, HashAndSaltBytes, 32, 16);
 
             return HashAndSaltBytes;
-
         }
 
         public static byte[] HashPassword(string password, byte[] salt)
@@ -37,6 +34,7 @@ namespace PriceFlowSecurity
               prf: KeyDerivationPrf.HMACSHA256,
               iterationCount: HashInterations,
               numBytesRequested: 32);
+
             return hash;
         }
 
@@ -49,6 +47,7 @@ namespace PriceFlowSecurity
             Buffer.BlockCopy(storedHash, 32, salt, 0, 16);
 
             var enteredHash = HashPassword(enteredPassword, salt);
+
             return hash.SequenceEqual(enteredHash);
         }
 
@@ -64,6 +63,5 @@ namespace PriceFlowSecurity
                     clearTextPassword.Any(char.IsUpper) && clearTextPassword.Any(char.IsDigit) &&
                     clearTextPassword.Any(c => SpecialCharacters.Contains(c)) && !clearTextPassword.Any(char.IsWhiteSpace));
         }
-
     }
 }

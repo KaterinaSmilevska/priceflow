@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions } from 'chart.js';
 import { PortfoliosService } from '../portfolios.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SecuritiesPriceTrend } from '../SecuritiesPriceTrend';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-securities-price-trend',
@@ -14,8 +15,10 @@ import { SecuritiesPriceTrend } from '../SecuritiesPriceTrend';
   templateUrl: './securities-price-trend.component.html',
   styleUrl: './securities-price-trend.component.css',
 })
-export class SecuritiesPriceTrendComponent implements OnInit {
+export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  private langSubscription?: Subscription;
 
   data: SecuritiesPriceTrend[] = [];
   securities: string[] = [];
@@ -72,6 +75,13 @@ export class SecuritiesPriceTrendComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.langSubscription = this.translateService.onLangChange.subscribe(() => {
+      this.buildChart();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.langSubscription?.unsubscribe();
   }
 
   loadData(): void {

@@ -49,6 +49,7 @@ namespace PriceFlowApp.Services
                 DolnaGranica = request.LowerThreshold,
                 GornaGranica = request.UpperThreshold
             };
+
             await _thresholdRepository.AddAsync(entity);
         }
 
@@ -84,12 +85,12 @@ namespace PriceFlowApp.Services
             List<int> ownedIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
 
             IEnumerable<HartiiOdVrednost> securities = await _securitiesRepository.GetAllByIds(ownedIds);
+
             return securities.Select(s => new OwnedSecurity
             {
                 Id = s.Id,
                 hvCode = s.Kod
-            })
-            .ToList();
+            }).ToList();
         }
     }
 }

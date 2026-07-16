@@ -61,7 +61,6 @@ namespace PriceFlowApp.Services
                 .ToListAsync();
 
             return result;
-
         }
     }
 }

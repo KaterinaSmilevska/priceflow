@@ -1,5 +1,4 @@
-﻿
-namespace PriceFlowApp.Services
+﻿namespace PriceFlowApp.Services
 {
     public class NotificationBackgroundService: BackgroundService
     {

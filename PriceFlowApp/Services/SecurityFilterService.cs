@@ -1,8 +1,6 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace PriceFlowApp.Services
 {
@@ -108,6 +106,7 @@ namespace PriceFlowApp.Services
             IEnumerable<Sektori> sectors = await _securityFilterRepository.GetMostProfitableSectorsByDividendYieldAsync();
 
             int latestYear = await _securityFilterRepository.GetLatestYearAsync();
+
             return sectors.Select(s =>
             {
                 decimal dividendYield = s.Izdavachi
@@ -131,6 +130,7 @@ namespace PriceFlowApp.Services
             IEnumerable<Sektori> sectors = await _securityFilterRepository.GetMostProfitableSectorsByProfitAsync();
 
             int latestYear = await _securityFilterRepository.GetLatestYearAsync();
+
             return sectors.Select(s =>
             {
                 decimal profit = s.Izdavachi
@@ -244,7 +244,6 @@ namespace PriceFlowApp.Services
                 .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
                 .FirstOrDefault();
 
-
                 return new FilteredSecurity
                 {
                     SecurityId = s.Id,
@@ -269,7 +268,6 @@ namespace PriceFlowApp.Services
                     && (dp.MaxCena - dp.MinCena) > 0)
                 .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
                 .FirstOrDefault();
-
 
                 return new FilteredSecurity
                 {

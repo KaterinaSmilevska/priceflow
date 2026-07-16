@@ -23,6 +23,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindMostProfitableSecuritiesByDividendYieldAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -37,6 +38,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindMostProfitableSecuritiesByDividendPerShareAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -51,6 +53,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindSecuritiesWithBiggestPriceOscillationsAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -65,6 +68,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindSecuritiesWithSmallestPriceOscillationsAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -79,6 +83,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindLeastLiquidSecuritiesByTradedQuantityAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -93,6 +98,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindMostLiquidSecuritiesByTradedQuantityAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -107,6 +113,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindLeastLiquidSecuritiesByNumTradingDaysAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -121,6 +128,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindMostLiquidSecuritiesByNumTradingDaysAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -135,6 +143,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<Sector> sectors = await _securityFilterService.FindMostProfitableSectorsByDividendYieldAsync();
+
                 return Ok(sectors);
             }
             catch (Exception ex)
@@ -149,6 +158,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<Sector> sectors = await _securityFilterService.FindMostProfitableSectorsByProfitAsync();
+
                 return Ok(sectors);
             }
             catch (Exception ex)
@@ -163,6 +173,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindSecuritiesValuationAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)

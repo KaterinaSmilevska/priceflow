@@ -10,7 +10,10 @@ namespace PriceFlowApp.Controllers
     {
         private readonly IChartService _chartService;
 
-        public ChartController(IChartService chartService) => _chartService = chartService;
+        public ChartController(IChartService chartService)
+        {
+            _chartService = chartService;
+        } 
 
         [HttpGet("price-trend")]
         public async Task<ActionResult<IEnumerable<PriceTrend>>> GetPriceTrend(int securityId, DateTime startDate, DateTime endDate)
@@ -18,6 +21,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<PriceTrend> data = await _chartService.GetPriceTrendAsync(securityId, startDate, endDate);
+
                 return Ok(data);
             }
             catch (Exception ex)
@@ -32,6 +36,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<SectorDistribution> data = await _chartService.GetSectorDistributionAsync(date);
+
                 return Ok(data);
             }
             catch (Exception ex)
@@ -46,6 +51,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<Security> securities = await _chartService.GetSecurities();
+
                 return Ok(securities);
             }
             catch (Exception ex)
@@ -71,6 +77,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<MonthlyIncome> monthlyIncome= await _chartService.GetMonthlyIncomeAsync(portfolioId, isReal);
+
                 return Ok(monthlyIncome);
             }
             catch (Exception ex)
@@ -86,6 +93,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<SecurityAllocation> securityAllocation = await _chartService.GetAllocationAsync(portfolioId, isReal);
+
                 return Ok(securityAllocation);
             }
             catch (Exception ex)

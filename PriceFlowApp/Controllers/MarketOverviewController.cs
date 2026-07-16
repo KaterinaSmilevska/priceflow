@@ -1,5 +1,4 @@
-﻿using DataAccess.Enums;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 
@@ -12,7 +11,10 @@ namespace PriceFlowApp.Controllers
 
         private readonly IMarketOverviewService _marketOverviewService;
 
-        public MarketOverviewController(IMarketOverviewService marketOverviewService) => _marketOverviewService = marketOverviewService;
+        public MarketOverviewController(IMarketOverviewService marketOverviewService)
+        {
+            _marketOverviewService = marketOverviewService;
+        }
 
         [HttpGet]
         public async Task<ActionResult<MarketOverview>> GetMarketOverview()
@@ -20,6 +22,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 MarketOverview overview = await _marketOverviewService.GetOverviewAsync();
+
                 return Ok(overview);
             }
             catch (Exception ex)
@@ -35,6 +38,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<SecurityPerformance> securityPerformance = await _marketOverviewService.GetTopGainersAsync(count);
+
                 return Ok(securityPerformance);
             }
             catch (Exception ex)
@@ -49,6 +53,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<SecurityPerformance> securityPerformance = await _marketOverviewService.GetTopLosersAsync(count);
+
                 return Ok(securityPerformance);
             }
             catch (Exception ex)
@@ -63,6 +68,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<SecurityPerformance> securityPerformance = await _marketOverviewService.GetMostTradedAsync(count);
+
                 return Ok(securityPerformance);
             }
             catch (Exception ex)
@@ -78,6 +84,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 LiquidityOverview result = await _marketOverviewService.FindLiquidityAsync(userId, months, onlyOwned);
+
                 return Ok(result);
             }
             catch (Exception ex)

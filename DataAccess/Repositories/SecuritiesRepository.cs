@@ -1,11 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -13,12 +7,16 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public SecuritiesRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
+        public SecuritiesRepository(PriceFlowDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task<HartiiOdVrednost> AddAsync(HartiiOdVrednost security)
         {
             _dbContext.HartiiOdVrednost.Add(security);
             await _dbContext.SaveChangesAsync();
+
             return security;
         }
 
@@ -30,7 +28,6 @@ namespace DataAccess.Repositories
                 _dbContext.HartiiOdVrednost.Remove(security);
                 await _dbContext.SaveChangesAsync();
             }
-
         }
 
         public async Task<IEnumerable<HartiiOdVrednost>> GetAllAsync()

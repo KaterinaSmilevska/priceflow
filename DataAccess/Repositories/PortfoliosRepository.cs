@@ -1,10 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -12,12 +7,16 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public PortfoliosRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
+        public PortfoliosRepository(PriceFlowDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task<Portfolija> CreateAsync(Portfolija portfolio)
         {
             _dbContext.Portfolija.Add(portfolio);
             await _dbContext.SaveChangesAsync();
+
             return portfolio;
         }
 
@@ -57,6 +56,7 @@ namespace DataAccess.Repositories
 
             _dbContext.Portfolija.Update(portfolio);
             await _dbContext.SaveChangesAsync();
+
             return foundPortfolio;
         }
     }

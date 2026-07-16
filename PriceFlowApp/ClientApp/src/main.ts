@@ -23,7 +23,7 @@ bootstrapApplication(AppComponent, {
       }
     },
     importProvidersFrom(FormsModule, ReactiveFormsModule, TranslateModule.forRoot({
-      defaultLanguage: 'en',
+      fallbackLang: 'en',
       loader: {
         provide: TranslateLoader,
         useClass: TranslateHttpLoader,

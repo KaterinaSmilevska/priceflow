@@ -17,8 +17,8 @@ namespace PriceFlowApp.Services
             var response = await _rolesRepository.GetByNameAsync(name);
             if(response == null)
                 throw new Exception("No role found");
-            return response;
 
+            return response;
         }
 
         public async Task<List<string>> FindByUserIdAsync(int userId)

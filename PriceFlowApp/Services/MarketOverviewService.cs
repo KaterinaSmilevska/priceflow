@@ -1,9 +1,7 @@
-﻿using DataAccess.Enums;
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
-using System.Runtime.Intrinsics.Arm;
 
 namespace PriceFlowApp.Services
 {
@@ -19,7 +17,6 @@ namespace PriceFlowApp.Services
             _dbContext = dbContext;
             _transactionsRepository = transactionsRepository;
             _dailyTurnoverRepository = dailyTurnoverRepository;
-
         } 
 
         public async Task<MarketOverview> GetOverviewAsync()

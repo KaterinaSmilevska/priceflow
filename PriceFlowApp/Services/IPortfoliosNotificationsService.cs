@@ -1,5 +1,4 @@
-﻿using DataAccess.Models;
-using PriceFlowApp.DTOs;
+﻿using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {
@@ -10,6 +9,5 @@ namespace PriceFlowApp.Services
         Task<PortfolioNotification?> FindByPortfolioId(int portfolioId);
 
         Task<PortfolioNotification> UpdateAsync(UpdatePortfolioNotification portfolioNotification);
-
     }
 }

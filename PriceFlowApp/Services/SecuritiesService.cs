@@ -13,7 +13,6 @@ namespace PriceFlowApp.Services
         {
             _securitiesRepository = securitiesRepository;
             _dailyTurnoverRepository = dailyTurnoverRepository;
-
         }
 
         public async Task<Security> AddAsync(CreateSecurity security)

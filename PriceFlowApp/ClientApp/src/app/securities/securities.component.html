@@ -10,7 +10,7 @@
       <input type="text"
              placeholder="{{ 'SEARCH' | translate }} {{ 'BY' | translate }} {{ 'SECURITIES.CODE' | translate }}..."
              [(ngModel)]="searchTerm"
-             (input)="onSearch()"/>
+             (input)="onSearch()" />
       <button *ngIf="searchTerm"
               class="clear-btn"
               (click)="clearSearch()">
@@ -55,10 +55,9 @@
   </ng-template>
 </div>
 
-<app-add-security
-  *ngIf="showEditModal"
-  [securityToEdit]="securityToEdit"
-  (close)="onModalClose($event)">
+<app-add-security *ngIf="showEditModal"
+                  [securityToEdit]="securityToEdit"
+                  (close)="onModalClose($event)">
 </app-add-security>
 
 <div *ngIf="showDeleteModal" class="modal-overlay">

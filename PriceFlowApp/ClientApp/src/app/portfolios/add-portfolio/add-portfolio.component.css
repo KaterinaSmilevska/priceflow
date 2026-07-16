@@ -78,14 +78,14 @@
   color: white;
 }
 
-  .btn-primary:hover {
-    opacity: 0.95;
-  }
+.btn-primary:hover {
+  opacity: 0.95;
+}
 
-  .btn-primary:disabled {
-    background: var(--input-border);
-    cursor: not-allowed;
-  }
+.btn-primary:disabled {
+  background: var(--input-border);
+  cursor: not-allowed;
+}
 
 .btn-secondary {
   background: var(--input-bg);

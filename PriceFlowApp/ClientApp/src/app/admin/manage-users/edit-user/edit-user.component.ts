@@ -80,5 +80,4 @@ export class EditUserComponent implements OnInit {
   cancel(): void {
     this.close.emit(null);
   }
-
 }

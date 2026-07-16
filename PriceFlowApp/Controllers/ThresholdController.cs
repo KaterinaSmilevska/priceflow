@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
@@ -25,6 +24,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 IEnumerable<ThresholdResponse> response = await _thresholdService.GetUserThresholdsAsync(userId);
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -40,6 +40,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 IEnumerable<OwnedSecurity> response = await _thresholdService.GetOwnedSecuritiesAsync(userId);
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -55,6 +56,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 await _thresholdService.AddAsync(userId, request);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -70,6 +72,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 await _thresholdService.UpdateAsync(userId, id, request);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -85,6 +88,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
                 await _thresholdService.DeleteAsync(userId, id);
+
                 return Ok();
             }
             catch (Exception ex)

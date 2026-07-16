@@ -1,10 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -12,12 +7,16 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public TransactionsRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
+        public TransactionsRepository(PriceFlowDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task<Transakcii> AddAsync(Transakcii transaction)
         {
             await _dbContext.AddAsync(transaction);
             await _dbContext.SaveChangesAsync();
+
             return transaction;
         }
 
@@ -114,6 +113,7 @@ namespace DataAccess.Repositories
         {
             _dbContext.Transakcii.Update(transaction);
             await _dbContext.SaveChangesAsync();
+
             return transaction;
         }
     }

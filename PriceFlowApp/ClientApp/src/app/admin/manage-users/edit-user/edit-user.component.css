@@ -46,10 +46,10 @@ label {
 }
 
 .form-control {
-    background-color: var(--input-bg);
-    color: var(--input-text);
-    border: 1px solid var(--input-border);
-    transition: all 0.2s ease;
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--input-border);
+  transition: all 0.2s ease;
 }
 
   .form-control:focus {

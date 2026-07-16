@@ -69,10 +69,10 @@
     transform: translateY(-1px);
   }
 
-.modal-content button.btn-success {
-  background-color: var(--success-bg);
-  color: white;
-}
+  .modal-content button.btn-success {
+    background-color: var(--success-bg);
+    color: white;
+  }
 
   .modal-content button.btn-secondary {
     background-color: var(--secondary-color);

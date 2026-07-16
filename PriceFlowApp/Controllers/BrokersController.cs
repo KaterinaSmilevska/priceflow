@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
-using PriceFlowSecurity;
-
 
 namespace PriceFlowApp.Controllers
 {
@@ -12,11 +10,11 @@ namespace PriceFlowApp.Controllers
     [Route("api/[controller]")]
     public class BrokersController : ControllerBase
     {
-        private readonly IBrokersService _brokerService;
+        private readonly IBrokersService _brokersService;
 
         public BrokersController(IBrokersService brokerService)
         {
-            _brokerService = brokerService;
+            _brokersService = brokerService;
         }
 
         [HttpGet]
@@ -24,7 +22,8 @@ namespace PriceFlowApp.Controllers
         {
             try
             {
-                IEnumerable<Broker> brokers = await _brokerService.FindAllAsync();
+                IEnumerable<Broker> brokers = await _brokersService.FindAllAsync();
+
                 return Ok(brokers);
             }
             catch (Exception ex)

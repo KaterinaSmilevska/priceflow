@@ -74,13 +74,14 @@
 }
 
 .export-section {
-    max-width: 450px;
+  max-width: 450px;
 }
 
 .export-section,
 .notifications-section {
   flex: 1;
 }
+
 .transactions-section,
 .export-section,
 .notifications-section {

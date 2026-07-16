@@ -10,8 +10,8 @@
 }
 
 .info {
-    color: var(--disabled-text);
-    margin: 10px;
+  color: var(--disabled-text);
+  margin: 10px;
 }
 
 .form-select {

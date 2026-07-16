@@ -43,6 +43,7 @@ namespace PriceFlowApp.Services
                 Email = item.Email,
                 Roles = item.KorisniciUlogi.Select(ku => ku.Uloga.Ime).ToList()
             });
+
             return foundUsers;
         }
 
@@ -55,6 +56,7 @@ namespace PriceFlowApp.Services
 
             if(korisnik == null)
                 throw new ArgumentException("Korisnik not found");
+
             return korisnik;
         }
 
@@ -202,7 +204,6 @@ namespace PriceFlowApp.Services
                 }
 
                 return new EmailValidationResponse { IsValid = true, Message = "Email is valid." };
-
             });
 
         }
@@ -254,12 +255,6 @@ namespace PriceFlowApp.Services
                 }
              );
 
-            //httpContext.Session.SetString("Username", user.Username);
-            //httpContext.Session.SetString("UserId", user.Id.ToString());
-            //httpContext.Session.SetString("Roles", string.Join(",", roleNames));
-            //httpContext.Response.Cookies.Append("Username", user.Username,new CookieOptions 
-            //    { HttpOnly = true, Expires = DateTimeOffset.Now.AddHours(1) });
-
             return new LoginResponse
             {
                 Id = user.Id,
@@ -296,6 +291,7 @@ namespace PriceFlowApp.Services
             existingUser.Ime = user.Ime;
             existingUser.Username = user.Username;
             existingUser.Email = user.Email;
+
             await _authRepository.UpdateAsync(existingUser);
         }
 
@@ -323,6 +319,7 @@ namespace PriceFlowApp.Services
             await _authRepository.UpdateAsync(user);
 
             string resetLink = $"https://localhost:44413/forgot-password?token={resetToken}";
+
             await _emailService.SendEmailAsync(user.Email, "Reset password", $"Click <a href='{resetLink}'>here</a> to reset your password.");
         }
 
@@ -343,8 +340,8 @@ namespace PriceFlowApp.Services
             user.PasswordHash = PasswordHelper.CalculateHashAndSalt(newPassword);
             user.ResetPasswordToken = null;
             user.ResetPasswordTokenExpiry = null;
+
             await _authRepository.UpdateAsync(user);
-            
         }
     }
 }

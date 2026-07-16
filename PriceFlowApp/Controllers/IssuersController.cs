@@ -1,5 +1,4 @@
-﻿using DataAccess.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 
@@ -11,7 +10,10 @@ namespace PriceFlowApp.Controllers
     {
         private readonly IIssuersService _issuersService;
 
-        public IssuersController(IIssuersService issuersService) => _issuersService = issuersService;
+        public IssuersController(IIssuersService issuersService)
+        {
+            _issuersService = issuersService;
+        } 
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Issuer>>> GetAll()
@@ -19,6 +21,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<Issuer> securities = await _issuersService.FindAllAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)

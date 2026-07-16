@@ -28,10 +28,9 @@
       </div>
 
       <label>{{'PRICE' | translate }}</label>
-      <input
-        type="number"
-        formControlName="sharesUnitPrice"
-        class="form-control"/>
+      <input type="number"
+             formControlName="sharesUnitPrice"
+             class="form-control" />
       <div *ngIf="priceWarning" class="price-warning alert alert-warning mt-2">
         {{ priceWarning }}
       </div>
@@ -101,10 +100,6 @@
       <div *ngIf="form.errors?.backend" class="alert alert-danger mt-2">
         {{ form.errors?.backend }}
       </div>
-
-      <!--<div *ngIf="dateSellInvalid" class="text-danger mt-1">
-        {{ 'TRANSACTIONS.OWNED_SHARES_MESSAGE' | translate }} {{ ownedSharesAtDate }} {{ 'SHARES' | translate }}.
-      </div>-->
     </form>
   </div>
 </div>

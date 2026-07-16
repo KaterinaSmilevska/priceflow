@@ -1,6 +1,4 @@
-﻿using DataAccess.Enums;
-using DataAccess.Models;
-using PriceFlowApp.DTOs;
+﻿using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {

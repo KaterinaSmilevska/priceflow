@@ -72,7 +72,6 @@
     <None Remove="ClientApp\src\app\shared\db-value-translate.pipe.ts" />
     <None Remove="ClientApp\src\app\shared\issuers-translate.pipe.ts" />
     <None Remove="ClientApp\src\app\shared\sectors-translate.pipe.ts" />
-    <None Remove="ClientApp\src\app\shared\security-filter-metrics-translate.pipe.ts" />
     <None Remove="ClientApp\src\app\theme.service.ts" />
     <None Remove="ClientApp\src\app\transactions\PortfolioTableView.ts" />
     <None Remove="ClientApp\src\app\transactions\PortfolioValue.ts" />
@@ -124,7 +123,6 @@
     <TypeScriptCompile Include="ClientApp\src\app\shared\db-value-translate.pipe.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\issuers-translate.pipe.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\sectors-translate.pipe.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\shared\security-filter-metrics-translate.pipe.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\theme.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\transactions\PortfolioTableView.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\transactions\PortfolioValue.ts" />

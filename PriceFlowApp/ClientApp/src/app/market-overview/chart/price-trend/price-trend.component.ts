@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Chart, ChartData, ChartType, registerables } from 'chart.js';
 import { ChartService } from '../chart.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 Chart.register(...registerables);
 
@@ -15,11 +16,13 @@ Chart.register(...registerables);
   templateUrl: './price-trend.component.html',
 })
 
-export class PriceTrendComponent implements OnInit {
+export class PriceTrendComponent implements OnInit, OnDestroy {
   @Input() securityId!: number;
   @Input() startDate!: string;
   @Input() endDate!: string;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  private langSubscription?: Subscription;
 
   public type: ChartType = 'line';
   public data: ChartData<'line'> = {
@@ -61,6 +64,13 @@ export class PriceTrendComponent implements OnInit {
     else {
       this.loadChart();
     }
+    this.langSubscription = this.translateService.onLangChange.subscribe(() => {
+      this.loadChart();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.langSubscription?.unsubscribe();
   }
 
   loadChart(): void {

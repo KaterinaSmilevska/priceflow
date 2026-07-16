@@ -8,7 +8,10 @@ namespace PriceFlowApp.Services
     {
         private readonly IIssuersRepository _issuersRepository;
 
-        public IssuersService(IIssuersRepository issuersRepository) => _issuersRepository = issuersRepository;
+        public IssuersService(IIssuersRepository issuersRepository)
+        {
+            _issuersRepository = issuersRepository;
+        }
 
         public async Task<IEnumerable<Issuer>> FindAllAsync()
         {

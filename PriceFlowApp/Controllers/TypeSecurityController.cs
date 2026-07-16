@@ -11,7 +11,10 @@ namespace PriceFlowApp.Controllers
     {
         private readonly ITypeSecurityService _typeSecurityService;
 
-        public TypeSecurityController(ITypeSecurityService typeSecurityService) => _typeSecurityService = typeSecurityService;
+        public TypeSecurityController(ITypeSecurityService typeSecurityService)
+        {
+            _typeSecurityService = typeSecurityService;
+        }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TipHv>>> GetAll()
@@ -19,6 +22,7 @@ namespace PriceFlowApp.Controllers
             try
             {
                 IEnumerable<TypeSecurity> securities = await _typeSecurityService.FindAllAsync();
+
                 return Ok(securities);
             }
             catch (Exception ex)

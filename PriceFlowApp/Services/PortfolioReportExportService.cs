@@ -1,11 +1,7 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
 using PriceFlowApp.DTOs;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
-using System.ComponentModel;
-using System.Reflection.Metadata;
 using System.Text;
 
 namespace PriceFlowApp.Services

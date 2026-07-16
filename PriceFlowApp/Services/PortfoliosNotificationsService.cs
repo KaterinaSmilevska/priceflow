@@ -1,5 +1,4 @@
-﻿
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
 
@@ -46,8 +45,6 @@ namespace PriceFlowApp.Services
                     notification.PoslednoIsprateno = DateTime.UtcNow;
                     await _portfoliosNotificationsRepository.UpdateAsync(notification);
                 }
-
-
             }
         }
 
@@ -121,7 +118,6 @@ namespace PriceFlowApp.Services
 
                 await _portfoliosNotificationsRepository.AddAsync(foundNotification);
             }
-
             else
             {
                 foundNotification.Ovozmozeno = portfolioNotification.IsEnabled;
