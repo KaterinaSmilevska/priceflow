@@ -225,7 +225,6 @@ C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i pri
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\PriceFlo.053AE94B.Up2Date
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\PriceFlowApp.dll
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\refint\PriceFlowApp.dll

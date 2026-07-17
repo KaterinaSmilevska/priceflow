@@ -27,7 +27,7 @@ thead {
   thead th {
     padding: 14px;
     font-weight: 600;
-    border: none;
+    border-bottom: 2px solid var(--input-border);
   }
 
 tbody td {
@@ -36,7 +36,7 @@ tbody td {
 }
 
 tbody tr:hover {
-  background: var(--input-bg);
+  background-color: var(--navbar-hover);
   transition: background 0.2s ease;
 }
 

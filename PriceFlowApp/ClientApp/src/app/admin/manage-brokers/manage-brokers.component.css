@@ -36,6 +36,7 @@
     font-weight: 600;
     background-color: var(--secondary-color);
     color: var(--text-color);
+    border-bottom: 2px solid var(--input-border);
   }
 
   .brokers-table td {
@@ -44,8 +45,7 @@
   }
 
   .brokers-table tbody tr:hover {
-    background-color: rgba(59, 130, 246, 0.08);
-    transition: background 0.2s ease-in-out;
+    background-color: var(--navbar-hover);
   }
 
 .btn {

@@ -30,7 +30,7 @@ export class PortfolioIncomeComponent implements OnInit, OnChanges, OnDestroy {
 
   public noDataMessage: string | null = null;
 
-  options: ChartOptions<'line'> = {
+  chartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -101,7 +101,7 @@ export class PortfolioIncomeComponent implements OnInit, OnChanges, OnDestroy {
           ],
         };
 
-        (this.options as any).plugins.title.text = this.translateService.instant(
+        (this.chartOptions as any).plugins.title.text = this.translateService.instant(
           'CHART.PORTFOLIO_INCOME_MESSAGE',
           { start: labels[0], end: labels[labels.length - 1] }
         );

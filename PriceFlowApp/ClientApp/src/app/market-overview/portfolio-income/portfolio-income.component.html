@@ -2,11 +2,11 @@
   <canvas baseChart
           [type]="type"
           [data]="data"
-          [options]="options">
+          [options]="chartOptions">
   </canvas>
 </div>
 
 <ng-template #noData>
-  <strong>{{ options.plugins!.title!.text }}</strong>
+  <strong>{{ chartOptions.plugins!.title!.text }}</strong>
   <div class="no-data-message">{{ noDataMessage | translate }}</div>
 </ng-template>

@@ -140,6 +140,7 @@ thead {
     color: var(--text-color);
     font-weight: 600;
     padding: 10px 15px;
+    border-bottom: 2px solid var(--input-border);
   }
 
 tbody td {
@@ -148,11 +149,7 @@ tbody td {
 }
 
 tbody tr:hover {
-  background-color: var(--secondary-color);
-}
-
-tbody tr:hover {
-  background-color: var(--input-bg);
+  background-color: var(--navbar-hover);
 }
 
 td.text-end {
@@ -254,7 +251,7 @@ td.fw-bold {
 }
 
   .current-value-table tbody tr:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--navbar-hover);
   }
 
 @media(max-width: 992px) {

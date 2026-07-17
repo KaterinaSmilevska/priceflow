@@ -91,7 +91,7 @@
   }
 
     .table-card tbody tr:hover {
-      background: var(--hover-bg);
+      background-color: var(--navbar-hover);
     }
 
 .loading-panel {

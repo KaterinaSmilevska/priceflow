@@ -36,6 +36,7 @@
     font-weight: 600;
     background-color: var(--secondary-color);
     color: var(--text-color);
+    border-bottom: 2px solid var(--input-border);
   }
 
   .thresholds-table td {
