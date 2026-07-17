@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MarketOverviewService } from '../market-overview/market-overview.service';
 import { FormsModule } from '@angular/forms';
 import { LiquidityOverview } from './LiquidityOverview';
@@ -13,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './liquidity.component.html',
   styleUrl: './liquidity.component.css',
 })
-export class LiquidityComponent {
+export class LiquidityComponent implements OnInit {
   liquidity: LiquidityOverview = {
     mostByTradedQuantity: [],
     leastByTradedQuantity: [],

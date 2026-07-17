@@ -1,14 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
+import { ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-
-Chart.register(...registerables, ChartDataLabels);
 
 @Component({
   selector: 'app-portfolio-security-allocation',
@@ -33,7 +30,7 @@ export class PortfolioSecurityAllocationComponent implements OnInit, OnChanges, 
 
   public noDataMessage: string | null = null;
 
-  public options: ChartOptions<'pie'> = {
+  chartOptions: ChartOptions<'pie'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -59,8 +56,10 @@ export class PortfolioSecurityAllocationComponent implements OnInit, OnChanges, 
 
   ngOnInit(): void {
     this.loadChart();
+
     this.langSubscription = this.translateService.onLangChange.subscribe(() => {
-      this.loadChart();
+      this.updateChartOptions();
+      this.chart?.update();
     });
   }
 
@@ -108,5 +107,19 @@ export class PortfolioSecurityAllocationComponent implements OnInit, OnChanges, 
         this.noDataMessage = 'LOADING_DATA_ERROR';
       }
     });
+  }
+
+  private updateChartOptions(): void {
+    this.chartOptions = {
+      ...this.chartOptions,
+      plugins: {
+        ...this.chartOptions.plugins,
+        title: {
+          ...this.chartOptions.plugins?.title,
+          display: true,
+          text: this.translateService.instant('CHART.SECURITY_ALLOCATION_MESSAGE')
+        }
+      }
+    };
   }
 }

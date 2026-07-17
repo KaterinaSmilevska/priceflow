@@ -1,0 +1,10 @@
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\bin\Debug\Database.dacpac
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\bin\Debug\Database.dll
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\bin\Debug\Database.pdb
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\obj\Debug\Database.sqlproj.AssemblyReference.cache
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\obj\Debug\Model.xml
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\obj\Debug\refactor.xml
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\obj\Debug\postdeploy.sql
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\obj\Debug\predeploy.sql
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\obj\Debug\Database.dll
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\Database\obj\Debug\Database.pdb

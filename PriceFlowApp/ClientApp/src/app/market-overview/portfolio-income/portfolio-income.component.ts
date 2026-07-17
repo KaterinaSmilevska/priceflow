@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './portfolio-income.component.html',
   styleUrl: './portfolio-income.component.css',
 })
-export class PortfolioIncomeComponent implements OnInit, OnDestroy {
+export class PortfolioIncomeComponent implements OnInit, OnChanges, OnDestroy {
   @Input() portfolioId!: number;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
@@ -30,7 +30,7 @@ export class PortfolioIncomeComponent implements OnInit, OnDestroy {
 
   public noDataMessage: string | null = null;
 
-  public options: ChartOptions<'line'> = {
+  options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {

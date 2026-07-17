@@ -14,7 +14,8 @@ export class AuthGuard  {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.loginService.isLoggedIn().pipe(
+    return this.loginService.authReady().pipe(
+      switchMap(() => this.loginService.isLoggedIn()),
       take(1),
       map(isLoggedIn => {
         if (!isLoggedIn) {

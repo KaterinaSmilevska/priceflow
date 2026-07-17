@@ -80,7 +80,7 @@
 
           <div class="language-switch-container">
             <label class="language-switch">
-              <input type="checkbox" id="languageToggle" (change)="toggleLanguage()">
+              <input type="checkbox" id="languageToggle" [checked]="isEnglish" (change)="toggleLanguage()">
               <span class="language-slider"></span>
             </label>
           </div>

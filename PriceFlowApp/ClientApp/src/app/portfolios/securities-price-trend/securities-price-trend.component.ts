@@ -61,7 +61,7 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
       y: {
         title: {
           display: true,
-          text: this.translateService.instant('PRICE') + ' (' + this.translateService.instant('CURRENCY.MKD') + ')',
+          text: `${this.translateService.instant('PRICE')} (${this.translateService.instant('CURRENCY.MKD')})`,
           font: {
             weight: 'bold'
           }
@@ -75,8 +75,11 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadData();
+
     this.langSubscription = this.translateService.onLangChange.subscribe(() => {
+      this.updateChartOptions();
       this.buildChart();
+      this.chart?.update();
     });
   }
 
@@ -130,5 +133,30 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
       }))
     };
     this.chart?.update();
+  }
+
+  private updateChartOptions(): void {
+    this.chartOptions = {
+      ...this.chartOptions,
+      scales: {
+        ...this.chartOptions.scales,
+        x: {
+          ...this.chartOptions.scales!.x,
+          title: {
+            ...this.chartOptions.scales!.x!.title,
+            display: true,
+            text: this.translateService.instant('DATE')
+          }
+        },
+        y: {
+          ...this.chartOptions.scales!.y,
+          title: {
+            ...this.chartOptions.scales!.y!.title,
+            display: true,
+            text: `${this.translateService.instant('PRICE')} (${this.translateService.instant('CURRENCY.MKD')})`,
+          }
+        }
+      }
+    };
   }
 }

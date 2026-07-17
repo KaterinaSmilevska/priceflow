@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Broker } from '../Broker';
 import { AdminService } from '../../admin.service';
@@ -12,7 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './edit-broker.component.html',
   styleUrl: './edit-broker.component.css',
 })
-export class EditBrokerComponent implements OnInit {
+export class EditBrokerComponent implements OnInit, OnChanges {
   @Input() brokerToEdit!: Broker;
   @Output() close = new EventEmitter<Broker | null>();
 

@@ -19,25 +19,25 @@
 
   <div class="row g-3">
     <div class="col-md-6">
-      <app-liquidity-table [title]="('MOST' | translate) + ' ' + ('LIQUIDITY.LIQUID' | translate) + ' (' + ('LIQUIDITY.TRADED_QTY' | translate) + ')'"
+      <app-liquidity-table [title]="('METRIC.MOST_LIQUID_SECURITIES_TRADED_QTY' | translate)"
                            [data]="liquidity.mostByTradedQuantity">
       </app-liquidity-table>
     </div>
 
     <div class="col-md-6">
-      <app-liquidity-table [title]="('LEAST' | translate) + ' ' + ('LIQUIDITY.LIQUID' | translate) + ' (' + ('LIQUIDITY.TRADED_QTY' | translate) + ')'"
+      <app-liquidity-table [title]="('METRIC.LEAST_LIQUID_SECURITIES_TRADED_QTY' | translate)"
                            [data]="liquidity.leastByTradedQuantity">
       </app-liquidity-table>
     </div>
 
     <div class="col-md-6">
-      <app-liquidity-table [title]="('MOST' | translate) + ' ' + ('LIQUIDITY.LIQUID' | translate) + ' (' + ('LIQUIDITY.TRADING_DAYS' | translate) + ')'"
+      <app-liquidity-table [title]="('METRIC.MOST_LIQUID_SECURITIES_TRADING_DAYS' | translate)"
                            [data]="liquidity.mostByTradingDays">
       </app-liquidity-table>
     </div>
 
     <div class="col-md-6">
-      <app-liquidity-table [title]="('LEAST' | translate) + ' ' + ('LIQUIDITY.LIQUID' | translate) + ' (' + ('LIQUIDITY.TRADING_DAYS' | translate) + ')'"
+      <app-liquidity-table [title]="('METRIC.LEAST_LIQUID_SECURITIES_TRADING_DAYS' | translate)"
                            [data]="liquidity.leastByTradingDays">
       </app-liquidity-table>
     </div>

@@ -5,6 +5,7 @@ import { map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { LoginRequest } from './LoginRequest';
 import { LoginResponse } from './LoginResponse';
+import { filter, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +13,28 @@ import { LoginResponse } from './LoginResponse';
 
 export class LoginService {
   private apiUrl = '/api/auth';
-  private loggedIn = new BehaviorSubject<boolean>(false);
+  private loggedIn = new BehaviorSubject<boolean | null>(null);
   private username = new BehaviorSubject<string | null>(null);
   private userRoles = new BehaviorSubject<string[]>([]);
 
+  private authLoaded = new BehaviorSubject<boolean>(false);
+  
   constructor(private http: HttpClient, private router: Router) {
     this.http.get<{ isLoggedIn: boolean; username?: string, roles?: string[] }>(`${this.apiUrl}/status`, { withCredentials: true })
       .subscribe(status => {
         this.loggedIn.next(status.isLoggedIn);
         this.username.next(status.username || '');
         this.userRoles.next(status.roles || []);
+
+        this.authLoaded.next(true);
       });
+  }
+
+  authReady(): Observable<boolean> {
+    return this.authLoaded.asObservable().pipe(
+      filter(ready => ready),
+      take(1)
+    );
   }
 
   login(request: LoginRequest): Observable<LoginResponse> {
@@ -32,6 +44,8 @@ export class LoginService {
           this.loggedIn.next(true);
           this.username.next(response.username);
           this.userRoles.next(response.roles);
+
+          this.authLoaded.next(true);
         }
       })
     );
@@ -48,7 +62,9 @@ export class LoginService {
   }
 
   isLoggedIn(): Observable<boolean> {
-    return this.loggedIn.asObservable();
+    return this.loggedIn.asObservable().pipe(
+      filter((value): value is boolean => value !== null)
+    );
   }
 
   getUsername(): Observable<string | null> {

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { AdminService } from '../../admin.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -13,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./edit-user.component.css']
 })
 
-export class EditUserComponent implements OnInit {
+export class EditUserComponent implements OnInit, OnChanges {
   @Input() userToEdit!: User;
   @Output() close = new EventEmitter<User | null>();
 
@@ -29,6 +29,7 @@ export class EditUserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {

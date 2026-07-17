@@ -8,7 +8,10 @@ import { routes } from './app/app.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
+import { Chart } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+Chart.register(ChartDataLabels);
 bootstrapApplication(AppComponent, {
 
   providers: [
