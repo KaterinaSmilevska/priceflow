@@ -22,14 +22,19 @@ namespace PriceFlowApp.Services
         public async Task<MarketOverview> GetOverviewAsync()
         {
             DateTime latestDate = await _dbContext.DnevenPromet.MaxAsync(dp => dp.Datum);
+            DateTime startMonth = new DateTime(latestDate.Year, latestDate.Month, 1);
 
-            decimal? totalMarketCap = await _dbContext.HartiiOdVrednost
-                .Join(_dbContext.DnevenPromet, hv => hv.Id, dp => dp.Hvid, (hv, dp) => new { hv, dp })
-                .Where(x => x.dp.Datum == latestDate && x.dp.CenaPoslednaTransakcija != null)
+            decimal? totalMarketCap = await _dbContext.DnevenPromet
+                .Where(dp => dp.Datum == latestDate && dp.CenaPoslednaTransakcija != null)
+                .Join(_dbContext.HartiiOdVrednost, dp => dp.Hvid, hv => hv.Id, (dp, hv) => new { dp, hv })
                 .SumAsync(x => x.hv.VkupenBrojAkcii * x.dp.CenaPoslednaTransakcija);
 
             double? averageDailyVolume = await _dbContext.DnevenPromet
                 .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii != null)
+                .AverageAsync(dp => dp.KolicinaIstrguvaniAkcii);
+
+            double? averageMonthlyVolume = await _dbContext.DnevenPromet
+                .Where(dp => dp.Datum >= startMonth && dp.Datum <= latestDate && dp.KolicinaIstrguvaniAkcii != null)
                 .AverageAsync(dp => dp.KolicinaIstrguvaniAkcii);
 
             var topGainer = await _dbContext.DnevenPromet
@@ -51,6 +56,7 @@ namespace PriceFlowApp.Services
             {
                 TotalMarketCap = (decimal)(totalMarketCap ?? 0),
                 AverageDailyVolume = (int)(averageDailyVolume ?? 0),
+                AverageMonthlyVolume = (int)(averageMonthlyVolume ?? 0),
                 TopGainer = topGainer?.Kod ?? "",
                 TopGainerChange = topGainer?.ProcentPromena ?? 0,
                 TopLoser = topLoser?.Kod ?? "",

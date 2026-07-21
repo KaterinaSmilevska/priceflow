@@ -45,7 +45,7 @@
   }
 
   .thresholds-table tbody tr:hover {
-    background-color: rgba(59, 130, 246, 0.08);
+    background-color: var(--navbar-hover);
     transition: background 0.2s ease-in-out;
   }
 
