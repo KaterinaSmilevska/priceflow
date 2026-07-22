@@ -7,6 +7,7 @@ import { PortfoliosService } from '../portfolios.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SecuritiesPriceTrend } from '../SecuritiesPriceTrend';
 import { Subscription } from 'rxjs';
+import { SecurityPriceTrendReport } from './SecurityPriceTrendReport';
 
 @Component({
   selector: 'app-securities-price-trend',
@@ -26,6 +27,8 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
   selectedSecurity?: string;
 
   selectedPeriod: 'Monthly' | 'Yearly' = 'Monthly';
+
+  reports: SecurityPriceTrendReport[] = [];
 
   chartData: ChartData<'line'> = {
     labels: [],
@@ -99,6 +102,7 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
 
   onSecurityChange(): void {
     this.loadData();
+    this.loadReport();
   }
 
   private buildChart(): void {
@@ -158,5 +162,29 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
         }
       }
     };
+  }
+
+  private loadReport(): void {
+    this.portfoliosService
+      .getSecuritiesPriceTrendReport(this.selectedPeriod, this.selectedSecurity)
+      .subscribe(report => {
+        this.reports = report;
+      });
+  }
+
+  downloadPDF() {
+    this.portfoliosService
+      .generateSecuritiesPriceTrendReport(this.selectedPeriod, this.selectedSecurity)
+      .subscribe(blob => {
+        const fileURL = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = fileURL;
+        link.download = 'SecuritiesPriceTrendReport.pdf';
+
+        link.click();
+
+        URL.revokeObjectURL(fileURL);
+      });
   }
 }

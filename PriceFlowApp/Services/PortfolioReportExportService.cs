@@ -64,7 +64,7 @@ namespace PriceFlowApp.Services
         {
             QuestPDF.Settings.License = LicenseType.Community;
 
-            var document = QuestPDF.Fluent.Document.Create(container =>
+            var document = Document.Create(container =>
             {
                 container.Page(page =>
                 {

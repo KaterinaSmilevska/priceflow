@@ -44,10 +44,6 @@ tbody tr:hover {
     background-color: var(--navbar-hover);
 }
 
-tbody tr:first-child {
-    font-weight: 600;
-}
-
 tbody tr:last-child {
     border-bottom: none;
 }

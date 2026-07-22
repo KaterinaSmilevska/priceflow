@@ -14,13 +14,15 @@ namespace PriceFlowApp.Controllers
         private readonly IPortfoliosService _portfoliosService;
         private readonly ITransactionsService _transactionsService;
         private readonly IPortfolioReportExportService _exportService;
+        private readonly ISecurityPriceTrendReportService _securityPriceTrendReportService;
 
         public PortfoliosController(IPortfoliosService portfoliosService, ITransactionsService transactionsService,
-            IPortfolioReportExportService exportService)
+            IPortfolioReportExportService exportService, ISecurityPriceTrendReportService securityPriceTrendReportService)
         {
             _portfoliosService = portfoliosService;
             _transactionsService = transactionsService;
             _exportService = exportService;
+            _securityPriceTrendReportService = securityPriceTrendReportService;
         }
 
 
@@ -105,7 +107,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities-price-trend")]
-        public async Task<ActionResult<List<OwnedSecuritiesPriceTrend>>> GetSecuritiesPriceTrend([FromQuery] PriceTrendPeriod period = PriceTrendPeriod.Monthly, [FromQuery] int periodsBack = 12)
+        public async Task<ActionResult<List<OwnedSecuritiesPriceTrend>>> GetSecuritiesPriceTrend([FromQuery] PriceTrendPeriod period, [FromQuery] int periodsBack)
         {
             try
             {
@@ -150,6 +152,40 @@ namespace PriceFlowApp.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Error fetching portfolio performance summary.", detail = ex.Message });
+            }
+        }
+
+        [HttpGet("securities-price-trend-report")]
+        public async Task<ActionResult<List<SecurityPriceTrendReport>>> GetSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod period, [FromQuery] string? securityCode)
+        {
+            try
+            {
+                int userId = User.GetUserId();
+                List<SecurityPriceTrendReport> result = await _transactionsService.GetSecuritiesPriceTrendReportAsync(userId, period, securityCode);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching securities price trend report.", detail = ex.Message });
+            }
+        }
+
+        [HttpGet("securities-price-trend-report/pdf")]
+        public async Task<ActionResult> GenerateSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod period, [FromQuery] string? securityCode)
+        {
+            try
+            {
+                int userId = User.GetUserId();
+                List<SecurityPriceTrendReport> reports = await _transactionsService.GetSecuritiesPriceTrendReportAsync(userId, period, securityCode);
+
+                byte[] pdf = _securityPriceTrendReportService.GenerateSecurityPriceTrendReport(reports);
+
+                return File(pdf, "application/pdf", "SecuritiesPriceTrendReport.pdf");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error generating securities price trend report.", detail = ex.Message });
             }
         }
     }

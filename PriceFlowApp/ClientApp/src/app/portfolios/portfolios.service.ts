@@ -6,6 +6,7 @@ import { Portfolio } from './Portfolio';
 import { CreatePortfolio } from './CreatePortfolio';
 import { UpdatePortfolio } from './UpdatePortfolio';
 import { SecuritiesPriceTrend } from './SecuritiesPriceTrend';
+import { SecurityPriceTrendReport } from './securities-price-trend/SecurityPriceTrendReport';
 
 @Injectable({ providedIn: 'root' })
 export class PortfoliosService {
@@ -35,10 +36,21 @@ export class PortfoliosService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
-  getSecuritiesPriceTrend(period: 'Monthly' | 'Yearly', periodsBack = 12) {
+  getSecuritiesPriceTrend(period: 'Monthly' | 'Yearly') {
+    const periodsBack = period === 'Monthly' ? 1 : 12;
     return this.http.get<SecuritiesPriceTrend[]>(
       `${this.apiUrl}/securities-price-trend`,
       { params: { period, periodsBack }, withCredentials: true });
+  }
+
+  getSecuritiesPriceTrendReport(period: string, securityCode?: string) {
+    let params: any = { period };
+    if (securityCode) {
+      params.securityCode = securityCode;
+    }
+    return this.http.get<SecurityPriceTrendReport[]>(
+      `${this.apiUrl}/securities-price-trend-report`,
+      { params, withCredentials: true });
   }
 
   getPerformanceSummary(portfolioId: number, from: string, to: string): Observable<PortfolioPerformanceSummary> {
@@ -63,6 +75,23 @@ export class PortfoliosService {
           format
         },
         responseType: 'blob'
+      }
+    );
+  }
+
+  generateSecuritiesPriceTrendReport(period: string, securityCode?: string) {
+    let params: any = { period: period };
+
+    if (securityCode) {
+      params.securityCode = securityCode;
+    }
+
+    return this.http.get(
+      `${this.apiUrl}/securities-price-trend-report/pdf`,
+      {
+        params: params,
+        responseType: 'blob',
+        withCredentials: true
       }
     );
   }

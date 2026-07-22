@@ -256,7 +256,7 @@ namespace PriceFlowApp.Services
                 .GetOwnedSharesAsync(portfolioId, security.Id, isReal);
         }
 
-        public async Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod period, int periodsBack = 12)
+        public async Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod period, int periodsBack)
         {
             List<int> ownedSecuritiesIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
 
@@ -270,6 +270,74 @@ namespace PriceFlowApp.Services
                 SecurityCode = dp.Hv.Kod,
                 Price = dp.CenaPoslednaTransakcija!.Value
             }).ToList();
+        }
+
+        public async Task<List<SecurityPriceTrendReport>> GetSecuritiesPriceTrendReportAsync(int userId, PriceTrendPeriod period, string? securityCode)
+        {
+            List<int> ownedSecuritiesIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
+
+            int periodsBack = period == PriceTrendPeriod.Monthly ? 1 : 12;
+
+            IEnumerable<DnevenPromet> dailyPrices = await _dailyTurnoverRepository.GetBySecuritiesIdsAsync(ownedSecuritiesIds, period, periodsBack);
+
+            if(!string.IsNullOrWhiteSpace(securityCode))
+            {
+                dailyPrices = dailyPrices.Where(x => x.Hv.Kod == securityCode);
+            }
+
+            var reports = dailyPrices
+                .GroupBy(x => new
+                {
+                    x.Hvid,
+                    x.Hv.Kod
+                })
+                .Select(g =>
+                {
+                    var ordered = g.Where(x => x.CenaPoslednaTransakcija.HasValue)
+                    .OrderBy(x => x.Datum)
+                    .ToList();
+
+                    if (!ordered.Any())
+                        return null;
+
+                    decimal startPrice = ordered.First().CenaPoslednaTransakcija!.Value;
+                    decimal endPrice = ordered.Last().CenaPoslednaTransakcija!.Value;
+
+                    decimal lowestPrice = ordered.Min(x => x.CenaPoslednaTransakcija!.Value);
+                    decimal highestPrice = ordered.Max(x => x.CenaPoslednaTransakcija!.Value);
+                    
+                    decimal averagePrice = ordered.Average(x => x.CenaPoslednaTransakcija!.Value);
+
+                    decimal change = endPrice - startPrice;
+                    decimal changePercent = startPrice == 0 ? 0 : Math.Round(change / startPrice * 100, 2);
+
+                    string trend =
+                    change > 0 ? "Increasing" :
+                    change < 0 ? "Decreasing" :
+                    "Stable";
+
+                    return new SecurityPriceTrendReport
+                    {
+                        SecurityCode = g.Key.Kod,
+                        Period = period.ToString(),
+                        StartDate = ordered.First().Datum,
+                        EndDate = ordered.Last().Datum,
+                        NumberOfMeasurements = ordered.Count(),
+                        StartPrice = Math.Round(startPrice, 2),
+                        EndPrice = Math.Round(endPrice, 2),
+                        LowestPrice = Math.Round(lowestPrice, 2),
+                        HighestPrice = Math.Round(highestPrice, 2),
+                        AveragePrice = Math.Round(averagePrice, 2),
+                        PriceChange = change,
+                        PriceChangePercent = changePercent,
+                        Trend = trend
+                    };
+                })
+                .Where(r => r != null)
+                .Select(r => r!)
+                .ToList();
+
+            return reports;
         }
     }
 }

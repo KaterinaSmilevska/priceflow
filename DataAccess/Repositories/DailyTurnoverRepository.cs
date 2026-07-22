@@ -21,9 +21,7 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<DnevenPromet>> GetBySecuritiesIdsAsync(List<int> securitiesIds, PriceTrendPeriod period, int periodsBack)
         {
-            DateTime startDate = period == PriceTrendPeriod.Monthly
-                ? DateTime.Today.AddMonths(-periodsBack)
-                : DateTime.Today.AddYears(-periodsBack);
+            DateTime startDate = DateTime.Today.AddMonths(-periodsBack);
 
             var query = await _dbContext.DnevenPromet
                 .Include(dp => dp.Hv)
@@ -32,21 +30,17 @@ namespace DataAccess.Repositories
                 .OrderBy(dp => dp.Datum)
                 .ToListAsync();
 
-            if(period == PriceTrendPeriod.Monthly)
-            {
-                return query
-                    .GroupBy(dp => new { dp.Hvid, dp.Datum.Year, dp.Datum.Month })
-                    .Select(g =>
-                        g.OrderByDescending(x => x.Datum).First())
-                    .OrderBy(x => x.Datum)
-                    .ToList();
-            }
-
             return query
-                 .GroupBy(dp => new { dp.Hvid, dp.Datum.Year })
-                    .Select(g =>
-                        g.OrderByDescending(x => x.Datum).First())
-                .OrderBy(dp => dp.Datum)
+                .GroupBy(dp => new
+                {
+                    dp.Hv.Id,
+                    dp.Datum.Year,
+                    dp.Datum.Month
+                })
+                .Select(g =>
+
+                    g.OrderByDescending(x => x.Datum).First())
+                .OrderBy(x => x.Datum)
                 .ToList();
         }
 

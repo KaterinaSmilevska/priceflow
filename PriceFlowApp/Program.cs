@@ -63,6 +63,7 @@ builder.Services.AddScoped<IPortfoliosNotificationsService, PortfoliosNotificati
 builder.Services.AddHostedService<NotificationBackgroundService>();
 builder.Services.AddScoped<ISecurityFilterRepository, SecurityFilterRepository>();
 builder.Services.AddScoped<ISecurityFilterService, SecurityFilterService>();
+builder.Services.AddScoped<ISecurityPriceTrendReportService, SecurityPriceTrendReportService>();
 
 builder.Services.AddHttpContextAccessor();
 
