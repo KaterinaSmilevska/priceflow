@@ -3,11 +3,11 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { BrokersComponent } from './brokers/brokers.component';
-import { EditUserComponent } from './admin/manage-users/edit-user/edit-user.component';
+import { UserFormComponent } from './admin/manage-users/user-form/user-form.component';
 import { VerifyEmailComponent } from './auth/register/verify-email.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SecuritiesComponent } from './securities/securities.component';
-import { AddSecurityComponent } from './securities/add-security/add-security.component';
+import { SecurityFormComponent } from './securities/security-form/security-form.component';
 import { MarketOverviewComponent } from './market-overview/market-overview.component';
 import { AuthGuard } from './auth/auth.guard';
 import { PortfoliosComponent } from './portfolios/portfolios.component';
@@ -26,11 +26,11 @@ export const routes: Routes = [
   { path: 'brokers', component: BrokersComponent, canActivate: [InvestorGuard] },
   { path: 'admin/users', component: ManageUsersComponent, canActivate: [AuthGuard] },
   { path: 'admin/brokers', component: ManageBrokersComponent, canActivate: [AuthGuard] },
-  { path: 'admin/users/:id', component: EditUserComponent, canActivate: [AuthGuard] },
+  { path: 'admin/users/:id', component: UserFormComponent, canActivate: [AuthGuard] },
   { path: 'verify-email', component: VerifyEmailComponent, canActivate: [AuthGuard] },
   { path: 'forgot-password', component: ResetPasswordComponent },
   { path: 'securities', component: SecuritiesComponent },
-  { path: 'securities/add', component: AddSecurityComponent, canActivate: [AuthGuard] },
+  { path: 'securities/add', component: SecurityFormComponent, canActivate: [AuthGuard] },
   { path: 'marketoverview', component: MarketOverviewComponent },
   { path: 'portfolios', component: PortfoliosComponent, canActivate: [InvestorGuard] },
   { path: 'portfolios/:id', component: PortfolioDetailsComponent, canActivate: [InvestorGuard] },

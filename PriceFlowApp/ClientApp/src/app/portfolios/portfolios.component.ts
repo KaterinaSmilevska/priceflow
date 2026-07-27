@@ -3,14 +3,14 @@ import { PortfoliosService } from './portfolios.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AddPortfolioComponent } from './add-portfolio/add-portfolio.component';
+import { PortfolioFormComponent } from './portfolio-form/portfolio-form.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { Portfolio } from './Portfolio';
 
 @Component({
   selector: 'app-portfolios',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddPortfolioComponent, TranslateModule, RouterModule],
+  imports: [CommonModule, FormsModule, PortfolioFormComponent, TranslateModule, RouterModule],
   templateUrl: './portfolios.component.html',
   styleUrl: './portfolios.component.css',
 })

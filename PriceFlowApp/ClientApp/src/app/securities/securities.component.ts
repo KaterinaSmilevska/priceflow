@@ -3,7 +3,7 @@ import { SecuritiesService } from './securities.service';
 import { LoginService } from '../auth/login/login.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AddSecurityComponent } from './add-security/add-security.component';
+import { SecurityFormComponent } from './security-form/security-form.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { Security } from './Security';
 import { Router, RouterModule } from '@angular/router';
@@ -13,7 +13,7 @@ import { IssuersTranslatePipe } from '../shared/issuers-translate.pipe';
 @Component({
   selector: 'app-securities',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, AddSecurityComponent, TranslateModule, DbValueTranslatePipe, IssuersTranslatePipe],
+  imports: [CommonModule, FormsModule, RouterModule, SecurityFormComponent, TranslateModule, DbValueTranslatePipe, IssuersTranslatePipe],
   templateUrl: './securities.component.html',
   styleUrls: ['./securities.component.css']
 })
@@ -40,7 +40,6 @@ export class SecuritiesComponent implements OnInit {
     })
   }
  
-
   loadSecurities(): void {
     this.securitiesService.getAll().subscribe({
       next: (securities) => {

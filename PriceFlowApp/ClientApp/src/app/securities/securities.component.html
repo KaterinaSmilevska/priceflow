@@ -55,10 +55,10 @@
   </ng-template>
 </div>
 
-<app-add-security *ngIf="showEditModal"
+<app-security-form *ngIf="showEditModal"
                   [securityToEdit]="securityToEdit"
                   (close)="onModalClose($event)">
-</app-add-security>
+</app-security-form>
 
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">

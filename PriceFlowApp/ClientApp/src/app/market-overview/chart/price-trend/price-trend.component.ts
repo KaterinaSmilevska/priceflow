@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Chart, ChartData, ChartType, registerables } from 'chart.js';
 import { ChartService } from '../chart.service';
@@ -16,7 +16,7 @@ Chart.register(...registerables);
   templateUrl: './price-trend.component.html',
 })
 
-export class PriceTrendComponent implements OnInit, OnDestroy {
+export class PriceTrendComponent implements OnInit, OnChanges, OnDestroy {
   @Input() securityId!: number;
   @Input() startDate!: string;
   @Input() endDate!: string;
@@ -34,16 +34,6 @@ export class PriceTrendComponent implements OnInit, OnDestroy {
   public noDataMessage: string | null = null;
 
   constructor(private chartService: ChartService, private translateService: TranslateService) { }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (
-      (changes['securityId'] && !changes['securityId'].firstChange) ||
-      (changes['startDate'] && !changes['startDate'].firstChange) ||
-      (changes['endDate'] && !changes['endDate'].firstChange)
-    ) {
-      this.loadChart();
-    }
-  }
 
   ngOnInit(): void {
     if (!this.endDate) {
@@ -67,6 +57,16 @@ export class PriceTrendComponent implements OnInit, OnDestroy {
     this.langSubscription = this.translateService.onLangChange.subscribe(() => {
       this.loadChart();
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      (changes['securityId'] && !changes['securityId'].firstChange) ||
+      (changes['startDate'] && !changes['startDate'].firstChange) ||
+      (changes['endDate'] && !changes['endDate'].firstChange)
+    ) {
+      this.loadChart();
+    }
   }
 
   ngOnDestroy(): void {

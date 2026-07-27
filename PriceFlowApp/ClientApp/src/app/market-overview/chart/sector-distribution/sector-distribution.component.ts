@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { Chart, ChartData, ChartType, registerables } from "chart.js";
 import { ChartService } from "../chart.service";
 import { BaseChartDirective } from 'ng2-charts';
@@ -17,7 +17,7 @@ Chart.register(...registerables);
   templateUrl: './sector-distribution.component.html',
 })
 
-export class SectorDistributionComponent implements OnInit, OnDestroy {
+export class SectorDistributionComponent implements OnInit, OnChanges, OnDestroy {
   @Input() date!: string;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
@@ -37,12 +37,6 @@ export class SectorDistributionComponent implements OnInit, OnDestroy {
   constructor(private chartService: ChartService, private translateService: TranslateService,
     private sectorsTranslatePipe: SectorsTranslatePipe) { }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['date'] && !changes['date'].firstChange) {
-      this.loadChart();
-    }
-  }
-
   ngOnInit(): void {
     if (!this.date) {
       this.chartService.getLatestDate().subscribe({
@@ -61,6 +55,12 @@ export class SectorDistributionComponent implements OnInit, OnDestroy {
     this.langSubscription = this.translateService.onLangChange.subscribe(() => {
       this.loadChart();
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['date'] && !changes['date'].firstChange) {
+      this.loadChart();
+    }
   }
 
   ngOnDestroy(): void {

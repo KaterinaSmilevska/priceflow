@@ -18,7 +18,7 @@ export class BrokersComponent implements OnInit {
   errorMessage: string | null = null;
   loading = false;
 
-  constructor(private brokersService: BrokersService, private loginService: LoginService) { }
+  constructor(private brokersService: BrokersService) { }
 
   ngOnInit(): void {
     this.loadBrokers();

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddPortfolioComponent } from './add-portfolio.component';
+import { SecurityFormComponent } from './security-form.component';
 
-describe('AddPortfolioComponent', () => {
-  let component: AddPortfolioComponent;
-  let fixture: ComponentFixture<AddPortfolioComponent>;
+describe('SecurityFormComponent', () => {
+  let component: SecurityFormComponent;
+  let fixture: ComponentFixture<SecurityFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddPortfolioComponent]
+      declarations: [ SecurityFormComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddPortfolioComponent);
+    fixture = TestBed.createComponent(SecurityFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

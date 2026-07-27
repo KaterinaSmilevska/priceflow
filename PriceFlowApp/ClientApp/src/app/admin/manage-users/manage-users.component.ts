@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { EditUserComponent } from './edit-user/edit-user.component';
+import { UserFormComponent } from './user-form/user-form.component';
 import { AdminService } from '../admin.service';
 import { User } from './User';
 import { Router, RouterModule } from '@angular/router';
@@ -11,7 +11,7 @@ import { DbValueTranslatePipe } from '../../shared/db-value-translate.pipe';
 @Component({
   selector: 'app-manage-users',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, EditUserComponent, TranslateModule, DbValueTranslatePipe],
+  imports: [CommonModule, FormsModule, RouterModule, UserFormComponent, TranslateModule, DbValueTranslatePipe],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.css',
 })
@@ -38,7 +38,7 @@ export class ManageUsersComponent implements OnInit {
       next: (users) => {
         this.users = users;
       },
-      error: (err) => {
+      error: () => {
         this.errorMessage = 'LOADING_DATA_ERROR';
       }
     });
@@ -51,7 +51,7 @@ export class ManageUsersComponent implements OnInit {
           this.currentUserId = Number(status.userId);
         }
       },
-      error: (err) => {
+      error: () => {
         this.errorMessage = 'USERS.USER_STATUS_ERROR';
       }
     });
@@ -102,5 +102,4 @@ export class ManageUsersComponent implements OnInit {
       }
     });
   }
-
 }

@@ -38,10 +38,10 @@
   </ng-template>
 </div>
 
-<app-add-portfolio *ngIf="showEditModal"
+<app-portfolio-form *ngIf="showEditModal"
                    [portfolioToEdit]="portfolioToEdit"
                    (close)="onModalClose($event)">
-</app-add-portfolio>
+</app-portfolio-form>
 
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">

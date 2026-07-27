@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../admin.service';
 import { Broker } from './Broker';
-import { EditBrokerComponent } from './edit-broker/edit-broker.component';
+import { BrokerFormComponent } from './broker-form/broker-form.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { BrokersTranslatePipe } from '../../shared/brokers-translate.pipe';
@@ -11,7 +11,7 @@ import { BrokersTranslatePipe } from '../../shared/brokers-translate.pipe';
 @Component({
   selector: 'app-manage-brokers',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, EditBrokerComponent, TranslateModule, BrokersTranslatePipe],
+  imports: [CommonModule, FormsModule, RouterModule, BrokerFormComponent, TranslateModule, BrokersTranslatePipe],
   templateUrl: './manage-brokers.component.html',
   styleUrl: './manage-brokers.component.css',
 })

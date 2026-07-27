@@ -98,8 +98,6 @@ export class NavMenuComponent implements OnInit {
   }
 
   toggleLanguage() {
-    //const current = this.translateService.getCurrentLang();
-
     const next = this.isEnglish ? 'mk' : 'en';
 
     this.translateService.use(next);

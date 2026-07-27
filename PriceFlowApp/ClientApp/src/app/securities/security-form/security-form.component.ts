@@ -10,14 +10,14 @@ import { CreateSecurity } from '../CreateSecurity';
 import { Issuer } from '../Issuer';
 
 @Component({
-  selector: 'app-add-security',
+  selector: 'app-security-form',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule, TranslateModule],
-  templateUrl: './add-security.component.html',
-  styleUrls: ['./add-security.component.css']
+  templateUrl: './security-form.component.html',
+  styleUrls: ['./security-form.component.css']
 })
 
-export class AddSecurityComponent implements OnInit {
+export class SecurityFormComponent implements OnInit {
   @Input() securityToEdit?: Security;
   @Output() close = new EventEmitter<Security | null>();
 

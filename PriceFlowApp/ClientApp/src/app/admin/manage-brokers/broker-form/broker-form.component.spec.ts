@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditBrokerComponent } from './edit-broker.component';
+import { BrokerFormComponent } from './broker-form.component';
 
-describe('EditBrokerComponent', () => {
-  let component: EditBrokerComponent;
-  let fixture: ComponentFixture<EditBrokerComponent>;
+describe('BrokerFormComponent', () => {
+  let component: BrokerFormComponent;
+  let fixture: ComponentFixture<BrokerFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditBrokerComponent]
+      imports: [BrokerFormComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EditBrokerComponent);
+    fixture = TestBed.createComponent(BrokerFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -41,8 +41,7 @@ export class LiquidityComponent implements OnInit {
           }
           this.liquidity = res;
         },
-        error: (err) => {
-          console.error(err);
+        error: () => {
           this.noDataMessage = 'LOADING_DATA_ERROR'
         }
       });

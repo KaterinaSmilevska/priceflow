@@ -6,13 +6,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Portfolio } from '../Portfolio';
 
 @Component({
-  selector: 'app-add-portfolio',
+  selector: 'app-portfolio-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, TranslateModule],
-  templateUrl: './add-portfolio.component.html',
-  styleUrl: './add-portfolio.component.css',
+  templateUrl: './portfolio-form.component.html',
+  styleUrl: './portfolio-form.component.css',
 })
-export class AddPortfolioComponent implements OnInit {
+export class PortfolioFormComponent implements OnInit {
   @Input() portfolioToEdit?: Portfolio;
   @Output() close = new EventEmitter<Portfolio | null>();
 

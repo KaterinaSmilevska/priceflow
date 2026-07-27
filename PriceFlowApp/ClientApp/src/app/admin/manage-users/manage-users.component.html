@@ -46,10 +46,10 @@
   <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
 </p>
 
-<app-edit-user *ngIf="showEditModal"
+<app-user-form *ngIf="showEditModal"
                [userToEdit]="userToEdit!"
                (close)="onEditModalClose($event)">
-</app-edit-user>
+</app-user-form>
 
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">

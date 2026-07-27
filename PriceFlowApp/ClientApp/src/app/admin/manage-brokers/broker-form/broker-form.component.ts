@@ -6,13 +6,13 @@ import { AdminService } from '../../admin.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-edit-broker',
+  selector: 'app-broker-form',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
-  templateUrl: './edit-broker.component.html',
-  styleUrl: './edit-broker.component.css',
+  templateUrl: './broker-form.component.html',
+  styleUrl: './broker-form.component.css',
 })
-export class EditBrokerComponent implements OnInit, OnChanges {
+export class BrokerFormComponent implements OnInit, OnChanges {
   @Input() brokerToEdit!: Broker;
   @Output() close = new EventEmitter<Broker | null>();
 

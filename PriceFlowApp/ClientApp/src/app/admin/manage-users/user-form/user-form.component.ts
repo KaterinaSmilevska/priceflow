@@ -6,14 +6,14 @@ import { User } from '../User';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-edit-user',
+  selector: 'app-user-form',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
-  templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.css']
+  templateUrl: './user-form.component.html',
+  styleUrls: ['./user-form.component.css']
 })
 
-export class EditUserComponent implements OnInit, OnChanges {
+export class UserFormComponent implements OnInit, OnChanges {
   @Input() userToEdit!: User;
   @Output() close = new EventEmitter<User | null>();
 
@@ -67,12 +67,12 @@ export class EditUserComponent implements OnInit, OnChanges {
             this.successMessage = 'USERS.UPDATE_SUCCESS';
             setTimeout(() => this.close.emit(updatedUser), 800);
           },
-          error: (err) => {
+          error: () => {
             this.errorMessage = 'USERS.UPDATE_ERROR';
           }
         });
       },
-      error: (err) => {
+      error: () => {
         this.errorMessage = 'USERS.USERNAME_CHECK_ERROR';
       }
     });
