@@ -10,10 +10,16 @@
         {{ s }}
       </option>
     </select>
-    <select class="form-select mt-2"
-            [(ngModel)]="selectedPeriod" (change)="loadData()">
+    <label>{{ 'PERIOD' | translate }}</label>
+    <select class="form-select mt-1"
+            [(ngModel)]="selectedPeriod" (change)="onPeriodChange()">
       <option value="Monthly">{{ 'MONTHLY' | translate }} </option>
       <option value="Yearly">{{ 'YEARLY' | translate }} </option>
+    </select>
+    <label>{{ 'RESOLUTION' | translate }}</label>
+    <select class="form-select mt-1"
+            [(ngModel)]="selectedResolution" (change)="onResolutionChange()">
+      <option *ngFor="let r of availableResolutions" [value]="r.value">{{ r.label }} </option>
     </select>
   </div>
 
@@ -23,9 +29,14 @@
             [options]="chartOptions"
             chartType="line">
     </canvas>
+    <div class="reset-btn">
+      <button (click)="resetZoom()">
+        {{ 'RESET_ZOOM' | translate }}
+      </button>
+    </div>
   </div>
   <button class="btn btn-outline-primary" (click)="downloadPDF()">
     <i class="bi bi-file-earmark-pdf"></i>
-    PDF report
+    PDF {{ 'REPORT' | translate }}
   </button>
 </div>

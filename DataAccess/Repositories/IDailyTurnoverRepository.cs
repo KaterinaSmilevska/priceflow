@@ -7,7 +7,7 @@ namespace DataAccess.Repositories
     {
         Task<IEnumerable<DnevenPromet?>> GetBySecurityCode(string securityCode, DateTime date);
 
-        Task<IEnumerable<DnevenPromet>> GetBySecuritiesIdsAsync(List<int> securitiesIds, PriceTrendPeriod period, int periodsBack);
+        Task<IEnumerable<DnevenPromet>> GetBySecuritiesIdsAsync(List<int> securitiesIds, PriceTrendPeriod? period, PriceTrendResolution? resolution);
 
         Task<IEnumerable<DnevenPromet>> GetLiquidityAsync(IEnumerable<int>? securityIds, DateTime fromDate);
 

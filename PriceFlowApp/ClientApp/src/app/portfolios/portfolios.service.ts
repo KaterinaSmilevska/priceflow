@@ -36,18 +36,37 @@ export class PortfoliosService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
-  getSecuritiesPriceTrend(period: 'Monthly' | 'Yearly') {
-    const periodsBack = period === 'Monthly' ? 1 : 12;
+  getSecuritiesPriceTrend(period?: 'Monthly' | 'Yearly', resolution?: 'Day' | 'Week' | 'Month' | 'Quarter') {
+    const params: any = {}
+
+    if (period) {
+      params.period = period;
+    }
+
+    if (resolution) {
+      params.resolution = resolution;
+    }
+
     return this.http.get<SecuritiesPriceTrend[]>(
       `${this.apiUrl}/securities-price-trend`,
-      { params: { period, periodsBack }, withCredentials: true });
+      { params, withCredentials: true });
   }
 
-  getSecuritiesPriceTrendReport(period: string, securityCode?: string) {
-    let params: any = { period };
+  getSecuritiesPriceTrendReport(period?: string, resolution?: string, securityCode?: string) {
+    let params: any = {  };
+
+    if (period) {
+      params.period = period;
+    }
+
+    if (resolution) {
+      params.resolution = resolution;
+    }
+
     if (securityCode) {
       params.securityCode = securityCode;
     }
+
     return this.http.get<SecurityPriceTrendReport[]>(
       `${this.apiUrl}/securities-price-trend-report`,
       { params, withCredentials: true });
@@ -79,11 +98,19 @@ export class PortfoliosService {
     );
   }
 
-  generateSecuritiesPriceTrendReport(period: string, securityCode?: string) {
-    let params: any = { period: period };
+  generateSecuritiesPriceTrendReport(period?: string, resolution?: string, securityCode?: string) {
+    let params: any = { };
 
     if (securityCode) {
       params.securityCode = securityCode;
+    }
+
+    if (period) {
+      params.period = period;
+    }
+
+    if (resolution) {
+      params.resolution = resolution;
     }
 
     return this.http.get(

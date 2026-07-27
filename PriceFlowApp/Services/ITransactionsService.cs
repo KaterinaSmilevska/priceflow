@@ -19,9 +19,9 @@ namespace PriceFlowApp.Services
 
         Task<PortfolioAnalytics> GetAnalyticsAsync(int portfolioId, bool isReal);
 
-        Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod period, int periodsBack = 12);
+        Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution);
 
-        Task<List<SecurityPriceTrendReport>> GetSecuritiesPriceTrendReportAsync(int userId, PriceTrendPeriod period, string? securityCode);
+        Task<List<SecurityPriceTrendReport>> GetSecuritiesPriceTrendReportAsync(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution, string? securityCode);
 
     }
 }

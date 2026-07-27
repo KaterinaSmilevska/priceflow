@@ -3,8 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\services\\securitypricetrendreportservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\services\\securitypricetrendreportservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{41459E85-9A62-4AA1-851B-7767A83AF444}|DataAccess\\DataAccess.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\dataaccess\\repositories\\dailyturnoverrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{41459E85-9A62-4AA1-851B-7767A83AF444}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\repositories\\dailyturnoverrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\assets\\i18n\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -27,19 +31,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SecurityPriceTrendReportService.cs",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\SecurityPriceTrendReportService.cs",
-              "RelativeDocumentMoniker": "PriceFlowApp\\Services\\SecurityPriceTrendReportService.cs",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\SecurityPriceTrendReportService.cs",
-              "RelativeToolTip": "PriceFlowApp\\Services\\SecurityPriceTrendReportService.cs",
-              "ViewState": "AgIAAGIAAAAAAAAAAAAIwHUAAAAfAAAAAAAAAA==",
+              "Title": "DailyTurnoverRepository.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\DataAccess\\Repositories\\DailyTurnoverRepository.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Repositories\\DailyTurnoverRepository.cs",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\DataAccess\\Repositories\\DailyTurnoverRepository.cs",
+              "RelativeToolTip": "DataAccess\\Repositories\\DailyTurnoverRepository.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAACEAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-22T19:57:08.006Z",
+              "WhenOpened": "2026-07-23T15:00:17.025Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "securities-price-trend.component.ts",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts",
+              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts",
+              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts",
+              "ViewState": "AgIAALEAAAAAAAAAAADwv68AAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-23T14:42:31.582Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "en.json",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
               "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
@@ -52,7 +69,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "mk.json",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
               "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
@@ -60,8 +77,7 @@
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
               "ViewState": "AgIAANIAAAAAAAAAAAAtwOMAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-07-14T20:18:32.413Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-14T20:18:32.413Z"
             }
           ]
         }

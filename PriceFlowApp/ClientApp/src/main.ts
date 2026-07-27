@@ -10,8 +10,10 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
 import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import zoomPlugin from 'chartjs-plugin-zoom';
 
 Chart.register(ChartDataLabels);
+Chart.register(zoomPlugin);
 bootstrapApplication(AppComponent, {
 
   providers: [

@@ -256,12 +256,15 @@ namespace PriceFlowApp.Services
                 .GetOwnedSharesAsync(portfolioId, security.Id, isReal);
         }
 
-        public async Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod period, int periodsBack)
+        public async Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution)
         {
             List<int> ownedSecuritiesIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
 
+            period ??= PriceTrendPeriod.Monthly;
+            resolution ??= DetermineResolution(ownedSecuritiesIds.Count, period.Value);
+
             IEnumerable<DnevenPromet> dailyPrices = await _dailyTurnoverRepository
-                .GetBySecuritiesIdsAsync(ownedSecuritiesIds, period, periodsBack);
+                .GetBySecuritiesIdsAsync(ownedSecuritiesIds, period, resolution);
 
             return dailyPrices.Select(dp => new OwnedSecuritiesPriceTrend
             {
@@ -272,15 +275,21 @@ namespace PriceFlowApp.Services
             }).ToList();
         }
 
-        public async Task<List<SecurityPriceTrendReport>> GetSecuritiesPriceTrendReportAsync(int userId, PriceTrendPeriod period, string? securityCode)
+        public async Task<List<SecurityPriceTrendReport>> GetSecuritiesPriceTrendReportAsync(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution, string? securityCode)
         {
             List<int> ownedSecuritiesIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
 
+            int displayedSecurities = string.IsNullOrWhiteSpace(securityCode)
+                ? ownedSecuritiesIds.Count : 1;
+
+            period ??= PriceTrendPeriod.Monthly;
+            resolution ??= DetermineResolution(displayedSecurities, period.Value);
+
             int periodsBack = period == PriceTrendPeriod.Monthly ? 1 : 12;
 
-            IEnumerable<DnevenPromet> dailyPrices = await _dailyTurnoverRepository.GetBySecuritiesIdsAsync(ownedSecuritiesIds, period, periodsBack);
+            IEnumerable<DnevenPromet> dailyPrices = await _dailyTurnoverRepository.GetBySecuritiesIdsAsync(ownedSecuritiesIds, period, resolution);
 
-            if(!string.IsNullOrWhiteSpace(securityCode))
+            if (!string.IsNullOrWhiteSpace(securityCode))
             {
                 dailyPrices = dailyPrices.Where(x => x.Hv.Kod == securityCode);
             }
@@ -338,6 +347,32 @@ namespace PriceFlowApp.Services
                 .ToList();
 
             return reports;
+        }
+
+        private PriceTrendResolution DetermineResolution(int numberOfSecurities, PriceTrendPeriod period)
+        {
+            if(period == PriceTrendPeriod.Monthly)
+            {
+                if (numberOfSecurities <= 3)
+                {
+                    return PriceTrendResolution.Day;
+                }
+                else
+                {
+                    return PriceTrendResolution.Week;
+                }
+            }
+            else
+            {
+                if (numberOfSecurities <= 5)
+                {
+                    return PriceTrendResolution.Month;
+                }
+                else
+                {
+                    return PriceTrendResolution.Quarter;
+                }
+            }
         }
     }
 }

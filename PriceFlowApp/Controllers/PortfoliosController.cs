@@ -107,12 +107,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities-price-trend")]
-        public async Task<ActionResult<List<OwnedSecuritiesPriceTrend>>> GetSecuritiesPriceTrend([FromQuery] PriceTrendPeriod period, [FromQuery] int periodsBack)
+        public async Task<ActionResult<List<OwnedSecuritiesPriceTrend>>> GetSecuritiesPriceTrend([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution)
         {
             try
             {
                 int userId = User.GetUserId();
-                List<OwnedSecuritiesPriceTrend> result = await _transactionsService.FindPriceTrendAsync(userId, period, periodsBack);
+                List<OwnedSecuritiesPriceTrend> result = await _transactionsService.FindPriceTrendAsync(userId, period, resolution);
 
                 return Ok(result);
             }
@@ -156,12 +156,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities-price-trend-report")]
-        public async Task<ActionResult<List<SecurityPriceTrendReport>>> GetSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod period, [FromQuery] string? securityCode)
+        public async Task<ActionResult<List<SecurityPriceTrendReport>>> GetSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution, [FromQuery] string? securityCode)
         {
             try
             {
                 int userId = User.GetUserId();
-                List<SecurityPriceTrendReport> result = await _transactionsService.GetSecuritiesPriceTrendReportAsync(userId, period, securityCode);
+                List<SecurityPriceTrendReport> result = await _transactionsService.GetSecuritiesPriceTrendReportAsync(userId, period, resolution, securityCode);
 
                 return Ok(result);
             }
@@ -172,12 +172,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities-price-trend-report/pdf")]
-        public async Task<ActionResult> GenerateSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod period, [FromQuery] string? securityCode)
+        public async Task<ActionResult> GenerateSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution, [FromQuery] string? securityCode)
         {
             try
             {
                 int userId = User.GetUserId();
-                List<SecurityPriceTrendReport> reports = await _transactionsService.GetSecuritiesPriceTrendReportAsync(userId, period, securityCode);
+                List<SecurityPriceTrendReport> reports = await _transactionsService.GetSecuritiesPriceTrendReportAsync(userId, period, resolution, securityCode);
 
                 byte[] pdf = _securityPriceTrendReportService.GenerateSecurityPriceTrendReport(reports);
 

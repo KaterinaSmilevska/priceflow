@@ -28,6 +28,12 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
 
   selectedPeriod: 'Monthly' | 'Yearly' = 'Monthly';
 
+  selectedResolution: 'Day' | 'Week' | 'Month' | 'Quarter' = 'Week';
+  availableResolutions: {
+    value: 'Day' | 'Week' | 'Month' | 'Quarter',
+    label: string
+  }[] = [];
+
   reports: SecurityPriceTrendReport[] = [];
 
   chartData: ChartData<'line'> = {
@@ -44,6 +50,23 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
       },
       datalabels: {
         display: false
+      },
+      zoom: {
+        pan: {
+          enabled: false
+        },
+        zoom: {
+          wheel: {
+            enabled: true
+          },
+          pinch: {
+            enabled: false
+          },
+          drag: {
+            enabled: false
+          },
+          mode: 'x'
+        }
       }
     },
     scales: {
@@ -56,9 +79,11 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
           }
         },
         ticks: {
-          maxRotation: 0,
-          autoSkip: true,
-          maxTicksLimit: 10
+          autoSkip: this.selectedResolution !== 'Day',
+          maxTicksLimit: this.selectedResolution === 'Month' ? 12 :
+            this.selectedResolution === 'Quarter' ? 4 : undefined,
+          minRotation: this.selectedResolution === 'Day' ? 45 : 0,
+          maxRotation: this.selectedResolution === 'Day' ? 45 : 0
         }
       },
       y: {
@@ -69,7 +94,7 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
             weight: 'bold'
           }
         },
-        beginAtZero: false
+        beginAtZero: false,
       }
     }
   };
@@ -77,10 +102,12 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
   constructor(private portfoliosService: PortfoliosService, private translateService: TranslateService) { }
 
   ngOnInit(): void {
+    this.updateAvailableResolutions();
     this.loadData();
 
     this.langSubscription = this.translateService.onLangChange.subscribe(() => {
       this.updateChartOptions();
+      this.updateAvailableResolutions();
       this.buildChart();
       this.chart?.update();
     });
@@ -92,17 +119,18 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
 
   loadData(): void {
     this.portfoliosService
-      .getSecuritiesPriceTrend(this.selectedPeriod)
+      .getSecuritiesPriceTrend(this.selectedPeriod, this.selectedResolution)
       .subscribe(res => {
         this.data = res;
         this.securities = [...new Set(res.map(r => r.securityCode))];
         this.buildChart();
+        this.loadReport();
       });
   }
 
   onSecurityChange(): void {
-    this.loadData();
-    this.loadReport();
+    this.selectedResolution = this.determineResolution();
+    this.refresh();
   }
 
   private buildChart(): void {
@@ -121,8 +149,14 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
     const allDates = [...new Set(filtered.map(d => d.date))]
       .sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
+    const dateLabels = allDates.map(date => {
+      const d = new Date(date);
+
+      return this.formatLabel(new Date(d));
+    });
+
     this.chartData = {
-      labels: allDates,
+      labels: dateLabels,
       datasets: Array.from(grouped.entries()).map(([code, values], idx) => ({
         label: code,
         data: allDates.map(date => {
@@ -150,6 +184,13 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
             ...this.chartOptions.scales!.x!.title,
             display: true,
             text: this.translateService.instant('DATE')
+          },
+          ticks: {
+            autoSkip: this.selectedResolution !== 'Day',
+            maxTicksLimit: this.selectedResolution === 'Month' ? 12 :
+              this.selectedResolution === 'Quarter' ? 4 : undefined,
+            minRotation: this.selectedResolution === 'Day' ? 45 : 0,
+            maxRotation: this.selectedResolution === 'Day' ? 45 : 0
           }
         },
         y: {
@@ -164,17 +205,100 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
     };
   }
 
+  private updateAvailableResolutions(): void {
+    if (this.selectedPeriod === 'Monthly') {
+      this.availableResolutions = [
+        { value: 'Day', label: this.translateService.instant('DAILY') },
+        { value: 'Week', label: this.translateService.instant('WEEKLY') }
+      ];
+    } else {
+      this.availableResolutions = [
+        { value: 'Day', label: this.translateService.instant('DAILY') },
+        { value: 'Week', label: this.translateService.instant('WEEKLY') },
+        { value: 'Month', label: this.translateService.instant('MONTHLY') },
+        { value: 'Quarter', label: this.translateService.instant('QUARTERLY') }
+      ];
+    }
+  }
+
+  private determineResolution(): 'Day' | 'Week' | 'Month' | 'Quarter' {
+    const numberOfSecurities = this.selectedSecurity ? 1 : this.securities.length;
+
+    if (this.selectedPeriod === 'Monthly') {
+      if (numberOfSecurities <= 3) {
+        return 'Day';
+      } else {
+        return 'Week';
+      }
+    }
+    else {
+      if (numberOfSecurities <= 5) {
+        return 'Month';
+      } else {
+        return 'Quarter';
+      }
+    }
+  }
+
+  onPeriodChange() {
+    this.updateAvailableResolutions();
+    this.selectedResolution = this.determineResolution();
+    this.updateChartOptions();
+    this.refresh();
+  }
+
+  onResolutionChange() {
+    this.refresh();
+  }
+
   private loadReport(): void {
     this.portfoliosService
-      .getSecuritiesPriceTrendReport(this.selectedPeriod, this.selectedSecurity)
+      .getSecuritiesPriceTrendReport(this.selectedPeriod, this.selectedResolution, this.selectedSecurity)
       .subscribe(report => {
         this.reports = report;
       });
   }
 
+  private refresh(): void {
+    this.loadData();
+    this.loadReport();
+  }
+
+  resetZoom(): void {
+    this.chart?.chart?.resetZoom();
+  }
+
+  private formatLabel(date: Date): string {
+    switch (this.selectedResolution) {
+      case 'Day':
+        return date.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
+
+      case 'Week':
+        return date.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short'
+        });
+
+      case 'Month':
+        return date.toLocaleDateString('en-GB', {
+          month: 'short',
+          year: 'numeric'
+        });
+
+      case 'Quarter': {
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        return `Q${quarter} ${date.getFullYear()}`;
+      }
+    }
+  }
+
   downloadPDF() {
     this.portfoliosService
-      .generateSecuritiesPriceTrendReport(this.selectedPeriod, this.selectedSecurity)
+      .generateSecuritiesPriceTrendReport(this.selectedPeriod, this.selectedResolution, this.selectedSecurity)
       .subscribe(blob => {
         const fileURL = URL.createObjectURL(blob);
 
