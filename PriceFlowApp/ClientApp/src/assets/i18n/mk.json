@@ -249,7 +249,8 @@
   },
   "PRICE_TREND": {
     "TITLE": "Тренд на цени",
-    "OWNED": "Поседувани"
+    "OWNED": "Поседувани",
+    "NOTIFICATION_MESSAGE": "Хартиите од вредност со код {{code}} се променија за {{change}}% (Граница: {{lower}}% / {{upper}}%)"
   },
   "CHART": {
     "PRICE_TREND": "Тренд на цени",

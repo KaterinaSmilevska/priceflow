@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\assets\\i18n\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\assets\\i18n\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
@@ -23,27 +27,41 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "securities-price-trend.component.ts",
+              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts",
+              "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts",
+              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts",
+              "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\app\\portfolios\\securities-price-trend\\securities-price-trend.component.ts",
+              "ViewState": "AgIAAKoAAAAAAAAAAAAwwLsAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-29T15:12:08.963Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "en.json",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
               "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
               "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
-              "ViewState": "AgIAANQAAAAAAAAAAAAtwOcAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAO0AAAAAAAAAAAAnwP4AAABoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2026-07-17T13:40:04.965Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "mk.json",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
               "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
               "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
               "RelativeToolTip": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
-              "ViewState": "AgIAANIAAAAAAAAAAAAtwOMAAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAOsAAAAAAAAAAAAnwPwAAABmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-07-14T20:18:32.413Z"
+              "WhenOpened": "2026-07-14T20:18:32.413Z",
+              "EditorCaption": ""
             }
           ]
         }

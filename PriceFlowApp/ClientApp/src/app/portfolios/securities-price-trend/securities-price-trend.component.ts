@@ -80,10 +80,8 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
         },
         ticks: {
           autoSkip: this.selectedResolution !== 'Day',
-          maxTicksLimit: this.selectedResolution === 'Month' ? 12 :
-            this.selectedResolution === 'Quarter' ? 4 : undefined,
-          minRotation: this.selectedResolution === 'Day' ? 45 : 0,
-          maxRotation: this.selectedResolution === 'Day' ? 45 : 0
+          minRotation: 0,
+          maxRotation: 45
         }
       },
       y: {
@@ -187,10 +185,8 @@ export class SecuritiesPriceTrendComponent implements OnInit, OnDestroy {
           },
           ticks: {
             autoSkip: this.selectedResolution !== 'Day',
-            maxTicksLimit: this.selectedResolution === 'Month' ? 12 :
-              this.selectedResolution === 'Quarter' ? 4 : undefined,
-            minRotation: this.selectedResolution === 'Day' ? 45 : 0,
-            maxRotation: this.selectedResolution === 'Day' ? 45 : 0
+            minRotation: 0,
+            maxRotation: 45
           }
         },
         y: {

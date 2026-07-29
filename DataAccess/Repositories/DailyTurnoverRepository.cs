@@ -2,7 +2,6 @@
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.Runtime.Intrinsics.Arm;
 
 namespace DataAccess.Repositories
 {
@@ -23,14 +22,28 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<DnevenPromet>> GetBySecuritiesIdsAsync(List<int> securitiesIds, PriceTrendPeriod? period, PriceTrendResolution? resolution)
         {
+            DateTime today = DateTime.Today;
+
             DateTime startDate = period == PriceTrendPeriod.Monthly
                 ? DateTime.Today.AddMonths(-1)
                 : DateTime.Today.AddYears(-1);
 
+            if(resolution == PriceTrendResolution.Week)
+            {
+                while(startDate.DayOfWeek != DayOfWeek.Monday)
+                {
+                    startDate = startDate.AddDays(-1);
+                }
+            }
+            else if(resolution == PriceTrendResolution.Month || resolution == PriceTrendResolution.Quarter)
+            {
+                startDate = new DateTime(startDate.Year, startDate.Month, 1);
+            }
+
             var query = await _dbContext.DnevenPromet
                 .Include(dp => dp.Hv)
                 .Where(dp => securitiesIds.Contains(dp.Hvid) && dp.Datum >= startDate &&
-                    dp.CenaPoslednaTransakcija != null)
+                  dp.CenaPoslednaTransakcija != null)
                 .OrderBy(dp => dp.Datum)
                 .ToListAsync();
 
@@ -48,8 +61,17 @@ namespace DataAccess.Repositories
                 query.GroupBy(dp => new
                 {
                     dp.Hvid,
-                    dp.Datum.Year,
+                    Year = ISOWeek.GetYear(dp.Datum),
                     Week = ISOWeek.GetWeekOfYear(dp.Datum)
+                })
+                .Where(g =>
+                {
+                    DateTime weekEnd = ISOWeek.ToDateTime(
+                        g.Key.Year,
+                        g.Key.Week,
+                        DayOfWeek.Sunday);
+
+                    return weekEnd < today;
                 })
                 .Select(g => g.OrderByDescending(x => x.Datum).First()),
 
@@ -60,7 +82,16 @@ namespace DataAccess.Repositories
                     dp.Datum.Year,
                     dp.Datum.Month
                 })
-                 .Select(g => g.OrderByDescending(x => x.Datum).First()),
+                .Where(g =>
+                {
+                    DateTime monthEnd = new DateTime(
+                        g.Key.Year,
+                        g.Key.Month,
+                        DateTime.DaysInMonth(g.Key.Year, g.Key.Month));
+
+                    return monthEnd < today;
+                })
+                .Select(g => g.OrderByDescending(x => x.Datum).First()),
 
                 PriceTrendResolution.Quarter =>
                 query
@@ -77,8 +108,8 @@ namespace DataAccess.Repositories
                         g.Key.Quarter * 3,
                         DateTime.DaysInMonth(g.Key.Year, g.Key.Quarter * 3)
                     );
-                    return quarterEnd < DateTime.Today;
-        })
+                    return quarterEnd < today;
+                })
                 .Select(g => g.OrderByDescending(x => x.Datum).First()),
 
                 _ => query

@@ -251,7 +251,8 @@
   },
   "PRICE_TREND": {
     "TITLE": "Price Trend",
-    "OWNED": "Owned"
+    "OWNED": "Owned",
+    "NOTIFICATION_MESSAGE": "Security {{code}} changed {{change}}% (Threshold: {{lower}}% / {{upper}}%)"
   },
   "CHART": {
     "PRICE_TREND": "Price trend",
