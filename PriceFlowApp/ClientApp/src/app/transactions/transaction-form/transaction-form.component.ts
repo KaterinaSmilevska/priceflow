@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TransactionsService } from '../transactions.service';
 import { SecuritiesService } from '../../securities/securities.service';
@@ -16,7 +16,7 @@ import { SecurityDailyPrices } from '../../securities/SecurityDailyPrices';
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.css',
 })
-export class TransactionFormComponent implements OnInit {
+export class TransactionFormComponent implements OnInit, OnChanges {
   @Input() portfolioId!: number;
   @Input() transaction?: Transaction;
 
@@ -47,10 +47,10 @@ export class TransactionFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      hvCode: ['', Validators.required],
+      hvCode: [null, Validators.required],
       sharesQuantity: [1, [Validators.required, Validators.min(1)]],
       sharesUnitPrice: [0, [Validators.required, Validators.min(0.01)]],
-      typeTransaction: ['Купување', Validators.required],
+      typeTransaction: [null, Validators.required],
       isReal: [true],
       stockExchangeCommission: [{ value: 0.2, disabled: true }],
       brokerageCommission: [{ value: 0.75, disabled: true }],
@@ -59,7 +59,13 @@ export class TransactionFormComponent implements OnInit {
       amount: [{ value: 0, disabled: true }]
     });
 
-    this.securitiesService.getAll().subscribe(s => { this.securities = s; })
+    this.securitiesService.getAll().subscribe(s => {
+      this.securities = s;
+    });
+
+    if (this.transaction) {
+      this.loadTransactionData();
+    }
 
     this.form.get('hvCode')?.valueChanges.subscribe(() => {
       this.updateShares();
@@ -87,29 +93,36 @@ export class TransactionFormComponent implements OnInit {
       this.calculateAmountPreview();
     })
 
-    if (this.transaction) {
-      this.form.patchValue({
-        hvCode: this.transaction.hvCode,
-        sharesQuantity: this.transaction.sharesQuantity,
-        sharesUnitPrice: this.transaction.sharesUnitPrice,
-        typeTransaction: this.transaction.typeTransaction,
-        isReal: this.transaction.isReal,
-        stockExchangeCommission: this.transaction.stockExchangeCommission,
-        brokerageCommission: this.transaction.brokerageCommission,
-        cdhvCommission: this.transaction.cdhvCommission,
-        date: this.transaction.date,
-        amount: this.transaction.amount
-      }, { emitEvent: false });
-
-      this.calculateAmountPreview();
-      this.updateShares();
-      this.loadPrices();
-    }
-
     setTimeout(() => {
       document.querySelectorAll('[data-bs-toggle="tooltip"]')
         .forEach(el => new Tooltip(el));
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['transaction'] && this.form) {
+      this.loadTransactionData();
+    }
+  }
+
+  loadTransactionData(): void {
+    if (!this.transaction || !this.form) return;
+    this.form.patchValue({
+      hvCode: this.transaction.hvCode,
+      sharesQuantity: this.transaction.sharesQuantity,
+      sharesUnitPrice: this.transaction.sharesUnitPrice,
+      typeTransaction: this.transaction.typeTransaction,
+      isReal: this.transaction.isReal,
+      stockExchangeCommission: this.transaction.stockExchangeCommission,
+      brokerageCommission: this.transaction.brokerageCommission,
+      cdhvCommission: this.transaction.cdhvCommission,
+      date: this.transaction.date,
+      amount: this.transaction.amount
+    }, { emitEvent: false });
+
+    this.calculateAmountPreview();
+    this.updateShares();
+    this.loadPrices();
   }
 
   private updateShares(): void {
@@ -223,7 +236,12 @@ export class TransactionFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.invalid || this.sellLimitExceeded || this.buyLimitExceeded || this.dateSellInvalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    if (this.sellLimitExceeded || this.buyLimitExceeded || this.dateSellInvalid) return;
 
     const raw = this.form.getRawValue();
 

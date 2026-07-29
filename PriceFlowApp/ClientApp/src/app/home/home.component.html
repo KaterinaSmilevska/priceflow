@@ -1,7 +1,7 @@
 <div class="hero-section">
   <h1>{{'HOME.WELCOME_TO' | translate }} PriceFlow</h1>
   <p>{{'HOME.DESCRIPTION' | translate }}</p>
-  <button class="get-started-btn" (click)="onGetStarted()">{{'HOME.GET_STARTED' | translate }}</button>
+  <button *ngIf="!(loginService.isLoggedIn() | async)"  class="get-started-btn" (click)="onGetStarted()">{{'HOME.GET_STARTED' | translate }}</button>
 </div>
 
 <app-brokers *ngIf="(loginService.isInvestor() | async)"></app-brokers>

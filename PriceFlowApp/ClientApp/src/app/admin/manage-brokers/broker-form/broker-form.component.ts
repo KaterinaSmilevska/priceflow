@@ -34,7 +34,10 @@ export class BrokerFormComponent implements OnInit, OnChanges {
   }
 
   saveBroker(): void {
-    if (this.editForm.invalid) return;
+    if (this.editForm.invalid) {
+      this.editForm.markAllAsTouched();
+      return;
+    }
 
     const updatedBroker: Broker = { ...this.brokerToEdit, ...this.editForm.value };
 

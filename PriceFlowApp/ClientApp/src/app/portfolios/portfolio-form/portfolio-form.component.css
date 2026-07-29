@@ -101,6 +101,24 @@
   background: rgba(0, 0, 0, 0.5) !important;
 }
 
+.success {
+  background: #d1fae5;
+  border: 1px solid #10b981;
+  padding: 8px;
+  border-radius: 6px;
+  color: #065f46;
+  text-align: center;
+}
+
+.error {
+  background: #fee2e2;
+  border: 1px solid var(--error-color);
+  padding: 8px;
+  border-radius: 6px;
+  color: var(--error-color);
+  text-align: center;
+}
+
 .animate-in {
   animation: pop .18s ease-out;
 }

@@ -275,6 +275,14 @@ namespace PriceFlowApp.Services
             if (otherUser != null && otherUser.Id != user.Id)
                 throw new Exception("Username is already taken by another user.");
 
+            var emailValidation = await ValidateEmailAsync(new EmailValidationRequest
+            {
+                Email = user.Email
+            });
+
+            if (!emailValidation.IsValid)
+                throw new ArgumentException(emailValidation.Message);
+
             existingUser.Ime = user.Name;
             existingUser.Username = user.Username;
             existingUser.Email = user.Email;
@@ -287,6 +295,14 @@ namespace PriceFlowApp.Services
             var existingUser = await _authRepository.GetByIdAsync(user.Id);
             if (existingUser == null)
                 throw new Exception("User not found");
+
+            var emailValidation = await ValidateEmailAsync(new EmailValidationRequest
+            {
+                Email = user.Email
+            });
+
+            if (!emailValidation.IsValid)
+                throw new ArgumentException(emailValidation.Message);
 
             existingUser.Ime = user.Ime;
             existingUser.Username = user.Username;

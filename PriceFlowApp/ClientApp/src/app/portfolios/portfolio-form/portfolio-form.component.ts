@@ -28,7 +28,10 @@ export class PortfolioFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    };
 
     if (this.portfolioToEdit) {
       this.portfoliosService.updatePortfolio(this.portfolioToEdit.id, this.form.value).subscribe(p =>

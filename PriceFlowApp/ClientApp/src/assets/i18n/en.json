@@ -43,6 +43,8 @@
     "LOGOUT_SUCCESS_TOOLTIP": "Logged out successfully!",
     "RESET_LINK_SUCCESS": "Reset link has been sent to your email.",
     "RESET_LINK_ERROR": "The username does not exist.",
+    "FIELD_REQUIRED": "This field is required.",
+    "INVALID_EMAIL": "The email is not valid.",
     "RESET_PASSWORD_ERROR": "Failed to reset password.",
     "PASSWORD_MISSMATCH": "Passwords do not match."
 

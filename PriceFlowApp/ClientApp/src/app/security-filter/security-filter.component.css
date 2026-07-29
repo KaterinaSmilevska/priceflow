@@ -53,8 +53,17 @@
 
 .analytics-body {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 60% auto;
+  align-items: flex-start;
   gap: 25px;
+}
+
+.chart-card {
+    min-width: 500px;
+}
+
+.table-card {
+    width: fit-content;
 }
 
 .chart-card,
@@ -67,9 +76,10 @@
 }
 
   .table-card table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
     color: var(--text-color);
+    white-space: nowrap;
   }
 
   .table-card th {

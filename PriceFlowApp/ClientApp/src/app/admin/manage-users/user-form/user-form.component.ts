@@ -48,7 +48,10 @@ export class UserFormComponent implements OnInit, OnChanges {
     this.errorMessage = null;
     this.successMessage = null;
 
-    if (this.editForm.invalid) return;
+    if (this.editForm.invalid) {
+      this.editForm.markAllAsTouched();
+      return;
+    }
 
     const updatedUser: User = {
       ...this.userToEdit,

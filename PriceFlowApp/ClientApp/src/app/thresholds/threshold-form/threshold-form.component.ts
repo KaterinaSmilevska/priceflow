@@ -66,7 +66,10 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
   }
 
   saveThreshold(): void {
-    if (this.editForm.invalid) return;
+    if (this.editForm.invalid) {
+      this.editForm.markAllAsTouched();
+      return;
+    }
 
     this.errorMessage = null;
 

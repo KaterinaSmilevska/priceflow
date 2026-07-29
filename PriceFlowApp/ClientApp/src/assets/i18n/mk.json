@@ -43,6 +43,8 @@
     "LOGOUT_SUCCESS_TOOLTIP": "Успешно се одјавивте!",
     "RESET_LINK_SUCCESS": "Линк за промена на лозинката е испратен на вашиот емаил.",
     "RESET_LINK_ERROR": "Корисничкото име не постои.",
+    "FIELD_REQUIRED": "Ова поле е задолжително.",
+    "INVALID_EMAIL": "Невалидна емаил адреса.",
     "RESET_PASSWORD_ERROR": "Грешка при промена на лозинката.",
     "PASSWORD_MISSMATCH": "Лозинките не се идентични."
   },

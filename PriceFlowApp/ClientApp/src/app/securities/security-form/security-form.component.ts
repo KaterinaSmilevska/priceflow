@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, } from '@angular/core';
 import { SecuritiesService } from '../securities.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -17,7 +17,7 @@ import { Issuer } from '../Issuer';
   styleUrls: ['./security-form.component.css']
 })
 
-export class SecurityFormComponent implements OnInit {
+export class SecurityFormComponent implements OnInit, OnChanges {
   @Input() securityToEdit?: Security;
   @Output() close = new EventEmitter<Security | null>();
 
@@ -35,21 +35,31 @@ export class SecurityFormComponent implements OnInit {
       code: [this.securityToEdit?.code || '', Validators.required],
       isin: [this.securityToEdit?.isin || '', Validators.required],
       totalNumShares: [this.securityToEdit?.totalNumShares || 0, [Validators.required, Validators.min(1)]],
-      typeSecurityId: [0, Validators.required],
-      issuerId: [0, Validators.required]
+      typeSecurityId: [null, Validators.required],
+      issuerId: [null, Validators.required]
     });
 
     this.loadTypes();
     this.loadIssuers();
-}
+    this.loadSecurityData();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['securityToEdit'] && this.addEditForm) {
+      this.loadSecurityData();
+    }
+  }
 
 loadTypes(): void {
   this.securitiesService.getTypes().subscribe(types => {
     this.types = types;
     if (this.securityToEdit) {
       const type = this.types.find(t => t.name === this.securityToEdit?.typeSecurityName);
-      if (type)
-        this.addEditForm.patchValue({ typeSecurityId: type.id });
+      if (type) {
+        this.addEditForm.patchValue({
+          typeSecurityId: type.id
+        });
+      }
     }
   });
 }
@@ -59,17 +69,66 @@ loadIssuers(): void {
     this.issuers = issuers;
     if (this.securityToEdit) {
       const issuer = this.issuers.find(i => i.name === this.securityToEdit?.issuerName);
-      if (issuer)
-        this.addEditForm.patchValue({ issuerId: issuer.id });
+      if (issuer) {
+        this.addEditForm.patchValue({
+          issuerId: issuer.id
+        });
+      }
     }
   });
-}
+  }
+
+  loadSecurityData(): void {
+    if (!this.addEditForm || !this.securityToEdit) {
+      return;
+    }
+
+    if (this.securityToEdit) {
+      this.addEditForm.patchValue({
+        code: this.securityToEdit.code,
+        isin: this.securityToEdit.isin,
+        totalNumShares: this.securityToEdit.totalNumShares
+      });
+
+      const type = this.types.find(
+        t => t.name === this.securityToEdit?.typeSecurityName
+      );
+
+      if (type) {
+        this.addEditForm.patchValue({
+          typeSecurityId: type.id
+        });
+      }
+
+      const issuer = this.issuers.find(
+        i => i.name === this.securityToEdit?.issuerName
+      );
+
+      if (issuer) {
+        this.addEditForm.patchValue({
+          issuerId: issuer.id
+        });
+      }
+    }
+    else {
+      this.addEditForm.reset({
+        code: '',
+        isin: '',
+        totalNumShares: 0,
+        typeSecurityId: null,
+        issuerId: null
+      });
+    }
+  }
 
   onSubmit() {
     this.errorMessage = null;
     this.successMessage = null;
 
-    if (this.addEditForm.invalid) return;
+    if (this.addEditForm.invalid) {
+      this.addEditForm.markAllAsTouched();
+      return;
+    }
 
     const security: CreateSecurity = this.addEditForm.value;
 

@@ -5,14 +5,25 @@
       <div class="mb-3">
         <label>{{ 'BROKERS.COMPANY' | translate }}</label>
         <input class="form-control" formControlName="company">
+        <div *ngIf="editForm.get('company')?.touched && editForm.get('company')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="editForm.get('company')?.errors?.['required']" class="error mb-1">
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </div>
+        </div>
       </div>
+
       <div class="mb-3">
         <label>{{ 'BROKERS.COMMISSION' | translate }} (%)</label>
         <input type="number" step="0.01" class="form-control" formControlName="commissionPercent">
+        <div *ngIf="editForm.get('commissionPercent')?.touched && editForm.get('commissionPercent')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="editForm.get('commissionPercent')?.errors?.['required']" class="error mb-1">
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </div>
+        </div>
       </div>
       <div class="text-end">
         <button type="button" class="btn btn-secondary me-2" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
-        <button type="submit" class="btn btn-success">{{ (brokerToEdit.id === 0 ? 'ADD.ACTION_NAME' : 'SAVE_CHANGES') | translate}}</button>
+        <button type="submit" class="btn btn-success" [disabled]="editForm.invalid">{{ (brokerToEdit.id === 0 ? 'ADD.ACTION_NAME' : 'SAVE_CHANGES') | translate}}</button>
       </div>
       <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
       <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage | translate }}</div>

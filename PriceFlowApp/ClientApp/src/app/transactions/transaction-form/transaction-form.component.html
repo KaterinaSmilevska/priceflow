@@ -7,13 +7,21 @@
 
       <label>{{ 'SECURITIES.TITLE' | translate }}</label>
       <select formControlName="hvCode" class="form-select">
-        <option *ngFor="let s of securities" [value]="s.code">
+        <option [ngValue]="null">
+          {{ 'SELECT' | translate }}
+          {{ 'SECURITIES.TITLE' | translate }}
+        </option>
+        <option *ngFor="let s of securities" [ngValue]="s.code">
           {{ s.code }}
         </option>
       </select>
 
       <label>{{ 'TRANSACTIONS.TYPE' | translate }}</label>
       <select formControlName="typeTransaction" class="form-select">
+        <option [ngValue]="null">
+          {{ 'SELECT' | translate }}
+          {{ 'TRANSACTIONS.TYPE' | translate }}
+        </option>
         <option value="Купување">{{ 'TRANSACTIONS.BUY' | translate }}</option>
         <option value="Продавање">{{ 'TRANSACTIONS.SELL' | translate }}</option>
       </select>
@@ -22,6 +30,11 @@
       <input type="number" formControlName="sharesQuantity" class="form-control">
       <div *ngIf="sellLimitExceeded" class="text-danger mt-1">
         {{ 'TRANSACTIONS.SELL_MESSAGE' | translate }} {{ ownedShares }} {{ 'SHARES' | translate }}.
+      </div>
+      <div *ngIf="form.get('sharesQuantity')?.touched && form.get('sharesQuantity')?.invalid" class="text-red-700 mt-1">
+        <div *ngIf="form.get('sharesQuantity')?.errors?.['required']" class="error">
+          {{ 'AUTH.FIELD_REQUIRED' | translate }}
+        </div>
       </div>
       <div *ngIf="buyLimitExceeded" class="text-danger mt-1">
         {{ 'TRANSACTIONS.BUY_MESSAGE' | translate }} {{ remainingShares }} {{ 'SHARES' | translate }}.
@@ -33,6 +46,11 @@
              class="form-control" />
       <div *ngIf="priceWarning" class="price-warning alert alert-warning mt-2">
         {{ priceWarning }}
+      </div>
+      <div *ngIf="form.get('sharesUnitPrice')?.touched && form.get('sharesUnitPrice')?.invalid" class="text-red-700 mt-1">
+        <div *ngIf="form.get('sharesUnitPrice')?.errors?.['required']" class="error">
+          {{ 'AUTH.FIELD_REQUIRED' | translate }}
+        </div>
       </div>
 
       <div class="small mt-1" *ngIf="dailyPrices">

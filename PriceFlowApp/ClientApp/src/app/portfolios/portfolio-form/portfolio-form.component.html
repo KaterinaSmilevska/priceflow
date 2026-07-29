@@ -15,6 +15,11 @@
 
           <label class="form-label">{{ 'PORTFOLIOS.NAME' | translate }}</label>
           <input class="form-control mb-3" formControlName="name">
+          <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" class="text-red-700 mt-1">
+            <div *ngIf="form.get('name')?.errors?.['required']" class="error">
+              {{ 'AUTH.FIELD_REQUIRED' | translate }}
+            </div>
+          </div>
 
           <label class="form-label">{{ 'PORTFOLIOS.DESCRIPTION' | translate }}</label>
           <textarea class="form-control portfolio-textarea"
@@ -33,6 +38,9 @@
             {{ (portfolioToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}
           </button>
         </div>
+
+        <!--<div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+        <div *ngIf="successMessage" class="success mt-2">{{ successMessage | translate }}</div>-->
       </form>
     </div>
   </div>

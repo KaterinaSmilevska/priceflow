@@ -14,7 +14,7 @@
             {{ 'SECURITIES.TITLE' | translate }}
           </option>
           <option *ngFor="let s of owned"
-                  [value]="s.id"
+                  [ngValue]="s.id"
                   [disabled]="!thresholdToEdit && isSecurityAlreadyUsed(s.id)">
             {{ s.hvCode }}
           </option>
@@ -29,6 +29,11 @@
         <input type="number"
                class="form-control"
                formControlName="lowerThreshold" />
+        <div *ngIf="editForm.get('lowerThreshold')?.touched && editForm.get('lowerThreshold')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="editForm.get('lowerThreshold')?.errors?.['required']" class="error">
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </div>
+        </div>
       </div>
 
       <div class="mb-3">
@@ -39,6 +44,11 @@
         <input type="number"
                class="form-control"
                formControlName="upperThreshold" />
+        <div *ngIf="editForm.get('upperThreshold')?.touched && editForm.get('upperThreshold')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="editForm.get('upperThreshold')?.errors?.['required']" class="error">
+            {{ 'AUTH.FIELD_REQUIRED' | translate }}
+          </div>
+        </div>
       </div>
 
       <div class="text-end">
