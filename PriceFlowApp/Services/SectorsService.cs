@@ -13,9 +13,9 @@ namespace PriceFlowApp.Services
             _sectorsRepository = sectorsRepository;
         }
            
-        public async Task<IEnumerable<Sector>> FindAllAsync()
+        public IEnumerable<Sector> FindAll()
         {
-            IEnumerable<Sektori> issuers = await _sectorsRepository.GetAllAsync();
+            IEnumerable<Sektori> issuers = _sectorsRepository.GetAll();
 
             return issuers.Select(i => new Sector
             {

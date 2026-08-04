@@ -23,14 +23,14 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
   @Output() saved = new EventEmitter<Threshold | null>();
   @Output() close = new EventEmitter<Threshold | null>();
 
-  editForm!: FormGroup;
+  form!: FormGroup;
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private thresholdService: ThresholdService) { }
 
   ngOnInit(): void {
-    this.editForm = this.fb.group({
+    this.form = this.fb.group({
       hvId: [null, Validators.required],
       lowerThreshold: [null, Validators.required],
       upperThreshold: [null, Validators.required],
@@ -46,35 +46,35 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
   }
 
   private loadEditData(): void {
-    if(!this.editForm) {
+    if(!this.form) {
       return;
     }
 
     if (this.thresholdToEdit) {
-      this.editForm.patchValue({
+      this.form.patchValue({
         hvId: this.thresholdToEdit.hvId,
         lowerThreshold: this.thresholdToEdit.lowerThreshold,
         upperThreshold: this.thresholdToEdit.upperThreshold
       });
 
-      this.editForm.get('hvId')?.disable();
+      this.form.get('hvId')?.disable();
     }
     else {
-      this.editForm.reset();
-      this.editForm.get('hvId')?.enable();
+      this.form.reset();
+      this.form.get('hvId')?.enable();
     }
   }
 
   saveThreshold(): void {
-    if (this.editForm.invalid) {
-      this.editForm.markAllAsTouched();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
     this.errorMessage = null;
 
-    const lower = this.editForm.value.lowerThreshold;
-    const upper = this.editForm.value.upperThreshold;
+    const lower = this.form.value.lowerThreshold;
+    const upper = this.form.value.upperThreshold;
 
     if (lower >= upper) {
       this.errorMessage = 'THRESHOLD_VALIDATION_ERROR';
@@ -98,7 +98,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
     }
     else {
       const createRequest: CreateThresholdRequest = {
-        hvId: this.editForm.value.hvId,
+        hvId: this.form.value.hvId,
         lowerThreshold: lower,
         upperThreshold: upper
       };
@@ -123,8 +123,8 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
   }
 
   get invalidThresholdRange(): boolean {
-    const lower = this.editForm?.get('lowerThreshold')?.value;
-    const upper = this.editForm?.get('upperThreshold')?.value;
+    const lower = this.form?.get('lowerThreshold')?.value;
+    const upper = this.form?.get('upperThreshold')?.value;
 
     return lower !== null && upper !== null && lower >= upper;
   }

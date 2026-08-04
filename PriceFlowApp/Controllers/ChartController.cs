@@ -16,11 +16,11 @@ namespace PriceFlowApp.Controllers
         } 
 
         [HttpGet("price-trend")]
-        public async Task<ActionResult<IEnumerable<PriceTrend>>> GetPriceTrend(int securityId, DateTime startDate, DateTime endDate)
+        public ActionResult<IEnumerable<PriceTrend>> GetPriceTrend(int securityId, DateTime startDate, DateTime endDate)
         {
             try
             {
-                IEnumerable<PriceTrend> data = await _chartService.GetPriceTrendAsync(securityId, startDate, endDate);
+                IEnumerable<PriceTrend> data = _chartService.GetPriceTrend(securityId, startDate, endDate);
 
                 return Ok(data);
             }
@@ -31,11 +31,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("sector-distribution")]
-        public async Task<ActionResult<IEnumerable<SectorDistribution>>> GetSectorDistribution(DateTime date)
+        public ActionResult<IEnumerable<SectorDistribution>> GetSectorDistribution(DateTime date)
         {
             try
             {
-                IEnumerable<SectorDistribution> data = await _chartService.GetSectorDistributionAsync(date);
+                IEnumerable<SectorDistribution> data = _chartService.GetSectorDistribution(date);
 
                 return Ok(data);
             }
@@ -45,12 +45,42 @@ namespace PriceFlowApp.Controllers
             }
         }
 
-        [HttpGet("securities")]
-        public async Task<ActionResult<IEnumerable<Security>>> GetSecurities()
+        [HttpGet("portfolio-income")]
+        public ActionResult<IEnumerable<MonthlyIncome>> GetMonthlyIncome(int portfolioId, [FromQuery] bool isReal)
         {
             try
             {
-                IEnumerable<Security> securities = await _chartService.GetSecurities();
+                IEnumerable<MonthlyIncome> monthlyIncome = _chartService.GetMonthlyIncome(portfolioId, isReal);
+
+                return Ok(monthlyIncome);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching monthly income for portfolio.", detail = ex.Message });
+            }
+        }
+
+        [HttpGet("portfolio-security-allocation")]
+        public ActionResult<IEnumerable<MonthlyIncome>> GetSecurityAllocation(int portfolioId, bool isReal)
+        {
+            try
+            {
+                IEnumerable<SecurityAllocation> securityAllocation = _chartService.GetAllocation(portfolioId, isReal);
+
+                return Ok(securityAllocation);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching security allocation for portfolio.", detail = ex.Message });
+            }
+        }
+
+        [HttpGet("securities")]
+        public ActionResult<IEnumerable<Security>> GetSecurities()
+        {
+            try
+            {
+                IEnumerable<Security> securities = _chartService.GetSecurities();
 
                 return Ok(securities);
             }
@@ -69,37 +99,6 @@ namespace PriceFlowApp.Controllers
                 return NotFound("Latest date not found.");
 
             return Ok(latestDate.ToString());
-        }
-
-        [HttpGet("portfolio-income")]
-        public async Task<ActionResult<IEnumerable<MonthlyIncome>>> GetMonthlyIncome(int portfolioId, [FromQuery] bool isReal)
-        {
-            try
-            {
-                IEnumerable<MonthlyIncome> monthlyIncome= await _chartService.GetMonthlyIncomeAsync(portfolioId, isReal);
-
-                return Ok(monthlyIncome);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching monthly income for portfolio.", detail = ex.Message });
-            }
-        }
-
-
-        [HttpGet("portfolio-security-allocation")]
-        public async Task<ActionResult<IEnumerable<MonthlyIncome>>> GetSecurityAllocation(int portfolioId, bool isReal)
-        {
-            try
-            {
-                IEnumerable<SecurityAllocation> securityAllocation = await _chartService.GetAllocationAsync(portfolioId, isReal);
-
-                return Ok(securityAllocation);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching security allocation for portfolio.", detail = ex.Message });
-            }
         }
     }
 }

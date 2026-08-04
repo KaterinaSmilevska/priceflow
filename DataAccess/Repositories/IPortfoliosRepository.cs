@@ -4,14 +4,14 @@ namespace DataAccess.Repositories
 {
     public interface IPortfoliosRepository
     {
-        Task<Portfolija?> GetByIdAsync(int id);
+        Portfolija? GetById(int id);
 
-        Task<IEnumerable<Portfolija>> GetByUserAsync(int userId);
+        IEnumerable<Portfolija?> GetByUserId(int userId);
 
-        Task<Portfolija> CreateAsync(Portfolija portfolio);
+        Portfolija Add(Portfolija portfolio);
 
-        Task<Portfolija> UpdateAsync(Portfolija portfolio);
+        Portfolija Update(Portfolija portfolio);
 
-        Task DeleteAsync(Portfolija portfolio);
+        Portfolija Delete(Portfolija portfolio);
     }
 }

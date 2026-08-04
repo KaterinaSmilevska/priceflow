@@ -18,12 +18,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ThresholdResponse>>> GetUserThresholds()
+        public ActionResult<IEnumerable<ThresholdResponse>> GetUserThresholds()
         {
             try
             {
                 int userId = User.GetUserId();
-                IEnumerable<ThresholdResponse> response = await _thresholdService.GetUserThresholdsAsync(userId);
+                IEnumerable<ThresholdResponse> response = _thresholdService.GetUserThresholds(userId);
 
                 return Ok(response);
             }
@@ -34,12 +34,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("owned")]
-        public async Task<ActionResult<IEnumerable<OwnedSecurity>>> GetOwned()
+        public ActionResult<IEnumerable<OwnedSecurity>> GetOwned()
         {
             try
             {
                 int userId = User.GetUserId();
-                IEnumerable<OwnedSecurity> response = await _thresholdService.GetOwnedSecuritiesAsync(userId);
+                IEnumerable<OwnedSecurity> response = _thresholdService.GetOwnedSecurities(userId);
 
                 return Ok(response);
             }
@@ -50,12 +50,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddThreshold([FromBody] CreateThresholdRequest request)
+        public IActionResult AddThreshold([FromBody] CreateThresholdRequest request)
         {
             try
             {
                 int userId = User.GetUserId();
-                await _thresholdService.AddAsync(userId, request);
+                _thresholdService.Add(userId, request);
 
                 return Ok();
             }
@@ -66,12 +66,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateThreshold(int id, [FromBody] UpdateThresholdRequest request)
+        public IActionResult UpdateThreshold(int id, [FromBody] UpdateThresholdRequest request)
         {
             try
             {
                 int userId = User.GetUserId();
-                await _thresholdService.UpdateAsync(userId, id, request);
+                _thresholdService.Update(userId, id, request);
 
                 return Ok();
             }
@@ -82,12 +82,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteThreshold(int id)
+        public IActionResult DeleteThreshold(int id)
         {
             try
             {
                 int userId = User.GetUserId();
-                await _thresholdService.DeleteAsync(userId, id);
+                _thresholdService.Delete(userId, id);
 
                 return Ok();
             }

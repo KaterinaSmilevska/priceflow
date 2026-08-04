@@ -4,18 +4,18 @@ namespace DataAccess.Repositories
 {
     public interface IRolesRepository
     {
-        Task<Ulogi?> GetByIdAsync(int id);
+        Ulogi? GetById(int id);
 
-        Task<Ulogi?> GetByNameAsync(string name);
+        List<string> GetByUserId(int id);
 
-        Task<IEnumerable<Ulogi>> GetAllAsync();
+        Ulogi? GetByName(string name);
 
-        Task<List<string>> GetNamesAsync();
+        IEnumerable<Ulogi> GetAll();
 
-        Task<List<int>> GetIdsByNamesAsync(List<string> names);
+        List<string> GetNames();
 
-        Task<List<string>> GetByUserIdAsync(int id);
+        List<int> GetIdsByNames(List<string> names);
 
-        Task<List<string>> GetNamesAsync(IEnumerable<Ulogi> roles);
+        List<string> GetNames(IEnumerable<Ulogi> roles);
     }
 }

@@ -4,16 +4,16 @@ namespace DataAccess.Repositories
 {
     public interface IPriceChangeNotificationsRepository
     {
-        Task<IzvestuvanjaPromenaCena?> GetById(int id);
+        IzvestuvanjaPromenaCena? GetById(int id);
 
-        Task<List<IzvestuvanjaPromenaCena>> GetByUserAsync(int userId);
+        IEnumerable<IzvestuvanjaPromenaCena?> GetByUserId(int userId);
 
-        Task<int> GetUnreadNotificationCountAsync(int userId);
+        int GetUnreadNotificationCount(int userId);
 
-        Task MarkNotificationAsReadAsync(int notificationId);
+        void MarkNotificationAsRead(int notificationId);
 
-        Task GenerateNotificationsAsync(DateTime tradingDate);
+        void GenerateNotifications(DateTime tradingDate);
 
-        Task<bool> NotificationExistsForDateAsync(DateTime date);
+        bool NotificationExistsForDate(DateTime date);
     }
 }

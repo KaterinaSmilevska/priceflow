@@ -5,7 +5,7 @@
       {{ 'FOR' | translate }} {{ 'NAV.PRICE_ALERTS' | translate }}
     </h4>
 
-    <form [formGroup]="editForm" (ngSubmit)="saveThreshold()">
+    <form [formGroup]="form" (ngSubmit)="saveThreshold()">
       <div class="mb-3">
         <label>{{ 'SECURITIES.TITLE' | translate }}</label>
         <select class="form-select" formControlName="hvId">
@@ -29,8 +29,8 @@
         <input type="number"
                class="form-control"
                formControlName="lowerThreshold" />
-        <div *ngIf="editForm.get('lowerThreshold')?.touched && editForm.get('lowerThreshold')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="editForm.get('lowerThreshold')?.errors?.['required']" class="error">
+        <div *ngIf="form.get('lowerThreshold')?.touched && form.get('lowerThreshold')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('lowerThreshold')?.errors?.['required']" class="error">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
         </div>
@@ -44,8 +44,8 @@
         <input type="number"
                class="form-control"
                formControlName="upperThreshold" />
-        <div *ngIf="editForm.get('upperThreshold')?.touched && editForm.get('upperThreshold')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="editForm.get('upperThreshold')?.errors?.['required']" class="error">
+        <div *ngIf="form.get('upperThreshold')?.touched && form.get('upperThreshold')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('upperThreshold')?.errors?.['required']" class="error">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
         </div>
@@ -53,7 +53,7 @@
 
       <div class="text-end">
         <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
-        <button type="submit" class="btn btn-success" [disabled]="editForm.invalid || invalidThresholdRange">{{ (thresholdToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
+        <button type="submit" class="btn btn-success" [disabled]="form.invalid || invalidThresholdRange">{{ (thresholdToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
       </div>
 
       <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>

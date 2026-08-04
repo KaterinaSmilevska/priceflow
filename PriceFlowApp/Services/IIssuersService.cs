@@ -4,6 +4,6 @@ namespace PriceFlowApp.Services
 {
     public interface IIssuersService
     {
-        Task<IEnumerable<Issuer>> FindAllAsync();
+        IEnumerable<Issuer> FindAll();
     }
 }

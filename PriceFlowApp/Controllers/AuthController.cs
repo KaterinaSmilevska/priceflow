@@ -24,11 +24,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
+        public IActionResult Register([FromBody] RegisterRequest registerRequest)
         {
             try
             {
-                var response = await _authService.RegisterAsync(registerRequest);
+                var response = _authService.Register(registerRequest);
 
                 return Ok(response);
             }
@@ -42,11 +42,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public IActionResult Login([FromBody] LoginRequest request)
         {
             try
             {
-                var response = await _authService.LoginAsync(request);
+                var response = _authService.Login(request);
 
                 return Ok(response);
             }
@@ -57,19 +57,19 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return Ok(new { success = true, message = "Logged out successfully." });
         }
 
         [HttpGet("ulogi")]
-        public async Task<IActionResult> GetRolesNames()
+        public IActionResult GetRolesNames()
         {
             try
             {
-                var roles = await _rolesService.FindNamesAsync();
+                var roles = _rolesService.FindNames();
 
                 return Ok(roles);
             }
@@ -80,11 +80,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("check-username/{username}")]
-        public async Task<IActionResult> CheckUsername(string username)
+        public IActionResult CheckUsername(string username)
         {
             try
             {
-                var exists = await _authService.UsernameExistsAsync(username);
+                var exists = _authService.UsernameExists(username);
 
                 return Ok(new { exists });
             }
@@ -95,11 +95,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("validate-password")]
-        public async Task<IActionResult> ValidatePassword([FromBody] PasswordValidationRequest request)
+        public IActionResult ValidatePassword([FromBody] PasswordValidationRequest request)
         {
             try
             {
-                var response = await _authService.ValidatePasswordAsync(request);
+                var response = _authService.ValidatePassword(request);
 
                 return Ok(response);
             }
@@ -110,11 +110,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("validate-email")]
-        public async Task<IActionResult> ValidateEmail([FromBody] EmailValidationRequest request)
+        public IActionResult ValidateEmail([FromBody] EmailValidationRequest request)
         {
             try
             {
-                var response = await _authService.ValidateEmailAsync(request);
+                var response = _authService.ValidateEmail(request);
 
                 return Ok(response);
             }
@@ -125,11 +125,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        public IActionResult ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
             try
             {
-                await _authService.ForgotPasswordAsync(request.Username);
+                _authService.ForgotPassword(request.Username);
 
                 return Ok(new { message = "Reset link has been sent to your email. " });
             }
@@ -140,11 +140,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        public IActionResult ResetPassword([FromBody] ResetPasswordRequest request)
         {
             try
             {
-                await _authService.ResetPasswordAsync(request.Token, request.NewPassword);
+                _authService.ResetPassword(request.Token, request.NewPassword);
 
                 return Ok(new { message = "Password reset successful." });
             }
@@ -177,11 +177,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("users")]
-        public async Task<IActionResult> GetUsers()
+        public IActionResult GetUsers()
         {
             try
             {
-                var users = await _authService.FindAllAsync();
+                var users = _authService.FindAll();
 
                 return Ok(users);
             }
@@ -192,9 +192,9 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("users/{id}")]
-        public async Task<IActionResult> GetUser(int id)
+        public IActionResult GetUser(int id)
         {
-            var foundUser = await _authService.FindByIdAsync(id);
+            var foundUser = _authService.FindById(id);
             if (foundUser == null)
                 return NotFound();
 
@@ -210,13 +210,13 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut("users/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] User user)
+        public IActionResult UpdateUser(int id, [FromBody] User user)
         {
             if (id != user.Id)
                 return BadRequest(new { message = "User Id mismatch." });
             try
             {
-                await _authService.UpdateAsync(user);
+                _authService.Update(user);
                 return Ok();
             }
             catch (Exception ex)
@@ -226,11 +226,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpDelete("users/{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public IActionResult DeleteUser(int id)
         {
             try
             {
-                await _authService.DeleteAsync(id);
+                _authService.Delete(id);
 
                 return Ok();
             }
@@ -241,11 +241,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("brokers")]
-        public async Task<IActionResult> GetBrokers()
+        public IActionResult GetBrokers()
         {
             try
             {
-                var brokers = await _brokersService.FindAllAsync();
+                var brokers = _brokersService.FindAll();
 
                 return Ok(brokers);
             }
@@ -256,11 +256,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("brokers")]
-        public async Task<IActionResult> AddBroker([FromBody] CreateBrokerRequest broker)
+        public IActionResult AddBroker([FromBody] CreateBrokerRequest broker)
         {
             try
             {
-                Broker result = await _brokersService.AddAsync(broker);
+                Broker result = _brokersService.Add(broker);
 
                 return Ok(result);
             }
@@ -271,11 +271,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut("brokers/{id}")]
-        public async Task<IActionResult> UpdateBroker(int id, [FromBody] UpdateBrokerRequest broker)
+        public IActionResult UpdateBroker(int id, [FromBody] UpdateBrokerRequest broker)
         {
             try
             {
-                BrokerResponse result = await _brokersService.UpdateAsync(broker);
+                BrokerResponse result = _brokersService.Update(broker);
 
                 return Ok(result);
             }
@@ -286,11 +286,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpDelete("brokers/{id}")]
-        public async Task<IActionResult> DeleteBroker(int id)
+        public IActionResult DeleteBroker(int id)
         {
             try
             {
-                await _brokersService.DeleteAsync(id);
+                _brokersService.Delete(id);
 
                 return Ok();
             }
@@ -301,11 +301,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("verify-email")]
-        public async Task<IActionResult> VerifyEmail([FromQuery] Guid token)
+        public IActionResult VerifyEmail([FromQuery] Guid token)
         {
             try
             {
-                var user = await _authService.FindByVerificationTokenAsync(token);
+                var user = _authService.FindByVerificationToken(token);
                 if (user == null)
                     return BadRequest("Invalid  or expired verification link.");
 
@@ -315,7 +315,7 @@ namespace PriceFlowApp.Controllers
                 user.IsEmailVerified = true;
                 user.EmailVerificationToken = null;
 
-                await _authService.UpdateAsync(user);
+                _authService.Update(user);
 
                 return Redirect("https://localhost:44413/register?verified=true");
             }

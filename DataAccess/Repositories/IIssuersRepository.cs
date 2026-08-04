@@ -4,8 +4,8 @@ namespace DataAccess.Repositories
 {
     public interface IIssuersRepository
     {
-        Task<Izdavachi?> GetByIdAsync(int id);
+        Izdavachi? GetById(int id);
 
-        Task<IEnumerable<Izdavachi>> GetAllAsync();
+        IEnumerable<Izdavachi> GetAll();
     }
 }

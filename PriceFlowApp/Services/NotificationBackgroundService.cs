@@ -16,7 +16,7 @@
                 using var scope = _scopeFactory.CreateScope();
                 var service = scope.ServiceProvider.GetRequiredService<IPortfoliosNotificationsService>();
 
-                await service.SendScheduledNotificationsAsync();
+                service.SendScheduledNotifications();
 
                 await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
             }

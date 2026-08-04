@@ -4,16 +4,16 @@ namespace DataAccess.Repositories
 {
     public interface IThresholdRepository
     {
-        Task<IEnumerable<HvPromenaCena>> GetByUserAsync(int userId);
+        HvPromenaCena? GetById(int id);
 
-        Task<HvPromenaCena?> GetByIdAsync(int id);
+        IEnumerable<HvPromenaCena?> GetByUserId(int userId);
 
-        Task<HvPromenaCena?> GetByUserandSecurityCodeAsync(int userId, int securityId);
+        HvPromenaCena? GetByUserIdAndSecurityCode(int userId, int securityId);
 
-        Task<HvPromenaCena> AddAsync(HvPromenaCena entity);
+        HvPromenaCena Add(HvPromenaCena entity);
 
-        Task<HvPromenaCena> UpdateAsync(HvPromenaCena entity);
+        HvPromenaCena Update(HvPromenaCena entity);
 
-        Task DeleteAsync(HvPromenaCena entity);
+        HvPromenaCena Delete(HvPromenaCena entity);
     }
 }

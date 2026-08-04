@@ -15,11 +15,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("{name}")]
-        public async Task<IActionResult> GetRole(string name)
+        public IActionResult GetRole(string name)
         {
             try
             {
-                var response = await _rolesService.FindByNameAsync(name);
+                var response = _rolesService.FindByName(name);
 
                 return Ok(response);
             }
@@ -30,11 +30,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRoleNames()
+        public IActionResult GetRoleNames()
         {
             try
             {
-                var response = await _rolesService.FindNamesAsync();
+                var response = _rolesService.FindNames();
 
                 return Ok(response);
             }

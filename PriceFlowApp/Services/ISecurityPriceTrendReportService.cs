@@ -4,6 +4,6 @@ namespace PriceFlowApp.Services
 {
     public interface ISecurityPriceTrendReportService
     {
-        byte[] GenerateSecurityPriceTrendReport(List<SecurityPriceTrendReport> reports);
+        byte[] GenerateSecurityPriceTrendReport(IEnumerable<SecurityPriceTrendReport> reports);
     }
 }

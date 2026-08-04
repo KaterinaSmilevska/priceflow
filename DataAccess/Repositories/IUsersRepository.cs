@@ -4,8 +4,8 @@ namespace DataAccess.Repositories
 {
     public interface IUsersRepository
     {
-        Task<IEnumerable<Korisnici>> GetAllAsync();
+        Korisnici Update(Korisnici user);
 
-        Task UpdateAsync(Korisnici user);
+        IEnumerable<Korisnici> GetAll();
     }
 }

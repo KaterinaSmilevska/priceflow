@@ -12,33 +12,33 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IzvestuvanjaPortfolija> AddAsync(IzvestuvanjaPortfolija portfolioNotification)
+        public IEnumerable<IzvestuvanjaPortfolija?> GetByUserId(int userId)
         {
-            await _dbContext.IzvestuvanjaPortfolija.AddAsync(portfolioNotification);
-            await _dbContext.SaveChangesAsync();
+            return _dbContext.IzvestuvanjaPortfolija
+                .Include(ip => ip.Portfolio)
+                .Where(ip => ip.Portfolio.KorisnikId == userId)
+                .ToList();
+        }
+
+        public IzvestuvanjaPortfolija? GetByPortfolioId(int portfolioId)
+        {
+            return _dbContext.IzvestuvanjaPortfolija
+                .Where(ip => ip.PortfolioId == portfolioId)
+                .FirstOrDefault();
+        }
+
+        public IzvestuvanjaPortfolija Add(IzvestuvanjaPortfolija portfolioNotification)
+        {
+            _dbContext.IzvestuvanjaPortfolija.Add(portfolioNotification);
+            _dbContext.SaveChanges();
 
             return portfolioNotification;
         }
 
-        public async Task<IzvestuvanjaPortfolija?> GetByPortfolioId(int portfolioId)
-        {
-            return await _dbContext.IzvestuvanjaPortfolija
-                .Where(ip => ip.PortfolioId == portfolioId)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<IzvestuvanjaPortfolija>> GetByUserIdAsync(int userId)
-        {
-            return await _dbContext.IzvestuvanjaPortfolija
-                .Include(ip => ip.Portfolio)
-                .Where(ip => ip.Portfolio.KorisnikId == userId)
-                .ToListAsync();
-        }
-
-        public async Task<IzvestuvanjaPortfolija> UpdateAsync(IzvestuvanjaPortfolija portfolioNotification)
+        public IzvestuvanjaPortfolija Update(IzvestuvanjaPortfolija portfolioNotification)
         {
             _dbContext.IzvestuvanjaPortfolija.Update(portfolioNotification);
-            await _dbContext.SaveChangesAsync();
+             _dbContext.SaveChanges();
 
             return portfolioNotification;
         }

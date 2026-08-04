@@ -12,68 +12,74 @@ namespace DataAccess.Repositories
             _dbContext = context;
         }
 
-        public async Task<Korisnici?> GetByIdAsync(int id)
+        public Korisnici? GetById(int id)
         {
-            return await _dbContext.Korisnici
-                .FindAsync(id);
+            return _dbContext.Korisnici
+                .Find(id);
         }
 
-        public async Task<Korisnici?> GetByUsernameAsync(string username)
+        public Korisnici? GetByUsername(string username)
         {
-            return await _dbContext.Korisnici
+            return _dbContext.Korisnici
                 .Include(k => k.KorisniciUlogi)
                 .ThenInclude(ku => ku.Uloga)
-                .FirstOrDefaultAsync(k => k.Username == username);
+                .FirstOrDefault(k => k.Username == username);
         }
 
-        public async Task<IEnumerable<Korisnici>> GetAllAsync()
+        public Korisnici? GetByVerificationToken(Guid token)
         {
-            return await _dbContext.Korisnici
+            return _dbContext.Korisnici
+                .FirstOrDefault(k => k.EmailVerificationToken == token);
+        }
+
+        public Korisnici? GetByEmail(string email)
+        {
+            return _dbContext.Korisnici
+                .FirstOrDefault(k => k.Email == email);
+        }
+
+        public Korisnici? GetByResetPasswordToken(Guid token)
+        {
+            return _dbContext.Korisnici
+                .FirstOrDefault(k => k.ResetPasswordToken == token);
+        }
+
+        public IEnumerable<Korisnici> GetAll()
+        {
+            return _dbContext.Korisnici
                 .Include(k => k.KorisniciUlogi)
                 .ThenInclude(ku => ku.Uloga)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task AddAsync(Korisnici user)
+        public Korisnici Add(Korisnici user)
         {
             _dbContext.Korisnici.Add(user);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
+            return user;
         }
 
-        public async Task UpdateAsync(Korisnici user)
+        public Korisnici Update(Korisnici user)
         {
             _dbContext.Korisnici.Update(user);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
+            return user;
         }
 
-        public async Task DeleteAsync(Korisnici user)
+        public Korisnici Delete(Korisnici user)
         { 
             _dbContext.Korisnici.Remove(user);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
+            return user;
         }
 
-        public async Task<bool> UsernameExistsAsync(string username)
+        public bool UsernameExists(string username)
         {
-            return await _dbContext.Korisnici
-                .AnyAsync(k => k.Username == username);
-        }
-
-        public async Task<Korisnici?> GetByVerificationTokenAsync(Guid token)
-        {
-            return await _dbContext.Korisnici
-                .FirstOrDefaultAsync(k => k.EmailVerificationToken == token);
-        }
-
-        public async Task<Korisnici?> GetByEmailAsync(string email)
-        {
-            return await _dbContext.Korisnici
-                .FirstOrDefaultAsync(k => k.Email == email);
-        }
-
-        public async Task<Korisnici?> GetByResetPasswordTokenAsync(Guid token)
-        {
-            return await _dbContext.Korisnici
-                .FirstOrDefaultAsync(k => k.ResetPasswordToken == token);
+            return _dbContext.Korisnici
+                .Any(k => k.Username == username);
         }
     }
 }

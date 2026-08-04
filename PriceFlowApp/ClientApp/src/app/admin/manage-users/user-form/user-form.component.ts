@@ -17,7 +17,7 @@ export class UserFormComponent implements OnInit, OnChanges {
   @Input() userToEdit!: User;
   @Output() close = new EventEmitter<User | null>();
 
-  editForm!: FormGroup;
+  form!: FormGroup;
 
   originalUsername: string | null = null;
   errorMessage: string | null = null;
@@ -36,7 +36,7 @@ export class UserFormComponent implements OnInit, OnChanges {
     if (changes['userToEdit'] && this.userToEdit) {
       this.originalUsername = this.userToEdit.username;
 
-      this.editForm = this.fb.group({
+      this.form = this.fb.group({
         name: [this.userToEdit.name || '', Validators.required],
         username: [this.userToEdit.username || '', Validators.required],
         email: [this.userToEdit.email || '', [Validators.required, Validators.email]]
@@ -48,14 +48,14 @@ export class UserFormComponent implements OnInit, OnChanges {
     this.errorMessage = null;
     this.successMessage = null;
 
-    if (this.editForm.invalid) {
-      this.editForm.markAllAsTouched();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
     const updatedUser: User = {
       ...this.userToEdit,
-      ...this.editForm.value
+      ...this.form.value
     }
 
     this.adminService.checkUsername(updatedUser.username).subscribe({

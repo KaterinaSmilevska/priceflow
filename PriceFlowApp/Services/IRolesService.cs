@@ -4,10 +4,10 @@ namespace PriceFlowApp.Services
 {
     public interface IRolesService
     {
-        Task<Ulogi?> FindByNameAsync(string name);
+        List<string> FindByUserId(int userId);
 
-        Task<List<string>> FindNamesAsync();
+        Ulogi? FindByName(string name);
 
-        Task<List<string>> FindByUserIdAsync(int  userId);
+        List<string> FindNames();
     }
 }

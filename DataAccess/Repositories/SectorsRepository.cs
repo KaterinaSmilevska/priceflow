@@ -12,15 +12,16 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Sektori>> GetAllAsync()
+        public Sektori? GetById(int id)
         {
-            return await _dbContext.Sektori.ToListAsync();
+            return _dbContext.Sektori
+                .Find(id);
         }
 
-        public async Task<Sektori?> GetByIdAsync(int id)
+        public IEnumerable<Sektori> GetAll()
         {
-            return await _dbContext.Sektori
-                .FindAsync(id);
+            return _dbContext.Sektori
+                .ToList();
         }
     }
 }

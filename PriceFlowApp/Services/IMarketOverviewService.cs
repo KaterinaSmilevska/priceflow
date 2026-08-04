@@ -4,14 +4,14 @@ namespace PriceFlowApp.Services
 {
     public interface IMarketOverviewService
     {
-        Task<MarketOverview> GetOverviewAsync();
+        MarketOverview GetOverview();
 
-        Task<IEnumerable<SecurityPerformance>> GetTopGainersAsync(int count);
+        IEnumerable<SecurityPerformance> GetTopGainers(int count);
 
-        Task<IEnumerable<SecurityPerformance>> GetTopLosersAsync(int count);
+        IEnumerable<SecurityPerformance> GetTopLosers(int count);
 
-        Task<IEnumerable<SecurityPerformance>> GetMostTradedAsync(int count);
+        IEnumerable<SecurityPerformance> GetMostTrade(int count);
 
-        Task<LiquidityOverview> FindLiquidityAsync(int userId, int monthsBack, bool onlyOwned);
+        LiquidityOverview FindLiquidity(int userId, int monthsBack, bool onlyOwned);
     }
 }

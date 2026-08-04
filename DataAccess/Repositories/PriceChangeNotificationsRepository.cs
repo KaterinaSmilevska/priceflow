@@ -12,20 +12,50 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task GenerateNotificationsAsync(DateTime tradingDate)
+        public IzvestuvanjaPromenaCena? GetById(int id)
+        {
+            return  _dbContext.IzvestuvanjaPromenaCena
+                .Find(id);
+        }
+
+        public IEnumerable<IzvestuvanjaPromenaCena?> GetByUserId(int userId)
+        {
+            return _dbContext.IzvestuvanjaPromenaCena
+                .Where(n => n.KorisnikId == userId)
+                .OrderByDescending(n => n.DatumTrguvanje)
+                .ToList();
+        }
+
+        public int GetUnreadNotificationCount(int userId)
+        {
+            return _dbContext.IzvestuvanjaPromenaCena
+                .Count(n => n.KorisnikId == userId && n.Procitano == false);
+        }
+
+        public void MarkNotificationAsRead(int notificationId)
+        {
+            IzvestuvanjaPromenaCena? notification = GetById(notificationId);
+            if (notification != null)
+            {
+                notification.Procitano = true;
+                _dbContext.SaveChanges();
+            }
+        }
+
+        public void GenerateNotifications(DateTime tradingDate)
         {
             DateTime date = tradingDate.Date;
 
-            List<DnevenPromet> dailyTurnover = await _dbContext.DnevenPromet
+            IEnumerable<DnevenPromet> dailyTurnover = _dbContext.DnevenPromet
                 .Where(d => d.Datum >= date && d.Datum < date.AddDays(1) && d.ProcentPromena != null)
-                .ToListAsync();
+                .ToList();
 
             foreach(DnevenPromet dp in dailyTurnover)
             {
-                List<HvPromenaCena> alerts = await _dbContext.HvPromenaCena
+                IEnumerable<HvPromenaCena> alerts = _dbContext.HvPromenaCena
                     .Include(a => a.Hv)
                     .Where(a => a.Hvid == dp.Hvid)
-                    .ToListAsync();
+                    .ToList();
 
                 foreach(HvPromenaCena alert in alerts)
                 {
@@ -42,8 +72,8 @@ namespace DataAccess.Repositories
                     }
                         
 
-                    bool exists = await _dbContext.IzvestuvanjaPromenaCena
-                        .AnyAsync(n =>
+                    bool exists = _dbContext.IzvestuvanjaPromenaCena
+                        .Any(n =>
                             n.KorisnikId == alert.KorisnikId &&
                             n.Hvid == alert.Hvid &&
                             n.DatumTrguvanje >= date && n.DatumTrguvanje < date.AddDays(1)
@@ -62,46 +92,17 @@ namespace DataAccess.Repositories
                                 $"(Threshold: {alert.DolnaGranica}% / {alert.GornaGranica}%)",
                             Procitano = false
                         };
-                        await _dbContext.IzvestuvanjaPromenaCena.AddAsync(notification);
+                        _dbContext.IzvestuvanjaPromenaCena.Add(notification);
                     }
                 }
             }
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
 
-        public async Task<IzvestuvanjaPromenaCena?> GetById(int id)
+        public bool NotificationExistsForDate(DateTime date)
         {
-            return await _dbContext.IzvestuvanjaPromenaCena.FindAsync(id);
-        }
-
-        public async Task<List<IzvestuvanjaPromenaCena>> GetByUserAsync(int userId)
-        {
-            return await _dbContext.IzvestuvanjaPromenaCena
-                .Where(n => n.KorisnikId == userId)
-                .OrderByDescending(n => n.DatumTrguvanje)
-                .ToListAsync();
-        }
-
-        public async Task<int> GetUnreadNotificationCountAsync(int userId)
-        {
-            return await _dbContext.IzvestuvanjaPromenaCena
-                .CountAsync(n => n.KorisnikId == userId && n.Procitano == false);
-        }
-
-        public async Task MarkNotificationAsReadAsync(int notificationId)
-        {
-            IzvestuvanjaPromenaCena? notification = await GetById(notificationId);
-            if(notification != null)
-            {
-                notification.Procitano = true;
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task<bool> NotificationExistsForDateAsync(DateTime date)
-        {
-            return await _dbContext.IzvestuvanjaPromenaCena
-                .AnyAsync(n => n.DatumTrguvanje >= date.Date && n.DatumTrguvanje < date.Date.AddDays(1));
+            return _dbContext.IzvestuvanjaPromenaCena
+                .Any(n => n.DatumTrguvanje >= date.Date && n.DatumTrguvanje < date.Date.AddDays(1));
         }
     }
 }

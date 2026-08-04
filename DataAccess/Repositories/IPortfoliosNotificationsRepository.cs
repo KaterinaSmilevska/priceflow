@@ -4,12 +4,12 @@ namespace DataAccess.Repositories
 {
     public interface IPortfoliosNotificationsRepository
     {
-        Task<IEnumerable<IzvestuvanjaPortfolija>> GetByUserIdAsync(int userId);
+        IEnumerable<IzvestuvanjaPortfolija?> GetByUserId(int userId);
 
-        Task<IzvestuvanjaPortfolija?> GetByPortfolioId(int portfolioId);
+        IzvestuvanjaPortfolija? GetByPortfolioId(int portfolioId);
 
-        Task<IzvestuvanjaPortfolija> UpdateAsync(IzvestuvanjaPortfolija portfolioNotification);
+        IzvestuvanjaPortfolija Add(IzvestuvanjaPortfolija portfolioNotification);
 
-        Task<IzvestuvanjaPortfolija> AddAsync(IzvestuvanjaPortfolija portfolioNotification);
+        IzvestuvanjaPortfolija Update(IzvestuvanjaPortfolija portfolioNotification);
     }
 }

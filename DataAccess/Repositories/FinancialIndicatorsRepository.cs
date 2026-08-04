@@ -12,9 +12,10 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<FinansiskiPokazateli>> GetAllAsync()
+        public IEnumerable<FinansiskiPokazateli> GetAll()
         {
-            return await _dbContext.FinansiskiPokazateli.ToListAsync();
+            return _dbContext.FinansiskiPokazateli
+                .ToList();
         }
     }
 }

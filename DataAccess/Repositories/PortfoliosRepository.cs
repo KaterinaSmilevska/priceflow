@@ -12,52 +12,52 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Portfolija> CreateAsync(Portfolija portfolio)
+        public Portfolija? GetById(int id)
+        {
+            return _dbContext.Portfolija
+                .Find(id);
+        }
+
+        public IEnumerable<Portfolija> GetByUserId(int userId)
+        {
+            return _dbContext.Portfolija
+                 .Where(p => p.KorisnikId == userId)
+                 .Include(p => p.Transakcii)
+                 .Include(p => p.PortfolioPrinosi)
+                 .ToList();
+        }
+
+        public Portfolija Add(Portfolija portfolio)
         {
             _dbContext.Portfolija.Add(portfolio);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
 
             return portfolio;
         }
 
-        public async Task DeleteAsync(Portfolija portfolio)
+        public Portfolija Update(Portfolija portfolio)
         {
-            if(portfolio != null)
-            {
-                _dbContext.Portfolija.Remove(portfolio);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
+            //var foundPortfolio = await _dbContext.Portfolija
+            //    .FirstOrDefaultAsync(p => p.Id == portfolio.Id && p.KorisnikId == portfolio.KorisnikId);
 
-        public async Task<Portfolija?> GetByIdAsync(int id)
-        {
-            return await _dbContext.Portfolija.FindAsync(id);
-        }
+            //if (foundPortfolio == null)
+            //    return null;
 
-        public async Task<IEnumerable<Portfolija>> GetByUserAsync(int userId)
-        {
-           return await _dbContext.Portfolija
-                .Where(p => p.KorisnikId == userId)
-                .Include(p => p.Transakcii)
-                .Include(p => p.PortfolioPrinosi)
-                .ToListAsync();
-        }
-
-        public async Task<Portfolija> UpdateAsync(Portfolija portfolio)
-        {
-            var foundPortfolio = await _dbContext.Portfolija
-                .FirstOrDefaultAsync(p => p.Id == portfolio.Id && p.KorisnikId == portfolio.KorisnikId);
-
-            if (foundPortfolio == null)
-                return null;
-
-            foundPortfolio.Ime = portfolio.Ime;
-            foundPortfolio.Opis = portfolio.Opis;
+            //foundPortfolio.Ime = portfolio.Ime;
+            //foundPortfolio.Opis = portfolio.Opis;
 
             _dbContext.Portfolija.Update(portfolio);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
 
-            return foundPortfolio;
+            return portfolio;
+        }
+
+        public Portfolija Delete(Portfolija portfolio)
+        {
+            _dbContext.Portfolija.Remove(portfolio);
+            _dbContext.SaveChanges();
+
+            return portfolio;
         }
     }
 }

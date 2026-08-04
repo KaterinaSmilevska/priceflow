@@ -4,6 +4,6 @@ namespace PriceFlowApp.Services
 {
     public interface ISectorsService
     {
-        Task<IEnumerable<Sector>> FindAllAsync();
+        IEnumerable<Sector> FindAll();
     }
 }

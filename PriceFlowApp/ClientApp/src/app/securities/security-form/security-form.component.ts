@@ -8,6 +8,7 @@ import { Security } from '../Security';
 import { TypeSecurity } from '../TypeSecurity';
 import { CreateSecurity } from '../CreateSecurity';
 import { Issuer } from '../Issuer';
+import { UpdateSecurity } from '../UpdateSecurity';
 
 @Component({
   selector: 'app-security-form',
@@ -21,7 +22,7 @@ export class SecurityFormComponent implements OnInit, OnChanges {
   @Input() securityToEdit?: Security;
   @Output() close = new EventEmitter<Security | null>();
 
-  addEditForm!: FormGroup;
+  form!: FormGroup;
   types: TypeSecurity[] = [];
   issuers: Issuer[] = [];
 
@@ -31,7 +32,7 @@ export class SecurityFormComponent implements OnInit, OnChanges {
   constructor(private fb: FormBuilder, private securitiesService: SecuritiesService, private router: Router) { }
 
   ngOnInit(): void {
-    this.addEditForm = this.fb.group({
+    this.form = this.fb.group({
       code: [this.securityToEdit?.code || '', Validators.required],
       isin: [this.securityToEdit?.isin || '', Validators.required],
       totalNumShares: [this.securityToEdit?.totalNumShares || 0, [Validators.required, Validators.min(1)]],
@@ -45,7 +46,7 @@ export class SecurityFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['securityToEdit'] && this.addEditForm) {
+    if (changes['securityToEdit'] && this.form) {
       this.loadSecurityData();
     }
   }
@@ -56,7 +57,7 @@ loadTypes(): void {
     if (this.securityToEdit) {
       const type = this.types.find(t => t.name === this.securityToEdit?.typeSecurityName);
       if (type) {
-        this.addEditForm.patchValue({
+        this.form.patchValue({
           typeSecurityId: type.id
         });
       }
@@ -70,7 +71,7 @@ loadIssuers(): void {
     if (this.securityToEdit) {
       const issuer = this.issuers.find(i => i.name === this.securityToEdit?.issuerName);
       if (issuer) {
-        this.addEditForm.patchValue({
+        this.form.patchValue({
           issuerId: issuer.id
         });
       }
@@ -79,12 +80,12 @@ loadIssuers(): void {
   }
 
   loadSecurityData(): void {
-    if (!this.addEditForm || !this.securityToEdit) {
+    if (!this.form || !this.securityToEdit) {
       return;
     }
 
     if (this.securityToEdit) {
-      this.addEditForm.patchValue({
+      this.form.patchValue({
         code: this.securityToEdit.code,
         isin: this.securityToEdit.isin,
         totalNumShares: this.securityToEdit.totalNumShares
@@ -95,7 +96,7 @@ loadIssuers(): void {
       );
 
       if (type) {
-        this.addEditForm.patchValue({
+        this.form.patchValue({
           typeSecurityId: type.id
         });
       }
@@ -105,13 +106,13 @@ loadIssuers(): void {
       );
 
       if (issuer) {
-        this.addEditForm.patchValue({
+        this.form.patchValue({
           issuerId: issuer.id
         });
       }
     }
     else {
-      this.addEditForm.reset({
+      this.form.reset({
         code: '',
         isin: '',
         totalNumShares: 0,
@@ -125,15 +126,18 @@ loadIssuers(): void {
     this.errorMessage = null;
     this.successMessage = null;
 
-    if (this.addEditForm.invalid) {
-      this.addEditForm.markAllAsTouched();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
-    const security: CreateSecurity = this.addEditForm.value;
-
     if (this.securityToEdit) {
-      this.securitiesService.updateSecurity(this.securityToEdit.id, security).subscribe({
+      const security: UpdateSecurity = {
+        id: this.securityToEdit!.id,
+        ...this.form.value
+      };
+
+      this.securitiesService.updateSecurity(security).subscribe({
         next: (updated) => {
           this.successMessage = 'SECURITIES.UPDATE_SUCCESS';
           setTimeout(() => this.close.emit(updated), 1000);
@@ -144,7 +148,7 @@ loadIssuers(): void {
         }
        });
     } else {
-      this.securitiesService.addSecurity(security).subscribe({
+      this.securitiesService.addSecurity(this.form.value).subscribe({
         next: (newSecurity) => {
           this.successMessage = 'SECURITIES.ADD_SUCCESS';
           setTimeout(() => this.close.emit(newSecurity), 1000);

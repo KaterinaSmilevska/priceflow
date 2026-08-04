@@ -4,26 +4,26 @@ namespace PriceFlowApp.Services
 {
     public interface ISecuritiesService
     {
-        Task<IEnumerable<Security>> FindAllAsync();
+        Security? FindById(int id);
 
-        Task<Security?> FindByIdAsync(int id);
+        Security? FindByCode(string code);
 
-        Task<Security?> FindByCodeAsync(string code);
+        IEnumerable<Security> FindAll();
 
-        Task<string?> FindSecurityCode(int id);
+        string? FindSecurityCode(int id);
 
-        Task<int?> FindTotalNumShares(int id);
+        int? FindTotalNumShares(int id);
 
-        Task<int?> FindTotalNumSharesAsync(string securityCode);
+        int? FindTotalNumShares(string securityCode);
 
-        Task<Security> AddAsync(CreateSecurity security);
+        Security Add(CreateSecurity security);
 
-        Task DeleteAsync(int id);
+        Security Update(UpdateSecurity security);
 
-        Task<Security> UpdateAsync(int id, CreateSecurity security);
+        Security Delete(int id);
 
-        Task<SecurityDailyPrices?> GetLatestPricesAsync(string securityCode, DateTime date);
+        SecurityDailyPrices? GetLatestPrices(string securityCode, DateTime date);
 
-        Task<IEnumerable<Security>> SearchByCodeAsync(string searchTerm);
+        IEnumerable<Security> SearchByCode(string searchTerm);
     }
 }

@@ -13,9 +13,9 @@ namespace PriceFlowApp.Services
             _issuersRepository = issuersRepository;
         }
 
-        public async Task<IEnumerable<Issuer>> FindAllAsync()
+        public IEnumerable<Issuer> FindAll()
         {
-            IEnumerable<Izdavachi> issuers = await _issuersRepository.GetAllAsync();
+            IEnumerable<Izdavachi> issuers = _issuersRepository.GetAll();
 
             return issuers.Select(i => new Issuer
             {

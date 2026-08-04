@@ -5,18 +5,18 @@ namespace PriceFlowApp.Services
 {
     public interface IBrokersService
     {
-        Task<IEnumerable<Broker>> FindAllAsync();
+        Brokeri? FindById(int id);
 
-        Task<IEnumerable<BrokerResponse>> GetAllAsync();
+        Brokeri? FindByCompany(string company);
 
-        Task<Brokeri?> FindById(int id);
+        IEnumerable<Broker> FindAll();
 
-        Task<Brokeri?> FindByCompanyAsync(string company);
+        IEnumerable<BrokerResponse> GetAll();
 
-        Task<Broker> AddAsync(CreateBrokerRequest request);
+        Broker Add(CreateBrokerRequest request);
 
-        Task<BrokerResponse> UpdateAsync(UpdateBrokerRequest request);
+        BrokerResponse Update(UpdateBrokerRequest request);
 
-        Task DeleteAsync(int brokerId);
+        Broker Delete(int id);
     }
 }

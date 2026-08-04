@@ -4,22 +4,22 @@ namespace DataAccess.Repositories
 {
     public interface ITransactionsRepository
     {
-        Task<Transakcii?> GetByIdAsync(int id);
+        Transakcii? GetById(int id);
 
-        Task<List<Transakcii>> GetByPortfolioIdAsync(int portfolioId);
+        IEnumerable<Transakcii?> GetByPortfolioId(int portfolioId);
 
-        Task<int> GetOwnedSharesAsync(int portfolioId, int securityId, bool isReal);
+        IEnumerable<Transakcii?> GetByPortfolioIdUntilDate(int portfolioId, DateOnly date);
 
-        Task<Transakcii> AddAsync(Transakcii transaction);
+        List<int> GetOwnedSecuritiesIds(int userId);
 
-        Task<Transakcii> UpdateAsync(Transakcii transaction);
+        int GetOwnedShares(int portfolioId, int securityId, bool isReal);
 
-        Task DeleteAsync(Transakcii transaction);
+        int GetOwnedSharesAtDate(int portfolioId, int securityId, bool isReal, DateOnly date, int? transactionToExclude);
 
-        Task<List<int>> GetOwnedSecuritiesIdsAsync(int userId);
+        Transakcii Add(Transakcii transaction);
 
-        Task<int> GetOwnedSharesAtDateAsync(int portfolioId, int securityId, bool isReal, DateOnly date, int? excludeTransactionId = null);
+        Transakcii Update(Transakcii transaction);
 
-        Task<IEnumerable<Transakcii>> GetByPortfolioUntilDateAsync(int portfolioId, DateOnly date);
+        Transakcii Delete(Transakcii transaction);
     }
 }

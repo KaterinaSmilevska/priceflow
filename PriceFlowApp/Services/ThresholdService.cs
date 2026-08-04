@@ -1,6 +1,8 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 
 namespace PriceFlowApp.Services
 {
@@ -9,18 +11,22 @@ namespace PriceFlowApp.Services
         private readonly IThresholdRepository _thresholdRepository;
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly ISecuritiesRepository _securitiesRepository;
+        private readonly IAuthRepository _authRepository;
 
         public ThresholdService(IThresholdRepository thresholdRepository, ITransactionsRepository transactionsRepository,
-            ISecuritiesRepository securitiesRepository)
+            ISecuritiesRepository securitiesRepository, IAuthRepository authRepository)
         {
             _thresholdRepository = thresholdRepository;
             _transactionsRepository = transactionsRepository;
             _securitiesRepository = securitiesRepository;
+            _authRepository = authRepository;
         }
 
-        public async Task<IEnumerable<ThresholdResponse>> GetUserThresholdsAsync(int userId)
+        public IEnumerable<ThresholdResponse> GetUserThresholds(int userId)
         {
-            IEnumerable<HvPromenaCena> entities = await _thresholdRepository.GetByUserAsync(userId);
+            Korisnici user = GetUser(userId);
+
+            IEnumerable<HvPromenaCena?> entities = _thresholdRepository.GetByUserId(userId);
 
             return entities.Select(e => new ThresholdResponse
             {
@@ -32,15 +38,33 @@ namespace PriceFlowApp.Services
             }).ToList();
         }
 
-        public async Task AddAsync(int userId, CreateThresholdRequest request)
+        public IEnumerable<OwnedSecurity> GetOwnedSecurities(int userId)
+        {
+            Korisnici user = GetUser(userId);
+
+            List<int> ownedIds = _transactionsRepository.GetOwnedSecuritiesIds(userId);
+
+            IEnumerable<HartiiOdVrednost?> securities = _securitiesRepository.GetAllByIds(ownedIds);
+
+            return securities.Select(s => new OwnedSecurity
+            {
+                Id = s.Id,
+                hvCode = s.Kod
+            }).ToList();
+        }
+
+        public ThresholdResponse Add(int userId, CreateThresholdRequest request)
         {
             if (request.LowerThreshold >= request.UpperThreshold)
-                throw new Exception("Lower threshold must be less than upper threshold.");
+                throw new ValidationException("INVALID_THRESHOLD_RANGE", "Lower threshold must be less than upper threshold.");
 
-            HvPromenaCena? existingThreshold = await _thresholdRepository.GetByUserandSecurityCodeAsync(userId, request.HvId);
+            Korisnici user = GetUser(userId);
+            HartiiOdVrednost security = GetSecurity(request.HvId);
+
+            HvPromenaCena? existingThreshold = _thresholdRepository.GetByUserIdAndSecurityCode(userId, request.HvId);
 
             if (existingThreshold != null)
-                throw new Exception("Threshold already exists for this security");
+                throw new AlreadyExistsException("THRESHOLD_ALREADY_EXISTS", "Threshold already exists for this security.");
 
             HvPromenaCena entity = new HvPromenaCena
             {
@@ -50,47 +74,89 @@ namespace PriceFlowApp.Services
                 GornaGranica = request.UpperThreshold
             };
 
-            await _thresholdRepository.AddAsync(entity);
+             HvPromenaCena createdThreshold = _thresholdRepository.Add(entity);
+
+            return new ThresholdResponse
+            {
+                Id = createdThreshold.Id,
+                HvId = createdThreshold.Hvid,
+                HvCode = createdThreshold.Hv.Kod,
+                LowerThreshold = createdThreshold.DolnaGranica,
+                UpperThreshold = createdThreshold.GornaGranica
+            };
         }
 
-        public async Task UpdateAsync(int userId, int id, UpdateThresholdRequest request)
+        public ThresholdResponse Update(int userId, int id, UpdateThresholdRequest request)
         {
-            HvPromenaCena? entity = await _thresholdRepository.GetByIdAsync(id);
+            HvPromenaCena existingThreshold = GetThreshold(id);
 
-            if (entity == null || entity.KorisnikId != userId)
-                throw new Exception("Threshold not found");
+            if (existingThreshold.KorisnikId != userId)
+                throw new UnauthorizedException("THRESHOLD_ACCESS_DENIED", "You do not have access to this threshold.");
 
             if (request.LowerThreshold >= request.UpperThreshold)
-                throw new Exception("Lower threshold must br less than upper threshodl.");
+                throw new ValidationException("INVALID_THRESHOLD_RANGE", "Lower threshold must br less than upper threshodl.");
 
-            entity.DolnaGranica = request.LowerThreshold;
-            entity.GornaGranica = request.UpperThreshold;
-            entity.DateModified = DateTime.Now;
+            existingThreshold.DolnaGranica = request.LowerThreshold;
+            existingThreshold.GornaGranica = request.UpperThreshold;
+            existingThreshold.DateModified = DateTime.Now;
 
-            await _thresholdRepository.UpdateAsync(entity);
-        }
+            HvPromenaCena updatedThreshold = _thresholdRepository.Update(existingThreshold);
 
-        public async Task DeleteAsync(int userId, int id)
-        {
-            HvPromenaCena? entity = await _thresholdRepository.GetByIdAsync(id);
-
-            if (entity == null || entity.KorisnikId != userId)
-                throw new Exception("Threshold not found.");
-
-            await _thresholdRepository.DeleteAsync(entity);
-        }
-
-        public async Task<IEnumerable<OwnedSecurity>> GetOwnedSecuritiesAsync(int userId)
-        {
-            List<int> ownedIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
-
-            IEnumerable<HartiiOdVrednost> securities = await _securitiesRepository.GetAllByIds(ownedIds);
-
-            return securities.Select(s => new OwnedSecurity
+            return new ThresholdResponse
             {
-                Id = s.Id,
-                hvCode = s.Kod
-            }).ToList();
+                Id = existingThreshold.Id,
+                HvId = existingThreshold.Hvid,
+                HvCode = existingThreshold.Hv.Kod,
+                LowerThreshold = existingThreshold.DolnaGranica,
+                UpperThreshold = existingThreshold.GornaGranica
+            };
+        }
+
+        public ThresholdResponse Delete(int userId, int id)
+        {
+            HvPromenaCena existingThreshold = GetThreshold(id);
+
+            if (existingThreshold.KorisnikId != userId)
+                throw new UnauthorizedException("THRESHOLD_ACCESS_DENIED", "You do not have access to this threshold.");
+
+            _thresholdRepository.Delete(existingThreshold);
+
+            return new ThresholdResponse
+            {
+                Id = existingThreshold.Id,
+                HvId = existingThreshold.Hvid,
+                HvCode = existingThreshold.Hv.Kod,
+                LowerThreshold = existingThreshold.DolnaGranica,
+                UpperThreshold = existingThreshold.GornaGranica
+            };
+        }
+
+        private Korisnici GetUser(int userId)
+        {
+            var user = _authRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+
+            return user;
+        }
+
+        private HartiiOdVrednost GetSecurity(int securityId)
+        {
+            var security = _securitiesRepository.GetById(securityId);
+            if (security == null)
+                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+
+            return security;
+        }
+
+        private HvPromenaCena GetThreshold(int thresholdId)
+        {
+            HvPromenaCena? threshold = _thresholdRepository.GetById(thresholdId);
+
+            if (threshold == null)
+                throw new NotFoundException("THRESHOLD_NOT_FOUND", "Threshold not found");
+
+            return threshold;
         }
     }
 }

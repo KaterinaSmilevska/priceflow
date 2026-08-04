@@ -25,8 +25,8 @@ export class AdminService {
     return this.http.put<void>(`${this.apiUrl}/users/${user.id}`, user);
   }
 
-  deleteUser(userId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/users/${userId}`);
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`);
   }
 
   getBrokers(): Observable<Broker[]> {
@@ -41,8 +41,8 @@ export class AdminService {
     return this.http.put<Broker>(`${this.apiUrl}/brokers/${broker.id}`, broker);
   }
 
-  deleteBroker(brokerId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/brokers/${brokerId}`);
+  deleteBroker(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/brokers/${id}`);
   }
 
   getCurrentUserStatus(): Observable<AuthStatus> {

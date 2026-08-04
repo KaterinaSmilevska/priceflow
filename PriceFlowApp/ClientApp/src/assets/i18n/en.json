@@ -176,7 +176,11 @@
     "PORTFOLIO_PERFORMANCE_NOTIFICATIONS": "Portfolio Performance Notifications",
     "ENABLE_NOTIFICATIONS": "Enable Notifications",
     "PORTFOLIO_INCOME": "Portfolio income",
-    "INCOME": "Income"
+    "INCOME": "Income",
+    "ADD_SUCCESS": "Portfolio added successfully!",
+    "ADD_ERROR": "Failed to add portfolio.",
+    "UPDATE_SUCCESS": "Portfolio updated successfully!",
+    "UPDATE_ERROR": "Failed to update portfolio."
   },
   "TRANSACTIONS": {
     "TITLE": "Transactions",
@@ -204,7 +208,11 @@
     "REAL_TRANSACTION": "Real Transaction",
     "DELETE_ERROR": "Failed to delete transaction.",
     "PRICE_BELOW_MIN_WARNING": "The entered price is lower than the today's min price of trading ({{price}} MKD).",
-    "PRICE_ABOVE_MAX_WARNING": "The entered price is higher than the today's max price of trading ({{price}} MKD)."
+    "PRICE_ABOVE_MAX_WARNING": "The entered price is higher than the today's max price of trading ({{price}} MKD).",
+    "ADD_SUCCESS": "Transaction added successfully!",
+    "ADD_ERROR": "Failed to add transaction.",
+    "UPDATE_SUCCESS": "Transactions updated successfully!",
+    "UPDATE_ERROR": "Failed to update transaction."
   },
   "ACTIONS": "Actions",
   "VIEW": {

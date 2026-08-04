@@ -18,11 +18,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/most-profitable/by-dividend-yield")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> GetMostPriftableSecuritiesByDividendYield()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetMostPriftableSecuritiesByDividendYield()
         {
             try
             {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindMostProfitableSecuritiesByDividendYieldAsync();
+                IEnumerable<FilteredSecurity> securities = _securityFilterService.FindMostProfitableSecuritiesByDividendYield();
 
                 return Ok(securities);
             }
@@ -33,11 +33,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/most-profitable/by-dividend-per-share")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> GetMostPriftableSecuritiesByDividendPerShare()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetMostPriftableSecuritiesByDividendPerShare()
         {
             try
             {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindMostProfitableSecuritiesByDividendPerShareAsync();
+                IEnumerable<FilteredSecurity> securities = _securityFilterService.FindMostProfitableSecuritiesByDividendPerShare();
 
                 return Ok(securities);
             }
@@ -48,11 +48,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/price-oscillation/biggest")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> GetSecuritiesWithBiggestPriceOscillations()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetSecuritiesWithBiggestPriceOscillations()
         {
             try
             {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindSecuritiesWithBiggestPriceOscillationsAsync();
+                IEnumerable<FilteredSecurity> securities = _securityFilterService.FindSecuritiesWithBiggestPriceOscillations();
 
                 return Ok(securities);
             }
@@ -63,11 +63,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/price-oscillation/smallest")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> GetSecuritiesWithSmallestPriceOscillations()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetSecuritiesWithSmallestPriceOscillations()
         {
             try
             {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindSecuritiesWithSmallestPriceOscillationsAsync();
+                IEnumerable<FilteredSecurity> securities = _securityFilterService.FindSecuritiesWithSmallestPriceOscillations();
 
                 return Ok(securities);
             }
@@ -78,11 +78,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/liquidity/least-by-traded-quantity")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> GetLeastLiquidSecuritiesByTradedQuantity()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetLeastLiquidSecuritiesByTradedQuantity()
         {
             try
             {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindLeastLiquidSecuritiesByTradedQuantityAsync();
+                IEnumerable<FilteredSecurity> securities = _securityFilterService.FindLeastLiquidSecuritiesByTradedQuantity();
 
                 return Ok(securities);
             }
@@ -93,11 +93,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/liquidity/most-by-traded-quantity")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> GetMostLiquidSecuritiesByTradedQuantity()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetMostLiquidSecuritiesByTradedQuantity()
         {
             try
             {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindMostLiquidSecuritiesByTradedQuantityAsync();
+                IEnumerable<FilteredSecurity> securities = _securityFilterService.FindMostLiquidSecuritiesByTradedQuantity();
 
                 return Ok(securities);
             }
@@ -108,11 +108,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/liquidity/least-by-trading-days")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> GetLeastLiquidSecuritiesByNumTradingDays()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetLeastLiquidSecuritiesByNumTradingDays()
         {
             try
             {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindLeastLiquidSecuritiesByNumTradingDaysAsync();
+                IEnumerable<FilteredSecurity> securities = _securityFilterService.FindLeastLiquidSecuritiesByNumTradingDays();
 
                 return Ok(securities);
             }
@@ -123,11 +123,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/liquidity/most-by-trading-days")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> GetMostLiquidSecuritiesByNumTradingDays()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetMostLiquidSecuritiesByNumTradingDays()
         {
             try
             {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindMostLiquidSecuritiesByNumTradingDaysAsync();
+                IEnumerable<FilteredSecurity> securities = _securityFilterService.FindMostLiquidSecuritiesByNumTradingDays();
 
                 return Ok(securities);
             }
@@ -138,11 +138,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("sectors/most-profitable/by-dividend-yield")]
-        public async Task<ActionResult<IEnumerable<Sector>>> GetMostProfitableSectorsByDividendYield()
+        public ActionResult<IEnumerable<Sector>> GetMostProfitableSectorsByDividendYield()
         {
             try
             {
-                IEnumerable<Sector> sectors = await _securityFilterService.FindMostProfitableSectorsByDividendYieldAsync();
+                IEnumerable<Sector> sectors = _securityFilterService.FindMostProfitableSectorsByDividendYield();
 
                 return Ok(sectors);
             }
@@ -153,11 +153,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("sectors/most-profitable/by-profit")]
-        public async Task<ActionResult<IEnumerable<Sector>>> GetMostProfitableSectorsByProfit()
+        public ActionResult<IEnumerable<Sector>> GetMostProfitableSectorsByProfit()
         {
             try
             {
-                IEnumerable<Sector> sectors = await _securityFilterService.FindMostProfitableSectorsByProfitAsync();
+                IEnumerable<Sector> sectors = _securityFilterService.FindMostProfitableSectorsByProfit();
 
                 return Ok(sectors);
             }
@@ -168,11 +168,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/valuation")]
-        public async Task<ActionResult<IEnumerable<FilteredSecurity>>> GetSecuritiesValuation()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetSecuritiesValuation()
         {
             try
             {
-                IEnumerable<FilteredSecurity> securities = await _securityFilterService.FindSecuritiesValuationAsync();
+                IEnumerable<FilteredSecurity> securities = _securityFilterService.FindSecuritiesValuation();
 
                 return Ok(securities);
             }

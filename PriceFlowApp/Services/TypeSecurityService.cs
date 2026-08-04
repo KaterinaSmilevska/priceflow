@@ -13,9 +13,9 @@ namespace PriceFlowApp.Services
             _typeSecurityRepository = typeSecurityRepository;
         }
 
-        public async Task<IEnumerable<TypeSecurity>> FindAllAsync()
+        public IEnumerable<TypeSecurity> FindAll()
         {
-            IEnumerable<TipHv> types = await _typeSecurityRepository.GetAllAsync();
+            IEnumerable<TipHv> types = _typeSecurityRepository.GetAll();
 
             return types.Select(i => new TypeSecurity
             {

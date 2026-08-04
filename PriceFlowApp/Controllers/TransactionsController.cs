@@ -21,11 +21,11 @@ namespace PriceFlowApp.Controllers
         } 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int portfolioId)
+        public IActionResult GetAll(int portfolioId)
         {
             try
             {
-                IEnumerable<Transaction> transactions = await _transactionsService.FindByPortfolioIdAsync(portfolioId);
+                IEnumerable<Transaction> transactions = _transactionsService.FindByPortfolioId(portfolioId);
 
                 return Ok(transactions);
             }
@@ -36,11 +36,11 @@ namespace PriceFlowApp.Controllers
          }
 
         [HttpGet("owned-shares")]
-        public async Task<ActionResult<int>> GetOwnedShares(int portfolioId, [FromQuery] string code, [FromQuery] bool isReal)
+        public ActionResult<int> GetOwnedShares(int portfolioId, [FromQuery] string code, [FromQuery] bool isReal)
         {
             try
             {
-                int ownedShares = await _transactionsService.FindOwnedSharesAsync(portfolioId, code, isReal);
+                int ownedShares = _transactionsService.FindOwnedShares(portfolioId, code, isReal);
 
                 return Ok(ownedShares);
             }
@@ -52,11 +52,11 @@ namespace PriceFlowApp.Controllers
 
 
         [HttpGet("owned-shares-date")]
-        public async Task<ActionResult<int>> GetOwnedSharesAtDate(int portfolioId, [FromQuery] string code, [FromQuery] bool isReal, [FromQuery] DateOnly date)
+        public ActionResult<int> GetOwnedSharesAtDate(int portfolioId, [FromQuery] string code, [FromQuery] bool isReal, [FromQuery] DateOnly date, [FromQuery] int? transactionIdToExclude)
         {
             try
             {
-                int ownedSharesAtDate = await _transactionsService.FindOwnedSharesAtDateAsync(portfolioId, code, isReal, date);
+                int ownedSharesAtDate = _transactionsService.FindOwnedSharesAtDate(portfolioId, code, isReal, date, transactionIdToExclude);
 
                 return Ok(ownedSharesAtDate);
             }
@@ -67,11 +67,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(int portfolioId, [FromBody] Transaction transaction)
+        public IActionResult Create(int portfolioId, [FromBody] Transaction transaction)
         {
             try
             {
-                Transaction createdTransaction = await _transactionsService.AddAsync(portfolioId, transaction);
+                Transaction createdTransaction = _transactionsService.Add(portfolioId, transaction);
 
                 return Ok(createdTransaction);
             }
@@ -86,11 +86,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int portfolioId, int id, [FromBody] Transaction transaction)
+        public IActionResult Update(int portfolioId, int id, [FromBody] Transaction transaction)
         {
             try
             {
-                Transaction updatedTransaction = await _transactionsService.UpdateAsync(id, transaction);
+                Transaction updatedTransaction = _transactionsService.Update(id, transaction);
 
                 return Ok(updatedTransaction);
             }
@@ -105,13 +105,13 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int portfolioId, int id)
+        public IActionResult Delete(int id)
         {
             try
             {
-                await _transactionsService.DeleteAsync(id);
+                Transaction transaction = _transactionsService.Delete(id);
 
-                return NoContent();
+                return Ok(transaction);
             }
             catch (Exception ex)
             {
@@ -119,13 +119,12 @@ namespace PriceFlowApp.Controllers
             }
         }
 
-
         [HttpGet("analytics")]
-        public async Task<IActionResult> GetAnalytics(int portfolioId, [FromQuery] bool isReal)
+        public IActionResult GetAnalytics(int portfolioId, [FromQuery] bool isReal)
         {
             try
             {
-                PortfolioAnalytics analytics = await _transactionsService.GetAnalyticsAsync(portfolioId, isReal);
+                PortfolioAnalytics analytics = _transactionsService.GetAnalytics(portfolioId, isReal);
 
                 return Ok(analytics);
             }
@@ -136,11 +135,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("value")]
-        public async Task<ActionResult<List<PortfolioValue>>> GetPortfolioValue(int portfolioId, [FromQuery] bool isReal)
+        public ActionResult<IEnumerable<PortfolioValue>> GetPortfolioValue(int portfolioId, [FromQuery] bool isReal)
         {
             try
             {
-                List<PortfolioValue> result = await _portfolioValueService.GetCurrentValueAsync(portfolioId, isReal);
+                IEnumerable<PortfolioValue> result = _portfolioValueService.GetCurrentValue(portfolioId, isReal);
 
                 return Ok(result);
             }

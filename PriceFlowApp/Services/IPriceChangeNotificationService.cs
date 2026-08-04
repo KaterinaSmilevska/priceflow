@@ -4,12 +4,12 @@ namespace PriceFlowApp.Services
 {
     public interface IPriceChangeNotificationService
     {
-        Task<List<PriceChangeNotificationResponse>> GetUserNotificationsAsync(int userId);
+        IEnumerable<PriceChangeNotificationResponse> GetUserNotifications(int userId);
 
-        Task<int> GetUnreadNotificationCountAsync(int userId);
+        int GetUnreadNotificationCount(int userId);
 
-        Task MarkNotificationAsReadAsync(int notificationId);
+        void CheckAndGenerateNotifications();
 
-        Task CheckAndGenerateNotificationsAsync();
+        void MarkNotificationAsRead(int notificationId);
     }
 }

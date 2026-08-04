@@ -4,12 +4,12 @@ namespace PriceFlowApp.Services
 {
     public interface IPortfolioReturnsService
     {
-        Task<IEnumerable<PortfolioReturns>> FindByPortfolioId(int  portfolioId);
+        IEnumerable<PortfolioReturns> FindByPortfolioId(int  portfolioId);
 
-        Task<PortfolioReturns> CreateAsync(PortfolioReturns portfolioReturns);
+        PortfolioReturns Add(PortfolioReturns portfolioReturns);
 
-        Task<PortfolioReturnsSummary> CalculateSummaryAsync(int portfolioId);
+        PortfolioReturnsSummary CalculateSummary(int portfolioId);
 
-        Task<PortfolioReturnsSummary> CalculateSummaryForPeriodAsync(int portfolioId, DateOnly from, DateOnly to);
+        PortfolioReturnsSummary CalculateSummaryForPeriod(int portfolioId, DateOnly from, DateOnly to);
     }
 }

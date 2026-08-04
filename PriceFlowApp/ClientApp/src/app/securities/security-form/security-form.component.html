@@ -2,12 +2,12 @@
   <div class="modal-content p-4">
     <h5>{{ (securityToEdit ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'SECURITIES.TITLE' | translate }}</h5>
 
-    <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="mb-3">
         <label>{{ 'SECURITIES.CODE' | translate }}</label>
         <input formControlName="code" class="form-control">
-        <div *ngIf="addEditForm.get('code')?.touched && addEditForm.get('code')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="addEditForm.get('code')?.errors?.['required']" class="error">
+        <div *ngIf="form.get('code')?.touched && form.get('code')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('code')?.errors?.['required']" class="error">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
         </div>
@@ -16,8 +16,8 @@
       <div class="mb-3">
         <label>{{ 'SECURITIES.ISIN' | translate }}</label>
         <input formControlName="isin" class="form-control">
-        <div *ngIf="addEditForm.get('isin')?.touched && addEditForm.get('isin')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="addEditForm.get('isin')?.errors?.['required']" class="error">
+        <div *ngIf="form.get('isin')?.touched && form.get('isin')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('isin')?.errors?.['required']" class="error">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
         </div>
@@ -25,8 +25,8 @@
       <div class="mb-3">
         <label>{{ 'SECURITIES.TOTAL_SHARES' | translate }}</label>
         <input type="number" formControlName="totalNumShares" class="form-control">
-        <div *ngIf="addEditForm.get('totalNumShares')?.touched && addEditForm.get('totalNumShares')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="addEditForm.get('totalNumShares')?.errors?.['required']" class="error">
+        <div *ngIf="form.get('totalNumShares')?.touched && form.get('totalNumShares')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('totalNumShares')?.errors?.['required']" class="error">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
         </div>
@@ -56,7 +56,7 @@
 
       <div class="text-end">
         <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
-        <button type="submit" class="btn btn-success ms-2" [disabled]="addEditForm.invalid">{{ (securityToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
+        <button type="submit" class="btn btn-success ms-2" [disabled]="form.invalid">{{ (securityToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
       </div>
 
       <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>

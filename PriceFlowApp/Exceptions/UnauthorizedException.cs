@@ -1,10 +1,10 @@
 ﻿namespace PriceFlowApp.Exceptions
 {
-    public class BusinessRuleException: Exception
+    public class UnauthorizedException: Exception
     {
         public string ErrorCode { get; }
 
-        public BusinessRuleException(string errorCode, string message): base(message)
+        public UnauthorizedException(string errorCode, string message): base(message)
         {
             ErrorCode = errorCode;
         }

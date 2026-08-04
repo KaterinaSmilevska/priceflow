@@ -15,12 +15,27 @@ namespace PriceFlowApp.Controllers
             _portfolioReturnsService = portfolioReturnsService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(PortfolioReturns portfolioReturns)
+        [HttpGet("{portfolioId}")]
+        public ActionResult<IEnumerable<PortfolioReturns>> GetByPortfolioId(int portfolioId)
         {
             try
             {
-                PortfolioReturns returns = await _portfolioReturnsService.CreateAsync(portfolioReturns);
+                IEnumerable<PortfolioReturns> returns = _portfolioReturnsService.FindByPortfolioId(portfolioId);
+
+                return Ok(returns);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error getting portfolio returns.", detail = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Create(PortfolioReturns portfolioReturns)
+        {
+            try
+            {
+                PortfolioReturns returns = _portfolioReturnsService.Add(portfolioReturns);
 
                 return Ok(returns);
             }
@@ -31,32 +46,17 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("summary/{portfolioId}")]
-        public async Task<ActionResult<PortfolioReturnsSummary>> GetSummary(int portfolioId)
+        public ActionResult<PortfolioReturnsSummary> GetSummary(int portfolioId)
         {
             try
             {
-                PortfolioReturnsSummary summary = await _portfolioReturnsService.CalculateSummaryAsync(portfolioId);
+                PortfolioReturnsSummary summary = _portfolioReturnsService.CalculateSummary(portfolioId);
 
                 return Ok(summary);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Error getting portfolio summary.", detail = ex.Message });
-            }
-        }
-
-        [HttpGet("{portfolioId}")]
-        public async Task<ActionResult<IEnumerable<PortfolioReturns>>> GetByPortfolioId(int portfolioId)
-        {
-            try
-            {
-                IEnumerable<PortfolioReturns> returns = await _portfolioReturnsService.FindByPortfolioId(portfolioId);
-
-                return Ok(returns);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error getting portfolio returns.", detail = ex.Message });
             }
         }
     }

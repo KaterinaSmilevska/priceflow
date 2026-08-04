@@ -54,9 +54,14 @@ export class TransactionsService {
       { params: { code, isReal }, withCredentials: true });
   }
 
-  getOwnedSharesAtDate(portfolioId: number, code: string, isReal: boolean, date: string) {
+  getOwnedSharesAtDate(portfolioId: number, code: string, isReal: boolean, date: string, transactionIdToExclude?: number) {
+    const params: any = { code, isReal, date };
+
+    if (transactionIdToExclude !== undefined) {
+      params.transactionIdToExclude = transactionIdToExclude;
+    }
     return this.http.get<number>(`${this.apiUrl}/${portfolioId}/transactions/owned-shares-date`,
-      { params: { code, isReal, date }, withCredentials: true });
+      { params, withCredentials: true });
   }
 
   getTotalShares(code: string) {

@@ -12,47 +12,49 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<HvPromenaCena> AddAsync(HvPromenaCena entity)
+        public HvPromenaCena? GetById(int id)
         {
-           await _dbContext.HvPromenaCena.AddAsync(entity);
-           await _dbContext.SaveChangesAsync();
+            return _dbContext.HvPromenaCena
+                .Include(e => e.Hv)
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+
+        public IEnumerable<HvPromenaCena?> GetByUserId(int userId)
+        {
+            return _dbContext.HvPromenaCena
+                .Where(e => e.KorisnikId == userId)
+                .Include(e => e.Hv)
+                .ToList();
+        }
+
+        public HvPromenaCena? GetByUserIdAndSecurityCode(int userId, int securityId)
+        {
+            return _dbContext.HvPromenaCena
+                .FirstOrDefault(e => e.KorisnikId == userId && e.Hvid == securityId);
+        }
+
+        public HvPromenaCena Add(HvPromenaCena entity)
+        {
+           _dbContext.HvPromenaCena.Add(entity);
+           _dbContext.SaveChanges();
 
            return entity;
         }
 
-        public async Task DeleteAsync(HvPromenaCena entity)
-        {
-           _dbContext.HvPromenaCena.Remove(entity);
-           await _dbContext.SaveChangesAsync();
-
-        }
-
-        public async Task<HvPromenaCena?> GetByIdAsync(int id)
-        {
-            return await _dbContext.HvPromenaCena
-                .Include(e => e.Hv)
-                .FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public async Task<HvPromenaCena?> GetByUserandSecurityCodeAsync(int userId, int securityId)
-        {
-            return await _dbContext.HvPromenaCena
-                .FirstOrDefaultAsync(e => e.KorisnikId == userId && e.Hvid == securityId);
-        }
-
-        public async Task<IEnumerable<HvPromenaCena>> GetByUserAsync(int userId)
-        {
-            return await _dbContext.HvPromenaCena
-                .Where(e => e.KorisnikId == userId)
-                .Include(e => e.Hv)
-                .ToListAsync();
-        }
-
-        public async Task<HvPromenaCena> UpdateAsync(HvPromenaCena entity)
+        public HvPromenaCena Update(HvPromenaCena entity)
         {
             _dbContext.HvPromenaCena.Update(entity);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
 
+            return entity;
+        }
+
+        public HvPromenaCena Delete(HvPromenaCena entity)
+        {
+           _dbContext.HvPromenaCena.Remove(entity);
+           _dbContext.SaveChanges();
+            
             return entity;
         }
     }

@@ -1,10 +1,10 @@
 ﻿namespace PriceFlowApp.Exceptions
 {
-    public class BusinessRuleException: Exception
+    public class AlreadyExistsException: Exception
     {
         public string ErrorCode { get; }
 
-        public BusinessRuleException(string errorCode, string message): base(message)
+        public AlreadyExistsException(string errorCode, string message) : base(message)
         {
             ErrorCode = errorCode;
         }

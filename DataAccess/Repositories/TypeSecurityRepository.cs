@@ -1,5 +1,4 @@
 ﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
 {
@@ -10,17 +9,18 @@ namespace DataAccess.Repositories
         public TypeSecurityRepository(PriceFlowDbContext dbContext)
         {
             _dbContext = dbContext;
-        } 
-
-        public async Task<IEnumerable<TipHv>> GetAllAsync()
-        {
-            return await _dbContext.TipHv.ToListAsync();
         }
 
-        public async Task<TipHv?> GetByIdAsync(int id)
+        public TipHv? GetById(int id)
         {
-            return await _dbContext.TipHv
-                .FindAsync(id);
+            return _dbContext.TipHv
+                .Find(id);
+        }
+
+        public IEnumerable<TipHv> GetAll()
+        {
+            return _dbContext.TipHv
+                .ToList();
         }
     }
 }

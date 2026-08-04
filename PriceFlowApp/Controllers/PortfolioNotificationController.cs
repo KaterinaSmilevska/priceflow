@@ -18,11 +18,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("{portfolioId}")]
-        public async Task<IActionResult> GetByPortfolioId(int portfolioId)
+        public IActionResult GetByPortfolioId(int portfolioId)
         {
             try
             {
-                PortfolioNotification? notification = await _portfoliosNotificationsService.FindByPortfolioId(portfolioId);
+                PortfolioNotification? notification = _portfoliosNotificationsService.FindByPortfolioId(portfolioId);
 
                 return Ok(notification);
             }
@@ -33,11 +33,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<PortfolioNotification>> Update([FromBody] UpdatePortfolioNotification notification)
+        public ActionResult<PortfolioNotification> Update([FromBody] UpdatePortfolioNotification notification)
         {
             try
             {
-                PortfolioNotification result = await _portfoliosNotificationsService.UpdateAsync(notification);
+                PortfolioNotification result = _portfoliosNotificationsService.Update(notification);
 
                 return Ok(result);
             }

@@ -17,11 +17,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TipHv>>> GetAll()
+        public ActionResult<IEnumerable<TipHv>> GetAll()
         {
             try
             {
-                IEnumerable<TypeSecurity> securities = await _typeSecurityService.FindAllAsync();
+                IEnumerable<TypeSecurity> securities = _typeSecurityService.FindAll();
 
                 return Ok(securities);
             }

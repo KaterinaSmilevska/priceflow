@@ -118,6 +118,10 @@
       <div *ngIf="form.errors?.backend" class="alert alert-danger mt-2">
         {{ form.errors?.backend }}
       </div>
+      <div class="px-3 pb-3">
+        <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+        <div *ngIf="successMessage" class="success mt-2">{{ successMessage | translate }}</div>
+      </div>
     </form>
   </div>
 </div>

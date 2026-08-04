@@ -4,8 +4,8 @@ namespace DataAccess.Repositories
 {
     public interface ITypeSecurityRepository
     {
-        Task<TipHv?> GetByIdAsync(int id);
+        TipHv? GetById(int id);
 
-        Task<IEnumerable<TipHv>> GetAllAsync();
+        IEnumerable<TipHv> GetAll();
     }
 }

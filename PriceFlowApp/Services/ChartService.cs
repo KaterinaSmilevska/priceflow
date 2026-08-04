@@ -1,26 +1,36 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 
 namespace PriceFlowApp.Services
 {
     public class ChartService : IChartService
     {
         private readonly PriceFlowDbContext _dbContext;
+        private readonly IPortfoliosRepository _portfoliosRepository;
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly ISecuritiesRepository _securitiesRepository;
 
-        public ChartService(PriceFlowDbContext dbContext, ITransactionsRepository transactionsRepository, ISecuritiesRepository securitiesRepository)
+        public ChartService(PriceFlowDbContext dbContext, ITransactionsRepository transactionsRepository, ISecuritiesRepository securitiesRepository, IPortfoliosRepository portfoliosRepository)
         {
             _dbContext = dbContext;
             _transactionsRepository = transactionsRepository;
             _securitiesRepository = securitiesRepository;
+            _portfoliosRepository = portfoliosRepository;
         }
 
-        public async Task<IEnumerable<PriceTrend>> GetPriceTrendAsync(int securityId, DateTime startDate, DateTime endDate)
+        public IEnumerable<PriceTrend> GetPriceTrend(int securityId, DateTime startDate, DateTime endDate)
         {
-            return await _dbContext.DnevenPromet
+            if (startDate > endDate)
+                throw new ValidationException("INVALID_DATE_RANGE", "Start date cannot be after end date.");
+
+            HartiiOdVrednost? security = _securitiesRepository.GetById(securityId);
+
+            if (security == null)
+                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+
+            return _dbContext.DnevenPromet
                 .Where(dp => dp.Hvid == securityId && dp.Datum >= startDate && dp.Datum <= endDate)
                 .OrderBy(dp => dp.Datum)
                 .Select(dp => new PriceTrend
@@ -28,12 +38,12 @@ namespace PriceFlowApp.Services
                     Date = dp.Datum,
                     Price = (decimal)dp.CenaPoslednaTransakcija
                 })
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<SectorDistribution>> GetSectorDistributionAsync(DateTime date)
+        public IEnumerable<SectorDistribution> GetSectorDistribution(DateTime date)
         {
-            return await _dbContext.HartiiOdVrednost
+            return _dbContext.HartiiOdVrednost
                 .Join(_dbContext.DnevenPromet, hv => hv.Id, dp => dp.Hvid, (hv, dp) => new { hv, dp })
                 .Where(x => x.dp.Datum == date)
                 .Select( x => new
@@ -48,30 +58,17 @@ namespace PriceFlowApp.Services
                     MarketCap = (decimal)g.Sum(x => x.MarketCap)
 
                 })
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<Security>> GetSecurities()
+        public IEnumerable<MonthlyIncome> GetMonthlyIncome(int portfolioId, bool isReal)
         {
-            IEnumerable<HartiiOdVrednost> foundSecurities = await _securitiesRepository.GetAllAsync();
-            return foundSecurities.Select(security => new Security
-            {
-                Id = security.Id,
-                Code = security.Kod,
-            });
-        }
+            Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
 
-        public DateTime? FindLatestDate()
-        {
-            return _dbContext.DnevenPromet
-                .OrderByDescending(dp => dp.Datum)
-                .Select(dp => dp.Datum)
-                .FirstOrDefault();
-        }
+            if (portfolio == null)
+                throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
 
-        public async Task<IEnumerable<MonthlyIncome>> GetMonthlyIncomeAsync(int portfolioid, bool isReal)
-        {
-            List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioid);
+            IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
 
             List<MonthlyIncome> monthlyIncome = transactions
                 .Where(t => t.TipTransakcija == "Продавање" && t.Realna == isReal)
@@ -89,9 +86,14 @@ namespace PriceFlowApp.Services
             return monthlyIncome;
         }
 
-        public async Task<IEnumerable<SecurityAllocation>> GetAllocationAsync(int portfolioId, bool isReal)
+        public IEnumerable<SecurityAllocation> GetAllocation(int portfolioId, bool isReal)
         {
-            List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioId);
+            Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
+
+            if (portfolio == null)
+                throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
+
+            IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
 
             List<SecurityAllocation> securityAllocation = transactions
                 .Where(t => t.Realna == isReal)
@@ -105,6 +107,24 @@ namespace PriceFlowApp.Services
                 .ToList();
 
             return securityAllocation;
+        }
+
+        public IEnumerable<Security> GetSecurities()
+        {
+            IEnumerable<HartiiOdVrednost> foundSecurities = _securitiesRepository.GetAll();
+            return foundSecurities.Select(security => new Security
+            {
+                Id = security.Id,
+                Code = security.Kod
+            });
+        }
+
+        public DateTime? FindLatestDate()
+        {
+            return _dbContext.DnevenPromet
+                .OrderByDescending(dp => dp.Datum)
+                .Select(dp => dp.Datum)
+                .FirstOrDefault();
         }
     }
 }

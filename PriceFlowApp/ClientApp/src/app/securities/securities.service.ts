@@ -6,6 +6,7 @@ import { CreateSecurity } from './CreateSecurity';
 import { Issuer } from './Issuer';
 import { SecurityDailyPrices } from './SecurityDailyPrices';
 import { TypeSecurity } from './TypeSecurity';
+import { UpdateSecurity } from './UpdateSecurity';
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +19,12 @@ export class SecuritiesService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<Security[]> {
-    return this.http.get<Security[]>(this.apiUrl);
-  }
-
   getById(id: number): Observable<Security> {
     return this.http.get<Security>(`${this.apiUrl}/${id}`);
+  }
+
+  getAll(): Observable<Security[]> {
+    return this.http.get<Security[]>(this.apiUrl);
   }
 
   getSecurityCode(id: number): Observable<string> {
@@ -34,20 +35,20 @@ export class SecuritiesService {
     return this.http.post<Security>(this.apiUrl, security);
   }
 
-  getTypes(): Observable<TypeSecurity[]> {
-    return this.http.get<TypeSecurity[]>(this.typesUrl);
-  }
-
-  getIssuers(): Observable<Issuer[]> {
-    return this.http.get<Issuer[]>(this.issuersUrl);
+  updateSecurity(security: UpdateSecurity): Observable<Security> {
+    return this.http.put<Security>(`${this.apiUrl}/${security.id}`, security);
   }
 
   deleteSecurity(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  updateSecurity(id: number, security: CreateSecurity): Observable<Security> {
-    return this.http.put<Security>(`${this.apiUrl}/${id}`, security);
+  getTypes(): Observable<TypeSecurity[]> {
+    return this.http.get<TypeSecurity[]>(this.typesUrl);
+  }
+
+  getIssuers(): Observable<Issuer[]> {
+    return this.http.get<Issuer[]>(this.issuersUrl);
   }
 
   getLatestPrices(securityCode: string, date: string): Observable<SecurityDailyPrices> {

@@ -1,5 +1,4 @@
 ﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
@@ -13,9 +12,9 @@ namespace PriceFlowApp.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<PortfolioValue>> GetCurrentValueAsync(int portfolioId, bool isReal)
+        public IEnumerable<PortfolioValue> GetCurrentValue(int portfolioId, bool isReal)
         {
-            List<PortfolioValue> result = await _dbContext.Transakcii
+            IEnumerable<PortfolioValue> result = _dbContext.Transakcii
                 .Where(t => t.PortfolioId == portfolioId && t.Realna == isReal)
                 .GroupBy(t => new
                 {
@@ -58,7 +57,7 @@ namespace PriceFlowApp.Services
                     }
                 )
                 .OrderByDescending(x => x.CurrentValue)
-                .ToListAsync();
+                .ToList();
 
             return result;
         }

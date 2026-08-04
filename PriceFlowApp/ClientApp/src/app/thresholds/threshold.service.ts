@@ -34,5 +34,4 @@ export class ThresholdService {
   deleteThreshold(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
-
 }

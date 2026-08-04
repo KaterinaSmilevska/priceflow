@@ -22,57 +22,9 @@ namespace PriceFlowApp.Services
             _dailyTurnoverRepository = dailyTurnoverRepository;
         }
 
-        public async Task<Transaction> AddAsync(int portfolioId, Transaction transaction)
+        public IEnumerable<Transaction> FindByPortfolioId(int portfolioid)
         {
-            HartiiOdVrednost security = await _securitiesRepository.GetByCodeAsync(transaction.HVCode)
-                ?? throw new InvalidOperationException($"Security with code  '{transaction.HVCode}' not found.");
-
-            await ValidateSharesAsync(portfolioId, security, transaction);
-
-            Transakcii entity = new Transakcii
-            {
-                PortfolioId = portfolioId,
-                Hvid = security.Id,
-                TipTransakcija = transaction.TypeTransaction,
-                KolicinaAkcii = transaction.SharesQuantity,
-                Iznos = CalculateTransactionAmount(transaction),
-                EdinecnaCenaAkcija = transaction.SharesUnitPrice,
-                BerzanskaProvizija = transaction.StockExchangeCommission,
-                BrokerskaProvizija = transaction.BrokerageCommission,
-                Cdhvprovizija = transaction.CDHVCommission,
-                Realna = transaction.IsReal,
-                Datum = transaction.Date
-            };
-             entity = await _transactionsRepository.AddAsync(entity);
-
-            return new Transaction
-            {
-                Id = entity.Id,
-                HVId = entity.Hvid,
-                HVCode = entity.Hv.Kod,
-                SharesQuantity = entity.KolicinaAkcii,
-                SharesUnitPrice = entity.EdinecnaCenaAkcija,
-                Amount = entity.Iznos,
-                TypeTransaction = entity.TipTransakcija,
-                IsReal = entity.Realna,
-                StockExchangeCommission = entity.BerzanskaProvizija,
-                BrokerageCommission = entity.BrokerskaProvizija,
-                CDHVCommission = entity.Cdhvprovizija,
-                Date = entity.Datum
-            };
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            Transakcii? transaction = await _transactionsRepository.GetByIdAsync(id);
-            if (transaction == null) return;
-
-            await _transactionsRepository.DeleteAsync(transaction);
-        }
-
-        public async Task<List<Transaction>> FindByPortfolioIdAsync(int portfolioid)
-        {
-            List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioid);
+            IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioid);
 
             return transactions.Select(t => new Transaction
             {
@@ -91,58 +43,141 @@ namespace PriceFlowApp.Services
             }).ToList();
         }
 
-        public async Task<Transaction> UpdateAsync(int id, Transaction transaction)
+        public int FindOwnedShares(int portfolioId, string securityCode, bool isReal)
         {
-            Transakcii foundTransaction = await _transactionsRepository.GetByIdAsync(id)
-                ?? throw new KeyNotFoundException();
+            HartiiOdVrednost security = GetSecurity(securityCode);
 
-            HartiiOdVrednost security = await _securitiesRepository.GetByCodeAsync(transaction.HVCode)
-                ?? throw new InvalidOperationException($"Security with code  '{transaction.HVCode}' not found.");
+            return _transactionsRepository
+                .GetOwnedShares(portfolioId, security.Id, isReal);
+        }
 
-            await ValidateSharesAsync(foundTransaction.PortfolioId, security, transaction, id);
+        public int FindOwnedSharesAtDate(int portfolioId, string securityCode, bool isReal, DateOnly date, int? transactionIdToExclude)
+        {
+            HartiiOdVrednost security = GetSecurity(securityCode);
 
-            foundTransaction.Hvid = security.Id;
-            foundTransaction.KolicinaAkcii = transaction.SharesQuantity;
-            foundTransaction.EdinecnaCenaAkcija = transaction.SharesUnitPrice;
-            foundTransaction.TipTransakcija = transaction.TypeTransaction;
-            foundTransaction.Realna = transaction.IsReal;
-            foundTransaction.BerzanskaProvizija = transaction.StockExchangeCommission;
-            foundTransaction.BrokerskaProvizija = transaction.BrokerageCommission;
-            foundTransaction.Cdhvprovizija = transaction.CDHVCommission;
-            foundTransaction.Datum = transaction.Date;
-            foundTransaction.Iznos = CalculateTransactionAmount(transaction);
+            return _transactionsRepository
+                .GetOwnedSharesAtDate(portfolioId, security.Id, isReal, date, transactionIdToExclude);
+        }
 
-            var updated = await _transactionsRepository.UpdateAsync(foundTransaction);
+        public Transaction Add(int portfolioId, Transaction transaction)
+        {
+            HartiiOdVrednost security = GetSecurity(transaction.HVCode);
+
+            if (string.IsNullOrWhiteSpace(transaction.TypeTransaction))
+                throw new ValidationException("TRANSACTION_TYPE_REQUIRED", "Type cannot be null or empty.");
+
+            ValidateShares(portfolioId, security, transaction);
+
+            var entity = new Transakcii
+            {
+                PortfolioId = portfolioId,
+                Hvid = security.Id,
+                TipTransakcija = transaction.TypeTransaction,
+                KolicinaAkcii = transaction.SharesQuantity,
+                Iznos = CalculateTransactionAmount(transaction),
+                EdinecnaCenaAkcija = transaction.SharesUnitPrice,
+                BerzanskaProvizija = transaction.StockExchangeCommission,
+                BrokerskaProvizija = transaction.BrokerageCommission,
+                Cdhvprovizija = transaction.CDHVCommission,
+                Realna = transaction.IsReal,
+                Datum = transaction.Date
+            };
+
+            Transakcii createdTransaction = _transactionsRepository.Add(entity);
 
             return new Transaction
             {
-                HVId = foundTransaction.Hvid,
-                HVCode = foundTransaction.Hv.Kod,
-                SharesQuantity = foundTransaction.KolicinaAkcii,
-                SharesUnitPrice = foundTransaction.EdinecnaCenaAkcija,
-                Amount = foundTransaction.Iznos,
-                TypeTransaction = foundTransaction.TipTransakcija,
-                IsReal = foundTransaction.Realna,
-                StockExchangeCommission = foundTransaction.BerzanskaProvizija,
-                BrokerageCommission = foundTransaction.BrokerskaProvizija,
-                CDHVCommission = foundTransaction.Cdhvprovizija,
-                Date = foundTransaction.Datum
+                Id = createdTransaction.Id,
+                HVId = createdTransaction.Hvid,
+                HVCode = createdTransaction.Hv.Kod,
+                SharesQuantity = createdTransaction.KolicinaAkcii,
+                SharesUnitPrice = createdTransaction.EdinecnaCenaAkcija,
+                Amount = createdTransaction.Iznos,
+                TypeTransaction = createdTransaction.TipTransakcija,
+                IsReal = createdTransaction.Realna,
+                StockExchangeCommission = createdTransaction.BerzanskaProvizija,
+                BrokerageCommission = createdTransaction.BrokerskaProvizija,
+                CDHVCommission = createdTransaction.Cdhvprovizija,
+                Date = createdTransaction.Datum
             };
         }
 
-        public async Task<PortfolioAnalytics> GetAnalyticsAsync(int portfolioId, bool isReal)
+        public Transaction Update(int id, Transaction transaction)
         {
-            List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioId);
+            Transakcii existingTransaction = GetTransaction(id);
+            HartiiOdVrednost security = GetSecurity(transaction.HVCode);
+
+            if (string.IsNullOrWhiteSpace(transaction.TypeTransaction))
+                throw new ValidationException("TRANSACTION_TYPE_REQUIRED", "Type cannot be null or empty.");
+
+            ValidateShares(existingTransaction.PortfolioId, security, transaction, id);
+
+            existingTransaction.Hvid = security.Id;
+            existingTransaction.KolicinaAkcii = transaction.SharesQuantity;
+            existingTransaction.EdinecnaCenaAkcija = transaction.SharesUnitPrice;
+            existingTransaction.TipTransakcija = transaction.TypeTransaction;
+            existingTransaction.Realna = transaction.IsReal;
+            existingTransaction.BerzanskaProvizija = transaction.StockExchangeCommission;
+            existingTransaction.BrokerskaProvizija = transaction.BrokerageCommission;
+            existingTransaction.Cdhvprovizija = transaction.CDHVCommission;
+            existingTransaction.Datum = transaction.Date;
+            existingTransaction.Iznos = CalculateTransactionAmount(transaction);
+
+            Transakcii updatedTransaction = _transactionsRepository.Update(existingTransaction);
+
+            return new Transaction
+            {
+                Id = updatedTransaction.Id,
+                HVId = updatedTransaction.Hvid,
+                HVCode = updatedTransaction.Hv.Kod,
+                SharesQuantity = updatedTransaction.KolicinaAkcii,
+                SharesUnitPrice = updatedTransaction.EdinecnaCenaAkcija,
+                Amount = updatedTransaction.Iznos,
+                TypeTransaction = updatedTransaction.TipTransakcija,
+                IsReal = updatedTransaction.Realna,
+                StockExchangeCommission = updatedTransaction.BerzanskaProvizija,
+                BrokerageCommission = updatedTransaction.BrokerskaProvizija,
+                CDHVCommission = updatedTransaction.Cdhvprovizija,
+                Date = updatedTransaction.Datum
+            };
+        }
+
+        public Transaction Delete(int id)
+        {
+            Transakcii? existingTransaction = GetTransaction(id);
+
+            _transactionsRepository.Delete(existingTransaction);
+
+            return new Transaction
+            {
+                Id = existingTransaction.Id,
+                HVId = existingTransaction.Hvid,
+                HVCode = existingTransaction.Hv.Kod,
+                SharesQuantity = existingTransaction.KolicinaAkcii,
+                SharesUnitPrice = existingTransaction.EdinecnaCenaAkcija,
+                Amount = existingTransaction.Iznos,
+                TypeTransaction = existingTransaction.TipTransakcija,
+                IsReal = existingTransaction.Realna,
+                StockExchangeCommission = existingTransaction.BerzanskaProvizija,
+                BrokerageCommission = existingTransaction.BrokerskaProvizija,
+                CDHVCommission = existingTransaction.Cdhvprovizija,
+                Date = existingTransaction.Datum
+            };
+        }
+
+        public PortfolioAnalytics GetAnalytics(int portfolioId, bool isReal)
+        {
+            List<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioId).ToList();
 
             transactions = transactions
                 .Where(t => t.Realna == isReal)
                 .ToList();
 
-            List<Transakcii> sellTransactions = transactions.FindAll(t => t.TipTransakcija == "Продавање");
+            IEnumerable<Transakcii?> sellTransactions = transactions.FindAll(t => t.TipTransakcija == "Продавање");
 
-            List<Transakcii> buyTransactions = transactions.FindAll(t => t.TipTransakcija == "Купување");
+            IEnumerable<Transakcii?> buyTransactions = transactions.FindAll(t => t.TipTransakcija == "Купување");
 
-            PortfolioReturnsSummary summary = await _portfolioReturnsService.CalculateSummaryAsync(portfolioId);
+            PortfolioReturnsSummary summary = _portfolioReturnsService.CalculateSummary(portfolioId);
 
             decimal totalRevenue = sellTransactions.Sum(t => t.Iznos);
             decimal totalExpenses = buyTransactions.Sum(t => t.Iznos + CalculateCommission(t)) + 
@@ -166,105 +201,15 @@ namespace PriceFlowApp.Services
             };
         }
 
-        private decimal CalculateTransactionAmount(Transaction transaction)
+        public IEnumerable<OwnedSecuritiesPriceTrend> FindPriceTrend(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution)
         {
-            return transaction.SharesQuantity * transaction.SharesUnitPrice;
-        }
-
-        private decimal CalculateCommission(Transakcii transaction) {
-            decimal amount = transaction.KolicinaAkcii * transaction.EdinecnaCenaAkcija;
-
-                decimal feesPercent = transaction.BrokerskaProvizija
-                    + transaction.BerzanskaProvizija
-                    + transaction.Cdhvprovizija;
-                decimal fees = amount * feesPercent / 100;
-
-            return Math.Round(fees, 2);
-        }
-
-        private async Task ValidateSharesAsync(int portfolioId, HartiiOdVrednost security,
-            Transaction transaction, int? transactionIdToExclude = null)
-        {
-            if (transaction.SharesQuantity <= 0)
-                throw new InvalidOperationException("Transaction quantity must be greater than 0.");
-
-            List<Transakcii> allTransactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioId);
-
-            allTransactions = allTransactions
-                .Where(t => t.Hvid == security.Id && t.Realna == transaction.IsReal)
-                .ToList();
-
-            if (transactionIdToExclude.HasValue)
-            {
-                allTransactions = allTransactions
-                    .Where(t => t.Id != transactionIdToExclude.Value)
-                    .ToList();
-            }
-
-            allTransactions.Add(new Transakcii
-            {
-                Hvid = security.Id,
-                TipTransakcija = transaction.TypeTransaction,
-                KolicinaAkcii = transaction.SharesQuantity,
-                Datum = transaction.Date,
-                Realna = transaction.IsReal
-            });
-
-            var ordered = allTransactions
-                .OrderBy(t => t.Datum)
-                .ThenBy(t => t.TipTransakcija == "Купување" ? 0:1)
-                .ToList();
-
-            if(transaction.TypeTransaction == "Продавање")
-            {
-                int ownedAtDate = await _transactionsRepository.GetOwnedSharesAtDateAsync(portfolioId, security.Id,
-                    transaction.IsReal, transaction.Date, transactionIdToExclude);
-
-                if (transaction.SharesQuantity > ownedAtDate)
-                {
-                    throw new BusinessRuleException("SELL_MORE_THAN_OWNED",
-                        $"On {transaction.Date.ToString("yyyy-MM-dd")} you own only {ownedAtDate} shares of '{security.Kod}'");
-                }
-            }
-
-            int totalBought = ordered
-                .Where(t => t.TipTransakcija == "Купување")
-                .Sum(t => t.KolicinaAkcii);
-
-            int totalSold = ordered
-                .Where(t => t.TipTransakcija == "Продавање")
-                .Sum(t => t.KolicinaAkcii);
-
-            int owned = totalBought - totalSold;
-        }
-
-        public async Task<int> FindOwnedSharesAtDateAsync(int portfolioId, string securityCode, bool isReal, DateOnly date)
-        {
-            HartiiOdVrednost security = await _securitiesRepository.GetByCodeAsync(securityCode)
-                ?? throw new InvalidOperationException("Security not found.");
-
-            return await _transactionsRepository
-                .GetOwnedSharesAtDateAsync(portfolioId, security.Id, isReal, date);
-        }
-
-        public async Task<int> FindOwnedSharesAsync(int portfolioId, string securityCode, bool isReal)
-        {
-            HartiiOdVrednost security = await _securitiesRepository.GetByCodeAsync(securityCode)
-                ?? throw new InvalidOperationException("Security not found.");
-
-            return await _transactionsRepository
-                .GetOwnedSharesAsync(portfolioId, security.Id, isReal);
-        }
-
-        public async Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution)
-        {
-            List<int> ownedSecuritiesIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
+            List<int> ownedSecuritiesIds = _transactionsRepository.GetOwnedSecuritiesIds(userId);
 
             period ??= PriceTrendPeriod.Monthly;
             resolution ??= DetermineResolution(ownedSecuritiesIds.Count, period.Value);
 
-            IEnumerable<DnevenPromet> dailyPrices = await _dailyTurnoverRepository
-                .GetBySecuritiesIdsAsync(ownedSecuritiesIds, period, resolution);
+            IEnumerable<DnevenPromet?> dailyPrices = _dailyTurnoverRepository
+                .GetBySecuritiesIds(ownedSecuritiesIds, period, resolution);
 
             return dailyPrices.Select(dp => new OwnedSecuritiesPriceTrend
             {
@@ -275,9 +220,9 @@ namespace PriceFlowApp.Services
             }).ToList();
         }
 
-        public async Task<List<SecurityPriceTrendReport>> GetSecuritiesPriceTrendReportAsync(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution, string? securityCode)
+        public IEnumerable<SecurityPriceTrendReport> GetSecuritiesPriceTrendReport(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution, string? securityCode)
         {
-            List<int> ownedSecuritiesIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
+            List<int> ownedSecuritiesIds = _transactionsRepository.GetOwnedSecuritiesIds(userId);
 
             int displayedSecurities = string.IsNullOrWhiteSpace(securityCode)
                 ? ownedSecuritiesIds.Count : 1;
@@ -287,7 +232,7 @@ namespace PriceFlowApp.Services
 
             int periodsBack = period == PriceTrendPeriod.Monthly ? 1 : 12;
 
-            IEnumerable<DnevenPromet> dailyPrices = await _dailyTurnoverRepository.GetBySecuritiesIdsAsync(ownedSecuritiesIds, period, resolution);
+            IEnumerable<DnevenPromet?> dailyPrices = _dailyTurnoverRepository.GetBySecuritiesIds(ownedSecuritiesIds, period, resolution);
 
             if (!string.IsNullOrWhiteSpace(securityCode))
             {
@@ -349,6 +294,79 @@ namespace PriceFlowApp.Services
             return reports;
         }
 
+        private decimal CalculateTransactionAmount(Transaction transaction)
+        {
+            return transaction.SharesQuantity * transaction.SharesUnitPrice;
+        }
+
+        private decimal CalculateCommission(Transakcii transaction)
+        {
+            decimal amount = transaction.KolicinaAkcii * transaction.EdinecnaCenaAkcija;
+
+            decimal feesPercent = transaction.BrokerskaProvizija
+                + transaction.BerzanskaProvizija
+                + transaction.Cdhvprovizija;
+            decimal fees = amount * feesPercent / 100;
+
+            return Math.Round(fees, 2);
+        }
+
+        private void ValidateShares(int portfolioId, HartiiOdVrednost security,
+           Transaction transaction, int? transactionIdToExclude = null)
+        {
+            if (transaction.SharesQuantity <= 0)
+                throw new InvalidOperationException("Transaction quantity must be greater than 0.");
+
+            List<Transakcii?> allTransactions = _transactionsRepository.GetByPortfolioId(portfolioId).ToList();
+
+            allTransactions = allTransactions
+                .Where(t => t.Hvid == security.Id && t.Realna == transaction.IsReal)
+                .ToList();
+
+            if (transactionIdToExclude.HasValue)
+            {
+                allTransactions = allTransactions
+                    .Where(t => t.Id != transactionIdToExclude.Value)
+                    .ToList();
+            }
+
+            allTransactions.Add(new Transakcii
+            {
+                Hvid = security.Id,
+                TipTransakcija = transaction.TypeTransaction,
+                KolicinaAkcii = transaction.SharesQuantity,
+                Datum = transaction.Date,
+                Realna = transaction.IsReal
+            });
+
+            var ordered = allTransactions
+                .OrderBy(t => t.Datum)
+                .ThenBy(t => t.TipTransakcija == "Купување" ? 0 : 1)
+                .ToList();
+
+            if (transaction.TypeTransaction == "Продавање")
+            {
+                int ownedAtDate = _transactionsRepository.GetOwnedSharesAtDate(portfolioId, security.Id,
+                    transaction.IsReal, transaction.Date, transactionIdToExclude);
+
+                if (transaction.SharesQuantity > ownedAtDate)
+                {
+                    throw new BusinessRuleException("SELL_MORE_THAN_OWNED",
+                        $"On {transaction.Date.ToString("yyyy-MM-dd")} you own only {ownedAtDate} shares of '{security.Kod}'");
+                }
+            }
+
+            int totalBought = ordered
+                .Where(t => t.TipTransakcija == "Купување")
+                .Sum(t => t.KolicinaAkcii);
+
+            int totalSold = ordered
+                .Where(t => t.TipTransakcija == "Продавање")
+                .Sum(t => t.KolicinaAkcii);
+
+            int owned = totalBought - totalSold;
+        }
+
         private PriceTrendResolution DetermineResolution(int numberOfSecurities, PriceTrendPeriod period)
         {
             if(period == PriceTrendPeriod.Monthly)
@@ -373,6 +391,24 @@ namespace PriceFlowApp.Services
                     return PriceTrendResolution.Quarter;
                 }
             }
+        }
+
+        private HartiiOdVrednost GetSecurity(string securityCode)
+        {
+            var security = _securitiesRepository.GetByCode(securityCode);
+            if (security == null)
+                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+
+            return security;
+        }
+
+        private Transakcii GetTransaction(int transactionId)
+        {
+            var transaction = _transactionsRepository.GetById(transactionId);
+            if (transaction == null)
+                throw new NotFoundException("TRANSACTION_NOT_FOUND", "Transaction not found.");
+
+            return transaction;
         }
     }
 }

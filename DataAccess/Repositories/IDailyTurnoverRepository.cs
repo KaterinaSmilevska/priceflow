@@ -5,16 +5,16 @@ namespace DataAccess.Repositories
 {
     public interface IDailyTurnoverRepository
     {
-        Task<IEnumerable<DnevenPromet?>> GetBySecurityCode(string securityCode, DateTime date);
+        IEnumerable<DnevenPromet?> GetBySecurityCode(string securityCode, DateTime date);
 
-        Task<IEnumerable<DnevenPromet>> GetBySecuritiesIdsAsync(List<int> securitiesIds, PriceTrendPeriod? period, PriceTrendResolution? resolution);
+        IEnumerable<DnevenPromet?> GetBySecuritiesIds(List<int> securitiesIds, PriceTrendPeriod? period, PriceTrendResolution? resolution);
 
-        Task<IEnumerable<DnevenPromet>> GetLiquidityAsync(IEnumerable<int>? securityIds, DateTime fromDate);
+        IEnumerable<DnevenPromet?> GetLiquidity(IEnumerable<int>? securityIds, DateTime fromDate);
 
-        Task<bool> ExistsForDateAsync(DateTime date);
+        decimal? GetLatestPrice(int securityId, DateOnly date);
 
-        Task<decimal> GetLatestPriceAsync(int securityId, DateOnly date);
+        DateTime GetLatestDate();
 
-        Task<DateTime> GetLatestDateAsync();
+        bool ExistsForDate(DateTime date);
     }
 }

@@ -25,30 +25,13 @@ namespace PriceFlowApp.Controllers
             _securityPriceTrendReportService = securityPriceTrendReportService;
         }
 
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            {
-                int userId = User.GetUserId();
-                IEnumerable<Portfolio> portfolios = await _portfoliosService.FindUserPortfoliosAsync(userId);
-
-                return Ok(portfolios);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching portfolios for user.", detail = ex.Message });
-            }
-        }
-
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public IActionResult GetById(int id)
         {
             try
             {
                 int userId = User.GetUserId();
-                Portfolio portfolio = await _portfoliosService.FindById(id);
+                Portfolio portfolio = _portfoliosService.FindById(id);
 
                 return Ok(portfolio);
             }
@@ -58,13 +41,29 @@ namespace PriceFlowApp.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreatePortfolio portfolio)
+        [HttpGet]
+        public IActionResult GetAll()
         {
             try
             {
                 int userId = User.GetUserId();
-                Portfolio createdPortfolio = await _portfoliosService.CreatePortfolio(userId, portfolio);
+                IEnumerable<Portfolio> portfolios = _portfoliosService.FindUserPortfolios(userId);
+
+                return Ok(portfolios);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching portfolios for user.", detail = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreatePortfolio portfolio)
+        {
+            try
+            {
+                int userId = User.GetUserId();
+                Portfolio createdPortfolio = _portfoliosService.Add(userId, portfolio);
 
                 return Ok(createdPortfolio);
             }
@@ -75,12 +74,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdatePortfolio portfolio)
+        public IActionResult Update([FromBody] UpdatePortfolio portfolio)
         {
             try
             {
                 int userId = User.GetUserId();
-                Portfolio updatedPortfolio = await _portfoliosService.UpdatePortfolio(id, userId, portfolio);
+                Portfolio updatedPortfolio = _portfoliosService.Update(userId, portfolio);
 
                 return Ok(updatedPortfolio);
             }
@@ -91,12 +90,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
             try
             {
                 int userId = User.GetUserId();
-                await _portfoliosService.DeletePortfolio(id, userId);
+                _portfoliosService.Delete(id, userId);
 
                 return Ok();
             }
@@ -107,12 +106,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities-price-trend")]
-        public async Task<ActionResult<List<OwnedSecuritiesPriceTrend>>> GetSecuritiesPriceTrend([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution)
+        public ActionResult<IEnumerable<OwnedSecuritiesPriceTrend>> GetSecuritiesPriceTrend([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution)
         {
             try
             {
                 int userId = User.GetUserId();
-                List<OwnedSecuritiesPriceTrend> result = await _transactionsService.FindPriceTrendAsync(userId, period, resolution);
+                IEnumerable<OwnedSecuritiesPriceTrend> result = _transactionsService.FindPriceTrend(userId, period, resolution);
 
                 return Ok(result);
             }
@@ -123,11 +122,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("{id}/performance-summary")]
-        public async Task<IActionResult> GetPerformanceSummary(int id, [FromQuery] DateOnly from, [FromQuery] DateOnly to, [FromQuery] string? format = null)
+        public IActionResult GetPerformanceSummary(int id, [FromQuery] DateOnly from, [FromQuery] DateOnly to, [FromQuery] string? format = null)
         {
             try
             {
-                PortfolioPerformanceSummary result = await _portfoliosService.GeneratePerformanceSummaryAsync(id, from, to);
+                PortfolioPerformanceSummary result = _portfoliosService.GeneratePerformanceSummary(id, from, to);
                 
                 if(string.IsNullOrEmpty(format))
                     return Ok(result);
@@ -156,12 +155,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities-price-trend-report")]
-        public async Task<ActionResult<List<SecurityPriceTrendReport>>> GetSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution, [FromQuery] string? securityCode)
+        public ActionResult<IEnumerable<SecurityPriceTrendReport>> GetSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution, [FromQuery] string? securityCode)
         {
             try
             {
                 int userId = User.GetUserId();
-                List<SecurityPriceTrendReport> result = await _transactionsService.GetSecuritiesPriceTrendReportAsync(userId, period, resolution, securityCode);
+                IEnumerable<SecurityPriceTrendReport> result = _transactionsService.GetSecuritiesPriceTrendReport(userId, period, resolution, securityCode);
 
                 return Ok(result);
             }
@@ -172,12 +171,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities-price-trend-report/pdf")]
-        public async Task<ActionResult> GenerateSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution, [FromQuery] string? securityCode)
+        public ActionResult GenerateSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution, [FromQuery] string? securityCode)
         {
             try
             {
                 int userId = User.GetUserId();
-                List<SecurityPriceTrendReport> reports = await _transactionsService.GetSecuritiesPriceTrendReportAsync(userId, period, resolution, securityCode);
+                IEnumerable<SecurityPriceTrendReport> reports = _transactionsService.GetSecuritiesPriceTrendReport(userId, period, resolution, securityCode);
 
                 byte[] pdf = _securityPriceTrendReportService.GenerateSecurityPriceTrendReport(reports);
 

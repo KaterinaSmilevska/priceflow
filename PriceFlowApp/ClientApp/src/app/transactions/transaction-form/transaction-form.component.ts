@@ -40,6 +40,9 @@ export class TransactionFormComponent implements OnInit, OnChanges {
   dailyPrices?: SecurityDailyPrices;
   priceWarning: string | null = null;
 
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
+
   constructor(private fb: FormBuilder,
     private transactionsService: TransactionsService,
     private securitiesService: SecuritiesService,
@@ -197,7 +200,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
       return;
     }
 
-    this.transactionsService.getOwnedSharesAtDate(this.portfolioId, raw.hvCode, raw.isReal, raw.date)
+    this.transactionsService.getOwnedSharesAtDate(this.portfolioId, raw.hvCode, raw.isReal, raw.date, this.transaction?.id)
       .subscribe(owned => {
         this.ownedSharesAtDate = owned;
         this.dateSellInvalid = raw.sharesQuantity > owned;
@@ -227,12 +230,19 @@ export class TransactionFormComponent implements OnInit, OnChanges {
     if (!price) return;
 
     if (this.dailyPrices.minPrice != null && price < this.dailyPrices.minPrice) {
-      this.priceWarning = this.translateService.instant('TRANSACTIONS.PRICE_BELOW_MIN_WARNING', { price: this.dailyPrices.minPrice.toFixed(2) });
+      this.priceWarning = this.translateService.instant('TRANSACTIONS.PRICE_BELOW_MIN_WARNING', { price: this.formatPrice(this.dailyPrices.minPrice) });
     }
 
     if (this.dailyPrices.maxPrice != null && price > this.dailyPrices.maxPrice) {
-      this.priceWarning = this.translateService.instant('TRANSACTIONS.PRICE_ABOVE_MAX_WARNING', { price: this.dailyPrices.maxPrice.toFixed(2) });
+      this.priceWarning = this.translateService.instant('TRANSACTIONS.PRICE_ABOVE_MAX_WARNING', { price: this.formatPrice(this.dailyPrices.maxPrice) });
     }
+  }
+
+  private formatPrice(price: number): string {
+    return new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(price);
   }
 
   onSubmit(): void {
@@ -257,31 +267,43 @@ export class TransactionFormComponent implements OnInit, OnChanges {
       date: raw.date
     };
 
+    this.successMessage = null;
+    this.errorMessage = null;
+
     if (this.transaction) {
       this.transactionsService
         .update(this.portfolioId, this.transaction.id, payload)
-        .subscribe((updated) => {
-          if (!updated) return;
+        .subscribe({
+          next: (updated) => {
+            if (!updated) return;
 
-          this.form.patchValue({ amount: updated.amount }, { emitEvent: false });
-          this.close.emit(updated);
+            this.successMessage = 'TRANSACTIONS.UPDATE_SUCCESS';
+            this.form.patchValue({ amount: updated.amount }, { emitEvent: false });
+
+            setTimeout(() => { this.close.emit(updated); }, 800);
+          },
+          error: (err) => {
+            this.errorMessage = err.error?.message
+              ? err.error.message
+              : 'TRANSACTIONS.UPDATE_ERROR';
+          }
         });
-        
     } else {
       this.transactionsService
         .add(this.portfolioId, payload)
         .subscribe({
           next: (newTransaction) => {
+            this.successMessage = 'TRANSACTIONS.ADD_SUCCESS';
+
             this.form.patchValue({ amount: newTransaction.amount }, { emitEvent: false });
-            this.close.emit(newTransaction);
+
+            setTimeout(() => { this.close.emit(newTransaction); }, 800);
           },
           error: (err) => {
-            if (err.status === 400 && err.error?.message) {
-              this.form.setErrors({
-                backend: err.error.message
-              });
+            this.errorMessage = err.error?.message
+              ? err.error.message
+              : 'TRANSACTIONS.ADD_ERROR';
             }
-          }
         });
     }
   }

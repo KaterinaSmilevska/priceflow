@@ -17,6 +17,8 @@ export class PortfolioFormComponent implements OnInit {
   @Output() close = new EventEmitter<Portfolio | null>();
 
   form!: FormGroup;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
   constructor(private formBuilder: FormBuilder, private portfoliosService: PortfoliosService) { }
 
@@ -33,11 +35,26 @@ export class PortfolioFormComponent implements OnInit {
       return;
     };
 
-    if (this.portfolioToEdit) {
-      this.portfoliosService.updatePortfolio(this.portfolioToEdit.id, this.form.value).subscribe(p =>
-        this.close.emit(p));
+    const updatedPortfolio: Portfolio = { ...this.portfolioToEdit, ...this.form.value };
+
+    if (!this.portfolioToEdit) {
+      this.portfoliosService.createPortfolio(this.form.value)
+        .subscribe({
+          next: (b) => {
+            this.successMessage = 'PORTFOLIOS.ADD_SUCCESS';
+            setTimeout(() => this.close.emit(b), 800)
+          },
+          error: () => this.errorMessage = 'PORTFOLIOS.ADD_ERROR'
+        });
     } else {
-      this.portfoliosService.createPortfolio(this.form.value).subscribe(p => this.close.emit(p));
+      this.portfoliosService.updatePortfolio(updatedPortfolio)
+        .subscribe({
+          next: () => {
+            this.successMessage = 'PORTFOLIOS.UPDATE_SUCCESS';
+            setTimeout(() => this.close.emit(updatedPortfolio), 800)
+          },
+          error: () => this.errorMessage = 'PORTFOLIOS.UPDATE_ERROR'
+        });
     }
   }
 

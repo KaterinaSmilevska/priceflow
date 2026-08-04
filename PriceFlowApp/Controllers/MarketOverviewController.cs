@@ -17,11 +17,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<MarketOverview>> GetMarketOverview()
+        public ActionResult<MarketOverview> GetMarketOverview()
         {
             try
             {
-                MarketOverview overview = await _marketOverviewService.GetOverviewAsync();
+                MarketOverview overview = _marketOverviewService.GetOverview();
 
                 return Ok(overview);
             }
@@ -29,15 +29,14 @@ namespace PriceFlowApp.Controllers
             {
                 return StatusCode(500, new { message = "An error has occured while fetching market overview.", detail = ex.Message });
             }
-
         }
 
         [HttpGet("top-gainers")]
-        public async Task<IActionResult> GetTopGainers([FromQuery] int count)
+        public IActionResult GetTopGainers([FromQuery] int count)
         {
             try
             {
-                IEnumerable<SecurityPerformance> securityPerformance = await _marketOverviewService.GetTopGainersAsync(count);
+                IEnumerable<SecurityPerformance> securityPerformance = _marketOverviewService.GetTopGainers(count);
 
                 return Ok(securityPerformance);
             }
@@ -48,11 +47,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("top-losers")]
-        public async Task<IActionResult> GetTopLosers([FromQuery] int count)
+        public IActionResult GetTopLosers([FromQuery] int count)
         {
             try
             {
-                IEnumerable<SecurityPerformance> securityPerformance = await _marketOverviewService.GetTopLosersAsync(count);
+                IEnumerable<SecurityPerformance> securityPerformance = _marketOverviewService.GetTopLosers(count);
 
                 return Ok(securityPerformance);
             }
@@ -63,11 +62,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("most-traded")]
-        public async Task<IActionResult> GetMostTraded([FromQuery] int count)
+        public IActionResult GetMostTraded([FromQuery] int count)
         {
             try
             {
-                IEnumerable<SecurityPerformance> securityPerformance = await _marketOverviewService.GetMostTradedAsync(count);
+                IEnumerable<SecurityPerformance> securityPerformance = _marketOverviewService.GetMostTrade(count);
 
                 return Ok(securityPerformance);
             }
@@ -78,12 +77,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("liquidity")]
-        public async Task<ActionResult<LiquidityOverview>> GetLiquidity([FromQuery] int months = 6, [FromQuery] bool onlyOwned = true)
+        public ActionResult<LiquidityOverview> GetLiquidity([FromQuery] int months = 6, [FromQuery] bool onlyOwned = true)
         {
             try
             {
                 int userId = User.GetUserId();
-                LiquidityOverview result = await _marketOverviewService.FindLiquidityAsync(userId, months, onlyOwned);
+                LiquidityOverview result = _marketOverviewService.FindLiquidity(userId, months, onlyOwned);
 
                 return Ok(result);
             }

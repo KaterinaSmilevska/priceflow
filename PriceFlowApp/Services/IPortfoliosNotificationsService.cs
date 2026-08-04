@@ -4,10 +4,10 @@ namespace PriceFlowApp.Services
 {
     public interface IPortfoliosNotificationsService
     {
-        Task SendScheduledNotificationsAsync();
+        PortfolioNotification? FindByPortfolioId(int portfolioId);
 
-        Task<PortfolioNotification?> FindByPortfolioId(int portfolioId);
+        PortfolioNotification Update(UpdatePortfolioNotification portfolioNotification);
 
-        Task<PortfolioNotification> UpdateAsync(UpdatePortfolioNotification portfolioNotification);
+        void SendScheduledNotifications();
     }
 }

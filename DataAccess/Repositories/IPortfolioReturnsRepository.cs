@@ -4,10 +4,10 @@ namespace DataAccess.Repositories
 {
     public interface IPortfolioReturnsRepository
     {
-        Task<IEnumerable<PortfolioPrinosi>> GetByPortfolioIdAsync(int portfolioId);
+        IEnumerable<PortfolioPrinosi?> GetByPortfolioId(int portfolioId);
 
-        Task<PortfolioPrinosi> AddAsync(PortfolioPrinosi portfolioPrinosi);
+        IEnumerable<PortfolioPrinosi?> GetByPortfolioIdForPeriod(int portfolioId, DateOnly from, DateOnly to);
 
-        Task<IEnumerable<PortfolioPrinosi>> GetByPortfolioIdForPeriod(int portfolioId, DateOnly from, DateOnly to);
+        PortfolioPrinosi Add(PortfolioPrinosi portfolioPrinosi);
     }
 }

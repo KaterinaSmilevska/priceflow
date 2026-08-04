@@ -18,11 +18,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
             try
             {
-                IEnumerable<Broker> brokers = await _brokersService.FindAllAsync();
+                IEnumerable<Broker> brokers = _brokersService.FindAll();
 
                 return Ok(brokers);
             }

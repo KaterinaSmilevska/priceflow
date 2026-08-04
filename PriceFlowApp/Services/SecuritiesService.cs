@@ -1,6 +1,7 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 
 namespace PriceFlowApp.Services
 {
@@ -8,46 +9,55 @@ namespace PriceFlowApp.Services
     {
         private readonly ISecuritiesRepository _securitiesRepository;
         private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
+        private readonly IIssuersRepository _issuersRepository;
+        private readonly ITypeSecurityRepository _typeSecurityRepository;
 
-        public SecuritiesService(ISecuritiesRepository securitiesRepository, IDailyTurnoverRepository dailyTurnoverRepository)
+        public SecuritiesService(ISecuritiesRepository securitiesRepository, IDailyTurnoverRepository dailyTurnoverRepository, 
+            IIssuersRepository issuersRepository, ITypeSecurityRepository typeSecurityRepository)
         {
             _securitiesRepository = securitiesRepository;
             _dailyTurnoverRepository = dailyTurnoverRepository;
+            _issuersRepository = issuersRepository;
+            _typeSecurityRepository = typeSecurityRepository;
         }
 
-        public async Task<Security> AddAsync(CreateSecurity security)
+        public Security? FindById(int id)
         {
-            var entity = new HartiiOdVrednost
-            {
-                Isin = security.Isin,
-                Kod = security.Code,
-                VkupenBrojAkcii = security.TotalNumShares,
-                TipHvid = security.TypeSecurityId,
-                IzdavachId = security.IssuerId
-            };
-
-            var createdSecurity = await _securitiesRepository.AddAsync(entity);
-            var full = await _securitiesRepository.GetByIdAsync(createdSecurity.Id);
+            HartiiOdVrednost security = GetSecurity(id);
 
             return new Security
             {
-                Id = full.Id,
-                Isin = full.Isin,
-                Code = full.Kod,
-                TypeSecurityName = full.TipHv.Ime,
-                IssuerName = full.Izdavach.Ime,
-                TotalNumShares = full.VkupenBrojAkcii
+                Id = security.Id,
+                Isin = security.Isin,
+                Code = security.Kod,
+                TypeSecurityName = security.TipHv.Ime,
+                IssuerName = security.Izdavach.Ime,
+                TotalNumShares = security.VkupenBrojAkcii
             };
         }
 
-        public async Task DeleteAsync(int id)
+        public Security? FindByCode(string code)
         {
-            await _securitiesRepository.DeleteAsync(id);
+            var security = _securitiesRepository.GetByCode(code);
+
+            if (security == null)
+                return null;
+
+            return new Security
+            {
+                Id = security.Id,
+                Isin = security.Isin,
+                Code = security.Kod,
+                TypeSecurityName = security.TipHv.Ime,
+                IssuerName = security.Izdavach.Ime,
+                TotalNumShares = security.VkupenBrojAkcii
+            };
         }
 
-        public async Task<IEnumerable<Security>> FindAllAsync()
+
+        public IEnumerable<Security> FindAll()
         {
-            var foundSecurities = await _securitiesRepository.GetAllAsync();
+            var foundSecurities = _securitiesRepository.GetAll();
 
             return foundSecurities.Select(hv => new Security
             {
@@ -60,87 +70,110 @@ namespace PriceFlowApp.Services
             });
         }
 
-        public async Task<Security?> FindByIdAsync(int id)
+        public string? FindSecurityCode(int id)
         {
-            var security = await _securitiesRepository.GetByIdAsync(id);
+            HartiiOdVrednost security = GetSecurity(id);
 
-            if (security == null)
-                return null;
+            return _securitiesRepository.GetSecurityCode(id);
+        }
+
+        public int? FindTotalNumShares(int id)
+        {
+            HartiiOdVrednost security = GetSecurity(id);
+
+            return _securitiesRepository.GetTotalNumSharesById(id);
+        }
+
+        public int? FindTotalNumShares(string securityCode)
+        {
+            return _securitiesRepository.GetTotalNumSharesBySecurityCode(securityCode);
+        }
+
+        public Security Add(CreateSecurity security)
+        {
+            if (string.IsNullOrWhiteSpace(security.Isin))
+                throw new ValidationException("SECURITY_ISIN_REQUIRED", "ISIN cannot be null or empty.");
+
+            if (string.IsNullOrWhiteSpace(security.Code))
+                throw new ValidationException("SECURITY_CODE_REQUIRED", "Code cannot be null or empty.");
+
+            TipHv typeSecurity = GetTypeSecurity(security.TypeSecurityId);
+            Izdavachi issuer = GetIssuer(security.IssuerId);
+
+            var entity = new HartiiOdVrednost
+            {
+                Isin = security.Isin,
+                Kod = security.Code,
+                VkupenBrojAkcii = security.TotalNumShares,
+                TipHvid = security.TypeSecurityId,
+                IzdavachId = security.IssuerId
+            };
+
+            var createdSecurity = _securitiesRepository.Add(entity);
 
             return new Security
             {
-                Id = security.Id,
-                Isin = security.Isin,
-                Code = security.Kod,
-                TypeSecurityName = security.TipHv.Ime,
-                IssuerName = security.Izdavach.Ime,
-                TotalNumShares = security.VkupenBrojAkcii
+                Id = createdSecurity.Id,
+                Isin = createdSecurity.Isin,
+                Code = createdSecurity.Kod,
+                TypeSecurityName = createdSecurity.TipHv.Ime,
+                IssuerName = createdSecurity.Izdavach.Ime,
+                TotalNumShares = createdSecurity.VkupenBrojAkcii
             };
         }
 
-        public async Task<Security?> FindByCodeAsync(string code)
+
+        public Security Update(UpdateSecurity security)
         {
-            var security = await _securitiesRepository.GetByCodeAsync(code);
+            HartiiOdVrednost? existingSecurity = GetSecurity(security.Id);
+            TipHv typeSecurity = GetTypeSecurity(security.TypeSecurityId);
+            Izdavachi issuer = GetIssuer(security.IssuerId);
 
-            if (security == null)
-                return null;
+            if (string.IsNullOrWhiteSpace(security.Isin))
+                throw new ValidationException("SECURITY_ISIN_REQUIRED", "ISIN cannot be null or empty.");
 
-            return new Security
-            {
-                Id = security.Id,
-                Isin = security.Isin,
-                Code = security.Kod,
-                TypeSecurityName = security.TipHv.Ime,
-                IssuerName = security.Izdavach.Ime,
-                TotalNumShares = security.VkupenBrojAkcii
-            };
-        }
-
-        public async Task<Security> UpdateAsync(int id, CreateSecurity security)
-        {
-            HartiiOdVrednost? existingSecurity = await _securitiesRepository.GetByIdAsync(id);
-            if (existingSecurity == null)
-                throw new Exception("Security not found");
+            if (string.IsNullOrWhiteSpace(security.Code))
+                throw new ValidationException("SECURITY_CODE_REQUIRED", "Code cannot be null or empty.");
 
             existingSecurity.Isin = security.Isin;
             existingSecurity.Kod = security.Code;
             existingSecurity.VkupenBrojAkcii = security.TotalNumShares;
-            existingSecurity.TipHvid = security.TypeSecurityId;
-            existingSecurity.IzdavachId = security.IssuerId;
+            existingSecurity.TipHvid = typeSecurity.Id;
+            existingSecurity.IzdavachId = issuer.Id;
 
-            await _securitiesRepository.UpdateAsync(existingSecurity);
-
-            var full = await _securitiesRepository.GetByIdAsync(id);
+            HartiiOdVrednost updatedSecurity =_securitiesRepository.Update(existingSecurity);
 
             return new Security
             {
-                Id = full.Id,
-                Isin = full.Isin,
-                Code = full.Kod,
-                TypeSecurityName = full.TipHv.Ime,
-                IssuerName = full.Izdavach.Ime,
-                TotalNumShares = full.VkupenBrojAkcii
+                Id = updatedSecurity.Id,
+                Isin = updatedSecurity.Isin,
+                Code = updatedSecurity.Kod,
+                TypeSecurityName = updatedSecurity.TipHv.Ime,
+                IssuerName = updatedSecurity.Izdavach.Ime,
+                TotalNumShares = updatedSecurity.VkupenBrojAkcii
             };
         }
 
-        public async Task<string?> FindSecurityCode(int id)
+        public Security Delete(int id)
         {
-            return await _securitiesRepository.GetSecurityCode(id);
+            HartiiOdVrednost existingSecurity = GetSecurity(id);
+
+            _securitiesRepository.Delete(existingSecurity);
+
+            return new Security
+            {
+                Id = existingSecurity.Id,
+                Isin = existingSecurity.Isin,
+                Code = existingSecurity.Kod,
+                TypeSecurityName = existingSecurity.TipHv.Ime,
+                IssuerName = existingSecurity.Izdavach.Ime,
+                TotalNumShares = existingSecurity.VkupenBrojAkcii
+            };
         }
 
-        public async Task<int?> FindTotalNumShares(int id)
+        public SecurityDailyPrices? GetLatestPrices(string securityCode, DateTime date)
         {
-            return await _securitiesRepository.GetTotalNumShares(id);
-        }
-
-        public async Task<int?> FindTotalNumSharesAsync(string securityCode)
-        {
-            return await _securitiesRepository.GetTotalNumSharesAsync(securityCode);
-        }
-
-        public async Task<SecurityDailyPrices?> GetLatestPricesAsync(string securityCode, DateTime date)
-        {
-           IEnumerable<DnevenPromet?> dailyTurnover = await _dailyTurnoverRepository.GetBySecurityCode(securityCode, date);
+           IEnumerable<DnevenPromet?> dailyTurnover = _dailyTurnoverRepository.GetBySecurityCode(securityCode, date);
 
             if (!dailyTurnover.Any())
                 return null;
@@ -169,9 +202,9 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public async Task<IEnumerable<Security>> SearchByCodeAsync(string searchTerm)
+        public IEnumerable<Security> SearchByCode(string searchTerm)
         {
-            IEnumerable<HartiiOdVrednost> securities = await _securitiesRepository.SearchByCodeAsync(searchTerm);
+            IEnumerable<HartiiOdVrednost?> securities = _securitiesRepository.SearchByCode(searchTerm);
 
             return securities.Select(s => new Security
             {
@@ -183,6 +216,33 @@ namespace PriceFlowApp.Services
                 TotalNumShares = s.VkupenBrojAkcii
             })
             .ToList();
+        }
+
+        private HartiiOdVrednost GetSecurity(int securityId)
+        {
+            var security = _securitiesRepository.GetById(securityId);
+            if (security == null)
+                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+
+            return security;
+        }
+
+        private TipHv GetTypeSecurity(int typeSecurityId)
+        {
+            var typeSecurity = _typeSecurityRepository.GetById(typeSecurityId);
+            if (typeSecurity == null)
+                throw new NotFoundException("TYPESECURITY_NOT_FOUND", "Type security not found.");
+
+            return typeSecurity;
+        }
+
+        private Izdavachi GetIssuer(int issuerId)
+        {
+            var issuer = _issuersRepository.GetById(issuerId);
+            if (issuer == null)
+                throw new NotFoundException("ISSUER_NOT_FOUND", "Issuer not found.");
+
+            return issuer;
         }
     }
 }

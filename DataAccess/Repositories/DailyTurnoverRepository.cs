@@ -14,13 +14,16 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<bool> ExistsForDateAsync(DateTime date)
+        public IEnumerable<DnevenPromet?> GetBySecurityCode(string securityCode, DateTime date)
         {
-            return await _dbContext.DnevenPromet
-                .AnyAsync(dp => dp.Datum == date);
+            return _dbContext.DnevenPromet
+                .Include(dp => dp.Hv)
+                .Where(dp => dp.Hv.Kod == securityCode && dp.Datum <= date)
+                .OrderByDescending(dp => dp.Datum)
+                .ToList();
         }
 
-        public async Task<IEnumerable<DnevenPromet>> GetBySecuritiesIdsAsync(List<int> securitiesIds, PriceTrendPeriod? period, PriceTrendResolution? resolution)
+        public IEnumerable<DnevenPromet?> GetBySecuritiesIds(List<int> securitiesIds, PriceTrendPeriod? period, PriceTrendResolution? resolution)
         {
             DateTime today = DateTime.Today;
 
@@ -28,24 +31,24 @@ namespace DataAccess.Repositories
                 ? DateTime.Today.AddMonths(-1)
                 : DateTime.Today.AddYears(-1);
 
-            if(resolution == PriceTrendResolution.Week)
+            if (resolution == PriceTrendResolution.Week)
             {
-                while(startDate.DayOfWeek != DayOfWeek.Monday)
+                while (startDate.DayOfWeek != DayOfWeek.Monday)
                 {
                     startDate = startDate.AddDays(-1);
                 }
             }
-            else if(resolution == PriceTrendResolution.Month || resolution == PriceTrendResolution.Quarter)
+            else if (resolution == PriceTrendResolution.Month || resolution == PriceTrendResolution.Quarter)
             {
                 startDate = new DateTime(startDate.Year, startDate.Month, 1);
             }
 
-            var query = await _dbContext.DnevenPromet
+            var query = _dbContext.DnevenPromet
                 .Include(dp => dp.Hv)
                 .Where(dp => securitiesIds.Contains(dp.Hvid) && dp.Datum >= startDate &&
                   dp.CenaPoslednaTransakcija != null)
                 .OrderBy(dp => dp.Datum)
-                .ToListAsync();
+                .ToList();
 
             var result = resolution switch
             {
@@ -115,7 +118,7 @@ namespace DataAccess.Repositories
                 _ => query
             };
 
-            if(resolution == PriceTrendResolution.Quarter)
+            if (resolution == PriceTrendResolution.Quarter)
             {
                 result = result
                     .GroupBy(x => x.Hvid)
@@ -129,31 +132,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public async Task<IEnumerable<DnevenPromet?>> GetBySecurityCode(string securityCode, DateTime date)
-        {
-            return await _dbContext.DnevenPromet
-                .Include(dp => dp.Hv)
-                .Where(dp => dp.Hv.Kod == securityCode && dp.Datum <= date)
-                .OrderByDescending(dp => dp.Datum)
-                .ToListAsync();
-        }
-
-        public async Task<DateTime> GetLatestDateAsync()
-        {
-            return await _dbContext.DnevenPromet
-                .MaxAsync(dp => dp.Datum);
-        }
-
-        public async Task<decimal> GetLatestPriceAsync(int securityId, DateOnly date)
-        {
-            return (decimal)await _dbContext.DnevenPromet
-                .Where(dp => dp.Hvid == securityId && DateOnly.FromDateTime(dp.Datum) <= date && dp.CenaPoslednaTransakcija.HasValue)
-                .OrderByDescending(dp => dp.Datum)
-                .Select(dp => dp.CenaPoslednaTransakcija)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<DnevenPromet>> GetLiquidityAsync(IEnumerable<int>? securityIds, DateTime fromDate)
+        public IEnumerable<DnevenPromet?> GetLiquidity(IEnumerable<int>? securityIds, DateTime fromDate)
         {
             var query = _dbContext.DnevenPromet
                 .Include(dp => dp.Hv)
@@ -162,7 +141,28 @@ namespace DataAccess.Repositories
             if (securityIds != null)
                 query = query.Where(dp => securityIds.Contains(dp.Hvid) && dp.KolicinaIstrguvaniAkcii > 0);
 
-            return await query.ToListAsync();
+            return query.ToList();
+        }
+
+        public decimal? GetLatestPrice(int securityId, DateOnly date)
+        {
+            return _dbContext.DnevenPromet
+                .Where(dp => dp.Hvid == securityId && DateOnly.FromDateTime(dp.Datum) <= date && dp.CenaPoslednaTransakcija.HasValue)
+                .OrderByDescending(dp => dp.Datum)
+                .Select(dp => dp.CenaPoslednaTransakcija)
+                .FirstOrDefault();
+        }
+
+        public DateTime GetLatestDate()
+        {
+            return _dbContext.DnevenPromet
+                .Max(dp => dp.Datum);
+        }
+
+        public bool ExistsForDate(DateTime date)
+        {
+            return _dbContext.DnevenPromet
+                .Any(dp => dp.Datum == date);
         }
     }
 }

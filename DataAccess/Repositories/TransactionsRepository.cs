@@ -12,50 +12,36 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Transakcii> AddAsync(Transakcii transaction)
+        public Transakcii? GetById(int id)
         {
-            await _dbContext.AddAsync(transaction);
-            await _dbContext.SaveChangesAsync();
-
-            return transaction;
-        }
-
-        public async Task DeleteAsync(Transakcii transaction)
-        {
-            _dbContext.Transakcii.Remove(transaction);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<Transakcii?> GetByIdAsync(int id)
-        {
-            return await _dbContext.Transakcii
+            return _dbContext.Transakcii
                 .Include(t => t.Hv)
-                .FirstOrDefaultAsync(t => t.Id == id);
+                .FirstOrDefault(t => t.Id == id);
         }
 
-        public async Task<List<Transakcii>> GetByPortfolioIdAsync(int portfolioId)
+        public IEnumerable<Transakcii> GetByPortfolioId(int portfolioId)
         {
-            return await _dbContext.Transakcii
+            return _dbContext.Transakcii
                 .Include(t => t.Hv)
                 .Where(t => t.PortfolioId == portfolioId)
                 .OrderByDescending(t => t.Datum)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<Transakcii>> GetByPortfolioUntilDateAsync(int portfolioId, DateOnly date)
+        public IEnumerable<Transakcii?> GetByPortfolioIdUntilDate(int portfolioId, DateOnly date)
         {
-            return await _dbContext.Transakcii
+            return _dbContext.Transakcii
                 .Where(t => t.PortfolioId == portfolioId && t.Realna && t.Datum <= date)
                 .OrderBy(t => t.Datum)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<List<int>> GetOwnedSecuritiesIdsAsync(int userId)
+        public List<int> GetOwnedSecuritiesIds(int userId)
         {
-            IEnumerable<Transakcii> transactions = await _dbContext.Transakcii
+            IEnumerable<Transakcii> transactions = _dbContext.Transakcii
                 .Include(t => t.Portfolio)
                 .Where(t => t.Portfolio.KorisnikId == userId && t.Realna)
-                .ToListAsync();
+                .ToList();
 
             return transactions
                 .GroupBy(t => t.Hvid)
@@ -68,11 +54,11 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public async Task<int> GetOwnedSharesAsync(int portfolioId, int securityId, bool isReal)
+        public int GetOwnedShares(int portfolioId, int securityId, bool isReal)
         {
-            List<Transakcii> transactions = await _dbContext.Transakcii
+            List<Transakcii> transactions = _dbContext.Transakcii
                 .Where(t => t.PortfolioId == portfolioId && t.Hvid == securityId && t.Realna == isReal)
-                .ToListAsync();
+                .ToList();
 
             int bought = transactions
                 .Where(t => t.TipTransakcija == "Купување")
@@ -85,22 +71,22 @@ namespace DataAccess.Repositories
             return bought - sold;
         }
 
-        public async Task<int> GetOwnedSharesAtDateAsync(int portfolioId, int securityId, bool isReal, DateOnly date, int? excludeTransactionId = null)
+        public int GetOwnedSharesAtDate(int portfolioId, int securityId, bool isReal, DateOnly date, int? transactionIdToExclude)
         {
             var query = _dbContext.Transakcii
                 .Where(t => t.PortfolioId == portfolioId && t.Hvid == securityId &&
                     t.Realna == isReal && t.Datum <= date);
 
-            if(excludeTransactionId.HasValue)
-                query = query.Where(t => t.Id != excludeTransactionId.Value);
-            
-            var transactions = await query
+            if (transactionIdToExclude.HasValue)
+                query = query.Where(t => t.Id != transactionIdToExclude.Value);
+
+            var transactions = query
                 .OrderBy(t => t.Datum)
-                .ToListAsync();
+                .ToList();
 
             int ownedShares = 0;
 
-            foreach(var t in transactions)
+            foreach (var t in transactions)
             {
                 ownedShares += t.TipTransakcija == "Купување"
                     ? t.KolicinaAkcii
@@ -109,10 +95,26 @@ namespace DataAccess.Repositories
             return ownedShares;
         }
 
-        public async Task<Transakcii> UpdateAsync(Transakcii transaction)
+        public Transakcii Add(Transakcii transaction)
+        {
+            _dbContext.Add(transaction);
+            _dbContext.SaveChanges();
+
+            return transaction;
+        }
+
+        public Transakcii Update(Transakcii transaction)
         {
             _dbContext.Transakcii.Update(transaction);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
+            return transaction;
+        }
+
+        public Transakcii Delete(Transakcii transaction)
+        {
+            _dbContext.Transakcii.Remove(transaction);
+            _dbContext.SaveChanges();
 
             return transaction;
         }

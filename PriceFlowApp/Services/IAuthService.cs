@@ -5,32 +5,32 @@ namespace PriceFlowApp.Services
 {
     public interface IAuthService
     {
-        Task<Korisnici?> FindByIdAsync(int id);
+        Korisnici? FindById(int id);
 
-        Task<Korisnici?> FindByUsernameAsync(string username);
+        Korisnici? FindByUsername(string username);
 
-        Task<Korisnici?> FindByVerificationTokenAsync(Guid token);
+        Korisnici? FindByVerificationToken(Guid token);
 
-        Task<IEnumerable<User>> FindAllAsync();
+        IEnumerable<User> FindAll();
 
-        Task UpdateAsync(User user);
+        User Update(User user);
 
-        Task UpdateAsync(Korisnici user);
+        Korisnici Update(Korisnici user);
 
-        Task DeleteAsync(int id);
+        User Delete(int id);
 
-        Task<bool> UsernameExistsAsync(string username);
+        RegisterResponse Register(RegisterRequest registerRequest);
 
-        Task<RegisterResponse> RegisterAsync(RegisterRequest registerRequest);
+        LoginResponse Login(LoginRequest loginRequest);
 
-        Task<LoginResponse> LoginAsync(LoginRequest loginRequest);
+        PasswordValidationResponse ValidatePassword(PasswordValidationRequest request);
 
-        Task<PasswordValidationResponse> ValidatePasswordAsync(PasswordValidationRequest request);
+        EmailValidationResponse ValidateEmail(EmailValidationRequest request);
 
-        Task<EmailValidationResponse> ValidateEmailAsync(EmailValidationRequest request);
+        void ForgotPassword(string email);
 
-        Task ForgotPasswordAsync(string email);
+        void ResetPassword(Guid token, string newPassword);
 
-        Task ResetPasswordAsync(Guid token, string newPassword);
+        bool UsernameExists(string username);
     }
 }

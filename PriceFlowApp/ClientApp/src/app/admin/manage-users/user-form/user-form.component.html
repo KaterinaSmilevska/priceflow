@@ -1,13 +1,13 @@
 <div class="modal-overlay">
   <div class="modal-content">
     <h4>{{ 'EDIT.ACTION_NAME' | translate }} {{ 'USERS.USER' | translate }}</h4>
-    <form [formGroup]="editForm" (ngSubmit)="saveUser()">
+    <form [formGroup]="form" (ngSubmit)="saveUser()">
 
       <div class="mb-3">
         <label>{{ 'USERS.NAME' | translate }}</label>
         <input class="form-control" formControlName="name">
-        <div *ngIf="editForm.get('name')?.touched && editForm.get('name')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="editForm.get('name')?.errors?.['required']" class="error">
+        <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('name')?.errors?.['required']" class="error">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
         </div>
@@ -16,8 +16,8 @@
       <div class="mb-3">
         <label>{{ 'USERS.USERNAME' | translate }}</label>
         <input class="form-control" formControlName="username">
-        <div *ngIf="editForm.get('username')?.touched && editForm.get('username')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="editForm.get('username')?.errors?.['required']" class="error">
+        <div *ngIf="form.get('username')?.touched && form.get('username')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('username')?.errors?.['required']" class="error">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
         </div>
@@ -27,11 +27,11 @@
         <label>{{ 'USERS.EMAIL' | translate }}</label>
         <input type="email" class="form-control" formControlName="email">
 
-        <div *ngIf="editForm.get('email')?.touched && editForm.get('email')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="editForm.get('email')?.errors?.['required']" class="error">
+        <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('email')?.errors?.['required']" class="error">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
-          <div *ngIf="editForm.get('email')?.errors?.['email']" class="error">
+          <div *ngIf="form.get('email')?.errors?.['email']" class="error">
             {{ 'AUTH.INVALID_EMAIL' | translate }}
           </div>
         </div>
@@ -39,7 +39,7 @@
 
       <div class="text-end">
         <button type="button" class="btn btn-secondary me-2" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
-        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">{{ 'SAVE_CHANGES' | translate }}</button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">{{ 'SAVE_CHANGES' | translate }}</button>
       </div>
 
       <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>

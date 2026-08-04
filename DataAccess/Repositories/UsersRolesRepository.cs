@@ -11,17 +11,21 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         } 
 
-        public async Task AddAsync(KorisniciUlogi userRole)
+        public KorisniciUlogi Add(KorisniciUlogi userRole)
         {
             _dbContext.KorisniciUlogi.Add(userRole);
-            await _dbContext.SaveChangesAsync();
+             _dbContext.SaveChanges();
+
+            return userRole;
         }
 
-        public async Task RemoveByUserIdAsync(int id)
+        public int RemoveByUserId(int id)
         {
             _dbContext.KorisniciUlogi.RemoveRange(_dbContext.KorisniciUlogi
                .Where(ku => ku.KorisnikId == id));
-            await _dbContext.SaveChangesAsync(); 
+             _dbContext.SaveChanges();
+
+            return id;
         }
     }
 }

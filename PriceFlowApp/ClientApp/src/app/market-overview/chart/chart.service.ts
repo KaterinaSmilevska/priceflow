@@ -32,14 +32,6 @@ export class ChartService {
     });
   }
 
-  getSecurities(): Observable<Security[]> {
-    return this.http.get<Security[]>(`${this.baseUrl}/securities`);
-  }
-
-  getLatestDate(): Observable<string> {
-    return this.http.get<string>(`${this.baseUrl}/latest-date`);
-  }
-
   getPortfolioIncome(portfolioId: number, isReal:  boolean): Observable<PortfolioIncome[]> {
     return this.http.get<PortfolioIncome[]>(`${this.baseUrl}/portfolio-income`, {
       params: { portfolioId, isReal }
@@ -50,6 +42,14 @@ export class ChartService {
     return this.http.get<SecurityAllocation[]>(`${this.baseUrl}/portfolio-security-allocation`, {
       params: { portfolioId, isReal }
     });
+  }
+
+  getSecurities(): Observable<Security[]> {
+    return this.http.get<Security[]>(`${this.baseUrl}/securities`);
+  }
+
+  getLatestDate(): Observable<string> {
+    return this.http.get<string>(`${this.baseUrl}/latest-date`);
   }
 
   public generateColors(count: number): string[] {

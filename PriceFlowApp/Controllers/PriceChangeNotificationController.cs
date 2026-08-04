@@ -18,34 +18,15 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByUserId()
+        public IActionResult GetByUserId()
         {
             try
             {
                 int userId = User.GetUserId();
 
-                await _notificationService.CheckAndGenerateNotificationsAsync();
+                _notificationService.CheckAndGenerateNotifications();
 
-                List<PriceChangeNotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
-
-                return Ok(notifications);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching notifications for user.", detail = ex.Message });
-            }
-        }
-
-        [HttpPost("debug-generate")]
-        public async Task<IActionResult> DebugGenerate()
-        {
-            try
-            {
-                int userId = User.GetUserId();
-
-                await _notificationService.CheckAndGenerateNotificationsAsync();
-
-                List<PriceChangeNotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
+                IEnumerable<PriceChangeNotificationResponse> notifications = _notificationService.GetUserNotifications(userId);
 
                 return Ok(notifications);
             }
@@ -56,13 +37,13 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("unread-count")]
-        public async Task<IActionResult> GetUnreadCount()
+        public IActionResult GetUnreadCount()
         {
             try
             {
                 int userId = User.GetUserId();
 
-                int unread = await _notificationService.GetUnreadNotificationCountAsync(userId);
+                int unread = _notificationService.GetUnreadNotificationCount(userId);
 
                 return Ok(unread);
             }
@@ -73,17 +54,36 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("{id}/read")]
-        public async Task<IActionResult> MarkAsRead(int id)
+        public IActionResult MarkAsRead(int id)
         {
             try
             { 
-                await _notificationService.MarkNotificationAsReadAsync(id);
+                _notificationService.MarkNotificationAsRead(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Error marking notification as read.", detail = ex.Message });
+            }
+        }
+
+        [HttpPost("debug-generate")]
+        public IActionResult DebugGenerate()
+        {
+            try
+            {
+                int userId = User.GetUserId();
+
+                _notificationService.CheckAndGenerateNotifications();
+
+                IEnumerable<PriceChangeNotificationResponse> notifications = _notificationService.GetUserNotifications(userId);
+
+                return Ok(notifications);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching notifications for user.", detail = ex.Message });
             }
         }
     }

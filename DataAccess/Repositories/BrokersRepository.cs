@@ -1,5 +1,4 @@
 ﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
 {
@@ -12,44 +11,44 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Brokeri?> GetByIdAsync(int id)
+        public Brokeri? GetById(int id)
         {
-            return await _dbContext.Brokeri
-                .FindAsync(id);
+            return _dbContext.Brokeri
+                .Find(id);
         }
 
-        public async Task<Brokeri?> GetByCompanyAsync(string company)
+        public Brokeri? GetByCompany(string company)
         {
-            return await _dbContext.Brokeri
-                .FirstOrDefaultAsync(b => b.Kompanija == company);
+            return _dbContext.Brokeri
+                .FirstOrDefault(b => b.Kompanija == company);
         }
 
-        public async Task<IEnumerable<Brokeri>> GetAllAsync()
+        public IEnumerable<Brokeri> GetAll()
         {
-            return await _dbContext.Brokeri
-                .ToListAsync();
+            return _dbContext.Brokeri
+                .ToList();
         }
 
-        public async Task UpdateAsync(Brokeri broker)
+        public Brokeri Add(Brokeri broker)
+        {
+            _dbContext.Brokeri.Add(broker);
+            _dbContext.SaveChanges();
+
+            return broker;
+        }
+
+        public Brokeri Update(Brokeri broker)
         {
             _dbContext.Brokeri.Update(broker);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
+            return broker;
         }
 
-        public async Task DeleteAsync(int id)
+        public Brokeri Delete(Brokeri broker)
         {
-            Brokeri? broker = await _dbContext.Brokeri.FindAsync(id);
-            if (broker != null)
-            {
-                _dbContext.Brokeri.Remove(broker);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task<Brokeri> AddAsync(Brokeri broker)
-        {
-            await _dbContext.Brokeri.AddAsync(broker);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.Brokeri.Remove(broker);
+            _dbContext.SaveChanges();
 
             return broker;
         }

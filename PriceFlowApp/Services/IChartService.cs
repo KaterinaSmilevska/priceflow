@@ -4,16 +4,16 @@ namespace PriceFlowApp.Services
 {
     public interface IChartService
     {
-        Task<IEnumerable<PriceTrend>> GetPriceTrendAsync(int securityId, DateTime startDate, DateTime endDate);
+        IEnumerable<PriceTrend> GetPriceTrend(int securityId, DateTime startDate, DateTime endDate);
 
-        Task<IEnumerable<SectorDistribution>> GetSectorDistributionAsync(DateTime date);
+        IEnumerable<SectorDistribution> GetSectorDistribution(DateTime date);
 
-        Task<IEnumerable<Security>> GetSecurities();
+        IEnumerable<MonthlyIncome> GetMonthlyIncome(int portfolioId, bool isReal);
+
+        IEnumerable<SecurityAllocation> GetAllocation(int portfolioId, bool isReal);
+
+        IEnumerable<Security> GetSecurities();
 
         DateTime? FindLatestDate();
-
-        Task<IEnumerable<MonthlyIncome>> GetMonthlyIncomeAsync(int portfolioid, bool isReal);
-
-        Task<IEnumerable<SecurityAllocation>> GetAllocationAsync(int portfolioId, bool isReal);
     }
 }

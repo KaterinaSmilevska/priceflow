@@ -4,8 +4,8 @@ namespace DataAccess.Repositories
 {
     public interface ISectorsRepository
     {
-        Task<Sektori?> GetByIdAsync(int id);
+        Sektori? GetById(int id);
 
-        Task<IEnumerable<Sektori>> GetAllAsync();
+        IEnumerable<Sektori> GetAll();
     }
 }

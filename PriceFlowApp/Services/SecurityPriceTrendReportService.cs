@@ -9,7 +9,7 @@ namespace PriceFlowApp.Services
     public class SecurityPriceTrendReportService : ISecurityPriceTrendReportService
     {
 
-        public byte[] GenerateSecurityPriceTrendReport(List<SecurityPriceTrendReport> reports)
+        public byte[] GenerateSecurityPriceTrendReport(IEnumerable<SecurityPriceTrendReport> reports)
         {
             QuestPDF.Settings.License = LicenseType.Community;
 

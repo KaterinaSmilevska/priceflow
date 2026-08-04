@@ -1,34 +1,44 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
+using PriceFlowApp.Exceptions;
 
 namespace PriceFlowApp.Services
 {
     public class RolesService: IRolesService
     {
         private readonly IRolesRepository _rolesRepository;
+        private readonly IAuthRepository _authRepository;
 
-        public RolesService(IRolesRepository rolesRepository)
+        public RolesService(IRolesRepository rolesRepository, IAuthRepository authRepository)
         {
             _rolesRepository = rolesRepository;
+            _authRepository = authRepository;
         }
 
-        public async Task<Ulogi?> FindByNameAsync(string name)
+        public Ulogi? FindByName(string name)
         {
-            var response = await _rolesRepository.GetByNameAsync(name);
-            if(response == null)
-                throw new Exception("No role found");
+            if(string.IsNullOrWhiteSpace(name))
+                throw new ValidationException("ROLE_NAME_REQUIRED", "Name cannot be null or empty.");
 
-            return response;
+            Ulogi? roles = _rolesRepository.GetByName(name);
+            if(roles == null)
+                throw new NotFoundException("ROLE_NOT_FOUND", "Role not found.");
+
+            return roles;
         }
 
-        public async Task<List<string>> FindByUserIdAsync(int userId)
+        public List<string> FindByUserId(int userId)
         {
-            return await _rolesRepository.GetByUserIdAsync(userId);
+            Korisnici? user = _authRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+
+            return _rolesRepository.GetByUserId(userId);
         }
 
-        public async Task<List<string>> FindNamesAsync()
+        public List<string> FindNames()
         {
-            return await _rolesRepository.GetNamesAsync();
+            return _rolesRepository.GetNames();
         }
     }
 }

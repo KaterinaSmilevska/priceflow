@@ -38,9 +38,10 @@
             {{ (portfolioToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}
           </button>
         </div>
-
-        <!--<div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
-        <div *ngIf="successMessage" class="success mt-2">{{ successMessage | translate }}</div>-->
+        <div class="px-3 pb-3">
+          <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+          <div *ngIf="successMessage" class="success mt-2">{{ successMessage | translate }}</div>
+        </div>
       </form>
     </div>
   </div>

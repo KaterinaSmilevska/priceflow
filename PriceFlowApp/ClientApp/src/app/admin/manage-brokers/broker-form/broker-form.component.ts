@@ -16,7 +16,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
   @Input() brokerToEdit!: Broker;
   @Output() close = new EventEmitter<Broker | null>();
 
-  editForm!: FormGroup;
+  form!: FormGroup;
   errorMessage: string | null= null;
   successMessage: string | null = null;
 
@@ -26,7 +26,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['brokerToEdit'] && this.brokerToEdit) {
-      this.editForm = this.fb.group({
+      this.form = this.fb.group({
         company: [this.brokerToEdit.company || '', Validators.required],
           commissionPercent: [this.brokerToEdit.commissionPercent || 0, [Validators.required, Validators.min(0)]]
       });
@@ -34,12 +34,12 @@ export class BrokerFormComponent implements OnInit, OnChanges {
   }
 
   saveBroker(): void {
-    if (this.editForm.invalid) {
-      this.editForm.markAllAsTouched();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
-    const updatedBroker: Broker = { ...this.brokerToEdit, ...this.editForm.value };
+    const updatedBroker: Broker = { ...this.brokerToEdit, ...this.form.value };
 
     if (updatedBroker.id === 0) {
       this.adminService.addBroker(updatedBroker)

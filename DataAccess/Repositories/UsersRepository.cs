@@ -10,17 +10,20 @@ namespace DataAccess.Repositories
         public UsersRepository(PriceFlowDbContext dbContext)
         {
             _dbContext = dbContext;
-        } 
-
-        public async Task<IEnumerable<Korisnici>> GetAllAsync()
-        {
-            return await _dbContext.Korisnici.ToListAsync();
         }
 
-        public async Task UpdateAsync(Korisnici user)
+        public Korisnici Update(Korisnici user)
         {
             _dbContext.Korisnici.Update(user);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
+            return user;
+        }
+
+        public IEnumerable<Korisnici> GetAll()
+        {
+            return _dbContext.Korisnici
+                .ToList();
         }
     }
 }

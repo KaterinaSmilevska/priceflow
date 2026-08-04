@@ -1,6 +1,7 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 
 namespace PriceFlowApp.Services
 {
@@ -8,33 +9,21 @@ namespace PriceFlowApp.Services
     {
         private readonly IPriceChangeNotificationsRepository _notificationRepository;
         private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
+        private readonly IAuthRepository _authRepository;
 
-        public PriceChangeNotificationService(IPriceChangeNotificationsRepository notificationRepository, IDailyTurnoverRepository dailyTurnoverRepository)
+        public PriceChangeNotificationService(IPriceChangeNotificationsRepository notificationRepository, IDailyTurnoverRepository dailyTurnoverRepository, 
+            IAuthRepository authRepository)
         {
             _notificationRepository = notificationRepository;
             _dailyTurnoverRepository = dailyTurnoverRepository;
+            _authRepository = authRepository;
         } 
 
-        public async Task CheckAndGenerateNotificationsAsync()
+        public IEnumerable<PriceChangeNotificationResponse> GetUserNotifications(int userId)
         {
-            DateTime today = await _dailyTurnoverRepository.GetLatestDateAsync();
+            Korisnici user = GetUser(userId);
 
-            bool hasTodayData = await _dailyTurnoverRepository.ExistsForDateAsync(today);
-            
-            if(!hasTodayData)
-                return;
-
-            await _notificationRepository.GenerateNotificationsAsync(today);
-        }
-
-        public async Task<int> GetUnreadNotificationCountAsync(int userId)
-        {
-            return await _notificationRepository.GetUnreadNotificationCountAsync(userId);
-        }
-
-        public async Task<List<PriceChangeNotificationResponse>> GetUserNotificationsAsync(int userId)
-        {
-            List<IzvestuvanjaPromenaCena> notifications = await _notificationRepository.GetByUserAsync(userId);
+            IEnumerable<IzvestuvanjaPromenaCena?> notifications = _notificationRepository.GetByUserId(userId);
 
             return notifications.Select(n => new PriceChangeNotificationResponse
             {
@@ -47,9 +36,41 @@ namespace PriceFlowApp.Services
             }).ToList();
         }
 
-        public async Task MarkNotificationAsReadAsync(int notificationId)
+        public int GetUnreadNotificationCount(int userId)
         {
-            await _notificationRepository.MarkNotificationAsReadAsync(notificationId);
+            Korisnici user = GetUser(userId);
+
+            return _notificationRepository.GetUnreadNotificationCount(userId);
+        }
+
+        public void CheckAndGenerateNotifications()
+        {
+            DateTime today = _dailyTurnoverRepository.GetLatestDate();
+
+            bool hasTodayData = _dailyTurnoverRepository.ExistsForDate(today);
+
+            if (!hasTodayData)
+                return;
+
+            _notificationRepository.GenerateNotifications(today);
+        }
+
+        public void MarkNotificationAsRead(int notificationId)
+        {
+            IzvestuvanjaPromenaCena? notification = _notificationRepository.GetById(notificationId);
+            if (notification == null)
+                throw new NotFoundException("NOTIFICATION_NOT_FOUND", "Notification not found.");
+
+            _notificationRepository.MarkNotificationAsRead(notificationId);
+        }
+
+        private Korisnici GetUser(int userId)
+        {
+            var user = _authRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+
+            return user;
         }
     }
 }

@@ -4,6 +4,6 @@ namespace PriceFlowApp.Services
 {
     public interface ITypeSecurityService
     {
-        Task<IEnumerable<TypeSecurity>> FindAllAsync();
+        IEnumerable<TypeSecurity> FindAll();
     }
 }

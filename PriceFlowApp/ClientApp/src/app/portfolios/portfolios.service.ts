@@ -28,8 +28,8 @@ export class PortfoliosService {
     return this.http.post<Portfolio>(this.apiUrl, portfolio, { withCredentials: true });
   }
 
-  updatePortfolio(id: number, portfolio: UpdatePortfolio): Observable<Portfolio> {
-    return this.http.put<Portfolio>(`${this.apiUrl}/${id}`, portfolio, { withCredentials: true });
+  updatePortfolio(portfolio: UpdatePortfolio): Observable<Portfolio> {
+    return this.http.put<Portfolio>(`${this.apiUrl}/${portfolio.id}`, portfolio, { withCredentials: true });
   }
 
   deletePortfolio(id: number): Observable<void> {

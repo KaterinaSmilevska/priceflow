@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PriceFlowApp.Controllers
 {
@@ -16,12 +15,22 @@ namespace PriceFlowApp.Controllers
             _securitiesService = securitiesService;
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<Security> GetById(int id)
+        {
+            Security? security = _securitiesService.FindById(id);
+            if (security == null)
+                return NotFound();
+
+            return Ok(security);
+        }
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Security>>> GetAll()
+        public ActionResult<IEnumerable<Security>> GetAll()
         {
             try
             {
-                IEnumerable<Security> securities = await _securitiesService.FindAllAsync();
+                IEnumerable<Security> securities = _securitiesService.FindAll();
 
                 return Ok(securities);
             }
@@ -32,31 +41,21 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("code/{id}")]
-        public async Task<ActionResult<Security>> GetSecurityCode(int id)
+        public ActionResult<Security> GetSecurityCode(int id)
         {
-            string? code = await _securitiesService.FindSecurityCode(id);
+            string? code = _securitiesService.FindSecurityCode(id);
             if(code == null)
                 return NotFound();
 
             return Ok(code);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Security>> GetById(int id)
-        {
-            Security? security = await _securitiesService.FindByIdAsync(id);
-            if (security == null)
-                return NotFound();
-
-            return Ok(security);
-        }
-
         [HttpGet("{code}/total-shares")]
-        public async Task<ActionResult<int>> GetTotalNumShares(string code)
+        public ActionResult<int> GetTotalNumShares(string code)
         {
             try
             {
-                int? totalShares = await _securitiesService.FindTotalNumSharesAsync(code);
+                int? totalShares = _securitiesService.FindTotalNumShares(code);
 
                 return Ok(totalShares);
             }
@@ -67,37 +66,22 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateSecurity security)
+        public IActionResult Create([FromBody] CreateSecurity security)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var createdSecurity = await _securitiesService.AddAsync(security);
+            var createdSecurity = _securitiesService.Add(security);
 
             return CreatedAtAction(nameof(GetById), new { id = createdSecurity.Id }, createdSecurity);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                await _securitiesService.DeleteAsync(id);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error deleting security.", detail = ex.Message });
-            }
-        }
-
         [HttpPut("{id}")]
-        public async Task<ActionResult<Security>> Update(int id, [FromBody] CreateSecurity updatedSecurity)
+        public ActionResult<Security> Update([FromBody] UpdateSecurity updatedSecurity)
         {
             try
             {
-                Security security = await _securitiesService.UpdateAsync(id, updatedSecurity);
+                Security security = _securitiesService.Update(updatedSecurity);
 
                 return Ok(security);
             }
@@ -107,12 +91,27 @@ namespace PriceFlowApp.Controllers
             }
         }
 
-        [HttpGet("prices")]
-        public async Task<ActionResult<SecurityDailyPrices>> GetLatestPrices([FromQuery] string securityCode, [FromQuery] DateTime date)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
             try
             {
-                SecurityDailyPrices? result = await _securitiesService.GetLatestPricesAsync(securityCode, date);
+                _securitiesService.Delete(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error deleting security.", detail = ex.Message });
+            }
+        }
+
+        [HttpGet("prices")]
+        public ActionResult<SecurityDailyPrices> GetLatestPrices([FromQuery] string securityCode, [FromQuery] DateTime date)
+        {
+            try
+            {
+                SecurityDailyPrices? result = _securitiesService.GetLatestPrices(securityCode, date);
                 if (result == null)
                     return NotFound();
                 return Ok(result);
@@ -124,11 +123,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<Security>>> SearchByCode([FromQuery] string searchTerm)
+        public ActionResult<IEnumerable<Security>> SearchByCode([FromQuery] string searchTerm)
         {
             try
             {
-                IEnumerable<Security> securities = await _securitiesService.SearchByCodeAsync(searchTerm);
+                IEnumerable<Security> securities = _securitiesService.SearchByCode(searchTerm);
 
                 return Ok(securities);
             }

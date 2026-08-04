@@ -137,7 +137,7 @@ app.UseExceptionHandler(appError =>
             await context.Response.WriteAsJsonAsync(new
             {
                 message = bre.Message,
-                code = bre.Code
+                code = bre.ErrorCode
             });
             return;
         }
