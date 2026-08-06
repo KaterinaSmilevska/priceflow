@@ -69,7 +69,7 @@ namespace DataAccess.Repositories
         }
 
         public Korisnici Delete(Korisnici user)
-        { 
+        {
             _dbContext.Korisnici.Remove(user);
             _dbContext.SaveChanges();
 

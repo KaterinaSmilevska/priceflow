@@ -31,7 +31,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(PortfolioReturns portfolioReturns)
+        public IActionResult Add(PortfolioReturns portfolioReturns)
         {
             try
             {

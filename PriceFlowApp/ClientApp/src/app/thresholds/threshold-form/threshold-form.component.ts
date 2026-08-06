@@ -87,7 +87,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
         upperThreshold: upper
       };
 
-      this.thresholdService.updateThreshold(this.thresholdToEdit.id, updateRequest)
+      this.thresholdService.update(this.thresholdToEdit.id, updateRequest)
         .subscribe({
           next: () => {
             this.successMessage = 'THRESHOLD.UPDATE_SUCCESS';
@@ -103,7 +103,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
         upperThreshold: upper
       };
 
-      this.thresholdService.addThreshold(createRequest)
+      this.thresholdService.add(createRequest)
         .subscribe({
           next: () => {
             this.successMessage = 'THRESHOLD.ADD_SUCCESS';

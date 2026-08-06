@@ -1,6 +1,6 @@
 ﻿namespace PriceFlowApp.DTOs
 {
-    public class CreateThresholdRequest
+    public class AddThresholdRequest
     {
         public int HvId { get; set; }
         public decimal LowerThreshold { get; set; }

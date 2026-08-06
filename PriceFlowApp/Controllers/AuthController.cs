@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace PriceFlowApp.Controllers
@@ -24,29 +25,26 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterRequest registerRequest)
+        public ActionResult<RegisterResponse> Register([FromBody] RegisterRequest registerRequest)
         {
             try
             {
-                var response = _authService.Register(registerRequest);
+                RegisterResponse response = _authService.Register(registerRequest);
 
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                {
-                    return BadRequest(new { message = ex.Message });
-                }
-
+                return BadRequest(new { message = ex.Message });
             }
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
             try
             {
-                var response = _authService.Login(request);
+                LoginResponse response = await _authService.Login(request);
 
                 return Ok(response);
             }
@@ -57,19 +55,19 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return Ok(new { success = true, message = "Logged out successfully." });
         }
 
         [HttpGet("ulogi")]
-        public IActionResult GetRolesNames()
+        public ActionResult<List<string>> GetRolesNames()
         {
             try
             {
-                var roles = _rolesService.FindNames();
+                List<string> roles = _rolesService.FindNames();
 
                 return Ok(roles);
             }
@@ -80,11 +78,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("check-username/{username}")]
-        public IActionResult CheckUsername(string username)
+        public ActionResult<bool> CheckUsername(string username)
         {
             try
             {
-                var exists = _authService.UsernameExists(username);
+                bool exists = _authService.UsernameExists(username);
 
                 return Ok(new { exists });
             }
@@ -95,11 +93,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("validate-password")]
-        public IActionResult ValidatePassword([FromBody] PasswordValidationRequest request)
+        public ActionResult<PasswordValidationResponse> ValidatePassword([FromBody] PasswordValidationRequest request)
         {
             try
             {
-                var response = _authService.ValidatePassword(request);
+                PasswordValidationResponse response = _authService.ValidatePassword(request);
 
                 return Ok(response);
             }
@@ -110,11 +108,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost("validate-email")]
-        public IActionResult ValidateEmail([FromBody] EmailValidationRequest request)
+        public ActionResult<EmailValidationResponse> ValidateEmail([FromBody] EmailValidationRequest request)
         {
             try
             {
-                var response = _authService.ValidateEmail(request);
+                EmailValidationResponse response = _authService.ValidateEmail(request);
 
                 return Ok(response);
             }
@@ -131,7 +129,7 @@ namespace PriceFlowApp.Controllers
             {
                 _authService.ForgotPassword(request.Username);
 
-                return Ok(new { message = "Reset link has been sent to your email. " });
+                return Ok(new { message = "Reset link has been sent to your email." });
             }
             catch (Exception ex)
             {
@@ -157,10 +155,10 @@ namespace PriceFlowApp.Controllers
         [HttpGet("status")]
         public IActionResult Status()
         {
-            if (!User.Identity!.IsAuthenticated)
+            if (!(User.Identity?.IsAuthenticated ?? false))
                 return Ok(new { isLoggedIn = false });
 
-            var username = User.Identity!.Name;
+            var username = User.Identity?.Name;
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var roles = User.Claims
                 .Where(c => c.Type == ClaimTypes.Role)
@@ -177,11 +175,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("users")]
-        public IActionResult GetUsers()
+        public ActionResult<IEnumerable<User>> GetUsers()
         {
             try
             {
-                var users = _authService.FindAll();
+                IEnumerable<User> users = _authService.FindAll();
 
                 return Ok(users);
             }
@@ -192,32 +190,24 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("users/{id}")]
-        public IActionResult GetUser(int id)
+        public ActionResult<User> GetUser(int id)
         {
-            var foundUser = _authService.FindById(id);
-            if (foundUser == null)
+            User user = _authService.FindById(id);
+            if (user == null)
                 return NotFound();
-
-            User user = new User
-            {
-                Id = foundUser.Id,
-                Name = foundUser.Ime,
-                Username = foundUser.Username,
-                Email = foundUser.Email
-            };
 
             return Ok(user);
         }
 
         [HttpPut("users/{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] User user)
+        public ActionResult<User> UpdateUser(int id, [FromBody] User user)
         {
             if (id != user.Id)
                 return BadRequest(new { message = "User Id mismatch." });
             try
             {
-                _authService.Update(user);
-                return Ok();
+                User updatedUser = _authService.Update(id, user);
+                return Ok(updatedUser);
             }
             catch (Exception ex)
             {
@@ -226,77 +216,17 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpDelete("users/{id}")]
-        public IActionResult DeleteUser(int id)
+        public ActionResult<User> DeleteUser(int id)
         {
             try
             {
-                _authService.Delete(id);
+                User deletedUser = _authService.Delete(id);
 
-                return Ok();
+                return Ok(deletedUser);
             }
             catch (Exception ex)
             {
                 return StatusCode(400, new { message = ex.Message });
-            }
-        }
-
-        [HttpGet("brokers")]
-        public IActionResult GetBrokers()
-        {
-            try
-            {
-                var brokers = _brokersService.FindAll();
-
-                return Ok(brokers);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching brokers.", detail = ex.Message });
-            }
-        }
-
-        [HttpPost("brokers")]
-        public IActionResult AddBroker([FromBody] CreateBrokerRequest broker)
-        {
-            try
-            {
-                Broker result = _brokersService.Add(broker);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error creating broker.", detail = ex.Message });
-            }
-        }
-
-        [HttpPut("brokers/{id}")]
-        public IActionResult UpdateBroker(int id, [FromBody] UpdateBrokerRequest broker)
-        {
-            try
-            {
-                BrokerResponse result = _brokersService.Update(broker);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error updating broker.", detail = ex.Message });
-            }
-        }
-
-        [HttpDelete("brokers/{id}")]
-        public IActionResult DeleteBroker(int id)
-        {
-            try
-            {
-                _brokersService.Delete(id);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error deleting broker.", detail = ex.Message });
             }
         }
 
@@ -305,19 +235,13 @@ namespace PriceFlowApp.Controllers
         {
             try
             {
-                var user = _authService.FindByVerificationToken(token);
-                if (user == null)
-                    return BadRequest("Invalid  or expired verification link.");
-
-                if (user.IsEmailVerified)
-                    return Redirect("https://localhost:44413/register?verified=true");
-
-                user.IsEmailVerified = true;
-                user.EmailVerificationToken = null;
-
-                _authService.Update(user);
+                _authService.VerifyEmail(token);
 
                 return Redirect("https://localhost:44413/register?verified=true");
+            }
+            catch(ValidationException)
+            {
+                return BadRequest("Invalid or expired verification link.");
             }
             
             catch (Exception ex)

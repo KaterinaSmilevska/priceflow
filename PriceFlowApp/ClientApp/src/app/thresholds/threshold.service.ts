@@ -23,15 +23,15 @@ export class ThresholdService {
     return this.http.get<Threshold[]>(this.apiUrl);
   }
 
-  addThreshold(request: CreateThresholdRequest) {
+  add(request: CreateThresholdRequest) {
     return this.http.post(this.apiUrl, request);
   }
 
-  updateThreshold(id: number, request: UpdateThresholdRequest) {
+  update(id: number, request: UpdateThresholdRequest) {
     return this.http.put(`${this.apiUrl}/${id}`, request);
   }
 
-  deleteThreshold(id: number) {
+  delete(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

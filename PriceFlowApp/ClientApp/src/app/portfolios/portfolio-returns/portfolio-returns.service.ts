@@ -15,7 +15,7 @@ export class PortfolioReturnsService {
     return this.http.get<PortfolioReturns[]>(`${this.apiUrl}/${portfolioId}`);
   }
 
-  create(model: PortfolioReturns): Observable<PortfolioReturns> {
+  add(model: PortfolioReturns): Observable<PortfolioReturns> {
     return this.http.post<PortfolioReturns>(this.apiUrl, model);
   }
 

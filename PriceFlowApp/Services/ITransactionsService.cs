@@ -13,7 +13,7 @@ namespace PriceFlowApp.Services
 
         Transaction Add(int portfolioId, Transaction transaction);
 
-        Transaction Update(int id, Transaction transaction);
+        Transaction Update(int portfolioId, int id, Transaction transaction);
 
         Transaction Delete(int id);
 

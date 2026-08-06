@@ -50,7 +50,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddThreshold([FromBody] CreateThresholdRequest request)
+        public IActionResult AddThreshold([FromBody] AddThresholdRequest request)
         {
             try
             {

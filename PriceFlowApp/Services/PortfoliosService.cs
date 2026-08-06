@@ -37,7 +37,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<Portfolio> FindUserPortfolios(int userId)
         {
-            Korisnici user = GetUser(userId);
+            DataAccess.Models.Korisnici user = GetUser(userId);
 
             IEnumerable<Portfolija?> items = _portfoliosRepository.GetByUserId(userId);
 
@@ -49,9 +49,9 @@ namespace PriceFlowApp.Services
             }).ToList();
         }
 
-        public Portfolio Add(int userId, CreatePortfolio portfolio)
+        public Portfolio Add(int userId, AddPortfolioRequest portfolio)
         {
-            Korisnici user = GetUser(userId);
+            DataAccess.Models.Korisnici user = GetUser(userId);
 
             if (string.IsNullOrWhiteSpace(portfolio.Name))
                 throw new ValidationException("PORTFOLIO_NAME_REQUIRED", "Portfolio name cannot be null or empty.");
@@ -73,9 +73,9 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public Portfolio Update(int userId, UpdatePortfolio portfolio)
+        public Portfolio Update(int id, int userId, UpdatePortfolio portfolio)
         {
-            var existingPortfolio = GetPortfolio(portfolio.Id);
+            var existingPortfolio = GetPortfolio(id);
 
             if (existingPortfolio.KorisnikId != userId)
                 throw new UnauthorizedException("PORTFOLIO_ACCESS_DENIED", "You do not have access to this portfolio.");
@@ -212,7 +212,7 @@ namespace PriceFlowApp.Services
             return portfolio;
         }
 
-        private Korisnici GetUser(int userId)
+        private DataAccess.Models.Korisnici GetUser(int userId)
         {
             var user = _authRepository.GetById(userId);
             if (user == null)

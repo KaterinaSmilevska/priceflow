@@ -66,7 +66,7 @@ export class SecuritiesComponent implements OnInit {
   confirmDelete(): void {
     if (!this.securityToDelete) return;
 
-    this.securitiesService.deleteSecurity(this.securityToDelete.id).subscribe({
+    this.securitiesService.delete(this.securityToDelete.id).subscribe({
       next: () => {
         this.securities = this.securities.filter(s => s.id !== this.securityToDelete?.id);
         this.closeDeleteModal();

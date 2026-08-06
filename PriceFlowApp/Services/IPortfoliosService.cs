@@ -8,9 +8,9 @@ namespace PriceFlowApp.Services
 
         IEnumerable<Portfolio> FindUserPortfolios(int userId);
 
-        Portfolio Add(int userId, CreatePortfolio portfolio);
+        Portfolio Add(int userId, AddPortfolioRequest portfolio);
 
-        Portfolio Update(int userId, UpdatePortfolio portfolio);
+        Portfolio Update(int id, int userId, UpdatePortfolio portfolio);
 
         Portfolio Delete(int id, int userId);
 

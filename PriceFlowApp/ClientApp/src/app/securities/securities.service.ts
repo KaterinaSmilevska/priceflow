@@ -31,15 +31,15 @@ export class SecuritiesService {
     return this.http.get<string>(`${this.apiUrl}/code/${id}`);
   }
 
-  addSecurity(security: CreateSecurity): Observable<Security> {
+  add(security: CreateSecurity): Observable<Security> {
     return this.http.post<Security>(this.apiUrl, security);
   }
 
-  updateSecurity(security: UpdateSecurity): Observable<Security> {
-    return this.http.put<Security>(`${this.apiUrl}/${security.id}`, security);
+  update(id: number, security: UpdateSecurity): Observable<Security> {
+    return this.http.put<Security>(`${this.apiUrl}/${id}`, security);
   }
 
-  deleteSecurity(id: number): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 

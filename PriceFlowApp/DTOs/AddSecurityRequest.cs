@@ -1,6 +1,6 @@
 ﻿namespace PriceFlowApp.DTOs
 {
-    public class CreateSecurity
+    public class AddSecurityRequest
     {
         public string Isin { get; set; } = null!;
         public string Code { get; set; } = null!;

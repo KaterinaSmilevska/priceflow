@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Broker } from '../Broker';
-import { AdminService } from '../../admin.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { BrokersService } from '../../../brokers/brokers.service';
 
 @Component({
   selector: 'app-broker-form',
@@ -20,7 +20,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
   errorMessage: string | null= null;
   successMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private adminService: AdminService) { }
+  constructor(private fb: FormBuilder, private brokersService: BrokersService) { }
 
   ngOnInit(): void { }
 
@@ -42,7 +42,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
     const updatedBroker: Broker = { ...this.brokerToEdit, ...this.form.value };
 
     if (updatedBroker.id === 0) {
-      this.adminService.addBroker(updatedBroker)
+      this.brokersService.add(updatedBroker)
         .subscribe({
           next: (b) => {
             this.successMessage = 'BROKERS.ADD_SUCCESS';
@@ -52,7 +52,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
         });
     }
         else {
-        this.adminService.updateBroker(updatedBroker)
+        this.brokersService.update(this.brokerToEdit.id, updatedBroker)
           .subscribe({
             next: () => {
               this.successMessage = 'BROKERS.UPDATE_SUCCESS';

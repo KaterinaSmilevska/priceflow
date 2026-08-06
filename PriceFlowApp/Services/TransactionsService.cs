@@ -102,15 +102,18 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public Transaction Update(int id, Transaction transaction)
+        public Transaction Update(int portfolioId, int id, Transaction transaction)
         {
             Transakcii existingTransaction = GetTransaction(id);
             HartiiOdVrednost security = GetSecurity(transaction.HVCode);
 
+            if (existingTransaction.PortfolioId != portfolioId)
+                throw new NotFoundException("TRANSACTION_NOT_FOUND", "Transaction not found.");
+
             if (string.IsNullOrWhiteSpace(transaction.TypeTransaction))
                 throw new ValidationException("TRANSACTION_TYPE_REQUIRED", "Type cannot be null or empty.");
 
-            ValidateShares(existingTransaction.PortfolioId, security, transaction, id);
+            ValidateShares(portfolioId, security, transaction, id);
 
             existingTransaction.Hvid = security.Id;
             existingTransaction.KolicinaAkcii = transaction.SharesQuantity;

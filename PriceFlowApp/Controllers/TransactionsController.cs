@@ -90,7 +90,7 @@ namespace PriceFlowApp.Controllers
         {
             try
             {
-                Transaction updatedTransaction = _transactionsService.Update(id, transaction);
+                Transaction updatedTransaction = _transactionsService.Update(portfolioId, id, transaction);
 
                 return Ok(updatedTransaction);
             }

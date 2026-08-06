@@ -13,9 +13,9 @@ namespace PriceFlowApp.Services
 
         IEnumerable<BrokerResponse> GetAll();
 
-        Broker Add(CreateBrokerRequest request);
+        Broker Add(AddBrokerRequest request);
 
-        BrokerResponse Update(UpdateBrokerRequest request);
+        BrokerResponse Update(int id, UpdateBrokerRequest request);
 
         Broker Delete(int id);
     }

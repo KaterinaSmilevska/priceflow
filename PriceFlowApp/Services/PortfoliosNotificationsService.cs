@@ -78,16 +78,16 @@ namespace PriceFlowApp.Services
 
         public void SendScheduledNotifications()
         {
-            IEnumerable<Korisnici> users = _usersRepository.GetAll();
+            IEnumerable<DataAccess.Models.Korisnici> users = _usersRepository.GetAll();
 
-            foreach(Korisnici user in users)
+            foreach(DataAccess.Models.Korisnici user in users)
             {
                 IEnumerable<IzvestuvanjaPortfolija?> notifications = _portfoliosNotificationsRepository.GetByUserId(user.Id);
 
                 IEnumerable<IzvestuvanjaPortfolija?> enabledNotifications = notifications
-                    .Where(n => n.Ovozmozeno && ShouldSend(n))
+                    .Where<IzvestuvanjaPortfolija>(n => n.Ovozmozeno && ShouldSend(n))
                     .ToList();
-                if (!enabledNotifications.Any())
+                if (!enabledNotifications.Any<IzvestuvanjaPortfolija>())
                     continue;
 
                 foreach(IzvestuvanjaPortfolija notification in  enabledNotifications)

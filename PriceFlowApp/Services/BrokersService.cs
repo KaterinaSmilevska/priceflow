@@ -57,7 +57,7 @@ namespace PriceFlowApp.Services
             });
         }
 
-        public Broker Add(CreateBrokerRequest request)
+        public Broker Add(AddBrokerRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Company))
                 throw new ValidationException("BROKER_COMPANY_REQUIRED", "Company cannot be null or empty.");
@@ -84,7 +84,7 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public BrokerResponse Update(UpdateBrokerRequest request)
+        public BrokerResponse Update(int id, UpdateBrokerRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Company))
                 throw new ValidationException("BROKER_COMPANY_REQUIRED", "Company cannot be null or empty.");
@@ -92,10 +92,7 @@ namespace PriceFlowApp.Services
             if (request.CommissionPercent < 0)
                 throw new BusinessRuleException("BROKER_IVALID_COMMISSION", "Commission percent cannot be negative.");
 
-            if (_brokersRepository.GetByCompany(request.Company) != null)
-                throw new AlreadyExistsException("BROKER_ALREADY_EXISTS", "Broker already exists.");
-
-            Brokeri? broker = _brokersRepository.GetById(request.Id);
+            Brokeri? broker = _brokersRepository.GetById(id);
 
             if (broker == null)
                 throw new NotFoundException("BROKER_NOT_FOUND", "Broker not found.");

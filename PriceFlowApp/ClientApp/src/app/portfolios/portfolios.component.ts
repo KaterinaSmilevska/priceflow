@@ -73,7 +73,7 @@ export class PortfoliosComponent implements OnInit {
   confirmDelete() {
     if (!this.portfolioToDelete) return;
 
-    this.portfoliosService.deletePortfolio(this.portfolioToDelete.id).subscribe(() => {
+    this.portfoliosService.delete(this.portfolioToDelete.id).subscribe(() => {
       this.portfolios = this.portfolios.filter(p => p.id !== this.portfolioToDelete?.id);
       this.closeDeleteModal();
     });

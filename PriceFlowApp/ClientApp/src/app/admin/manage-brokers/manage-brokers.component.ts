@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AdminService } from '../admin.service';
 import { Broker } from './Broker';
 import { BrokerFormComponent } from './broker-form/broker-form.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { BrokersTranslatePipe } from '../../shared/brokers-translate.pipe';
+import { BrokersService } from '../../brokers/brokers.service';
 
 @Component({
   selector: 'app-manage-brokers',
@@ -27,14 +27,14 @@ export class ManageBrokersComponent implements OnInit {
   brokerToDelete: Broker | null = null;
 
 
-  constructor(private adminService: AdminService) { }
+  constructor(private brokersService: BrokersService) { }
 
   ngOnInit(): void {
     this.loadBrokers();
   }
 
   loadBrokers(): void {
-    this.adminService.getBrokers().subscribe({
+    this.brokersService.getAll().subscribe({
       next: (data) => this.brokers = data,
       error: () => this.errorMessage = 'LOADING_DATA_ERROR'
     });
@@ -74,7 +74,7 @@ export class ManageBrokersComponent implements OnInit {
   confirmDelete(): void {
     if (!this.brokerToDelete) return;
 
-    this.adminService.deleteBroker(this.brokerToDelete.id).subscribe({
+    this.brokersService.delete(this.brokerToDelete.id).subscribe({
       next: () => {
         this.loadBrokers();
         this.closeDeleteModal();

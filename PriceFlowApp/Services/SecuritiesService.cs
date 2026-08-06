@@ -89,7 +89,7 @@ namespace PriceFlowApp.Services
             return _securitiesRepository.GetTotalNumSharesBySecurityCode(securityCode);
         }
 
-        public Security Add(CreateSecurity security)
+        public Security Add(AddSecurityRequest security)
         {
             if (string.IsNullOrWhiteSpace(security.Isin))
                 throw new ValidationException("SECURITY_ISIN_REQUIRED", "ISIN cannot be null or empty.");
@@ -123,9 +123,9 @@ namespace PriceFlowApp.Services
         }
 
 
-        public Security Update(UpdateSecurity security)
+        public Security Update(int id, UpdateSecurity security)
         {
-            HartiiOdVrednost? existingSecurity = GetSecurity(security.Id);
+            HartiiOdVrednost? existingSecurity = GetSecurity(id);
             TipHv typeSecurity = GetTypeSecurity(security.TypeSecurityId);
             Izdavachi issuer = GetIssuer(security.IssuerId);
 

@@ -16,9 +16,9 @@ namespace PriceFlowApp.Services
 
         int? FindTotalNumShares(string securityCode);
 
-        Security Add(CreateSecurity security);
+        Security Add(AddSecurityRequest security);
 
-        Security Update(UpdateSecurity security);
+        Security Update(int id, UpdateSecurity security);
 
         Security Delete(int id);
 

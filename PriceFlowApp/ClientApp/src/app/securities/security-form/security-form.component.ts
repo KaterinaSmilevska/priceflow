@@ -131,13 +131,13 @@ loadIssuers(): void {
       return;
     }
 
-    if (this.securityToEdit) {
-      const security: UpdateSecurity = {
-        id: this.securityToEdit!.id,
-        ...this.form.value
-      };
+    const updatedSecurity: UpdateSecurity = {
+      ...this.securityToEdit,
+      ...this.form.value
+    };
 
-      this.securitiesService.updateSecurity(security).subscribe({
+    if (this.securityToEdit) {
+      this.securitiesService.update(this.securityToEdit.id, updatedSecurity).subscribe({
         next: (updated) => {
           this.successMessage = 'SECURITIES.UPDATE_SUCCESS';
           setTimeout(() => this.close.emit(updated), 1000);
@@ -148,7 +148,7 @@ loadIssuers(): void {
         }
        });
     } else {
-      this.securitiesService.addSecurity(this.form.value).subscribe({
+      this.securitiesService.add(this.form.value).subscribe({
         next: (newSecurity) => {
           this.successMessage = 'SECURITIES.ADD_SUCCESS';
           setTimeout(() => this.close.emit(newSecurity), 1000);

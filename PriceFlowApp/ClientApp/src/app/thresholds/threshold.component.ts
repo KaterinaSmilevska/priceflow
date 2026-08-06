@@ -81,7 +81,7 @@ export class ThresholdComponent implements OnInit {
     if (!this.thresholdToDelete) return;
 
     this.thresholdService
-      .deleteThreshold(this.thresholdToDelete.id)
+      .delete(this.thresholdToDelete.id)
       .subscribe(() => {
         this.showDeleteModal = false;
         this.thresholdToDelete = undefined;

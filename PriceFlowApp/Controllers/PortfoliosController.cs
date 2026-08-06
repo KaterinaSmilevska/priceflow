@@ -58,7 +58,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreatePortfolio portfolio)
+        public IActionResult Create([FromBody] AddPortfolioRequest portfolio)
         {
             try
             {
@@ -74,12 +74,12 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromBody] UpdatePortfolio portfolio)
+        public IActionResult Update(int id, [FromBody] UpdatePortfolio portfolio)
         {
             try
             {
                 int userId = User.GetUserId();
-                Portfolio updatedPortfolio = _portfoliosService.Update(userId, portfolio);
+                Portfolio updatedPortfolio = _portfoliosService.Update(id, userId, portfolio);
 
                 return Ok(updatedPortfolio);
             }

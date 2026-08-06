@@ -66,7 +66,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateSecurity security)
+        public IActionResult Create([FromBody] AddSecurityRequest security)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -77,11 +77,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Security> Update([FromBody] UpdateSecurity updatedSecurity)
+        public ActionResult<Security> Update(int id, [FromBody] UpdateSecurity updatedSecurity)
         {
             try
             {
-                Security security = _securitiesService.Update(updatedSecurity);
+                Security security = _securitiesService.Update(id, updatedSecurity);
 
                 return Ok(security);
             }

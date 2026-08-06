@@ -8,7 +8,7 @@ namespace PriceFlowApp.Services
 
         IEnumerable<OwnedSecurity> GetOwnedSecurities(int userId);
 
-        ThresholdResponse Add(int userId, CreateThresholdRequest request);
+        ThresholdResponse Add(int userId, AddThresholdRequest request);
 
         ThresholdResponse Update(int userId, int id, UpdateThresholdRequest request);
 

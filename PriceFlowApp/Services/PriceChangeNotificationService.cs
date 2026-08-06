@@ -21,7 +21,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<PriceChangeNotificationResponse> GetUserNotifications(int userId)
         {
-            Korisnici user = GetUser(userId);
+            DataAccess.Models.Korisnici user = GetUser(userId);
 
             IEnumerable<IzvestuvanjaPromenaCena?> notifications = _notificationRepository.GetByUserId(userId);
 
@@ -38,7 +38,7 @@ namespace PriceFlowApp.Services
 
         public int GetUnreadNotificationCount(int userId)
         {
-            Korisnici user = GetUser(userId);
+            DataAccess.Models.Korisnici user = GetUser(userId);
 
             return _notificationRepository.GetUnreadNotificationCount(userId);
         }
@@ -64,7 +64,7 @@ namespace PriceFlowApp.Services
             _notificationRepository.MarkNotificationAsRead(notificationId);
         }
 
-        private Korisnici GetUser(int userId)
+        private DataAccess.Models.Korisnici GetUser(int userId)
         {
             var user = _authRepository.GetById(userId);
             if (user == null)

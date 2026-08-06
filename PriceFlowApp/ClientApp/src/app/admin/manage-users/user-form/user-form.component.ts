@@ -65,7 +65,7 @@ export class UserFormComponent implements OnInit, OnChanges {
           return;
         }
 
-        this.adminService.updateUser(updatedUser).subscribe({
+        this.adminService.updateUser(this.userToEdit.id, updatedUser).subscribe({
           next: () => {
             this.successMessage = 'USERS.UPDATE_SUCCESS';
             setTimeout(() => this.close.emit(updatedUser), 800);

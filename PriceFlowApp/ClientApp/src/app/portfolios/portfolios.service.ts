@@ -24,15 +24,15 @@ export class PortfoliosService {
     });
   }
 
-  createPortfolio(portfolio: CreatePortfolio): Observable<Portfolio> {
+  add(portfolio: CreatePortfolio): Observable<Portfolio> {
     return this.http.post<Portfolio>(this.apiUrl, portfolio, { withCredentials: true });
   }
 
-  updatePortfolio(portfolio: UpdatePortfolio): Observable<Portfolio> {
-    return this.http.put<Portfolio>(`${this.apiUrl}/${portfolio.id}`, portfolio, { withCredentials: true });
+  update(id: number, portfolio: UpdatePortfolio): Observable<Portfolio> {
+    return this.http.put<Portfolio>(`${this.apiUrl}/${id}`, portfolio, { withCredentials: true });
   }
 
-  deletePortfolio(id: number): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 

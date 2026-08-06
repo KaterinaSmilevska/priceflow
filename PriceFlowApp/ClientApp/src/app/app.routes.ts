@@ -18,15 +18,16 @@ import { ManageUsersComponent } from './admin/manage-users/manage-users.componen
 import { ManageBrokersComponent } from './admin/manage-brokers/manage-brokers.component';
 import { SecurityFilterComponent } from './security-filter/security-filter.component';
 import { AnalystGuard } from './security-filter/analyst.guard';
+import { AdminGuard } from './admin/admin.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'brokers', component: BrokersComponent, canActivate: [InvestorGuard] },
-  { path: 'admin/users', component: ManageUsersComponent, canActivate: [AuthGuard] },
-  { path: 'admin/brokers', component: ManageBrokersComponent, canActivate: [AuthGuard] },
-  { path: 'admin/users/:id', component: UserFormComponent, canActivate: [AuthGuard] },
+  { path: 'admin/brokers', component: ManageBrokersComponent, canActivate: [AdminGuard] },
+  { path: 'admin/users', component: ManageUsersComponent, canActivate: [AdminGuard] },
+  { path: 'admin/users/:id', component: UserFormComponent, canActivate: [AdminGuard] },
   { path: 'verify-email', component: VerifyEmailComponent, canActivate: [AuthGuard] },
   { path: 'forgot-password', component: ResetPasswordComponent },
   { path: 'securities', component: SecuritiesComponent },

@@ -38,7 +38,7 @@ export class PortfolioFormComponent implements OnInit {
     const updatedPortfolio: Portfolio = { ...this.portfolioToEdit, ...this.form.value };
 
     if (!this.portfolioToEdit) {
-      this.portfoliosService.createPortfolio(this.form.value)
+      this.portfoliosService.add(this.form.value)
         .subscribe({
           next: (b) => {
             this.successMessage = 'PORTFOLIOS.ADD_SUCCESS';
@@ -47,7 +47,7 @@ export class PortfolioFormComponent implements OnInit {
           error: () => this.errorMessage = 'PORTFOLIOS.ADD_ERROR'
         });
     } else {
-      this.portfoliosService.updatePortfolio(updatedPortfolio)
+      this.portfoliosService.update(this.portfolioToEdit.id, updatedPortfolio)
         .subscribe({
           next: () => {
             this.successMessage = 'PORTFOLIOS.UPDATE_SUCCESS';

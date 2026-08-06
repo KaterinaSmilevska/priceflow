@@ -40,7 +40,7 @@ export class PortfolioReturnsComponent implements OnInit {
   save(): void {
     if (this.form.invalid) return;
 
-    this.portfolioReturnsService.create({
+    this.portfolioReturnsService.add({
       ...this.form.value,
       portfolioId: this.portfolioId
     }).subscribe(() => {

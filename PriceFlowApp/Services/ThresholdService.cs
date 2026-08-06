@@ -24,7 +24,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<ThresholdResponse> GetUserThresholds(int userId)
         {
-            Korisnici user = GetUser(userId);
+            DataAccess.Models.Korisnici user = GetUser(userId);
 
             IEnumerable<HvPromenaCena?> entities = _thresholdRepository.GetByUserId(userId);
 
@@ -40,7 +40,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<OwnedSecurity> GetOwnedSecurities(int userId)
         {
-            Korisnici user = GetUser(userId);
+            DataAccess.Models.Korisnici user = GetUser(userId);
 
             List<int> ownedIds = _transactionsRepository.GetOwnedSecuritiesIds(userId);
 
@@ -53,12 +53,12 @@ namespace PriceFlowApp.Services
             }).ToList();
         }
 
-        public ThresholdResponse Add(int userId, CreateThresholdRequest request)
+        public ThresholdResponse Add(int userId, AddThresholdRequest request)
         {
             if (request.LowerThreshold >= request.UpperThreshold)
                 throw new ValidationException("INVALID_THRESHOLD_RANGE", "Lower threshold must be less than upper threshold.");
 
-            Korisnici user = GetUser(userId);
+            DataAccess.Models.Korisnici user = GetUser(userId);
             HartiiOdVrednost security = GetSecurity(request.HvId);
 
             HvPromenaCena? existingThreshold = _thresholdRepository.GetByUserIdAndSecurityCode(userId, request.HvId);
@@ -131,7 +131,7 @@ namespace PriceFlowApp.Services
             };
         }
 
-        private Korisnici GetUser(int userId)
+        private DataAccess.Models.Korisnici GetUser(int userId)
         {
             var user = _authRepository.GetById(userId);
             if (user == null)

@@ -1,12 +1,12 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using PriceFlowApp.DTOs;
-using PriceFlowSecurity;
-using System.Text.RegularExpressions;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
+using PriceFlowSecurity;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace PriceFlowApp.Services
 {
@@ -15,179 +15,91 @@ namespace PriceFlowApp.Services
         private readonly IAuthRepository _authRepository;
         private readonly IRolesRepository _rolesRepository;
         private readonly IUsersRolesRepository _usersRolesRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthService(IAuthRepository korisnikRepository, IRolesRepository rolesRepository, IUsersRolesRepository usersRolesRepository,
-            IHttpContextAccessor httpContextAccessor, IEmailService emailService)
+        public AuthService(IAuthRepository korisnikRepository, IRolesRepository rolesRepository, IUsersRolesRepository usersRolesRepository, 
+            IEmailService emailService, IHttpContextAccessor httpContextAccessor)
         {
             _authRepository = korisnikRepository;
             _rolesRepository = rolesRepository;
             _usersRolesRepository = usersRolesRepository;
-            _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public Korisnici? FindById(int id)
+        public User FindById(int id)
         {
-            return _authRepository
-                .GetById(id);
+            Korisnici user = GetUserById(id);
+
+            return MapToUser(user);
         }
 
-        public Korisnici? FindByUsername(string username)
+        public User FindByUsername(string username)
         {
-            if (string.IsNullOrWhiteSpace(username))
-                throw new ValidationException("USERNAME_VALIDATION_REQUIRED", "Username cannot be null or empty.");
+            ValidateRequiredField(username, "Username", "USERNAME_VALIDATION_REQUIRED");
 
-            var korisnik = _authRepository.GetByUsername(username);
+            Korisnici user = GetUserByUsername(username);
 
-            if (korisnik == null)
-                throw new NotFoundException("USER_NOT_FOUND", $"User with username '{username}' not found.");
-
-            return korisnik;
+            return MapToUser(user);
         }
 
-        public Korisnici? FindByVerificationToken(Guid token)
+        public User FindByVerificationToken(Guid token)
         {
-            return _authRepository.GetByVerificationToken(token);
+            Korisnici? user = GetUserByVerificationToken(token);
+
+            return MapToUser(user);
         }
 
         public IEnumerable<User> FindAll()
         {
-            var users = _authRepository.GetAll();
+            IEnumerable<Korisnici> users = _authRepository.GetAll();
 
-            return users.Select(item => new User
-            {
-                Id = item.Id,
-                Name = item.Ime,
-                Username = item.Username,
-                Email = item.Email,
-                Roles = item.KorisniciUlogi.Select(ku => ku.Uloga.Ime).ToList()
-            });
+            return users.Select(user => MapToUser(user));
         }
 
-        public User Update(User user)
+        public User Update(int id, User user)
         {
-            var existingUser = _authRepository.GetById(user.Id);
-            if (existingUser == null)
-                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+            Korisnici existingUser = GetUserById(id);
 
-            var otherUser = _authRepository.GetByUsername(user.Username);
-
-            if (string.IsNullOrWhiteSpace(user.Name))
-                throw new ValidationException("NAME_VALIDATION_REQUIRED", "Name cannot be null or empty.");
-
-            if (string.IsNullOrWhiteSpace(user.Username))
-                throw new ValidationException("USERNAME_VALIDATION_REQUIRED", "Username cannot be null or empty");
-
-            if (otherUser != null && otherUser.Id != user.Id)
-                throw new AlreadyExistsException("USERNAME_EXISTS", "Username is already taken by another user.");
-
-            if (string.IsNullOrWhiteSpace(user.Email))
-                throw new ValidationException("EMAIL_VALIDATION_REQUIRED", "Email cannot be null or empty.");
-
-            var emailValidation = ValidateEmail(new EmailValidationRequest
-            {
-                Email = user.Email
-            });
-
-            if (!emailValidation.IsValid)
-                throw new ValidationException("INVALID_EMAIL", emailValidation.Message);
+            ValidateRequiredField(user.Username, "Username", "USERNAME_VALIDATION_REQUIRED");
+            ValidateUsernameAvailability(user.Username, user.Id);
+            ValidateRequiredField(user.Name, "Name", "NAME_VALIDATION_REQUIRED");
+            ValidateRequiredField(user.Email, "Email", "EMAIL_VALIDATION_REQUIRED");
+            ValidateEmailFormat(user.Email);
 
             existingUser.Ime = user.Name;
             existingUser.Username = user.Username;
             existingUser.Email = user.Email;
+            existingUser.IsEmailVerified = user.IsEmailVerified;
 
             _authRepository.Update(existingUser);
 
-            return new User
-            {
-                Id = existingUser.Id,
-                Name = existingUser.Ime,
-                Username = existingUser.Username,
-                Email = existingUser.Email,
-                Roles = existingUser.KorisniciUlogi.Select(x => x.Uloga.Ime).ToList()
-            };
-        }
-
-        public Korisnici Update(Korisnici user)
-        {
-            var existingUser = _authRepository.GetById(user.Id);
-            if (existingUser == null)
-                throw new Exception("User not found");
-
-            var emailValidation = ValidateEmail(new EmailValidationRequest
-            {
-                Email = user.Email
-            });
-
-            if (!emailValidation.IsValid)
-                throw new ArgumentException(emailValidation.Message);
-
-            existingUser.Ime = user.Ime;
-            existingUser.Username = user.Username;
-            existingUser.Email = user.Email;
-
-            _authRepository.Update(existingUser);
-
-            return existingUser;
+            return MapToUser(existingUser);
         }
 
         public User Delete(int id)
         {
-            Korisnici? existingUser = _authRepository.GetById(id);
-
-            if (existingUser == null)
-                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+            Korisnici? existingUser = GetUserById(id);
 
             _authRepository.Delete(existingUser);
 
-            return new User
-            {
-                Id = existingUser.Id,
-                Name = existingUser.Ime,
-                Username= existingUser.Username,
-                Email = existingUser.Email,
-                Roles = existingUser.KorisniciUlogi.Select(x => x.Uloga.Ime).ToList()
-            };
+            return MapToUser(existingUser);
         }
-
 
         public RegisterResponse Register(RegisterRequest registerRequest)
         {
-            if (string.IsNullOrWhiteSpace(registerRequest.Name) ||
-                string.IsNullOrWhiteSpace(registerRequest.Username) ||
-                string.IsNullOrWhiteSpace(registerRequest.Email) ||
-                string.IsNullOrWhiteSpace(registerRequest.Password))
-                throw new ValidationException("VALIDATION_REQUIRED_FIELD", "All fields are required.");
-
-            var passwordValidation = ValidatePassword(new PasswordValidationRequest
-            {
-                Password = registerRequest.Password,
-                ConfirmPassword = registerRequest.ConfirmPassword
-            });
-            if (!passwordValidation.IsValid)
-                throw new ValidationException("PASSWORD_VALIDATION_REQUIRED", passwordValidation.Message);
-
-            var emailValidation = ValidateEmail(new EmailValidationRequest
-            {
-                Email = registerRequest.Email,
-            });
-            if (!emailValidation.IsValid)
-                throw new ValidationException("EMAIL_VALIDATION_REQUIRED", emailValidation.Message);
-
-            if (_authRepository.GetByUsername(registerRequest.Username) != null)
-                throw new AlreadyExistsException("USERNAME_EXISTS", "Username already exists.");
-
-            var validRoleNames = _rolesRepository.GetNames();
-            if (registerRequest.RoleNames.Any() && registerRequest.RoleNames.Any(name => !validRoleNames.Contains(name)))
-                throw new ValidationException("INVALID_ROLES", "One or more role names are invalid.");
+            ValidateRegistrationFields(registerRequest);
+            ValidatePasswordFormat(registerRequest.Password, registerRequest.ConfirmPassword);
+            ValidateEmailFormat(registerRequest.Email);
+            ValidateUsernameAvailability(registerRequest.Username);
+            ValidateRoles(registerRequest.RoleNames);
 
             byte[] fullPasswordBytes = PasswordHelper.CalculateHashAndSalt(registerRequest.Password);
 
             var token = Guid.NewGuid();
 
-            var user = new Korisnici
+            Korisnici user = new Korisnici
             {
                 Ime = registerRequest.Name,
                 Username = registerRequest.Username,
@@ -227,21 +139,14 @@ namespace PriceFlowApp.Services
         }
 
 
-        public LoginResponse Login(LoginRequest loginRequest)
+        public async Task<LoginResponse> Login(LoginRequest loginRequest)
         {
-            if (string.IsNullOrWhiteSpace(loginRequest.Username) || string.IsNullOrWhiteSpace(loginRequest.Password))
-            {
-                throw new ValidationException("VALIDATION_REQUIRED", "Username and password are required.");
-            }
+            ValidateLoginFields(loginRequest);
 
-            var user = _authRepository.GetByUsername(loginRequest.Username);
-            if (user == null)
-                throw new UnauthorizedException("INVALID_CREDENTIALS", "Invalid username or password.");
-            if (!PasswordHelper.VerifyPassword(loginRequest.Password, user.PasswordHash))
-                throw new UnauthorizedException("INVALID_CREDENTIALS", "Invalid username or password.");
+            Korisnici user = GetUserByUsername(loginRequest.Username);
 
-            if (!user.IsEmailVerified)
-                throw new UnauthorizedException("EMAIL_NOT_VERIFIED", "Please verify your email before logging in.");
+            ValidateCredentials(loginRequest.Password, user);
+            ValidateEmailVerification(user);
 
             var httpContext = _httpContextAccessor.HttpContext;
 
@@ -264,7 +169,7 @@ namespace PriceFlowApp.Services
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            httpContext.SignInAsync(
+            await httpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 principal,
                 new AuthenticationProperties
@@ -286,67 +191,77 @@ namespace PriceFlowApp.Services
 
         public PasswordValidationResponse ValidatePassword(PasswordValidationRequest request)
         {
-                if (string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.ConfirmPassword))
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password and Confirm Password are required." };
-                }
-                if (request.Password != request.ConfirmPassword)
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Passwords do not match." };
-                }
+            if (string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.ConfirmPassword))
+            {
+                return new PasswordValidationResponse { IsValid = false, Message = "Password and Confirm Password are required." };
+            }
+            if (request.Password != request.ConfirmPassword)
+            {
+                return new PasswordValidationResponse { IsValid = false, Message = "Passwords do not match." };
+            }
 
-                if(!PasswordHelper.ValidatePasswordStrength(request.Password))
+            if(!PasswordHelper.ValidatePasswordStrength(request.Password))
+            {
+                return new PasswordValidationResponse
                 {
-                    return new PasswordValidationResponse
-                    {
-                        IsValid = false,
-                        Message = "Password must contain at least 8 characters, " +
-                        "with one lowercase letter, one uppercase letter, one number, one special character and no spaces."
-                    };
-                }
-                if (request.Password.Length < 8)
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password must be at least 8 characters long." };
-                }
+                    IsValid = false,
+                    Message = "Password must contain at least 8 characters, " +
+                    "with one lowercase letter, one uppercase letter, one number, one special character and no spaces."
+                };
+            }
+            if (request.Password.Length < 8)
+            {
+                return new PasswordValidationResponse { IsValid = false, Message = "Password must be at least 8 characters long." };
+            }
 
-                if (!Regex.IsMatch(request.Password, @"\d"))
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one number." };
-                }
-                if (!Regex.IsMatch(request.Password, @"[A-Z]"))
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one uppercase letter." };
-                }
+            if (!Regex.IsMatch(request.Password, @"\d"))
+            {
+                return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one number." };
+            }
+            if (!Regex.IsMatch(request.Password, @"[A-Z]"))
+            {
+                return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one uppercase letter." };
+            }
 
-                if (!Regex.IsMatch(request.Password, @"[!@#$%^&*(),.?""':{}|<>]"))
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one special character." };
-                }
-                return new PasswordValidationResponse { IsValid = true, Message = "Password is valid." };
+            if (!Regex.IsMatch(request.Password, @"[!@#$%^&*(),.?""':{}|<>]"))
+            {
+                return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one special character." };
+            }
+            return new PasswordValidationResponse { IsValid = true, Message = "Password is valid." };
         }
 
         public EmailValidationResponse ValidateEmail(EmailValidationRequest request)
         {
-           
-                if (string.IsNullOrWhiteSpace(request.Email))
-                {
-                    return new EmailValidationResponse { IsValid = false, Message = "Email is required" };
-                }
+            if (string.IsNullOrWhiteSpace(request.Email))
+            {
+                return new EmailValidationResponse { IsValid = false, Message = "Email is required" };
+            }
+            
+            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if (!Regex.IsMatch(request.Email, emailPattern))
+            {
+                return new EmailValidationResponse { IsValid = false, Message = "Invalid email format." };
+            }
+            
+            return new EmailValidationResponse { IsValid = true, Message = "Email is valid." };
+        }
 
-                string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-                if (!Regex.IsMatch(request.Email, emailPattern))
-                {
-                    return new EmailValidationResponse { IsValid = false, Message = "Invalid email format." };
-                }
+        public void VerifyEmail(Guid token)
+        {
+            Korisnici user = GetUserByVerificationToken(token);
 
-                return new EmailValidationResponse { IsValid = true, Message = "Email is valid." };
+            if (user.IsEmailVerified)
+                return;
+
+            user.IsEmailVerified = true;
+            user.EmailVerificationToken = null;
+
+            _authRepository.Update(user);
         }
 
         public void ForgotPassword(string username)
         {
-            Korisnici? user = _authRepository.GetByUsername(username);
-            if (user == null)
-                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+            Korisnici user = GetUserByUsername(username);
             
             Guid resetToken = Guid.NewGuid();
             user.ResetPasswordToken = resetToken;
@@ -360,17 +275,9 @@ namespace PriceFlowApp.Services
 
         public void ResetPassword(Guid token, string newPassword)
         {
-            Korisnici? user = _authRepository.GetByResetPasswordToken(token);
-            if (user == null || user.ResetPasswordTokenExpiry < DateTime.UtcNow)
-                throw new ValidationException("INVALID_RESET_TOKEN", "Invalid or expired token");
+            Korisnici? user = GetByResetPasswordToken(token);
 
-            var passwordValidation = ValidatePassword(new PasswordValidationRequest
-            {
-                Password = newPassword,
-                ConfirmPassword = newPassword
-            });
-            if (!passwordValidation.IsValid)
-                throw new ArgumentException(passwordValidation.Message);
+            ValidatePasswordFormat(newPassword, newPassword);
 
             user.PasswordHash = PasswordHelper.CalculateHashAndSalt(newPassword);
             user.ResetPasswordToken = null;
@@ -382,6 +289,123 @@ namespace PriceFlowApp.Services
         public bool UsernameExists(string username)
         {
             return _authRepository.UsernameExists(username);
+        }
+
+        private void ValidateRequiredField(string value, string fieldName, string errorCode)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ValidationException(errorCode, $"{fieldName} cannot be null or empty.");
+        }
+
+        private void ValidateRegistrationFields(RegisterRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Username)
+                || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+                throw new ValidationException("VALIDATION_REQUIRED_FIELD", "All fields are required.");
+        }
+
+        private void ValidateLoginFields(LoginRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
+                throw new ValidationException("VALIDATION_REQUIRED_FIELD", "Username and password are required.");
+        }
+
+        private Korisnici GetUserById(int  userId)
+        {
+            Korisnici? user = _authRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+
+            return user;
+        }
+
+        private Korisnici GetUserByUsername(string username)
+        {
+            Korisnici? user = _authRepository.GetByUsername(username);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", $"User with '{username}' not found.");
+
+            return user;
+        }
+
+        private Korisnici GetUserByVerificationToken(Guid token)
+        {
+            Korisnici? user = _authRepository.GetByVerificationToken(token);
+            if (user == null)
+                throw new ValidationException("INVALID_VERIFICATION_TOKEN", "Verification token is invalid.");
+
+            return user;
+        }
+
+        private Korisnici GetByResetPasswordToken(Guid token)
+        {
+            Korisnici? user = _authRepository.GetByResetPasswordToken(token);
+            if (user == null || user.ResetPasswordTokenExpiry < DateTime.UtcNow)
+                throw new ValidationException("INVALID_RESET_TOKEN", "Invalid or expired token");
+
+            return user;
+        }
+
+        private void ValidateEmailFormat(string email)
+        {
+            EmailValidationResponse emailValidation = ValidateEmail(new EmailValidationRequest
+            {
+                Email = email
+            });
+
+            if (!emailValidation.IsValid)
+                throw new ValidationException("EMAIL_VALIDATION_REQUIRED", emailValidation.Message);
+        }
+
+        private void ValidatePasswordFormat(string password, string confirmPassword)
+        {
+            PasswordValidationResponse passwordValidation = ValidatePassword(new PasswordValidationRequest
+            {
+                Password = password,
+                ConfirmPassword = confirmPassword
+            });
+
+            if(!passwordValidation.IsValid)
+                throw new ValidationException("PASSWORD_VALIDATION_REQUIRED", passwordValidation.Message);
+        }
+
+        private void ValidateRoles(IEnumerable<string> roleNames)
+        {
+            IEnumerable<string> validRoleNames = _rolesRepository.GetNames();
+            if(roleNames.Any(name => !validRoleNames.Contains(name)))
+                throw new ValidationException("INVALID_ROLES", "One or more role names are invalid.");
+        }
+
+        private void ValidateUsernameAvailability(string username, int? userId = null)
+        {
+            Korisnici? existingUser = _authRepository.GetByUsername(username);
+            if (existingUser != null && existingUser.Id != userId)
+                throw new AlreadyExistsException("USERNAME_ALREADY_EXISTS", "The username is taken by another user.");
+        }
+
+        private void ValidateCredentials(string password, Korisnici user)
+        {
+            if (!PasswordHelper.VerifyPassword(password, user.PasswordHash))
+                throw new UnauthorizedException("INVALID_CREDENTIALS", "Invalid username or password.");
+        }
+
+        private void ValidateEmailVerification(Korisnici user)
+        {
+            if (!user.IsEmailVerified)
+                throw new UnauthorizedException("EMAIL_NOT_VERIFIED", "Please verify your email before logging in.");
+        }
+
+        private User MapToUser(Korisnici user)
+        {
+            return new User
+            {
+                Id = user.Id,
+                Name = user.Ime,
+                Username = user.Username,
+                Email = user.Email,
+                Roles = user.KorisniciUlogi.Select(x => x.Uloga.Ime).ToList(),
+                IsEmailVerified = user.IsEmailVerified
+            };
         }
     }
 }
