@@ -18,11 +18,11 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("{portfolioId}")]
-        public IActionResult GetByPortfolioId(int portfolioId)
+        public ActionResult<PortfolioNotification> GetByPortfolioId(int portfolioId)
         {
             try
             {
-                PortfolioNotification? notification = _portfoliosNotificationsService.FindByPortfolioId(portfolioId);
+                PortfolioNotification notification = _portfoliosNotificationsService.FindByPortfolioId(portfolioId);
 
                 return Ok(notification);
             }

@@ -4,7 +4,7 @@ namespace PriceFlowApp.Services
 {
     public interface IPortfoliosNotificationsService
     {
-        PortfolioNotification? FindByPortfolioId(int portfolioId);
+        PortfolioNotification FindByPortfolioId(int portfolioId);
 
         PortfolioNotification Update(UpdatePortfolioNotification portfolioNotification);
 

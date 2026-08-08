@@ -1,4 +1,5 @@
 ﻿using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 using System.Net;
 using System.Net.Mail;
 
@@ -15,14 +16,9 @@ namespace PriceFlowApp.Services
 
         public void SendEmail(string toEmail, string subject, string body)
         {
-            if (string.IsNullOrWhiteSpace(toEmail))
-                throw new ValidationException("EMAIL_REQUIRED", "Recipient email is required.");
-
-            if (string.IsNullOrWhiteSpace(subject))
-                throw new ValidationException("EMAIL_SUBJECT_REQUIRED", "Email subject is required.");
-
-            if (string.IsNullOrWhiteSpace(body))
-                throw new ValidationException("EMAIL_BODY_REQUIRED", "Email body is required.");
+            ValidationHelper.ValidateRequiredField(toEmail, "Recipient Email", "EMAIL_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(subject, "Email subject", "EMAIL_SUBJECT_REQUIRED");
+            ValidationHelper.ValidateRequiredField(body, "Email body", "EMAIL_BODY_REQUIRED");
 
             var host = _cofiguration["Smtp:Host"];
             var port = _cofiguration["Smtp:Port"];
@@ -30,9 +26,9 @@ namespace PriceFlowApp.Services
             var password = _cofiguration["Smtp:Password"];
             var fromEmail = _cofiguration["Smtp:FromEmail"];
 
-            if(string.IsNullOrWhiteSpace(host) || 
-                string.IsNullOrWhiteSpace(port) || 
-                string.IsNullOrWhiteSpace(username) || 
+            if (string.IsNullOrWhiteSpace(host) ||
+                string.IsNullOrWhiteSpace(port) ||
+                string.IsNullOrWhiteSpace(username) ||
                 string.IsNullOrWhiteSpace(password) ||
                 string.IsNullOrWhiteSpace(fromEmail))
             {

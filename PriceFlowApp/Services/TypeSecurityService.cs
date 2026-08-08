@@ -17,11 +17,18 @@ namespace PriceFlowApp.Services
         {
             IEnumerable<TipHv> types = _typeSecurityRepository.GetAll();
 
-            return types.Select(i => new TypeSecurity
+            return types
+                .Select(MapToTypeSecurity)
+                .ToList();
+        }
+
+        private TypeSecurity MapToTypeSecurity(TipHv typeSecurity)
+        {
+            return new TypeSecurity
             {
-                Id = i.Id,
-                Name = i.Ime
-            });
+                Id = typeSecurity.Id,
+                Name = typeSecurity.Ime
+            };
         }
     }
 }

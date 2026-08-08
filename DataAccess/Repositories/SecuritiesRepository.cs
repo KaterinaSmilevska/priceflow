@@ -26,7 +26,7 @@ namespace DataAccess.Repositories
                 .FirstOrDefault(hv => hv.Kod == code);
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetAllByIds(List<int> securitiesIds)
+        public IEnumerable<HartiiOdVrednost> GetAllByIds(List<int> securitiesIds)
         {
             return _dbContext.HartiiOdVrednost
                 .Where(s => securitiesIds.Contains(s.Id))

@@ -6,14 +6,14 @@ namespace DataAccess.Repositories
     {
         IzvestuvanjaPromenaCena? GetById(int id);
 
-        IEnumerable<IzvestuvanjaPromenaCena?> GetByUserId(int userId);
+        IEnumerable<IzvestuvanjaPromenaCena> GetByUserId(int userId);
 
         int GetUnreadNotificationCount(int userId);
 
-        void MarkNotificationAsRead(int notificationId);
+        bool ExistsForUserAndSecurityAndDate(int userId, int securityId, DateTime date);
 
-        void GenerateNotifications(DateTime tradingDate);
+        IzvestuvanjaPromenaCena Add(IzvestuvanjaPromenaCena notification);
 
-        bool NotificationExistsForDate(DateTime date);
+        void MarkNotificationAsRead(IzvestuvanjaPromenaCena notification);
     }
 }

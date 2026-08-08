@@ -1,6 +1,8 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
+using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 
 namespace PriceFlowApp.Services
 {
@@ -15,23 +17,18 @@ namespace PriceFlowApp.Services
             _authRepository = authRepository;
         }
 
-        public Ulogi? FindByName(string name)
+        public Role FindByName(string name)
         {
-            if(string.IsNullOrWhiteSpace(name))
-                throw new ValidationException("ROLE_NAME_REQUIRED", "Name cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(name, "Name", "NAME_VALIDATION_REQUIRED");
 
-            Ulogi? roles = _rolesRepository.GetByName(name);
-            if(roles == null)
-                throw new NotFoundException("ROLE_NOT_FOUND", "Role not found.");
+            Ulogi role = GetRoleByName(name);
 
-            return roles;
+            return MapToRole(role);
         }
 
         public List<string> FindByUserId(int userId)
         {
-            Korisnici? user = _authRepository.GetById(userId);
-            if (user == null)
-                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+            Korisnici user = GetUserById(userId);
 
             return _rolesRepository.GetByUserId(userId);
         }
@@ -39,6 +36,33 @@ namespace PriceFlowApp.Services
         public List<string> FindNames()
         {
             return _rolesRepository.GetNames();
+        }
+
+        private Ulogi GetRoleByName(string name)
+        {
+            Ulogi? role = _rolesRepository.GetByName(name);
+            if (role == null)
+                throw new NotFoundException("ROLE_NOT_FOUND", "Role not found.");
+
+            return role;
+        }
+
+        private Korisnici GetUserById(int userId)
+        {
+            Korisnici? user = _authRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+
+            return user;
+        }
+
+        private Role MapToRole(Ulogi role)
+        {
+            return new Role
+            {
+                Id = role.Id,
+                Name = role.Ime
+            };
         }
     }
 }

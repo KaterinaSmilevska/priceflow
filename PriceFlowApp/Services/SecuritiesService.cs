@@ -2,6 +2,7 @@
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 
 namespace PriceFlowApp.Services
 {
@@ -21,65 +22,40 @@ namespace PriceFlowApp.Services
             _typeSecurityRepository = typeSecurityRepository;
         }
 
-        public Security? FindById(int id)
+        public Security FindById(int id)
         {
-            HartiiOdVrednost security = GetSecurity(id);
+            HartiiOdVrednost security = GetSecurityById(id);
 
-            return new Security
-            {
-                Id = security.Id,
-                Isin = security.Isin,
-                Code = security.Kod,
-                TypeSecurityName = security.TipHv.Ime,
-                IssuerName = security.Izdavach.Ime,
-                TotalNumShares = security.VkupenBrojAkcii
-            };
+            return MapToSecurity(security);
         }
 
-        public Security? FindByCode(string code)
+        public Security FindByCode(string code)
         {
-            var security = _securitiesRepository.GetByCode(code);
+            HartiiOdVrednost security = GetSecurityByCode(code);
 
-            if (security == null)
-                return null;
-
-            return new Security
-            {
-                Id = security.Id,
-                Isin = security.Isin,
-                Code = security.Kod,
-                TypeSecurityName = security.TipHv.Ime,
-                IssuerName = security.Izdavach.Ime,
-                TotalNumShares = security.VkupenBrojAkcii
-            };
+            return MapToSecurity(security);
         }
 
 
         public IEnumerable<Security> FindAll()
         {
-            var foundSecurities = _securitiesRepository.GetAll();
+            IEnumerable<HartiiOdVrednost> securities = _securitiesRepository.GetAll();
 
-            return foundSecurities.Select(hv => new Security
-            {
-                Id = hv.Id,
-                Isin = hv.Isin,
-                Code = hv.Kod,
-                TypeSecurityName = hv.TipHv.Ime,
-                IssuerName = hv.Izdavach.Ime,
-                TotalNumShares = hv.VkupenBrojAkcii
-            });
+            return securities
+                .Select(MapToSecurity)
+                .ToList();
         }
 
         public string? FindSecurityCode(int id)
         {
-            HartiiOdVrednost security = GetSecurity(id);
+            HartiiOdVrednost security = GetSecurityById(id);
 
             return _securitiesRepository.GetSecurityCode(id);
         }
 
         public int? FindTotalNumShares(int id)
         {
-            HartiiOdVrednost security = GetSecurity(id);
+            HartiiOdVrednost security = GetSecurityById(id);
 
             return _securitiesRepository.GetTotalNumSharesById(id);
         }
@@ -89,51 +65,39 @@ namespace PriceFlowApp.Services
             return _securitiesRepository.GetTotalNumSharesBySecurityCode(securityCode);
         }
 
-        public Security Add(AddSecurityRequest security)
+        public Security Add(AddSecurityRequest request)
         {
-            if (string.IsNullOrWhiteSpace(security.Isin))
-                throw new ValidationException("SECURITY_ISIN_REQUIRED", "ISIN cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(request.Isin, "ISIN", "ISIN_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(request.Code, "Code", "CODE_VALIDATION_REQUIRED");
+            ValidateCodeAvailability(request.Code);
 
-            if (string.IsNullOrWhiteSpace(security.Code))
-                throw new ValidationException("SECURITY_CODE_REQUIRED", "Code cannot be null or empty.");
+            TipHv typeSecurity = GetTypeSecurityById(request.TypeSecurityId);
+            Izdavachi issuer = GetIssuerById(request.IssuerId);
 
-            TipHv typeSecurity = GetTypeSecurity(security.TypeSecurityId);
-            Izdavachi issuer = GetIssuer(security.IssuerId);
-
-            var entity = new HartiiOdVrednost
+            HartiiOdVrednost security = new HartiiOdVrednost
             {
-                Isin = security.Isin,
-                Kod = security.Code,
-                VkupenBrojAkcii = security.TotalNumShares,
-                TipHvid = security.TypeSecurityId,
-                IzdavachId = security.IssuerId
+                Isin = request.Isin,
+                Kod = request.Code,
+                VkupenBrojAkcii = request.TotalNumShares,
+                TipHvid = request.TypeSecurityId,
+                IzdavachId = request.IssuerId
             };
 
-            var createdSecurity = _securitiesRepository.Add(entity);
+            HartiiOdVrednost addedSecurity = _securitiesRepository.Add(security);
 
-            return new Security
-            {
-                Id = createdSecurity.Id,
-                Isin = createdSecurity.Isin,
-                Code = createdSecurity.Kod,
-                TypeSecurityName = createdSecurity.TipHv.Ime,
-                IssuerName = createdSecurity.Izdavach.Ime,
-                TotalNumShares = createdSecurity.VkupenBrojAkcii
-            };
+            return MapToSecurity(addedSecurity);
         }
-
 
         public Security Update(int id, UpdateSecurity security)
         {
-            HartiiOdVrednost? existingSecurity = GetSecurity(id);
-            TipHv typeSecurity = GetTypeSecurity(security.TypeSecurityId);
-            Izdavachi issuer = GetIssuer(security.IssuerId);
+            HartiiOdVrednost? existingSecurity = GetSecurityById(id);
+            TipHv typeSecurity = GetTypeSecurityById(security.TypeSecurityId);
+            Izdavachi issuer = GetIssuerById(security.IssuerId);
 
-            if (string.IsNullOrWhiteSpace(security.Isin))
-                throw new ValidationException("SECURITY_ISIN_REQUIRED", "ISIN cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(security.Isin, "ISIN", "ISIN_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(security.Code, "Code", "CODE_VALIDATION_REQUIRED");
 
-            if (string.IsNullOrWhiteSpace(security.Code))
-                throw new ValidationException("SECURITY_CODE_REQUIRED", "Code cannot be null or empty.");
+            ValidateCodeAvailability(security.Code, id);
 
             existingSecurity.Isin = security.Isin;
             existingSecurity.Kod = security.Code;
@@ -143,37 +107,21 @@ namespace PriceFlowApp.Services
 
             HartiiOdVrednost updatedSecurity =_securitiesRepository.Update(existingSecurity);
 
-            return new Security
-            {
-                Id = updatedSecurity.Id,
-                Isin = updatedSecurity.Isin,
-                Code = updatedSecurity.Kod,
-                TypeSecurityName = updatedSecurity.TipHv.Ime,
-                IssuerName = updatedSecurity.Izdavach.Ime,
-                TotalNumShares = updatedSecurity.VkupenBrojAkcii
-            };
+            return MapToSecurity(updatedSecurity);
         }
 
         public Security Delete(int id)
         {
-            HartiiOdVrednost existingSecurity = GetSecurity(id);
+            HartiiOdVrednost existingSecurity = GetSecurityById(id);
 
-            _securitiesRepository.Delete(existingSecurity);
+            HartiiOdVrednost deletedSecurity = _securitiesRepository.Delete(existingSecurity);
 
-            return new Security
-            {
-                Id = existingSecurity.Id,
-                Isin = existingSecurity.Isin,
-                Code = existingSecurity.Kod,
-                TypeSecurityName = existingSecurity.TipHv.Ime,
-                IssuerName = existingSecurity.Izdavach.Ime,
-                TotalNumShares = existingSecurity.VkupenBrojAkcii
-            };
+            return MapToSecurity(deletedSecurity);
         }
 
-        public SecurityDailyPrices? GetLatestPrices(string securityCode, DateTime date)
+        public SecurityDailyPrices GetLatestPrices(string securityCode, DateTime date)
         {
-           IEnumerable<DnevenPromet?> dailyTurnover = _dailyTurnoverRepository.GetBySecurityCode(securityCode, date);
+           IEnumerable<DnevenPromet> dailyTurnover = _dailyTurnoverRepository.GetBySecurityCode(securityCode, date);
 
             if (!dailyTurnover.Any())
                 return null;
@@ -206,43 +154,65 @@ namespace PriceFlowApp.Services
         {
             IEnumerable<HartiiOdVrednost?> securities = _securitiesRepository.SearchByCode(searchTerm);
 
-            return securities.Select(s => new Security
-            {
-                Id = s.Id,
-                Isin = s.Isin,
-                Code = s.Kod,
-                TypeSecurityName = s.TipHv.Ime,
-                IssuerName = s.Izdavach.Ime,
-                TotalNumShares = s.VkupenBrojAkcii
-            })
-            .ToList();
+            return securities
+                .Select(MapToSecurity)
+                .ToList();
         }
 
-        private HartiiOdVrednost GetSecurity(int securityId)
+        private HartiiOdVrednost GetSecurityById(int securityId)
         {
-            var security = _securitiesRepository.GetById(securityId);
+            HartiiOdVrednost? security = _securitiesRepository.GetById(securityId);
             if (security == null)
                 throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
 
             return security;
         }
 
-        private TipHv GetTypeSecurity(int typeSecurityId)
+        private HartiiOdVrednost GetSecurityByCode(string code)
+        {
+            HartiiOdVrednost? security = _securitiesRepository.GetByCode(code);
+            if (security == null)
+                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+
+            return security;
+        }
+
+        private TipHv GetTypeSecurityById(int typeSecurityId)
         {
             var typeSecurity = _typeSecurityRepository.GetById(typeSecurityId);
             if (typeSecurity == null)
-                throw new NotFoundException("TYPESECURITY_NOT_FOUND", "Type security not found.");
+                throw new NotFoundException("TYPESECURITY_NOT_FOUND", "Type request not found.");
 
             return typeSecurity;
         }
 
-        private Izdavachi GetIssuer(int issuerId)
+        private Izdavachi GetIssuerById(int issuerId)
         {
             var issuer = _issuersRepository.GetById(issuerId);
             if (issuer == null)
                 throw new NotFoundException("ISSUER_NOT_FOUND", "Issuer not found.");
 
             return issuer;
+        }
+
+        private void ValidateCodeAvailability(string code, int? securityId = null)
+        {
+            HartiiOdVrednost? existingSecurity = _securitiesRepository.GetByCode(code);
+            if (existingSecurity != null && existingSecurity.Id != securityId)
+                throw new AlreadyExistsException("CODE_ALREADY_EXISTS", "Code already exists.");
+        }
+
+        private Security MapToSecurity(HartiiOdVrednost security)
+        {
+            return new Security
+            {
+                Id = security.Id,
+                Isin = security.Isin,
+                Code = security.Kod,
+                TypeSecurityName = security.TipHv.Ime,
+                IssuerName = security.Izdavach.Ime,
+                TotalNumShares = security.VkupenBrojAkcii
+            };
         }
     }
 }

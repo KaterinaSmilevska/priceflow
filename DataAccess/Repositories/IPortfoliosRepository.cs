@@ -6,7 +6,9 @@ namespace DataAccess.Repositories
     {
         Portfolija? GetById(int id);
 
-        IEnumerable<Portfolija?> GetByUserId(int userId);
+        Portfolija? GetByName(string name, int userId);
+
+        IEnumerable<Portfolija> GetByUserId(int userId);
 
         Portfolija Add(Portfolija portfolio);
 

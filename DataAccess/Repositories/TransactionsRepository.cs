@@ -28,7 +28,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<Transakcii?> GetByPortfolioIdUntilDate(int portfolioId, DateOnly date)
+        public IEnumerable<Transakcii> GetByPortfolioIdUntilDate(int portfolioId, DateOnly date)
         {
             return _dbContext.Transakcii
                 .Where(t => t.PortfolioId == portfolioId && t.Realna && t.Datum <= date)
@@ -93,6 +93,27 @@ namespace DataAccess.Repositories
                     : -t.KolicinaAkcii;
             }
             return ownedShares;
+        }
+
+        public int GetOwnedSharesByUser(int userId, int securityId)
+        {
+            List<Transakcii> transactions = _dbContext.Transakcii
+                .Include(t => t.Portfolio)
+                    .Where(t =>
+                    t.Portfolio.KorisnikId == userId &&
+                    t.Hvid == securityId &&
+                    t.Realna)
+                .ToList();
+
+            int bought = transactions
+                .Where(t => t.TipTransakcija == "Купување")
+                .Sum(t => t.KolicinaAkcii);
+
+            int sold = transactions
+                .Where(t => t.TipTransakcija == "Продавање")
+                .Sum(t => t.KolicinaAkcii);
+
+            return bought - sold;
         }
 
         public Transakcii Add(Transakcii transaction)

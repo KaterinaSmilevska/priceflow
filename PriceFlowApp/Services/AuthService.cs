@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 using PriceFlowSecurity;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -37,7 +38,7 @@ namespace PriceFlowApp.Services
 
         public User FindByUsername(string username)
         {
-            ValidateRequiredField(username, "Username", "USERNAME_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(username, "Username", "USERNAME_VALIDATION_REQUIRED");
 
             Korisnici user = GetUserByUsername(username);
 
@@ -55,17 +56,19 @@ namespace PriceFlowApp.Services
         {
             IEnumerable<Korisnici> users = _authRepository.GetAll();
 
-            return users.Select(user => MapToUser(user));
+            return users
+                .Select(MapToUser)
+                .ToList();
         }
 
         public User Update(int id, User user)
         {
             Korisnici existingUser = GetUserById(id);
 
-            ValidateRequiredField(user.Username, "Username", "USERNAME_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(user.Username, "Username", "USERNAME_VALIDATION_REQUIRED");
             ValidateUsernameAvailability(user.Username, user.Id);
-            ValidateRequiredField(user.Name, "Name", "NAME_VALIDATION_REQUIRED");
-            ValidateRequiredField(user.Email, "Email", "EMAIL_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(user.Name, "Name", "NAME_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(user.Email, "Email", "EMAIL_VALIDATION_REQUIRED");
             ValidateEmailFormat(user.Email);
 
             existingUser.Ime = user.Name;
@@ -73,18 +76,18 @@ namespace PriceFlowApp.Services
             existingUser.Email = user.Email;
             existingUser.IsEmailVerified = user.IsEmailVerified;
 
-            _authRepository.Update(existingUser);
+            Korisnici updatedUser = _authRepository.Update(existingUser);
 
-            return MapToUser(existingUser);
+            return MapToUser(updatedUser);
         }
 
         public User Delete(int id)
         {
-            Korisnici? existingUser = GetUserById(id);
+            Korisnici existingUser = GetUserById(id);
 
-            _authRepository.Delete(existingUser);
+            Korisnici deletedUser = _authRepository.Delete(existingUser);
 
-            return MapToUser(existingUser);
+            return MapToUser(deletedUser);
         }
 
         public RegisterResponse Register(RegisterRequest registerRequest)
@@ -111,7 +114,7 @@ namespace PriceFlowApp.Services
                 ResetPasswordTokenExpiry = null
             };
 
-            _authRepository.Add(user);
+            Korisnici addedUser = _authRepository.Add(user);
 
             var roleIds = _rolesRepository.GetIdsByNames(registerRequest.RoleNames);
             foreach (var roleId in roleIds)
@@ -289,12 +292,6 @@ namespace PriceFlowApp.Services
         public bool UsernameExists(string username)
         {
             return _authRepository.UsernameExists(username);
-        }
-
-        private void ValidateRequiredField(string value, string fieldName, string errorCode)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new ValidationException(errorCode, $"{fieldName} cannot be null or empty.");
         }
 
         private void ValidateRegistrationFields(RegisterRequest request)

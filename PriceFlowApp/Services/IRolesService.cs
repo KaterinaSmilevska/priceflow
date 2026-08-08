@@ -1,4 +1,4 @@
-﻿using DataAccess.Models;
+﻿using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {
@@ -6,7 +6,7 @@ namespace PriceFlowApp.Services
     {
         List<string> FindByUserId(int userId);
 
-        Ulogi? FindByName(string name);
+        Role FindByName(string name);
 
         List<string> FindNames();
     }

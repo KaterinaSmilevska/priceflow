@@ -4,9 +4,9 @@ namespace PriceFlowApp.Services
 {
     public interface ISecuritiesService
     {
-        Security? FindById(int id);
+        Security FindById(int id);
 
-        Security? FindByCode(string code);
+        Security FindByCode(string code);
 
         IEnumerable<Security> FindAll();
 
@@ -22,7 +22,7 @@ namespace PriceFlowApp.Services
 
         Security Delete(int id);
 
-        SecurityDailyPrices? GetLatestPrices(string securityCode, DateTime date);
+        SecurityDailyPrices GetLatestPrices(string securityCode, DateTime date);
 
         IEnumerable<Security> SearchByCode(string searchTerm);
     }

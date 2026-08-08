@@ -1,6 +1,5 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
@@ -21,7 +20,7 @@ namespace PriceFlowApp.Services
 
         public MarketOverview GetOverview()
         {
-            DateTime latestDate = _dbContext.DnevenPromet.Max(dp => dp.Datum);
+            DateTime latestDate = FindLatestDate();
             DateTime startMonth = new DateTime(latestDate.Year, latestDate.Month, 1);
 
             decimal? totalMarketCap = _dbContext.DnevenPromet
@@ -67,7 +66,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<SecurityPerformance> GetTopGainers(int count)
         {
-            DateTime latestDate = _dbContext.DnevenPromet.Max(dp => dp.Datum);
+            DateTime latestDate = FindLatestDate();
 
             return _dbContext.DnevenPromet
                 .Where(dp => dp.Datum == latestDate && dp.ProcentPromena > 0 && dp.KolicinaIstrguvaniAkcii != null)
@@ -84,7 +83,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<SecurityPerformance> GetTopLosers(int count)
         {
-            DateTime latestDate = _dbContext.DnevenPromet.Max(dp => dp.Datum);
+            DateTime latestDate = FindLatestDate();
 
             return _dbContext.DnevenPromet
                 .Where(dp => dp.Datum == latestDate && dp.ProcentPromena < 0 && dp.KolicinaIstrguvaniAkcii != null)
@@ -101,7 +100,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<SecurityPerformance> GetMostTrade(int count)
         {
-            DateTime latestDate = _dbContext.DnevenPromet.Max(dp => dp.Datum);
+            DateTime latestDate = FindLatestDate();
 
             return _dbContext.DnevenPromet
                 .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii != null)
@@ -161,6 +160,12 @@ namespace PriceFlowApp.Services
                 .OrderBy(x => x.TradingDays)
                 .Take(5)
             };
+        }
+
+        private DateTime FindLatestDate()
+        {
+            return _dbContext.DnevenPromet
+                .Max(dp => dp.Datum);
         }
     }
 }

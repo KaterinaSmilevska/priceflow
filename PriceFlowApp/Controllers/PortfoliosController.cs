@@ -26,7 +26,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public ActionResult<Portfolio> GetById(int id)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult<IEnumerable<Portfolio>> GetAll()
         {
             try
             {
@@ -58,14 +58,14 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] AddPortfolioRequest portfolio)
+        public ActionResult<Portfolio> Create([FromBody] AddPortfolioRequest portfolio)
         {
             try
             {
                 int userId = User.GetUserId();
-                Portfolio createdPortfolio = _portfoliosService.Add(userId, portfolio);
+                Portfolio addedPortfolio = _portfoliosService.Add(userId, portfolio);
 
-                return Ok(createdPortfolio);
+                return Ok(addedPortfolio);
             }
             catch (Exception ex)
             {
@@ -74,7 +74,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UpdatePortfolio portfolio)
+        public ActionResult<Portfolio> Update(int id, [FromBody] UpdatePortfolio portfolio)
         {
             try
             {
@@ -90,14 +90,14 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public ActionResult<Portfolio> Delete(int id)
         {
             try
             {
                 int userId = User.GetUserId();
-                _portfoliosService.Delete(id, userId);
+                Portfolio deletedPortfolio = _portfoliosService.Delete(id, userId);
 
-                return Ok();
+                return Ok(deletedPortfolio);
             }
             catch (Exception ex)
             {

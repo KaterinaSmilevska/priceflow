@@ -17,11 +17,18 @@ namespace PriceFlowApp.Services
         {
             IEnumerable<Sektori> issuers = _sectorsRepository.GetAll();
 
-            return issuers.Select(i => new Sector
+            return issuers
+                .Select(MapToSector)
+                .ToList();
+        }
+
+        private Sector MapToSector(Sektori sector)
+        {
+            return new Sector
             {
-                SectorId = i.Id,
-                SectorName = i.Ime
-            });
+                SectorId = sector.Id,
+                SectorName = sector.Ime
+            };
         }
     }
 }

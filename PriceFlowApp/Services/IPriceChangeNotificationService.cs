@@ -8,8 +8,8 @@ namespace PriceFlowApp.Services
 
         int GetUnreadNotificationCount(int userId);
 
-        void CheckAndGenerateNotifications();
+        void GenerateNotifications();
 
-        void MarkNotificationAsRead(int notificationId);
+        void MarkNotificationAsRead(int userId, int notificationId);
     }
 }

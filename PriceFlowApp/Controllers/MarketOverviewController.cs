@@ -8,7 +8,6 @@ namespace PriceFlowApp.Controllers
     [Route("api/[controller]")]
     public class MarketOverviewController : ControllerBase
     {
-
         private readonly IMarketOverviewService _marketOverviewService;
 
         public MarketOverviewController(IMarketOverviewService marketOverviewService)
@@ -32,7 +31,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("top-gainers")]
-        public IActionResult GetTopGainers([FromQuery] int count)
+        public ActionResult<IEnumerable<SecurityPerformance>> GetTopGainers([FromQuery] int count)
         {
             try
             {
@@ -47,7 +46,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("top-losers")]
-        public IActionResult GetTopLosers([FromQuery] int count)
+        public ActionResult<IEnumerable<SecurityPerformance>> GetTopLosers([FromQuery] int count)
         {
             try
             {
@@ -62,7 +61,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("most-traded")]
-        public IActionResult GetMostTraded([FromQuery] int count)
+        public ActionResult<IEnumerable<SecurityPerformance>> GetMostTraded([FromQuery] int count)
         {
             try
             {

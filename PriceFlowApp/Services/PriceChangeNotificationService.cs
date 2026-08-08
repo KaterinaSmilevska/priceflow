@@ -10,67 +10,134 @@ namespace PriceFlowApp.Services
         private readonly IPriceChangeNotificationsRepository _notificationRepository;
         private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
         private readonly IAuthRepository _authRepository;
+        private readonly ITransactionsRepository _transactionsRepository;
+        private readonly IThresholdRepository _thresholdRepository;
 
         public PriceChangeNotificationService(IPriceChangeNotificationsRepository notificationRepository, IDailyTurnoverRepository dailyTurnoverRepository, 
-            IAuthRepository authRepository)
+            IAuthRepository authRepository, ITransactionsRepository transactionsRepository, IThresholdRepository thresholdRepository)
         {
             _notificationRepository = notificationRepository;
             _dailyTurnoverRepository = dailyTurnoverRepository;
             _authRepository = authRepository;
+            _transactionsRepository = transactionsRepository;
+            _thresholdRepository = thresholdRepository;
         } 
 
         public IEnumerable<PriceChangeNotificationResponse> GetUserNotifications(int userId)
         {
-            DataAccess.Models.Korisnici user = GetUser(userId);
+            Korisnici user = GetUserById(userId);
 
-            IEnumerable<IzvestuvanjaPromenaCena?> notifications = _notificationRepository.GetByUserId(userId);
+            IEnumerable<IzvestuvanjaPromenaCena> notifications = _notificationRepository.GetByUserId(userId);
 
-            return notifications.Select(n => new PriceChangeNotificationResponse
-            {
-                Id = n.Id,
-                HvId = n.Hvid,
-                ChangePercent = n.ProcentPromena,
-                TradingDate = n.DatumTrguvanje.Date,
-                Message = n.Poraka,
-                IsRead = n.Procitano
-            }).ToList();
+            return notifications
+                .Select(MapToPriceChangeNotification)
+                .ToList();
         }
 
         public int GetUnreadNotificationCount(int userId)
         {
-            DataAccess.Models.Korisnici user = GetUser(userId);
+            Korisnici user = GetUserById(userId);
 
             return _notificationRepository.GetUnreadNotificationCount(userId);
         }
 
-        public void CheckAndGenerateNotifications()
+        public void GenerateNotifications()
         {
-            DateTime today = _dailyTurnoverRepository.GetLatestDate();
+            DateTime latestDate = _dailyTurnoverRepository.GetLatestDate();
 
-            bool hasTodayData = _dailyTurnoverRepository.ExistsForDate(today);
-
-            if (!hasTodayData)
+            if (!_dailyTurnoverRepository.ExistsForDate(latestDate))
                 return;
 
-            _notificationRepository.GenerateNotifications(today);
+            IEnumerable<DnevenPromet> dailyTurnover = _dailyTurnoverRepository.GetByDate(latestDate);
+
+            foreach(DnevenPromet dailyData in dailyTurnover)
+            {
+                if (dailyData.ProcentPromena == null || dailyData.ProcentPromena == 0)
+                    continue;
+
+                IEnumerable<HvPromenaCena> alerts = _thresholdRepository.GetBySecurityId(dailyData.Hvid);
+
+                foreach(HvPromenaCena alert in alerts)
+                {
+                    int ownedShares = _transactionsRepository.GetOwnedSharesByUser(alert.KorisnikId, alert.Hvid);
+
+                    if (ownedShares <= 0)
+                        continue;
+
+                    bool thresholdReached = dailyData.ProcentPromena <= alert.DolnaGranica ||
+                        dailyData.ProcentPromena >= alert.GornaGranica;
+
+                    if (!thresholdReached)
+                        continue;
+
+                    bool notificationExists = _notificationRepository.ExistsForUserAndSecurityAndDate(alert.KorisnikId, alert.Hvid, latestDate);
+
+                    if (notificationExists)
+                        continue;
+
+                    AddNotification(alert, dailyData, latestDate);
+                }
+            }
         }
 
-        public void MarkNotificationAsRead(int notificationId)
+        public void MarkNotificationAsRead(int userId, int notificationId)
+        {
+            GetUserById(userId);
+            IzvestuvanjaPromenaCena notification = GetPriceChangeNotificationById(notificationId);
+
+            if (notification.KorisnikId != userId)
+                throw new UnauthorizedException("NOTIFICATION_ACCESS_DENIED", "You cannot access this notification.");
+
+            _notificationRepository.MarkNotificationAsRead(notification);
+        }
+
+        private Korisnici GetUserById(int userId)
+        {
+            Korisnici? user = _authRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+
+            return user;
+        }
+
+        private IzvestuvanjaPromenaCena GetPriceChangeNotificationById(int notificationId)
         {
             IzvestuvanjaPromenaCena? notification = _notificationRepository.GetById(notificationId);
             if (notification == null)
                 throw new NotFoundException("NOTIFICATION_NOT_FOUND", "Notification not found.");
 
-            _notificationRepository.MarkNotificationAsRead(notificationId);
+            return notification;
         }
 
-        private DataAccess.Models.Korisnici GetUser(int userId)
+        private PriceChangeNotificationResponse AddNotification(HvPromenaCena alert, DnevenPromet dailyData, DateTime tradingDate)
         {
-            var user = _authRepository.GetById(userId);
-            if (user == null)
-                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+            IzvestuvanjaPromenaCena notification = new IzvestuvanjaPromenaCena
+            {
+                KorisnikId = alert.KorisnikId,
+                Hvid = alert.Hvid,
+                ProcentPromena = dailyData.ProcentPromena!.Value,
+                DatumTrguvanje = tradingDate,
+                Poraka =
+                               $"Security {alert.Hv.Kod} changed {dailyData.ProcentPromena:F2}% " +
+                               $"(Threshold: {alert.DolnaGranica}% / {alert.GornaGranica}%)",
+                Procitano = false
+            };
+            IzvestuvanjaPromenaCena addedNotification = _notificationRepository.Add(notification);
 
-            return user;
+            return MapToPriceChangeNotification(addedNotification);
+        }
+
+        private PriceChangeNotificationResponse MapToPriceChangeNotification(IzvestuvanjaPromenaCena priceChangeNotification)
+        {
+            return new PriceChangeNotificationResponse
+            {
+                Id = priceChangeNotification.Id,
+                HvId = priceChangeNotification.Hvid,
+                ChangePercent = priceChangeNotification.ProcentPromena,
+                TradingDate = priceChangeNotification.DatumTrguvanje.Date,
+                Message = priceChangeNotification.Poraka,
+                IsRead = priceChangeNotification.Procitano
+            };
         }
     }
 }

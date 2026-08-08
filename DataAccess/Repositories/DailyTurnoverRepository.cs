@@ -14,7 +14,7 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public IEnumerable<DnevenPromet?> GetBySecurityCode(string securityCode, DateTime date)
+        public IEnumerable<DnevenPromet> GetBySecurityCode(string securityCode, DateTime date)
         {
             return _dbContext.DnevenPromet
                 .Include(dp => dp.Hv)
@@ -23,7 +23,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<DnevenPromet?> GetBySecuritiesIds(List<int> securitiesIds, PriceTrendPeriod? period, PriceTrendResolution? resolution)
+        public IEnumerable<DnevenPromet> GetBySecuritiesIds(List<int> securitiesIds, PriceTrendPeriod? period, PriceTrendResolution? resolution)
         {
             DateTime today = DateTime.Today;
 
@@ -132,7 +132,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<DnevenPromet?> GetLiquidity(IEnumerable<int>? securityIds, DateTime fromDate)
+        public IEnumerable<DnevenPromet> GetLiquidity(IEnumerable<int>? securityIds, DateTime fromDate)
         {
             var query = _dbContext.DnevenPromet
                 .Include(dp => dp.Hv)
@@ -162,7 +162,14 @@ namespace DataAccess.Repositories
         public bool ExistsForDate(DateTime date)
         {
             return _dbContext.DnevenPromet
-                .Any(dp => dp.Datum == date);
+                .Any(dp => dp.Datum >= date && dp.Datum < date.AddDays(1));
+        }
+
+        public IEnumerable<DnevenPromet> GetByDate(DateTime date)
+        {
+            return _dbContext.DnevenPromet
+                .Where(dp => dp.Datum >= date && dp.Datum < date.AddDays(1) && dp.ProcentPromena != null)
+                .ToList();
         }
     }
 }

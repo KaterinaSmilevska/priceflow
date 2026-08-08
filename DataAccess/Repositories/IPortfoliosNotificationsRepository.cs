@@ -4,7 +4,7 @@ namespace DataAccess.Repositories
 {
     public interface IPortfoliosNotificationsRepository
     {
-        IEnumerable<IzvestuvanjaPortfolija?> GetByUserId(int userId);
+        IEnumerable<IzvestuvanjaPortfolija> GetByUserId(int userId);
 
         IzvestuvanjaPortfolija? GetByPortfolioId(int portfolioId);
 

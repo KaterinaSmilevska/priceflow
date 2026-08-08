@@ -91,7 +91,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("/latest-date")]
-        public IActionResult GetLatestDate()
+        public ActionResult<DateTime> GetLatestDate()
         {
             var latestDate = _chartService.FindLatestDate();
 

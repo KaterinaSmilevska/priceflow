@@ -22,13 +22,9 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<PriceTrend> GetPriceTrend(int securityId, DateTime startDate, DateTime endDate)
         {
-            if (startDate > endDate)
-                throw new ValidationException("INVALID_DATE_RANGE", "Start date cannot be after end date.");
+            ValidateDateRange(startDate, endDate);
 
-            HartiiOdVrednost? security = _securitiesRepository.GetById(securityId);
-
-            if (security == null)
-                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+            HartiiOdVrednost security = GetSecurityById(securityId);
 
             return _dbContext.DnevenPromet
                 .Where(dp => dp.Hvid == securityId && dp.Datum >= startDate && dp.Datum <= endDate)
@@ -63,10 +59,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<MonthlyIncome> GetMonthlyIncome(int portfolioId, bool isReal)
         {
-            Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
-
-            if (portfolio == null)
-                throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
+            Portfolija portfolio = GetPortfolioById(portfolioId);
 
             IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
 
@@ -88,10 +81,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<SecurityAllocation> GetAllocation(int portfolioId, bool isReal)
         {
-            Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
-
-            if (portfolio == null)
-                throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
+            Portfolija portfolio = GetPortfolioById(portfolioId);
 
             IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
 
@@ -125,6 +115,30 @@ namespace PriceFlowApp.Services
                 .OrderByDescending(dp => dp.Datum)
                 .Select(dp => dp.Datum)
                 .FirstOrDefault();
+        }
+
+        private HartiiOdVrednost GetSecurityById(int securityId)
+        {
+            HartiiOdVrednost? security = _securitiesRepository.GetById(securityId);
+            if (security == null)
+                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+
+            return security;
+        }
+
+        private Portfolija GetPortfolioById(int portfolioId)
+        {
+            Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
+            if (portfolio == null)
+                throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
+
+            return portfolio;
+        }
+
+        private void ValidateDateRange(DateTime startDate, DateTime endDate)
+        {
+            if (startDate > endDate)
+                throw new ValidationException("INVALID_DATE_RANGE", "Start date cannot be after end date.");
         }
     }
 }

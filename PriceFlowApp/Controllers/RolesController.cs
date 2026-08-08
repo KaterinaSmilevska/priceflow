@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 
 namespace PriceFlowApp.Controllers
@@ -15,13 +16,13 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("{name}")]
-        public IActionResult GetRole(string name)
+        public ActionResult<Role> GetRole(string name)
         {
             try
             {
-                var response = _rolesService.FindByName(name);
+                Role role = _rolesService.FindByName(name);
 
-                return Ok(response);
+                return Ok(role);
             }
             catch (Exception ex)
             {
@@ -30,13 +31,13 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetRoleNames()
+        public ActionResult<List<string>> GetRoleNames()
         {
             try
             {
-                var response = _rolesService.FindNames();
+                List<string> roleNames = _rolesService.FindNames();
 
-                return Ok(response);
+                return Ok(roleNames);
             }
             catch (Exception ex)
             {

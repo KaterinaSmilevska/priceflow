@@ -3,6 +3,7 @@ using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 
 namespace PriceFlowApp.Services
 {
@@ -24,28 +25,16 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<Transaction> FindByPortfolioId(int portfolioid)
         {
-            IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioid);
+            IEnumerable<Transakcii> transactions = _transactionsRepository.GetByPortfolioId(portfolioid);
 
-            return transactions.Select(t => new Transaction
-            {
-                Id = t.Id,
-                HVId = t.Hvid,
-                HVCode = t.Hv.Kod,
-                SharesQuantity = t.KolicinaAkcii,
-                SharesUnitPrice = t.EdinecnaCenaAkcija,
-                Amount = t.Iznos,
-                TypeTransaction = t.TipTransakcija,
-                IsReal = t.Realna,
-                StockExchangeCommission = t.BerzanskaProvizija,
-                BrokerageCommission = t.BrokerskaProvizija,
-                CDHVCommission = t.Cdhvprovizija,
-                Date = t.Datum
-            }).ToList();
+            return transactions
+                .Select(MapToTransaction)
+                .ToList();
         }
 
         public int FindOwnedShares(int portfolioId, string securityCode, bool isReal)
         {
-            HartiiOdVrednost security = GetSecurity(securityCode);
+            HartiiOdVrednost security = GetSecurityByCode(securityCode);
 
             return _transactionsRepository
                 .GetOwnedShares(portfolioId, security.Id, isReal);
@@ -53,7 +42,7 @@ namespace PriceFlowApp.Services
 
         public int FindOwnedSharesAtDate(int portfolioId, string securityCode, bool isReal, DateOnly date, int? transactionIdToExclude)
         {
-            HartiiOdVrednost security = GetSecurity(securityCode);
+            HartiiOdVrednost security = GetSecurityByCode(securityCode);
 
             return _transactionsRepository
                 .GetOwnedSharesAtDate(portfolioId, security.Id, isReal, date, transactionIdToExclude);
@@ -61,10 +50,9 @@ namespace PriceFlowApp.Services
 
         public Transaction Add(int portfolioId, Transaction transaction)
         {
-            HartiiOdVrednost security = GetSecurity(transaction.HVCode);
+            HartiiOdVrednost security = GetSecurityByCode(transaction.HVCode);
 
-            if (string.IsNullOrWhiteSpace(transaction.TypeTransaction))
-                throw new ValidationException("TRANSACTION_TYPE_REQUIRED", "Type cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(transaction.TypeTransaction, "Type", "TYPE_VALIDATION_REQUIRED");
 
             ValidateShares(portfolioId, security, transaction);
 
@@ -83,35 +71,20 @@ namespace PriceFlowApp.Services
                 Datum = transaction.Date
             };
 
-            Transakcii createdTransaction = _transactionsRepository.Add(entity);
+            Transakcii addedTransaction = _transactionsRepository.Add(entity);
 
-            return new Transaction
-            {
-                Id = createdTransaction.Id,
-                HVId = createdTransaction.Hvid,
-                HVCode = createdTransaction.Hv.Kod,
-                SharesQuantity = createdTransaction.KolicinaAkcii,
-                SharesUnitPrice = createdTransaction.EdinecnaCenaAkcija,
-                Amount = createdTransaction.Iznos,
-                TypeTransaction = createdTransaction.TipTransakcija,
-                IsReal = createdTransaction.Realna,
-                StockExchangeCommission = createdTransaction.BerzanskaProvizija,
-                BrokerageCommission = createdTransaction.BrokerskaProvizija,
-                CDHVCommission = createdTransaction.Cdhvprovizija,
-                Date = createdTransaction.Datum
-            };
+            return MapToTransaction(addedTransaction);
         }
 
         public Transaction Update(int portfolioId, int id, Transaction transaction)
         {
-            Transakcii existingTransaction = GetTransaction(id);
-            HartiiOdVrednost security = GetSecurity(transaction.HVCode);
+            Transakcii existingTransaction = GetTransactionById(id);
+            HartiiOdVrednost security = GetSecurityByCode(transaction.HVCode);
 
             if (existingTransaction.PortfolioId != portfolioId)
                 throw new NotFoundException("TRANSACTION_NOT_FOUND", "Transaction not found.");
 
-            if (string.IsNullOrWhiteSpace(transaction.TypeTransaction))
-                throw new ValidationException("TRANSACTION_TYPE_REQUIRED", "Type cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(transaction.TypeTransaction, "Type", "TYPE_VALIDATION_REQUIRED");
 
             ValidateShares(portfolioId, security, transaction, id);
 
@@ -128,49 +101,21 @@ namespace PriceFlowApp.Services
 
             Transakcii updatedTransaction = _transactionsRepository.Update(existingTransaction);
 
-            return new Transaction
-            {
-                Id = updatedTransaction.Id,
-                HVId = updatedTransaction.Hvid,
-                HVCode = updatedTransaction.Hv.Kod,
-                SharesQuantity = updatedTransaction.KolicinaAkcii,
-                SharesUnitPrice = updatedTransaction.EdinecnaCenaAkcija,
-                Amount = updatedTransaction.Iznos,
-                TypeTransaction = updatedTransaction.TipTransakcija,
-                IsReal = updatedTransaction.Realna,
-                StockExchangeCommission = updatedTransaction.BerzanskaProvizija,
-                BrokerageCommission = updatedTransaction.BrokerskaProvizija,
-                CDHVCommission = updatedTransaction.Cdhvprovizija,
-                Date = updatedTransaction.Datum
-            };
+            return MapToTransaction(updatedTransaction);
         }
 
         public Transaction Delete(int id)
         {
-            Transakcii? existingTransaction = GetTransaction(id);
+            Transakcii existingTransaction = GetTransactionById(id);
 
-            _transactionsRepository.Delete(existingTransaction);
+            Transakcii deletedTransaction = _transactionsRepository.Delete(existingTransaction);
 
-            return new Transaction
-            {
-                Id = existingTransaction.Id,
-                HVId = existingTransaction.Hvid,
-                HVCode = existingTransaction.Hv.Kod,
-                SharesQuantity = existingTransaction.KolicinaAkcii,
-                SharesUnitPrice = existingTransaction.EdinecnaCenaAkcija,
-                Amount = existingTransaction.Iznos,
-                TypeTransaction = existingTransaction.TipTransakcija,
-                IsReal = existingTransaction.Realna,
-                StockExchangeCommission = existingTransaction.BerzanskaProvizija,
-                BrokerageCommission = existingTransaction.BrokerskaProvizija,
-                CDHVCommission = existingTransaction.Cdhvprovizija,
-                Date = existingTransaction.Datum
-            };
+            return MapToTransaction(deletedTransaction);
         }
 
         public PortfolioAnalytics GetAnalytics(int portfolioId, bool isReal)
         {
-            List<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioId).ToList();
+            List<Transakcii> transactions = _transactionsRepository.GetByPortfolioId(portfolioId).ToList();
 
             transactions = transactions
                 .Where(t => t.Realna == isReal)
@@ -320,7 +265,7 @@ namespace PriceFlowApp.Services
             if (transaction.SharesQuantity <= 0)
                 throw new InvalidOperationException("Transaction quantity must be greater than 0.");
 
-            List<Transakcii?> allTransactions = _transactionsRepository.GetByPortfolioId(portfolioId).ToList();
+            List<Transakcii> allTransactions = _transactionsRepository.GetByPortfolioId(portfolioId).ToList();
 
             allTransactions = allTransactions
                 .Where(t => t.Hvid == security.Id && t.Realna == transaction.IsReal)
@@ -396,7 +341,7 @@ namespace PriceFlowApp.Services
             }
         }
 
-        private HartiiOdVrednost GetSecurity(string securityCode)
+        private HartiiOdVrednost GetSecurityByCode(string securityCode)
         {
             var security = _securitiesRepository.GetByCode(securityCode);
             if (security == null)
@@ -405,13 +350,32 @@ namespace PriceFlowApp.Services
             return security;
         }
 
-        private Transakcii GetTransaction(int transactionId)
+        private Transakcii GetTransactionById(int transactionId)
         {
             var transaction = _transactionsRepository.GetById(transactionId);
             if (transaction == null)
                 throw new NotFoundException("TRANSACTION_NOT_FOUND", "Transaction not found.");
 
             return transaction;
+        }
+
+        private Transaction MapToTransaction(Transakcii transaction)
+        {
+            return new Transaction
+            {
+                Id = transaction.Id,
+                HVId = transaction.Hvid,
+                HVCode = transaction.Hv.Kod,
+                SharesQuantity = transaction.KolicinaAkcii,
+                SharesUnitPrice = transaction.EdinecnaCenaAkcija,
+                Amount = transaction.Iznos,
+                TypeTransaction = transaction.TipTransakcija,
+                IsReal = transaction.Realna,
+                StockExchangeCommission = transaction.BerzanskaProvizija,
+                BrokerageCommission = transaction.BrokerskaProvizija,
+                CDHVCommission = transaction.Cdhvprovizija,
+                Date = transaction.Datum
+            };
         }
     }
 }

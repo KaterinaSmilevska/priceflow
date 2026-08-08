@@ -1,6 +1,7 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 
 namespace PriceFlowApp.Services
 {
@@ -19,7 +20,7 @@ namespace PriceFlowApp.Services
             _emailService = emailService;
         }
 
-        public PortfolioNotification? FindByPortfolioId(int portfolioId)
+        public PortfolioNotification FindByPortfolioId(int portfolioId)
         {
             IzvestuvanjaPortfolija? notification = _portfoliosNotificationsRepository.GetByPortfolioId(portfolioId);
 
@@ -33,18 +34,12 @@ namespace PriceFlowApp.Services
                 };
             }
 
-            return new PortfolioNotification
-            {
-                PortfolioId = notification.PortfolioId,
-                IsEnabled = notification.Ovozmozeno,
-                Frequency = notification.Frekvencija
-            };
+            return MapToPortfolioNotification(notification);
         }
 
         public PortfolioNotification Update(UpdatePortfolioNotification portfolioNotification)
         {
-            if (portfolioNotification.Frequency != "Weekly" && portfolioNotification.Frequency != "Monthly")
-                throw new ArgumentException("Frequency must be Weekly or Monthly.");
+            ValidatePortfolioNotificationFrequency(portfolioNotification);
 
             IzvestuvanjaPortfolija? foundNotification = _portfoliosNotificationsRepository.GetByPortfolioId(portfolioNotification.PortfolioId);
 
@@ -78,13 +73,13 @@ namespace PriceFlowApp.Services
 
         public void SendScheduledNotifications()
         {
-            IEnumerable<DataAccess.Models.Korisnici> users = _usersRepository.GetAll();
+            IEnumerable<Korisnici> users = _usersRepository.GetAll();
 
-            foreach(DataAccess.Models.Korisnici user in users)
+            foreach(Korisnici user in users)
             {
-                IEnumerable<IzvestuvanjaPortfolija?> notifications = _portfoliosNotificationsRepository.GetByUserId(user.Id);
+                IEnumerable<IzvestuvanjaPortfolija> notifications = _portfoliosNotificationsRepository.GetByUserId(user.Id);
 
-                IEnumerable<IzvestuvanjaPortfolija?> enabledNotifications = notifications
+                IEnumerable<IzvestuvanjaPortfolija> enabledNotifications = notifications
                     .Where<IzvestuvanjaPortfolija>(n => n.Ovozmozeno && ShouldSend(n))
                     .ToList();
                 if (!enabledNotifications.Any<IzvestuvanjaPortfolija>())
@@ -132,6 +127,22 @@ namespace PriceFlowApp.Services
             <p>Total Expenses: {simulated.TotalExpenses:C}</p>
             <p>Balance: {simulated.Balance:C}</p>
             ";
+        }
+
+        private void ValidatePortfolioNotificationFrequency(UpdatePortfolioNotification portfolioNotification)
+        {
+            if (portfolioNotification.Frequency != "Weekly" && portfolioNotification.Frequency != "Monthly")
+                throw new ValidationException("FREQUENCY_VALIDATION_REQUIRED", "Frequency must be Weekly or Monthly.");
+        }
+
+        private PortfolioNotification MapToPortfolioNotification(IzvestuvanjaPortfolija portfolioNotification)
+        {
+            return new PortfolioNotification
+            {
+                PortfolioId = portfolioNotification.PortfolioId,
+                IsEnabled = portfolioNotification.Ovozmozeno,
+                Frequency = portfolioNotification.Frekvencija
+            };
         }
     }
 }

@@ -20,9 +20,9 @@ namespace PriceFlowApp.Controllers
         {
             try
             {
-                IEnumerable<Issuer> securities = _issuersService.FindAll();
+                IEnumerable<Issuer> issuers = _issuersService.FindAll();
 
-                return Ok(securities);
+                return Ok(issuers);
             }
             catch (Exception ex)
             {

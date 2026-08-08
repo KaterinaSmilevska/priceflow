@@ -8,7 +8,7 @@ namespace DataAccess.Repositories
 
         HartiiOdVrednost? GetByCode(string code);
 
-        IEnumerable<HartiiOdVrednost?> GetAllByIds(List<int> securitiesIds);
+        IEnumerable<HartiiOdVrednost> GetAllByIds(List<int> securitiesIds);
 
         IEnumerable<HartiiOdVrednost> GetAll();
 

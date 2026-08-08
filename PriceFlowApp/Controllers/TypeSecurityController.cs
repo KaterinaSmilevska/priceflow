@@ -17,17 +17,17 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<TipHv>> GetAll()
+        public ActionResult<IEnumerable<TypeSecurity>> GetAll()
         {
             try
             {
-                IEnumerable<TypeSecurity> securities = _typeSecurityService.FindAll();
+                IEnumerable<TypeSecurity> typeSecurities = _typeSecurityService.FindAll();
 
-                return Ok(securities);
+                return Ok(typeSecurities);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error fetching types of securities.", detail = ex.Message });
+                return StatusCode(500, new { message = "Error fetching types of typeSecurities.", detail = ex.Message });
             }
         }
     }

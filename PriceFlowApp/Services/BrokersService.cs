@@ -2,6 +2,7 @@
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 
 namespace PriceFlowApp.Services
 {
@@ -14,116 +15,116 @@ namespace PriceFlowApp.Services
             _brokersRepository = brokersRepository;
         }
 
-        public Brokeri? FindById(int id)
+        public BrokerResponse FindById(int id)
         {
-            return _brokersRepository
-                .GetById(id);
+            Brokeri broker = GetBrokerById(id);
+
+            return MapToBroker(broker);
         }
 
-        public Brokeri? FindByCompany(string company)
+        public BrokerResponse FindByCompany(string company)
         {
-            if (string.IsNullOrWhiteSpace(company))
-                throw new ValidationException("BROKER_COMPANY_REQUIRED", "Company cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(company, "Company", "COMPANY_VALIDATION_REQUIRED");
 
-            var broker = _brokersRepository.GetByCompany(company);
+            Brokeri broker = GetBrokerByCompany(company);
 
-            if (broker == null)
-                throw new NotFoundException("BROKER_NOT_FOUND", $"Broker with company '{company}' not found.");
-
-            return broker;
+            return MapToBroker(broker);
         }
 
-        public IEnumerable<Broker> FindAll()
+        public IEnumerable<BrokerResponse> FindAll()
         {
             IEnumerable<Brokeri> brokers = _brokersRepository.GetAll();
 
-            return brokers.Select(b => new Broker
-            {
-                Id = b.Id,
-                Company = b.Kompanija,
-                CommissionPercent = b.ProcentProvizija
-            });
+            return brokers.
+                Select(MapToBroker)
+                .ToList();
         }
 
-        public IEnumerable<BrokerResponse> GetAll()
+        public BrokerResponse Add(AddBrokerRequest request)
         {
-            IEnumerable<Brokeri> brokers = _brokersRepository.GetAll();
+            ValidationHelper.ValidateRequiredField(request.Company, "Company", "COMPANY_VALIDATION_REQUIRED");
+            ValidateCompanyAvailability(request.Company);
+            ValidateCommissionPercent(request.CommissionPercent);
 
-            return brokers.Select(b => new BrokerResponse
-            {
-                Id = b.Id,
-                Company = b.Kompanija,
-                CommissionPercent = b.ProcentProvizija
-            });
-        }
-
-        public Broker Add(AddBrokerRequest request)
-        {
-            if (string.IsNullOrWhiteSpace(request.Company))
-                throw new ValidationException("BROKER_COMPANY_REQUIRED", "Company cannot be null or empty.");
-
-            if (request.CommissionPercent < 0)
-                throw new BusinessRuleException("BROKER_IVALID_COMMISSION", "Commission percent cannot be negative.");
-
-            if (_brokersRepository.GetByCompany(request.Company) != null)
-                throw new AlreadyExistsException("BROKER_ALREADY_EXISTS", "Broker already exists.");
-
-            var entity = new Brokeri
+            Brokeri broker = new Brokeri
             {
                 Kompanija = request.Company,
                 ProcentProvizija = request.CommissionPercent
             };
 
-            var createdBroker = _brokersRepository.Add(entity);
+            Brokeri addedBroker = _brokersRepository.Add(broker);
 
-            return new Broker
-            {
-                Id = createdBroker.Id,
-                Company = createdBroker.Kompanija,
-                CommissionPercent = createdBroker.ProcentProvizija
-            };
+            return MapToBroker(addedBroker);
         }
 
         public BrokerResponse Update(int id, UpdateBrokerRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Company))
-                throw new ValidationException("BROKER_COMPANY_REQUIRED", "Company cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(request.Company, "Company", "COMPANY_VALIDATION_REQUIRED");
+            ValidateCompanyAvailability(request.Company, id);
+            ValidateCommissionPercent(request.CommissionPercent);
 
-            if (request.CommissionPercent < 0)
-                throw new BusinessRuleException("BROKER_IVALID_COMMISSION", "Commission percent cannot be negative.");
+            Brokeri existingBroker = GetBrokerById(id);
 
-            Brokeri? broker = _brokersRepository.GetById(id);
+            existingBroker.Kompanija = request.Company;
+            existingBroker.ProcentProvizija = request.CommissionPercent;
 
+            Brokeri updatedBroker = _brokersRepository.Update(existingBroker);
+
+            return new BrokerResponse
+            {
+                Id = updatedBroker.Id,
+                Company = updatedBroker.Kompanija,
+                CommissionPercent = updatedBroker.ProcentProvizija
+            };
+        }
+
+        public BrokerResponse Delete(int id)
+        {
+            Brokeri existingBroker = GetBrokerById(id);
+
+            Brokeri deletedBroker = _brokersRepository.Delete(existingBroker);
+
+            return MapToBroker(deletedBroker);
+        }
+
+        private Brokeri GetBrokerById(int brokerId)
+        {
+            Brokeri? broker = _brokersRepository.GetById(brokerId);
             if (broker == null)
                 throw new NotFoundException("BROKER_NOT_FOUND", "Broker not found.");
 
-            broker.Kompanija = request.Company;
-            broker.ProcentProvizija = request.CommissionPercent;
+            return broker;
+        }
 
-            _brokersRepository.Update(broker);
+        private Brokeri GetBrokerByCompany(string company)
+        {
+            Brokeri? broker = _brokersRepository.GetByCompany(company);
+            if(broker == null)
+                throw new NotFoundException("BROKER_NOT_FOUND", $"Broker with company '{company}' not found.");
 
+            return broker;
+        }
+
+        private void ValidateCompanyAvailability(string company, int? brokerId = null)
+        {
+            Brokeri? existingBroker = _brokersRepository.GetByCompany(company);
+            if (existingBroker != null && existingBroker.Id != brokerId)
+                throw new AlreadyExistsException("COMPANY_ALREADY_EXISTS", "Company already exists.");
+        }
+
+        private void ValidateCommissionPercent(decimal commissionPercent)
+        {
+            if (commissionPercent < 0)
+                throw new ValidationException("INVALID_COMMISSION_PERCENT", "Commission percent cannot be negative.");
+        }
+
+        private BrokerResponse MapToBroker(Brokeri broker)
+        {
             return new BrokerResponse
             {
                 Id = broker.Id,
                 Company = broker.Kompanija,
                 CommissionPercent = broker.ProcentProvizija
-            };
-        }
-
-        public Broker Delete(int id)
-        {
-            Brokeri? existingBroker = _brokersRepository.GetById(id);
-
-            if (existingBroker == null)
-                throw new NotFoundException("BROKER_NOT_FOUND", "Broker not found.");
-
-            _brokersRepository.Delete(existingBroker);
-
-            return new Broker
-            {
-                Id = existingBroker.Id,
-                Company = existingBroker.Kompanija,
-                CommissionPercent = existingBroker.ProcentProvizija
             };
         }
     }

@@ -23,9 +23,9 @@ namespace PriceFlowApp.Controllers
             try
             {
                 int userId = User.GetUserId();
-                IEnumerable<ThresholdResponse> response = _thresholdService.GetUserThresholds(userId);
+                IEnumerable<ThresholdResponse> userThresholds = _thresholdService.GetUserThresholds(userId);
 
-                return Ok(response);
+                return Ok(userThresholds);
             }
             catch (Exception ex)
             {
@@ -39,9 +39,9 @@ namespace PriceFlowApp.Controllers
             try
             {
                 int userId = User.GetUserId();
-                IEnumerable<OwnedSecurity> response = _thresholdService.GetOwnedSecurities(userId);
+                IEnumerable<OwnedSecurity> ownedSecurities = _thresholdService.GetOwnedSecurities(userId);
 
-                return Ok(response);
+                return Ok(ownedSecurities);
             }
             catch (Exception ex)
             {
@@ -50,14 +50,14 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddThreshold([FromBody] AddThresholdRequest request)
+        public ActionResult<ThresholdResponse> AddThreshold([FromBody] AddThresholdRequest request)
         {
             try
             {
                 int userId = User.GetUserId();
-                _thresholdService.Add(userId, request);
+                ThresholdResponse addedThreshold = _thresholdService.Add(userId, request);
 
-                return Ok();
+                return Ok(addedThreshold);
             }
             catch (Exception ex)
             {
@@ -66,14 +66,14 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateThreshold(int id, [FromBody] UpdateThresholdRequest request)
+        public ActionResult<ThresholdResponse> UpdateThreshold(int id, [FromBody] UpdateThresholdRequest request)
         {
             try
             {
                 int userId = User.GetUserId();
-                _thresholdService.Update(userId, id, request);
+                ThresholdResponse updatedThreshold = _thresholdService.Update(userId, id, request);
 
-                return Ok();
+                return Ok(updatedThreshold);
             }
             catch (Exception ex)
             {
@@ -82,14 +82,14 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteThreshold(int id)
+        public ActionResult<ThresholdResponse> DeleteThreshold(int id)
         {
             try
             {
                 int userId = User.GetUserId();
-                _thresholdService.Delete(userId, id);
+                ThresholdResponse deletedThreshold = _thresholdService.Delete(userId, id);
 
-                return Ok();
+                return Ok(deletedThreshold);
             }
             catch (Exception ex)
             {

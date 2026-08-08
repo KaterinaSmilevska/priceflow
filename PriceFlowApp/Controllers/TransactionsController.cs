@@ -1,5 +1,4 @@
-﻿using DataAccess.Enums;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
@@ -21,7 +20,7 @@ namespace PriceFlowApp.Controllers
         } 
 
         [HttpGet]
-        public IActionResult GetAll(int portfolioId)
+        public ActionResult<IEnumerable<Transaction>> GetAll(int portfolioId)
         {
             try
             {
@@ -67,13 +66,13 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(int portfolioId, [FromBody] Transaction transaction)
+        public ActionResult<Transaction> Add(int portfolioId, [FromBody] Transaction transaction)
         {
             try
             {
-                Transaction createdTransaction = _transactionsService.Add(portfolioId, transaction);
+                Transaction addedTransaction = _transactionsService.Add(portfolioId, transaction);
 
-                return Ok(createdTransaction);
+                return Ok(addedTransaction);
             }
             catch(InvalidOperationException ex)
             {
@@ -81,12 +80,12 @@ namespace PriceFlowApp.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error adding transaction to portfolio.", detail = ex.Message });
+                return StatusCode(500, new { message = "Error adding deletedTransaction to portfolio.", detail = ex.Message });
             }
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int portfolioId, int id, [FromBody] Transaction transaction)
+        public ActionResult<Transaction> Update(int portfolioId, int id, [FromBody] Transaction transaction)
         {
             try
             {
@@ -100,27 +99,27 @@ namespace PriceFlowApp.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error updating transaction in portfolio.", detail = ex.Message });
+                return StatusCode(500, new { message = "Error updating deletedTransaction in portfolio.", detail = ex.Message });
             }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public ActionResult<Transaction> Delete(int id)
         {
             try
             {
-                Transaction transaction = _transactionsService.Delete(id);
+                Transaction deletedTransaction = _transactionsService.Delete(id);
 
-                return Ok(transaction);
+                return Ok(deletedTransaction);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error deleting transaction from portfolio.", detail = ex.Message });
+                return StatusCode(500, new { message = "Error deleting deletedTransaction from portfolio.", detail = ex.Message });
             }
         }
 
         [HttpGet("analytics")]
-        public IActionResult GetAnalytics(int portfolioId, [FromQuery] bool isReal)
+        public ActionResult<PortfolioAnalytics> GetAnalytics(int portfolioId, [FromQuery] bool isReal)
         {
             try
             {
@@ -139,9 +138,9 @@ namespace PriceFlowApp.Controllers
         {
             try
             {
-                IEnumerable<PortfolioValue> result = _portfolioValueService.GetCurrentValue(portfolioId, isReal);
+                IEnumerable<PortfolioValue> value = _portfolioValueService.GetCurrentValue(portfolioId, isReal);
 
-                return Ok(result);
+                return Ok(value);
             }
             catch (Exception ex)
             {

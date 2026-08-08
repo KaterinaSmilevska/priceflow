@@ -5,7 +5,7 @@ using PriceFlowApp.Services;
 namespace PriceFlowApp.Controllers
 {
     [ApiController]
-    [Route("api/portfolio-returns")]
+    [Route("api/portfolio-portfolioReturns")]
     public class PortfolioReturnsController: ControllerBase
     {
         private readonly IPortfolioReturnsService _portfolioReturnsService;
@@ -26,22 +26,22 @@ namespace PriceFlowApp.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error getting portfolio returns.", detail = ex.Message });
+                return StatusCode(500, new { message = "Error getting portfolio portfolioReturns.", detail = ex.Message });
             }
         }
 
         [HttpPost]
-        public IActionResult Add(PortfolioReturns portfolioReturns)
+        public ActionResult<PortfolioReturns> Add(PortfolioReturns portfolioReturn)
         {
             try
             {
-                PortfolioReturns returns = _portfolioReturnsService.Add(portfolioReturns);
+                PortfolioReturns portfolioReturns = _portfolioReturnsService.Add(portfolioReturn);
 
-                return Ok(returns);
+                return Ok(portfolioReturns);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error creating portfolio returns.", detail = ex.Message });
+                return StatusCode(500, new { message = "Error creating portfolio portfolioReturns.", detail = ex.Message });
             }
         }
 

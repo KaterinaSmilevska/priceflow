@@ -12,14 +12,14 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public IEnumerable<PortfolioPrinosi?> GetByPortfolioId(int portfolioId)
+        public IEnumerable<PortfolioPrinosi> GetByPortfolioId(int portfolioId)
         {
             return _dbContext.PortfolioPrinosi
                 .Where(pp => pp.PortfolioId == portfolioId)
                 .ToList();
         }
 
-        public IEnumerable<PortfolioPrinosi?> GetByPortfolioIdForPeriod(int portfolioId, DateOnly from, DateOnly to)
+        public IEnumerable<PortfolioPrinosi> GetByPortfolioIdForPeriod(int portfolioId, DateOnly from, DateOnly to)
         {
             return _dbContext.PortfolioPrinosi
                 .Where(pp => pp.PortfolioId == portfolioId

@@ -18,11 +18,11 @@ namespace PriceFlowApp.Controllers
 
         [Authorize(Roles = Roles.Admin + "," + Roles.Investor)]
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult<IEnumerable<BrokerResponse>> GetAll()
         {
             try
             {
-                IEnumerable<Broker> brokers = _brokersService.FindAll();
+                IEnumerable<BrokerResponse> brokers = _brokersService.FindAll();
 
                 return Ok(brokers);
             }
@@ -34,11 +34,11 @@ namespace PriceFlowApp.Controllers
 
         [Authorize(Roles = Roles.Admin)]
         [HttpPost]
-        public ActionResult<Broker> AddBroker([FromBody] AddBrokerRequest broker)
+        public ActionResult<BrokerResponse> AddBroker([FromBody] AddBrokerRequest broker)
         {
             try
             {
-                Broker addedBroker = _brokersService.Add(broker);
+                BrokerResponse addedBroker = _brokersService.Add(broker);
 
                 return Ok(addedBroker);
             }
@@ -68,11 +68,11 @@ namespace PriceFlowApp.Controllers
 
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete("{id}")]
-        public ActionResult<Broker> DeleteBroker(int id)
+        public ActionResult<BrokerResponse> DeleteBroker(int id)
         {
             try
             {
-                Broker deletedBroker = _brokersService.Delete(id);
+                BrokerResponse deletedBroker = _brokersService.Delete(id);
 
                 return Ok(deletedBroker);
             }

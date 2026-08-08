@@ -20,7 +20,7 @@ namespace DataAccess.Repositories
         }
 
 
-        public IEnumerable<HvPromenaCena?> GetByUserId(int userId)
+        public IEnumerable<HvPromenaCena> GetByUserId(int userId)
         {
             return _dbContext.HvPromenaCena
                 .Where(e => e.KorisnikId == userId)
@@ -28,7 +28,15 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public HvPromenaCena? GetByUserIdAndSecurityCode(int userId, int securityId)
+        public IEnumerable<HvPromenaCena> GetBySecurityId(int securityId)
+        {
+            return _dbContext.HvPromenaCena
+                .Include(e => e.Hv)
+                .Where(e => e.Hvid == securityId)
+                .ToList();
+        }
+
+        public HvPromenaCena? GetByUserIdAndSecurityId(int userId, int securityId)
         {
             return _dbContext.HvPromenaCena
                 .FirstOrDefault(e => e.KorisnikId == userId && e.Hvid == securityId);

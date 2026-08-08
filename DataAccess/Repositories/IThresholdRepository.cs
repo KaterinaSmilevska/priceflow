@@ -6,9 +6,11 @@ namespace DataAccess.Repositories
     {
         HvPromenaCena? GetById(int id);
 
-        IEnumerable<HvPromenaCena?> GetByUserId(int userId);
+        IEnumerable<HvPromenaCena> GetByUserId(int userId);
 
-        HvPromenaCena? GetByUserIdAndSecurityCode(int userId, int securityId);
+        IEnumerable<HvPromenaCena> GetBySecurityId(int securityId);
+
+        HvPromenaCena? GetByUserIdAndSecurityId(int userId, int securityId);
 
         HvPromenaCena Add(HvPromenaCena entity);
 

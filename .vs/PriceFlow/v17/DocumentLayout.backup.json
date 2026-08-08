@@ -3,14 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|c:\\users\\dell\\desktop\\finki\\postdiplomski studii\\devetti semestar\\koncepti i primena na golemi podatoci\\priceflow\\priceflowapp\\clientapp\\src\\assets\\i18n\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{BAA6AEFF-4DBA-CC11-14F7-C9A346339DA3}|PriceFlowApp\\PriceFlowApp.csproj|solutionrelative:priceflowapp\\clientapp\\src\\assets\\i18n\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
@@ -31,32 +23,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "PriceFlowApp\\Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "PriceFlowApp\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAANIAAAAAAAAAAAAAANQAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-05T17:49:15.489Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\AuthService.cs",
-              "RelativeDocumentMoniker": "PriceFlowApp\\Services\\AuthService.cs",
-              "ToolTip": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\Services\\AuthService.cs",
-              "RelativeToolTip": "PriceFlowApp\\Services\\AuthService.cs",
-              "ViewState": "AgIAAFkBAAAAAAAAAAAiwGYBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-05T17:34:17.573Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "en.json",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
               "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\en.json",
@@ -69,7 +35,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "mk.json",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\FINKI\\Postdiplomski studii\\Devetti semestar\\Koncepti i primena na golemi podatoci\\PriceFlow\\PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",
               "RelativeDocumentMoniker": "PriceFlowApp\\ClientApp\\src\\assets\\i18n\\mk.json",

@@ -24,7 +24,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
 
-                _notificationService.CheckAndGenerateNotifications();
+                _notificationService.GenerateNotifications();
 
                 IEnumerable<PriceChangeNotificationResponse> notifications = _notificationService.GetUserNotifications(userId);
 
@@ -37,7 +37,7 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("unread-count")]
-        public IActionResult GetUnreadCount()
+        public ActionResult<int> GetUnreadCount()
         {
             try
             {
@@ -57,8 +57,9 @@ namespace PriceFlowApp.Controllers
         public IActionResult MarkAsRead(int id)
         {
             try
-            { 
-                _notificationService.MarkNotificationAsRead(id);
+            {
+                int userId = User.GetUserId();
+                _notificationService.MarkNotificationAsRead(userId, id);
 
                 return NoContent();
             }
@@ -75,7 +76,7 @@ namespace PriceFlowApp.Controllers
             {
                 int userId = User.GetUserId();
 
-                _notificationService.CheckAndGenerateNotifications();
+                _notificationService.GenerateNotifications();
 
                 IEnumerable<PriceChangeNotificationResponse> notifications = _notificationService.GetUserNotifications(userId);
 

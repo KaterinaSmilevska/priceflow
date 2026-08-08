@@ -6,15 +6,17 @@ namespace DataAccess.Repositories
     {
         Transakcii? GetById(int id);
 
-        IEnumerable<Transakcii?> GetByPortfolioId(int portfolioId);
+        IEnumerable<Transakcii> GetByPortfolioId(int portfolioId);
 
-        IEnumerable<Transakcii?> GetByPortfolioIdUntilDate(int portfolioId, DateOnly date);
+        IEnumerable<Transakcii> GetByPortfolioIdUntilDate(int portfolioId, DateOnly date);
 
         List<int> GetOwnedSecuritiesIds(int userId);
 
         int GetOwnedShares(int portfolioId, int securityId, bool isReal);
 
         int GetOwnedSharesAtDate(int portfolioId, int securityId, bool isReal, DateOnly date, int? transactionToExclude);
+
+        int GetOwnedSharesByUser(int userId, int securityId);
 
         Transakcii Add(Transakcii transaction);
 

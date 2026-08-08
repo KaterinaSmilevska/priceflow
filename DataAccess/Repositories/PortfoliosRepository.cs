@@ -18,6 +18,12 @@ namespace DataAccess.Repositories
                 .Find(id);
         }
 
+        public Portfolija? GetByName(string name, int userId)
+        {
+            return _dbContext.Portfolija
+                .FirstOrDefault(p => p.Ime == name && p.KorisnikId == userId);
+        }
+
         public IEnumerable<Portfolija> GetByUserId(int userId)
         {
             return _dbContext.Portfolija
@@ -37,15 +43,6 @@ namespace DataAccess.Repositories
 
         public Portfolija Update(Portfolija portfolio)
         {
-            //var foundPortfolio = await _dbContext.Portfolija
-            //    .FirstOrDefaultAsync(p => p.Id == portfolio.Id && p.KorisnikId == portfolio.KorisnikId);
-
-            //if (foundPortfolio == null)
-            //    return null;
-
-            //foundPortfolio.Ime = portfolio.Ime;
-            //foundPortfolio.Opis = portfolio.Opis;
-
             _dbContext.Portfolija.Update(portfolio);
             _dbContext.SaveChanges();
 

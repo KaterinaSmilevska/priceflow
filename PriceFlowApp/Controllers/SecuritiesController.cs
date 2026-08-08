@@ -18,11 +18,17 @@ namespace PriceFlowApp.Controllers
         [HttpGet("{id}")]
         public ActionResult<Security> GetById(int id)
         {
-            Security? security = _securitiesService.FindById(id);
-            if (security == null)
-                return NotFound();
+            try
+            {
+                Security security = _securitiesService.FindById(id);
 
-            return Ok(security);
+                return Ok(security);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching security.", detail = ex.Message });
+            }
+
         }
 
         [HttpGet]
@@ -43,11 +49,17 @@ namespace PriceFlowApp.Controllers
         [HttpGet("code/{id}")]
         public ActionResult<Security> GetSecurityCode(int id)
         {
-            string? code = _securitiesService.FindSecurityCode(id);
-            if(code == null)
-                return NotFound();
+            try
+            {
+                string? code = _securitiesService.FindSecurityCode(id);
 
-            return Ok(code);
+                return Ok(code);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching security code.", detail = ex.Message });
+            }
+     
         }
 
         [HttpGet("{code}/total-shares")]
@@ -66,14 +78,18 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] AddSecurityRequest security)
+        public ActionResult<Security> Add([FromBody] AddSecurityRequest security)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                Security addedSecurity = _securitiesService.Add(security);
 
-            var createdSecurity = _securitiesService.Add(security);
-
-            return CreatedAtAction(nameof(GetById), new { id = createdSecurity.Id }, createdSecurity);
+                return Ok(addedSecurity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error adding security.", detail = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
@@ -92,13 +108,13 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public ActionResult<Security> Delete(int id)
         {
             try
             {
-                _securitiesService.Delete(id);
+                Security deletedSecurity = _securitiesService.Delete(id);
 
-                return Ok();
+                return Ok(deletedSecurity);
             }
             catch (Exception ex)
             {
@@ -111,9 +127,8 @@ namespace PriceFlowApp.Controllers
         {
             try
             {
-                SecurityDailyPrices? result = _securitiesService.GetLatestPrices(securityCode, date);
-                if (result == null)
-                    return NotFound();
+                SecurityDailyPrices result = _securitiesService.GetLatestPrices(securityCode, date);
+
                 return Ok(result);
             }
             catch (Exception ex)

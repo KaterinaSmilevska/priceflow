@@ -20,29 +20,22 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<PortfolioReturns> FindByPortfolioId(int portfolioId)
         {
-            Portfolija? portfolio = GetPortfolio(portfolioId);
+            Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            IEnumerable<PortfolioPrinosi?> entities = _portfolioReturnsRepository.GetByPortfolioId(portfolioId);
+            IEnumerable<PortfolioPrinosi> portfolioReturns = _portfolioReturnsRepository.GetByPortfolioId(portfolioId);
 
-            return entities.Select(e => new PortfolioReturns
-            {
-                Date = e.Datum,
-                NetAmount = e.NetoIznos,
-                Tax = e.Danok,
-                PortfolioId = e.PortfolioId,
-                HVId = e.Hvid
-            });
+            return portfolioReturns
+                .Select(MapToPortfolioReturns)
+                .ToList();
         }
 
         public PortfolioReturns Add(PortfolioReturns portfolioReturns)
         {
-            Portfolija portfolio = GetPortfolio(portfolioReturns.PortfolioId);
+            Portfolija portfolio = GetPortfolioById(portfolioReturns.PortfolioId);
 
-            HartiiOdVrednost? security = _securitiesRepository.GetById(portfolioReturns.HVId);
-            if (security == null)
-                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+            HartiiOdVrednost security = GetBySecurityId(portfolioReturns.HVId);
 
-            var entity = new PortfolioPrinosi
+            PortfolioPrinosi portfolioReturn = new PortfolioPrinosi
             {
                 Datum = portfolioReturns.Date,
                 NetoIznos = portfolioReturns.NetAmount,
@@ -51,23 +44,16 @@ namespace PriceFlowApp.Services
                 Hvid = portfolioReturns.HVId,
             };
 
-            PortfolioPrinosi createdPortfolioReturns = _portfolioReturnsRepository.Add(entity);
+            PortfolioPrinosi createdPortfolioReturns = _portfolioReturnsRepository.Add(portfolioReturn);
 
-            return new PortfolioReturns
-            {
-                Date = createdPortfolioReturns.Datum,
-                NetAmount = createdPortfolioReturns.NetoIznos,
-                Tax = createdPortfolioReturns.Danok,
-                PortfolioId = createdPortfolioReturns.PortfolioId,
-                HVId = createdPortfolioReturns.Hvid
-            };
+            return MapToPortfolioReturns(createdPortfolioReturns);
         }
 
         public PortfolioReturnsSummary CalculateSummary(int portfolioId)
         {
-            Portfolija portfolio = GetPortfolio(portfolioId);
+            Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            IEnumerable<PortfolioPrinosi?> returns = _portfolioReturnsRepository.GetByPortfolioId(portfolioId);
+            IEnumerable<PortfolioPrinosi> returns = _portfolioReturnsRepository.GetByPortfolioId(portfolioId);
 
             return new PortfolioReturnsSummary
             {
@@ -76,14 +62,13 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public PortfolioReturnsSummary CalculateSummaryForPeriod(int portfolioId, DateOnly from, DateOnly to)
+        public PortfolioReturnsSummary CalculateSummaryForPeriod(int portfolioId, DateOnly fromDate, DateOnly toDate)
         {
-            Portfolija portfolio = GetPortfolio(portfolioId);
+            Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            if (from > to)
-                throw new ValidationException("INVALID_DATE_RANGE", "From date cannot be after to date.");
+            ValidateDateRange(fromDate, toDate);
 
-            IEnumerable<PortfolioPrinosi?> returns = _portfolioReturnsRepository.GetByPortfolioIdForPeriod(portfolioId, from, to);
+            IEnumerable<PortfolioPrinosi> returns = _portfolioReturnsRepository.GetByPortfolioIdForPeriod(portfolioId, fromDate, toDate);
 
             return new PortfolioReturnsSummary
             {
@@ -92,14 +77,40 @@ namespace PriceFlowApp.Services
             };
         }
 
-        private Portfolija GetPortfolio(int portfolioId)
+        private Portfolija GetPortfolioById(int portfolioId)
         {
             Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
-
             if(portfolio == null)
                 throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
 
             return portfolio;
+        }
+
+        private HartiiOdVrednost GetBySecurityId(int securityId)
+        {
+            HartiiOdVrednost? security = _securitiesRepository.GetById(securityId);
+            if (security == null)
+                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+
+            return security;
+        }
+
+        private void ValidateDateRange(DateOnly fromDate, DateOnly toDate)
+        {
+            if (fromDate > toDate)
+                throw new ValidationException("INVALID_DATE_RANGE", "FromDate cannot be after ToDate.");
+        }
+
+        private PortfolioReturns MapToPortfolioReturns(PortfolioPrinosi portfolioReturns)
+        {
+            return new PortfolioReturns
+            {
+                Date = portfolioReturns.Datum,
+                NetAmount = portfolioReturns.NetoIznos,
+                Tax = portfolioReturns.Danok,
+                PortfolioId = portfolioReturns.PortfolioId,
+                HVId = portfolioReturns.Hvid
+            };
         }
     }
 }

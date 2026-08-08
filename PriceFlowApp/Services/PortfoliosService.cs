@@ -2,6 +2,7 @@
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 
 namespace PriceFlowApp.Services
 {
@@ -25,97 +26,71 @@ namespace PriceFlowApp.Services
 
         public Portfolio FindById(int id)
         {
-            Portfolija portfolio = GetPortfolio(id);
+            Portfolija portfolio = GetPortfolioById(id);
 
-            return new Portfolio
-            {
-                Id = portfolio.Id,
-                Name = portfolio.Ime,
-                Description = portfolio.Opis
-            };
+            return MapToPortfolio(portfolio);
         }
 
         public IEnumerable<Portfolio> FindUserPortfolios(int userId)
         {
-            DataAccess.Models.Korisnici user = GetUser(userId);
+            Korisnici user = GetUserById(userId);
 
-            IEnumerable<Portfolija?> items = _portfoliosRepository.GetByUserId(userId);
+            IEnumerable<Portfolija> portfolios = _portfoliosRepository.GetByUserId(userId);
 
-            return items.Select(p => new Portfolio
-            {
-                Id = p.Id,
-                Name = p.Ime,
-                Description = p.Opis
-            }).ToList();
+            return portfolios
+                .Select(MapToPortfolio)
+                .ToList();
         }
 
-        public Portfolio Add(int userId, AddPortfolioRequest portfolio)
+        public Portfolio Add(int userId, AddPortfolioRequest request)
         {
-            DataAccess.Models.Korisnici user = GetUser(userId);
+            Korisnici user = GetUserById(userId);
 
-            if (string.IsNullOrWhiteSpace(portfolio.Name))
-                throw new ValidationException("PORTFOLIO_NAME_REQUIRED", "Portfolio name cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(request.Name, "Name", "NAME_VALIDATION_REQUIRED");
+            ValidateNameAvailability(request.Name, userId);
 
-            var entity = new Portfolija
+            Portfolija portfolio = new Portfolija
             {
-                Ime = portfolio.Name,
-                Opis = portfolio.Description,
+                Ime = request.Name,
+                Opis = request.Description,
                 KorisnikId = userId
             };
 
-            var createdPortfolio = _portfoliosRepository.Add(entity);
+            Portfolija addedPortfolio = _portfoliosRepository.Add(portfolio);
 
-            return new Portfolio
-            {
-                Id = createdPortfolio.Id,
-                Name = createdPortfolio.Ime,
-                Description = createdPortfolio.Opis
-            };
+            return MapToPortfolio(addedPortfolio);
         }
 
         public Portfolio Update(int id, int userId, UpdatePortfolio portfolio)
         {
-            var existingPortfolio = GetPortfolio(id);
+            Portfolija existingPortfolio = GetPortfolioById(id);
 
-            if (existingPortfolio.KorisnikId != userId)
-                throw new UnauthorizedException("PORTFOLIO_ACCESS_DENIED", "You do not have access to this portfolio.");
-
-            if (string.IsNullOrWhiteSpace(portfolio.Name))
-                throw new ValidationException("PORTFOLIO_NAME_REQUIRED", "Portfolio name cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(portfolio.Name, "Name", "NAME_VALIDATION_REQUIRED");
+            ValidateNameAvailability(portfolio.Name, userId, id);
 
             existingPortfolio.Ime = portfolio.Name;
             existingPortfolio.Opis = portfolio.Description;
 
-            var updatedPortfolio = _portfoliosRepository.Update(existingPortfolio);
+            Portfolija updatedPortfolio = _portfoliosRepository.Update(existingPortfolio);
 
-            return new Portfolio
-            {
-                Id = updatedPortfolio.Id,
-                Name = updatedPortfolio.Ime,
-                Description = updatedPortfolio.Opis
-            };
+            return MapToPortfolio(updatedPortfolio);
         }
 
         public Portfolio Delete(int id, int userId)
         {
-            Portfolija existingPortfolio = GetPortfolio(id);
+            Portfolija existingPortfolio = GetPortfolioById(id);
 
             if (existingPortfolio.KorisnikId != userId)
                 throw new UnauthorizedException("ACCESS_DENIED", "You cannot access this portfolio.");
 
-            _portfoliosRepository.Delete(existingPortfolio);
+            Portfolija deletedPortfolio = _portfoliosRepository.Delete(existingPortfolio);
 
-            return new Portfolio
-            {
-                Id = existingPortfolio.Id,
-                Name = existingPortfolio.Ime,
-                Description = existingPortfolio.Opis
-            };
+            return MapToPortfolio(deletedPortfolio);
         }
 
         public PortfolioPerformanceSummary GeneratePerformanceSummary(int portfolioId, DateOnly from, DateOnly to)
         {
-            Portfolija portfolio = GetPortfolio(portfolioId);
+            Portfolija portfolio = GetPortfolioById(portfolioId);
 
             IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioIdUntilDate(portfolioId, to);
 
@@ -203,22 +178,39 @@ namespace PriceFlowApp.Services
             return Math.Round(commission, 2);
         }
 
-        private Portfolija GetPortfolio(int portfolioId)
+        private Portfolija GetPortfolioById(int portfolioId)
         {
-            var portfolio = _portfoliosRepository.GetById(portfolioId);
+            Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
             if (portfolio == null)
                 throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
 
             return portfolio;
         }
 
-        private DataAccess.Models.Korisnici GetUser(int userId)
+        private Korisnici GetUserById(int userId)
         {
-            var user = _authRepository.GetById(userId);
+            Korisnici? user = _authRepository.GetById(userId);
             if (user == null)
                 throw new NotFoundException("USER_NOT_FOUND", "User not found.");
 
             return user;
+        }
+
+        private void ValidateNameAvailability(string name, int userId, int? portfolioId = null)
+        {
+            Portfolija? existingPortfolio = _portfoliosRepository.GetByName(name, userId);
+            if (existingPortfolio != null && existingPortfolio.Id != portfolioId && existingPortfolio.KorisnikId == userId)
+                throw new AlreadyExistsException("NAME_ALREADY_EXISTS", "Portfolio already exists for this user.");
+        }
+
+        private Portfolio MapToPortfolio(Portfolija portfolio)
+        {
+            return new Portfolio
+            {
+                Id = portfolio.Id,
+                Name = portfolio.Ime,
+                Description = portfolio.Opis
+            };
         }
     }
 }

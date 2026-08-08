@@ -12,7 +12,7 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public IEnumerable<IzvestuvanjaPortfolija?> GetByUserId(int userId)
+        public IEnumerable<IzvestuvanjaPortfolija> GetByUserId(int userId)
         {
             return _dbContext.IzvestuvanjaPortfolija
                 .Include(ip => ip.Portfolio)
