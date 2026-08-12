@@ -109,7 +109,7 @@ namespace PriceFlowApp.Services
             });
         }
 
-        public DateTime? FindLatestDate()
+        public DateTime FindLatestDate()
         {
             return _dbContext.DnevenPromet
                 .OrderByDescending(dp => dp.Datum)

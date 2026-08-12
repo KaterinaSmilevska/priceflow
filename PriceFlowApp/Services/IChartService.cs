@@ -14,6 +14,6 @@ namespace PriceFlowApp.Services
 
         IEnumerable<Security> GetSecurities();
 
-        DateTime? FindLatestDate();
+        DateTime FindLatestDate();
     }
 }

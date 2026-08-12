@@ -1,11 +1,9 @@
 ﻿namespace PriceFlowApp.Exceptions
 {
-    public class NotFoundException: Exception
+    public class NotFoundException: PriceFlowException
     {
-        public string ErrorCode {  get; }
-
-        public NotFoundException(string errorCode, string message): base(message) {
-            ErrorCode = errorCode;
+        public NotFoundException(string code, string message): base(code,message, StatusCodes.Status404NotFound) {
+            
         }
     }
 }

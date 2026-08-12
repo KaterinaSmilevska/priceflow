@@ -27,7 +27,7 @@ namespace PriceFlowApp.Services
         {
             Korisnici user = GetUserById(userId);
 
-            IEnumerable<IzvestuvanjaPromenaCena> notifications = _notificationRepository.GetByUserId(userId);
+            IEnumerable<IzvestuvanjaPromenaCena> notifications = _notificationRepository.GetByUserId(user.Id);
 
             return notifications
                 .Select(MapToPriceChangeNotification)
@@ -38,7 +38,7 @@ namespace PriceFlowApp.Services
         {
             Korisnici user = GetUserById(userId);
 
-            return _notificationRepository.GetUnreadNotificationCount(userId);
+            return _notificationRepository.GetUnreadNotificationCount(user.Id);
         }
 
         public void GenerateNotifications()

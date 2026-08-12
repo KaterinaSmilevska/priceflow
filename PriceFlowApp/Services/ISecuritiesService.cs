@@ -10,11 +10,11 @@ namespace PriceFlowApp.Services
 
         IEnumerable<Security> FindAll();
 
-        string? FindSecurityCode(int id);
+        string FindSecurityCode(int id);
 
         int? FindTotalNumShares(int id);
 
-        int? FindTotalNumShares(string securityCode);
+        int FindTotalNumShares(string securityCode);
 
         Security Add(AddSecurityRequest security);
 

@@ -4,199 +4,141 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace PriceFlowApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController : PriceFlowController
     {
         private readonly IAuthService _authService;
         private readonly IRolesService _rolesService;
-        private readonly IBrokersService _brokersService;
 
-        public AuthController(IAuthService authService, IRolesService rolesService, IBrokersService brokersService)
+        public AuthController(IAuthService authService, IRolesService rolesService)
         {
             _authService = authService;
             _rolesService = rolesService;
-            _brokersService = brokersService;
         }
 
         [HttpPost("register")]
         public ActionResult<RegisterResponse> Register([FromBody] RegisterRequest registerRequest)
         {
-            try
-            {
-                RegisterResponse response = _authService.Register(registerRequest);
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            return Execute(() => _authService.Register(registerRequest));   
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
-            try
-            {
-                LoginResponse response = await _authService.Login(request);
-
-                return Ok(response);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            return await ExecuteAsync(() => _authService.Login(request));
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<ActionResult<LogoutResponse>> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return await ExecuteAsync(async () =>
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return Ok(new { success = true, message = "Logged out successfully." });
+                return new LogoutResponse
+                {
+                    Success = true,
+                    Message = "Logged out successfully!"
+                };
+            });
         }
 
         [HttpGet("ulogi")]
         public ActionResult<List<string>> GetRolesNames()
         {
-            try
-            {
-                List<string> roles = _rolesService.FindNames();
-
-                return Ok(roles);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching roles.", detail = ex.Message });
-            }
+            return Execute(() => _rolesService.FindNames());
         }
 
         [HttpGet("check-username/{username}")]
         public ActionResult<bool> CheckUsername(string username)
         {
-            try
-            {
-                bool exists = _authService.UsernameExists(username);
-
-                return Ok(new { exists });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while checking username.", detail = ex.Message });
-            }
+            return Execute(() => _authService.UsernameExists(username));
         }
 
         [HttpPost("validate-password")]
         public ActionResult<PasswordValidationResponse> ValidatePassword([FromBody] PasswordValidationRequest request)
         {
-            try
-            {
-                PasswordValidationResponse response = _authService.ValidatePassword(request);
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while validating password.", detail = ex.Message });
-            }
+            return Execute(() => _authService.ValidatePassword(request));
         }
 
         [HttpPost("validate-email")]
         public ActionResult<EmailValidationResponse> ValidateEmail([FromBody] EmailValidationRequest request)
         {
-            try
-            {
-                EmailValidationResponse response = _authService.ValidateEmail(request);
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while validating email.", detail = ex.Message });
-            }
+            return Execute(() => _authService.ValidateEmail(request));
         }
 
         [HttpPost("forgot-password")]
-        public IActionResult ForgotPassword([FromBody] ForgotPasswordRequest request)
+        public ActionResult<MessageResponse> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
-            try
+            return Execute(() =>
             {
                 _authService.ForgotPassword(request.Username);
 
-                return Ok(new { message = "Reset link has been sent to your email." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = ex.Message });
-            }
+                return new MessageResponse
+                {
+                    Message = "Reset link has been sent to your email."
+                };
+            });
         }
 
         [HttpPost("reset-password")]
-        public IActionResult ResetPassword([FromBody] ResetPasswordRequest request)
+        public ActionResult<MessageResponse> ResetPassword([FromBody] ResetPasswordRequest request)
         {
-            try
+            return Execute(() =>
             {
                 _authService.ResetPassword(request.Token, request.NewPassword);
 
-                return Ok(new { message = "Password reset successful." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = ex.Message });
-            }
+                return new MessageResponse
+                {
+                    Message = "Password reset successful."
+                };
+            });
         }
 
         [HttpGet("status")]
-        public IActionResult Status()
+        public ActionResult<SessionStatusResponse> Status()
         {
-            if (!(User.Identity?.IsAuthenticated ?? false))
-                return Ok(new { isLoggedIn = false });
-
-            var username = User.Identity?.Name;
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var roles = User.Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            return Ok(new
+            return Execute(() =>
             {
-                isLoggedIn = true,
-                username,
-                userId,
-                roles
+                if (!(User.Identity?.IsAuthenticated ?? false))
+                {
+                    return new SessionStatusResponse
+                    {
+                        IsLoggedIn = false
+                    };
+                }
+                var username = User.Identity?.Name;
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var roles = User.Claims
+                    .Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .ToList();
+
+                return new SessionStatusResponse
+                {
+                    IsLoggedIn = true,
+                    Username = username,
+                    UserId = userId,
+                    Roles = roles
+                };
             });
         }
 
         [HttpGet("users")]
         public ActionResult<IEnumerable<User>> GetUsers()
         {
-            try
-            {
-                IEnumerable<User> users = _authService.FindAll();
-
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching users.", detail = ex.Message });
-            }
+            return Execute(() => _authService.FindAll());
         }
 
         [HttpGet("users/{id}")]
         public ActionResult<User> GetUser(int id)
         {
-            User user = _authService.FindById(id);
-            if (user == null)
-                return NotFound();
-
-            return Ok(user);
+            return Execute(() => _authService.FindById(id));
         }
 
         [HttpPut("users/{id}")]
@@ -204,50 +146,28 @@ namespace PriceFlowApp.Controllers
         {
             if (id != user.Id)
                 return BadRequest(new { message = "User Id mismatch." });
-            try
-            {
-                User updatedUser = _authService.Update(id, user);
-                return Ok(updatedUser);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = ex.Message });
-            }
+
+            return Execute(() => _authService.Update(id, user));
         }
 
         [HttpDelete("users/{id}")]
         public ActionResult<User> DeleteUser(int id)
         {
-            try
-            {
-                User deletedUser = _authService.Delete(id);
-
-                return Ok(deletedUser);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = ex.Message });
-            }
+            return Execute(() => _authService.Delete(id));
         }
 
         [HttpGet("verify-email")]
-        public IActionResult VerifyEmail([FromQuery] Guid token)
+        public ActionResult<MessageResponse> VerifyEmail([FromQuery] Guid token)
         {
-            try
+            return Execute(() =>
             {
                 _authService.VerifyEmail(token);
 
-                return Redirect("https://localhost:44413/register?verified=true");
-            }
-            catch(ValidationException)
-            {
-                return BadRequest("Invalid or expired verification link.");
-            }
-            
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred during email verification.", detail = ex.Message });
-            }
+                return new MessageResponse
+                {
+                    Message = "Email verification successful."
+                };
+            });
         }
 
         [AllowAnonymous]

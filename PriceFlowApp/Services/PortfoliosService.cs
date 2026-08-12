@@ -35,7 +35,7 @@ namespace PriceFlowApp.Services
         {
             Korisnici user = GetUserById(userId);
 
-            IEnumerable<Portfolija> portfolios = _portfoliosRepository.GetByUserId(userId);
+            IEnumerable<Portfolija> portfolios = _portfoliosRepository.GetByUserId(user.Id);
 
             return portfolios
                 .Select(MapToPortfolio)
@@ -47,13 +47,13 @@ namespace PriceFlowApp.Services
             Korisnici user = GetUserById(userId);
 
             ValidationHelper.ValidateRequiredField(request.Name, "Name", "NAME_VALIDATION_REQUIRED");
-            ValidateNameAvailability(request.Name, userId);
+            ValidateNameAvailability(request.Name, user.Id);
 
             Portfolija portfolio = new Portfolija
             {
                 Ime = request.Name,
                 Opis = request.Description,
-                KorisnikId = userId
+                KorisnikId = user.Id
             };
 
             Portfolija addedPortfolio = _portfoliosRepository.Add(portfolio);
@@ -63,10 +63,10 @@ namespace PriceFlowApp.Services
 
         public Portfolio Update(int id, int userId, UpdatePortfolio portfolio)
         {
-            Portfolija existingPortfolio = GetPortfolioById(id);
-
             ValidationHelper.ValidateRequiredField(portfolio.Name, "Name", "NAME_VALIDATION_REQUIRED");
             ValidateNameAvailability(portfolio.Name, userId, id);
+            
+            Portfolija existingPortfolio = GetPortfolioById(id);
 
             existingPortfolio.Ime = portfolio.Name;
             existingPortfolio.Opis = portfolio.Description;
@@ -92,7 +92,7 @@ namespace PriceFlowApp.Services
         {
             Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioIdUntilDate(portfolioId, to);
+            IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioIdUntilDate(portfolio.Id, to);
 
             Dictionary<int, decimal> holdingsAtStart = CalculateHoldingsUntilDate(transactions, from);
 
@@ -102,7 +102,7 @@ namespace PriceFlowApp.Services
 
             decimal endingValue = CalculatePortfolioValue(holdingsAtEnd, to);
 
-            PortfolioReturnsSummary returns = _portfolioReturnsService.CalculateSummaryForPeriod(portfolioId, from, to);
+            PortfolioReturnsSummary returns = _portfolioReturnsService.CalculateSummaryForPeriod(portfolio.Id, from, to);
             decimal dividends = returns.TotalDividends;
 
             decimal commissions = CalculateTotalCommissions(transactions, from, to);

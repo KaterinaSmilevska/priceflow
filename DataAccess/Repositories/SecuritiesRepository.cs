@@ -41,12 +41,12 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public string? GetSecurityCode(int id)
+        public string GetSecurityCode(int id)
         {
             HartiiOdVrednost? security = _dbContext.HartiiOdVrednost
                 .FirstOrDefault(hv => hv.Id == id);
 
-            return security?.Kod;
+            return security!.Kod;
         }
 
         public int? GetTotalNumSharesById(int id)
@@ -56,11 +56,11 @@ namespace DataAccess.Repositories
             return security?.VkupenBrojAkcii;
         }
 
-        public int? GetTotalNumSharesBySecurityCode(string securityCode)
+        public int GetTotalNumSharesBySecurityCode(string securityCode)
         {
             HartiiOdVrednost? security = this.GetByCode(securityCode);
 
-            return security?.VkupenBrojAkcii;
+            return security!.VkupenBrojAkcii;
         }
 
         public HartiiOdVrednost Add(HartiiOdVrednost security)

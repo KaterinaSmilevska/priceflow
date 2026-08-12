@@ -17,7 +17,8 @@ namespace PriceFlowApp.Services
         {
             IEnumerable<Izdavachi> issuers = _issuersRepository.GetAll();
 
-            return issuers.Select(MapToIssuer);
+            return issuers
+                .Select(MapToIssuer);
         }
 
         private Issuer MapToIssuer(Izdavachi issuer)

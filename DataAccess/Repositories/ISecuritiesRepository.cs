@@ -12,11 +12,11 @@ namespace DataAccess.Repositories
 
         IEnumerable<HartiiOdVrednost> GetAll();
 
-        string? GetSecurityCode(int id);
+        string GetSecurityCode(int id);
 
         int? GetTotalNumSharesById(int id);
 
-        int? GetTotalNumSharesBySecurityCode(string securityCode);
+        int GetTotalNumSharesBySecurityCode(string securityCode);
 
         HartiiOdVrednost Add(HartiiOdVrednost security);
 

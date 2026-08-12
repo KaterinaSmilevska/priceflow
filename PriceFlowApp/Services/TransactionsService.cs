@@ -78,14 +78,14 @@ namespace PriceFlowApp.Services
 
         public Transaction Update(int portfolioId, int id, Transaction transaction)
         {
+            ValidationHelper.ValidateRequiredField(transaction.TypeTransaction, "Type", "TYPE_VALIDATION_REQUIRED");
+
             Transakcii existingTransaction = GetTransactionById(id);
-            HartiiOdVrednost security = GetSecurityByCode(transaction.HVCode);
 
             if (existingTransaction.PortfolioId != portfolioId)
                 throw new NotFoundException("TRANSACTION_NOT_FOUND", "Transaction not found.");
 
-            ValidationHelper.ValidateRequiredField(transaction.TypeTransaction, "Type", "TYPE_VALIDATION_REQUIRED");
-
+            HartiiOdVrednost security = GetSecurityByCode(transaction.HVCode);
             ValidateShares(portfolioId, security, transaction, id);
 
             existingTransaction.Hvid = security.Id;

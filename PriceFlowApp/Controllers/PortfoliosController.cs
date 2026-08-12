@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 using PriceFlowApp.Services;
 
 namespace PriceFlowApp.Controllers
@@ -9,7 +10,7 @@ namespace PriceFlowApp.Controllers
     [Authorize(Roles = "Инвеститор")]
     [ApiController]
     [Route("api/[controller]")]
-    public class PortfoliosController : ControllerBase
+    public class PortfoliosController : PriceFlowController
     {
         private readonly IPortfoliosService _portfoliosService;
         private readonly ITransactionsService _transactionsService;
@@ -28,97 +29,60 @@ namespace PriceFlowApp.Controllers
         [HttpGet("{id}")]
         public ActionResult<Portfolio> GetById(int id)
         {
-            try
-            {
-                int userId = User.GetUserId();
-                Portfolio portfolio = _portfoliosService.FindById(id);
-
-                return Ok(portfolio);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching portfolios for user.", detail = ex.Message });
-            }
+            return Execute(() => _portfoliosService.FindById(id));
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Portfolio>> GetAll()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                IEnumerable<Portfolio> portfolios = _portfoliosService.FindUserPortfolios(userId);
-
-                return Ok(portfolios);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching portfolios for user.", detail = ex.Message });
-            }
+                return _portfoliosService.FindUserPortfolios(userId);
+            });
         }
 
         [HttpPost]
-        public ActionResult<Portfolio> Create([FromBody] AddPortfolioRequest portfolio)
+        public ActionResult<Portfolio> Add([FromBody] AddPortfolioRequest portfolio)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                Portfolio addedPortfolio = _portfoliosService.Add(userId, portfolio);
-
-                return Ok(addedPortfolio);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error creating portfolio.", detail = ex.Message });
-            }
+                return _portfoliosService.Add(userId, portfolio);
+            });
         }
 
         [HttpPut("{id}")]
         public ActionResult<Portfolio> Update(int id, [FromBody] UpdatePortfolio portfolio)
         {
-            try
+            if(id != portfolio.Id)
+                return BadRequest(new {message = "Portfolio Id mismatch."});
+
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                Portfolio updatedPortfolio = _portfoliosService.Update(id, userId, portfolio);
-
-                return Ok(updatedPortfolio);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error updading portoflio.", detail = ex.Message });
-            }
+                return _portfoliosService.Update(id, userId, portfolio);
+            });
         }
 
         [HttpDelete("{id}")]
         public ActionResult<Portfolio> Delete(int id)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                Portfolio deletedPortfolio = _portfoliosService.Delete(id, userId);
-
-                return Ok(deletedPortfolio);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error deleting portoflio.", detail = ex.Message });
-            }
+                return _portfoliosService.Delete(id, userId);
+            });
         }
 
         [HttpGet("securities-price-trend")]
         public ActionResult<IEnumerable<OwnedSecuritiesPriceTrend>> GetSecuritiesPriceTrend([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                IEnumerable<OwnedSecuritiesPriceTrend> result = _transactionsService.FindPriceTrend(userId, period, resolution);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching portfolio price trend.", detail = ex.Message });
-            }
+                return _transactionsService.FindPriceTrend(userId, period, resolution);
+            });
         }
 
         [HttpGet("{id}/performance-summary")]
@@ -148,26 +112,24 @@ namespace PriceFlowApp.Controllers
                 }
                 return BadRequest("Unsupported format.");
             }
+            catch (PriceFlowException ex)
+            {
+                return StatusCode(ex.StatusCode, new { message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error fetching portfolio performance summary.", detail = ex.Message });
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
         [HttpGet("securities-price-trend-report")]
         public ActionResult<IEnumerable<SecurityPriceTrendReport>> GetSecuritiesPriceTrendReport([FromQuery] PriceTrendPeriod? period, [FromQuery] PriceTrendResolution? resolution, [FromQuery] string? securityCode)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                IEnumerable<SecurityPriceTrendReport> result = _transactionsService.GetSecuritiesPriceTrendReport(userId, period, resolution, securityCode);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching securities price trend report.", detail = ex.Message });
-            }
+                return _transactionsService.GetSecuritiesPriceTrendReport(userId, period, resolution, securityCode);
+            });
         }
 
         [HttpGet("securities-price-trend-report/pdf")]
@@ -182,9 +144,13 @@ namespace PriceFlowApp.Controllers
 
                 return File(pdf, "application/pdf", "SecuritiesPriceTrendReport.pdf");
             }
+            catch (PriceFlowException ex)
+            {
+                return StatusCode(ex.StatusCode, new { message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error generating securities price trend report.", detail = ex.Message });
+                return StatusCode(500, new { message = ex.Message });
             }
         }
     }

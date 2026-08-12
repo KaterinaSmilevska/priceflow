@@ -48,7 +48,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
             this.successMessage = 'BROKERS.ADD_SUCCESS';
             setTimeout(() => this.close.emit(b), 800);
           },
-          error: () => this.errorMessage = 'BROKERS.ADD_ERROR'
+          error: (err) => this.errorMessage = `BROKERS.${err.error.code}`
         });
     }
         else {

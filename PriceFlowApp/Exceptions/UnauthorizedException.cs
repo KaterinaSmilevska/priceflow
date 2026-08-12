@@ -1,12 +1,10 @@
 ﻿namespace PriceFlowApp.Exceptions
 {
-    public class UnauthorizedException: Exception
+    public class UnauthorizedException: PriceFlowException
     {
-        public string ErrorCode { get; }
-
-        public UnauthorizedException(string errorCode, string message): base(message)
+        public UnauthorizedException(string code, string message): base(code,message, StatusCodes.Status401Unauthorized)
         {
-            ErrorCode = errorCode;
+            
         }
     }
 }

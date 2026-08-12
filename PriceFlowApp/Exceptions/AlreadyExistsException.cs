@@ -1,12 +1,10 @@
 ﻿namespace PriceFlowApp.Exceptions
 {
-    public class AlreadyExistsException: Exception
+    public class AlreadyExistsException: PriceFlowException
     {
-        public string ErrorCode { get; }
-
-        public AlreadyExistsException(string errorCode, string message) : base(message)
+        public AlreadyExistsException(string code, string message) : base(code, message, StatusCodes.Status409Conflict)
         {
-            ErrorCode = errorCode;
+
         }
     }
 }

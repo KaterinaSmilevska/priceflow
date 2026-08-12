@@ -30,7 +30,7 @@ namespace PriceFlowApp.Services
         {
             Korisnici user = GetUserById(userId);
 
-            return _rolesRepository.GetByUserId(userId);
+            return _rolesRepository.GetByUserId(user.Id);
         }
 
         public List<string> FindNames()

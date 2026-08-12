@@ -1,12 +1,10 @@
 ﻿namespace PriceFlowApp.Exceptions
 {
-    public class ValidationException: Exception
+    public class ValidationException: PriceFlowException
     {
-        public string ErrorCode { get; }
-
-        public ValidationException(string errorCode, string message) : base(message)
+        public ValidationException(string code, string message) : base(code,message, StatusCodes.Status400BadRequest)
         {
-            ErrorCode = errorCode;
+
         }
     }
 }

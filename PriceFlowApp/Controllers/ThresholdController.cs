@@ -8,7 +8,7 @@ namespace PriceFlowApp.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class ThresholdController : ControllerBase
+    public class ThresholdController : PriceFlowController
     {
         private readonly IThresholdService _thresholdService;
 
@@ -20,81 +20,51 @@ namespace PriceFlowApp.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ThresholdResponse>> GetUserThresholds()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                IEnumerable<ThresholdResponse> userThresholds = _thresholdService.GetUserThresholds(userId);
-
-                return Ok(userThresholds);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching thresholds.", detail = ex.Message });
-            }
+                return _thresholdService.GetUserThresholds(userId);
+            });
         }
 
         [HttpGet("owned")]
         public ActionResult<IEnumerable<OwnedSecurity>> GetOwned()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                IEnumerable<OwnedSecurity> ownedSecurities = _thresholdService.GetOwnedSecurities(userId);
-
-                return Ok(ownedSecurities);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching owned securities.", detail = ex.Message });
-            }
+                return _thresholdService.GetOwnedSecurities(userId);
+            });
         }
 
         [HttpPost]
-        public ActionResult<ThresholdResponse> AddThreshold([FromBody] AddThresholdRequest request)
+        public ActionResult<ThresholdResponse> Add([FromBody] AddThresholdRequest request)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                ThresholdResponse addedThreshold = _thresholdService.Add(userId, request);
-
-                return Ok(addedThreshold);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error creating threshold.", detail = ex.Message });
-            }
+                return _thresholdService.Add(userId, request);
+            });
         }
 
         [HttpPut("{id}")]
-        public ActionResult<ThresholdResponse> UpdateThreshold(int id, [FromBody] UpdateThresholdRequest request)
+        public ActionResult<ThresholdResponse> Update(int id, [FromBody] UpdateThresholdRequest request)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                ThresholdResponse updatedThreshold = _thresholdService.Update(userId, id, request);
-
-                return Ok(updatedThreshold);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error updating threshold.", detail = ex.Message });
-            }
+                return _thresholdService.Update(userId, id, request);
+            });
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<ThresholdResponse> DeleteThreshold(int id)
+        public ActionResult<ThresholdResponse> Delete(int id)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                ThresholdResponse deletedThreshold = _thresholdService.Delete(userId, id);
-
-                return Ok(deletedThreshold);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error deleting threshold.", detail = ex.Message });
-            }
+                return _thresholdService.Delete(userId, id);
+            });
         }
     }
 }

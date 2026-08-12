@@ -105,6 +105,7 @@
     "UPDATE_SUCCESS": "Broker updated successfully!",
     "UPDATE_ERROR": "Failed to update broker.",
     "DELETE_ERROR": "Failed to delete broker.",
+    "COMPANY_ALREADY_EXISTS": "Company already exists.",
     "TRANSLATE_NAMES": {
       "KOMERCIJALNA_BANKA": "Komercijalna banka AD Skopje",
       "STOPANSKA_BANKA": "Stopanska banka AD Skopje",
@@ -112,7 +113,6 @@
       "FERSHPED_BROKER": "Fershped broker AD Skopje",
       "EUROHAUS": "Eurohaus AD Skopje"
     }
-
   },
   "ISSUERS": {
     "TRANSLATE_NAMES": {

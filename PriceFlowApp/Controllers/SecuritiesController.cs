@@ -6,7 +6,7 @@ namespace PriceFlowApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SecuritiesController: ControllerBase
+    public class SecuritiesController: PriceFlowController
     {
         private readonly ISecuritiesService _securitiesService;
 
@@ -18,138 +18,58 @@ namespace PriceFlowApp.Controllers
         [HttpGet("{id}")]
         public ActionResult<Security> GetById(int id)
         {
-            try
-            {
-                Security security = _securitiesService.FindById(id);
-
-                return Ok(security);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching security.", detail = ex.Message });
-            }
-
+            return Execute(() => _securitiesService.FindById(id));
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Security>> GetAll()
         {
-            try
-            {
-                IEnumerable<Security> securities = _securitiesService.FindAll();
-
-                return Ok(securities);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching securities.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.FindAll());
         }
 
         [HttpGet("code/{id}")]
-        public ActionResult<Security> GetSecurityCode(int id)
+        public ActionResult<string> GetSecurityCode(int id)
         {
-            try
-            {
-                string? code = _securitiesService.FindSecurityCode(id);
-
-                return Ok(code);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching security code.", detail = ex.Message });
-            }
-     
+            return Execute(() => _securitiesService.FindSecurityCode(id));
         }
 
         [HttpGet("{code}/total-shares")]
         public ActionResult<int> GetTotalNumShares(string code)
         {
-            try
-            {
-                int? totalShares = _securitiesService.FindTotalNumShares(code);
-
-                return Ok(totalShares);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = "Error fetching total shares.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.FindTotalNumShares(code));
         }
 
         [HttpPost]
         public ActionResult<Security> Add([FromBody] AddSecurityRequest security)
         {
-            try
-            {
-                Security addedSecurity = _securitiesService.Add(security);
-
-                return Ok(addedSecurity);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error adding security.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.Add(security));
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Security> Update(int id, [FromBody] UpdateSecurity updatedSecurity)
+        public ActionResult<Security> Update(int id, [FromBody] UpdateSecurity security)
         {
-            try
-            {
-                Security security = _securitiesService.Update(id, updatedSecurity);
+            if(id != security.Id)
+                return BadRequest(new {message = "Security Id mismatch."});
 
-                return Ok(security);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error updating security.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.Update(id, security));
         }
 
         [HttpDelete("{id}")]
         public ActionResult<Security> Delete(int id)
         {
-            try
-            {
-                Security deletedSecurity = _securitiesService.Delete(id);
-
-                return Ok(deletedSecurity);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error deleting security.", detail = ex.Message });
-            }
+            return Execute(() =>  (_securitiesService.Delete(id)));
         }
 
         [HttpGet("prices")]
         public ActionResult<SecurityDailyPrices> GetLatestPrices([FromQuery] string securityCode, [FromQuery] DateTime date)
         {
-            try
-            {
-                SecurityDailyPrices result = _securitiesService.GetLatestPrices(securityCode, date);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching latest prices.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.GetLatestPrices(securityCode, date));
         }
 
         [HttpGet("search")]
         public ActionResult<IEnumerable<Security>> SearchByCode([FromQuery] string searchTerm)
         {
-            try
-            {
-                IEnumerable<Security> securities = _securitiesService.SearchByCode(searchTerm);
-
-                return Ok(securities);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching securities.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.SearchByCode(searchTerm));
         }
     }
 }

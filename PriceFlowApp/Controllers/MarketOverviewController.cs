@@ -6,7 +6,7 @@ namespace PriceFlowApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MarketOverviewController : ControllerBase
+    public class MarketOverviewController : PriceFlowController
     {
         private readonly IMarketOverviewService _marketOverviewService;
 
@@ -18,77 +18,35 @@ namespace PriceFlowApp.Controllers
         [HttpGet]
         public ActionResult<MarketOverview> GetMarketOverview()
         {
-            try
-            {
-                MarketOverview overview = _marketOverviewService.GetOverview();
-
-                return Ok(overview);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching market overview.", detail = ex.Message });
-            }
+            return Execute(() => _marketOverviewService.GetOverview());
         }
 
         [HttpGet("top-gainers")]
         public ActionResult<IEnumerable<SecurityPerformance>> GetTopGainers([FromQuery] int count)
         {
-            try
-            {
-                IEnumerable<SecurityPerformance> securityPerformance = _marketOverviewService.GetTopGainers(count);
-
-                return Ok(securityPerformance);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching top gainers.", detail = ex.Message });
-            }
+            return Execute(() => _marketOverviewService.GetTopGainers(count));
         }
 
         [HttpGet("top-losers")]
         public ActionResult<IEnumerable<SecurityPerformance>> GetTopLosers([FromQuery] int count)
         {
-            try
-            {
-                IEnumerable<SecurityPerformance> securityPerformance = _marketOverviewService.GetTopLosers(count);
-
-                return Ok(securityPerformance);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching top losers.", detail = ex.Message });
-            }
+            return Execute(() => _marketOverviewService.GetTopLosers(count));
         }
 
         [HttpGet("most-traded")]
         public ActionResult<IEnumerable<SecurityPerformance>> GetMostTraded([FromQuery] int count)
         {
-            try
-            {
-                IEnumerable<SecurityPerformance> securityPerformance = _marketOverviewService.GetMostTrade(count);
-
-                return Ok(securityPerformance);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching most traded securities.", detail = ex.Message });
-            }
+            return Execute(() => _marketOverviewService.GetMostTrade(count));
         }
 
         [HttpGet("liquidity")]
         public ActionResult<LiquidityOverview> GetLiquidity([FromQuery] int months = 6, [FromQuery] bool onlyOwned = true)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                LiquidityOverview result = _marketOverviewService.FindLiquidity(userId, months, onlyOwned);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching securities liquidity.", detail = ex.Message });
-            }
+                return _marketOverviewService.FindLiquidity(userId, months, onlyOwned);
+            });
         }
     }
 }

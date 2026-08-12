@@ -6,7 +6,7 @@ namespace PriceFlowApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class IssuersController : Controller
+    public class IssuersController : PriceFlowController
     {
         private readonly IIssuersService _issuersService;
 
@@ -18,16 +18,7 @@ namespace PriceFlowApp.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Issuer>> GetAll()
         {
-            try
-            {
-                IEnumerable<Issuer> issuers = _issuersService.FindAll();
-
-                return Ok(issuers);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching issuers.", detail = ex.Message });
-            }
+            return Execute(() => _issuersService.FindAll());
         }
     }
 }

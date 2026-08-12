@@ -47,7 +47,7 @@ namespace PriceFlowApp.Services
 
         public User FindByVerificationToken(Guid token)
         {
-            Korisnici? user = GetUserByVerificationToken(token);
+            Korisnici user = GetUserByVerificationToken(token);
 
             return MapToUser(user);
         }
@@ -63,13 +63,13 @@ namespace PriceFlowApp.Services
 
         public User Update(int id, User user)
         {
-            Korisnici existingUser = GetUserById(id);
-
             ValidationHelper.ValidateRequiredField(user.Username, "Username", "USERNAME_VALIDATION_REQUIRED");
             ValidateUsernameAvailability(user.Username, user.Id);
             ValidationHelper.ValidateRequiredField(user.Name, "Name", "NAME_VALIDATION_REQUIRED");
             ValidationHelper.ValidateRequiredField(user.Email, "Email", "EMAIL_VALIDATION_REQUIRED");
             ValidateEmailFormat(user.Email);
+
+            Korisnici existingUser = GetUserById(id);
 
             existingUser.Ime = user.Name;
             existingUser.Username = user.Username;
@@ -133,14 +133,13 @@ namespace PriceFlowApp.Services
 
             return new RegisterResponse
             {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
+                Id = addedUser.Id,
+                Username = addedUser.Username,
+                Email = addedUser.Email,
                 Roles = registerRequest.RoleNames,
                 Message = "Registration successful"
             };
         }
-
 
         public async Task<LoginResponse> Login(LoginRequest loginRequest)
         {
@@ -278,9 +277,9 @@ namespace PriceFlowApp.Services
 
         public void ResetPassword(Guid token, string newPassword)
         {
-            Korisnici? user = GetByResetPasswordToken(token);
-
             ValidatePasswordFormat(newPassword, newPassword);
+
+            Korisnici user = GetByResetPasswordToken(token);
 
             user.PasswordHash = PasswordHelper.CalculateHashAndSalt(newPassword);
             user.ResetPasswordToken = null;

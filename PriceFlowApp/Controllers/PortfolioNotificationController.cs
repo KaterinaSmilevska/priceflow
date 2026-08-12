@@ -8,7 +8,7 @@ namespace PriceFlowApp.Controllers
     [ApiController]
     [Route("api/portfolio-notification")]
     [Authorize]
-    public class PortfolioNotificationController: ControllerBase
+    public class PortfolioNotificationController: PriceFlowController
     {
         private readonly IPortfoliosNotificationsService _portfoliosNotificationsService;
 
@@ -20,31 +20,13 @@ namespace PriceFlowApp.Controllers
         [HttpGet("{portfolioId}")]
         public ActionResult<PortfolioNotification> GetByPortfolioId(int portfolioId)
         {
-            try
-            {
-                PortfolioNotification notification = _portfoliosNotificationsService.FindByPortfolioId(portfolioId);
-
-                return Ok(notification);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching notifications for portfolio.", detail = ex.Message });
-            }
+            return Execute(() => _portfoliosNotificationsService.FindByPortfolioId(portfolioId));
         }
 
         [HttpPut]
         public ActionResult<PortfolioNotification> Update([FromBody] UpdatePortfolioNotification notification)
         {
-            try
-            {
-                PortfolioNotification result = _portfoliosNotificationsService.Update(notification);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error updating portfolio notification.", detail = ex.Message });
-            }
+            return Execute(() => _portfoliosNotificationsService.Update(notification));
         }
     }
 }

@@ -22,7 +22,7 @@ namespace PriceFlowApp.Services
         {
             Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            IEnumerable<PortfolioPrinosi> portfolioReturns = _portfolioReturnsRepository.GetByPortfolioId(portfolioId);
+            IEnumerable<PortfolioPrinosi> portfolioReturns = _portfolioReturnsRepository.GetByPortfolioId(portfolio.Id);
 
             return portfolioReturns
                 .Select(MapToPortfolioReturns)
@@ -40,8 +40,8 @@ namespace PriceFlowApp.Services
                 Datum = portfolioReturns.Date,
                 NetoIznos = portfolioReturns.NetAmount,
                 Danok = portfolioReturns.Tax,
-                PortfolioId = portfolioReturns.PortfolioId,
-                Hvid = portfolioReturns.HVId,
+                PortfolioId = portfolio.Id,
+                Hvid = security.Id,
             };
 
             PortfolioPrinosi createdPortfolioReturns = _portfolioReturnsRepository.Add(portfolioReturn);
@@ -53,12 +53,12 @@ namespace PriceFlowApp.Services
         {
             Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            IEnumerable<PortfolioPrinosi> returns = _portfolioReturnsRepository.GetByPortfolioId(portfolioId);
+            IEnumerable<PortfolioPrinosi> returns = _portfolioReturnsRepository.GetByPortfolioId(portfolio.Id);
 
             return new PortfolioReturnsSummary
             {
-                    TotalDividends = returns.Sum(x => x.NetoIznos),
-                    TotalTaxes = returns.Sum(x => x.Danok)
+                TotalDividends = returns.Sum(x => x.NetoIznos),
+                TotalTaxes = returns.Sum(x => x.Danok)
             };
         }
 
@@ -68,7 +68,7 @@ namespace PriceFlowApp.Services
 
             ValidateDateRange(fromDate, toDate);
 
-            IEnumerable<PortfolioPrinosi> returns = _portfolioReturnsRepository.GetByPortfolioIdForPeriod(portfolioId, fromDate, toDate);
+            IEnumerable<PortfolioPrinosi> returns = _portfolioReturnsRepository.GetByPortfolioIdForPeriod(portfolio.Id, fromDate, toDate);
 
             return new PortfolioReturnsSummary
             {

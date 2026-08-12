@@ -28,7 +28,7 @@ namespace PriceFlowApp.Services
         {
             Korisnici user = GetUserById(userId);
 
-            IEnumerable<HvPromenaCena> thresholds = _thresholdRepository.GetByUserId(userId);
+            IEnumerable<HvPromenaCena> thresholds = _thresholdRepository.GetByUserId(user.Id);
 
             return thresholds.
                 Select(MapToThreshold)
@@ -39,7 +39,7 @@ namespace PriceFlowApp.Services
         {
             Korisnici user = GetUserById(userId);
 
-            List<int> ownedIds = _transactionsRepository.GetOwnedSecuritiesIds(userId);
+            List<int> ownedIds = _transactionsRepository.GetOwnedSecuritiesIds(user.Id);
 
             IEnumerable<HartiiOdVrednost> securities = _securitiesRepository.GetAllByIds(ownedIds);
 
@@ -55,15 +55,15 @@ namespace PriceFlowApp.Services
             if (request.LowerThreshold >= request.UpperThreshold)
                 throw new ValidationException("INVALID_THRESHOLD_RANGE", "Lower threshold must be less than upper threshold.");
 
+            ValidateThresholdAvailability(userId, request.HvId);
+
             Korisnici user = GetUserById(userId);
             HartiiOdVrednost security = GetSecurityById(request.HvId);
 
-            ValidateThresholdAvailability(userId, request.HvId);
-
             HvPromenaCena threshold = new HvPromenaCena
             {
-                KorisnikId = userId,
-                Hvid = request.HvId,
+                KorisnikId = user.Id,
+                Hvid = security.Id,
                 DolnaGranica = request.LowerThreshold,
                 GornaGranica = request.UpperThreshold
             };
@@ -75,13 +75,13 @@ namespace PriceFlowApp.Services
 
         public ThresholdResponse Update(int userId, int id, UpdateThresholdRequest request)
         {
+            ValidateThresholdRange(request);
+            ValidateThresholdAvailability(userId, request.HvId, id);
+
             HvPromenaCena existingThreshold = GetThresholdById(id);
 
             if (existingThreshold.KorisnikId != userId)
                 throw new UnauthorizedException("THRESHOLD_ACCESS_DENIED", "You do not have access to this threshold.");
-
-            ValidateThresholdRange(request);
-            ValidateThresholdAvailability(userId, request.HvId, id);
 
             existingThreshold.DolnaGranica = request.LowerThreshold;
             existingThreshold.GornaGranica = request.UpperThreshold;
@@ -129,15 +129,6 @@ namespace PriceFlowApp.Services
                 throw new NotFoundException("THRESHOLD_NOT_FOUND", "Threshold not found");
 
             return threshold;
-        }
-
-        private HvPromenaCena GetThresholdByUserIdAndSecurityId(int userId, int securityId)
-        {
-            HvPromenaCena? existingThreshold = _thresholdRepository.GetByUserIdAndSecurityId(userId, securityId);
-            if (existingThreshold == null)
-                throw new NotFoundException("THRESHOLD_NOT_FOUND", "Threshold not found.");
-
-            return existingThreshold;
         }
 
         private void ValidateThresholdRange(UpdateThresholdRequest request)

@@ -64,6 +64,8 @@ builder.Services.AddHostedService<NotificationBackgroundService>();
 builder.Services.AddScoped<ISecurityFilterRepository, SecurityFilterRepository>();
 builder.Services.AddScoped<ISecurityFilterService, SecurityFilterService>();
 builder.Services.AddScoped<ISecurityPriceTrendReportService, SecurityPriceTrendReportService>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -114,6 +116,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseExceptionHandler();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
@@ -123,27 +127,27 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-app.UseExceptionHandler(appError =>
-{
-    app.Run(async context =>
-    {
-        var exception = context.Features
-        .Get<IExceptionHandlerFeature>()?.Error;
+//app.UseExceptionHandler(appError =>
+//{
+//    app.Run(async context =>
+//    {
+//        var exception = context.Features
+//        .Get<IExceptionHandlerFeature>()?.Error;
 
-        if (exception is BusinessRuleException bre)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+//        if (exception is BusinessRuleException bre)
+//        {
+//            context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
-            await context.Response.WriteAsJsonAsync(new
-            {
-                message = bre.Message,
-                code = bre.ErrorCode
-            });
-            return;
-        }
-        throw exception!;
-    });
-});
+//            await context.Response.WriteAsJsonAsync(new
+//            {
+//                message = bre.Message,
+//                code = bre.Code
+//            });
+//            return;
+//        }
+//        throw exception!;
+//    });
+//});
 
 app.MapFallbackToFile("index.html");
 

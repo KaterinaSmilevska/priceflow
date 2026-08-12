@@ -96,6 +96,7 @@
     "UPDATE_SUCCESS": "Брокерот е успешно ажуриран!",
     "UPDATE_ERROR": "Грешка при ажурирањето на брокерот.",
     "DELETE_ERROR": "Грешка при бришењето на брокерот.",
+    "COMPANY_ALREADY_EXISTS": "Компанијата веќе постои.",
     "TRANSLATE_NAMES": {
       "KOMERCIJALNA_BANKA": "Комерцијална банка АД Скопје",
       "STOPANSKA_BANKA": "Стопанска банка АД Скопје",

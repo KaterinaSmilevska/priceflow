@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 using PriceFlowApp.Services;
 
 namespace PriceFlowApp.Controllers
@@ -8,7 +9,7 @@ namespace PriceFlowApp.Controllers
     [ApiController]
     [Route("api/price-change-notification")]
     [Authorize]
-    public class PriceChangeNotificationController : ControllerBase
+    public class PriceChangeNotificationController : PriceFlowController
     {
         private readonly IPriceChangeNotificationService _notificationService;
 
@@ -18,74 +19,49 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetByUserId()
+        public ActionResult<IEnumerable<PriceChangeNotificationResponse>> GetByUserId()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
 
                 _notificationService.GenerateNotifications();
 
-                IEnumerable<PriceChangeNotificationResponse> notifications = _notificationService.GetUserNotifications(userId);
-
-                return Ok(notifications);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching notifications for user.", detail = ex.Message });
-            }
+                return _notificationService.GetUserNotifications(userId);
+            });
         }
 
         [HttpGet("unread-count")]
         public ActionResult<int> GetUnreadCount()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-
-                int unread = _notificationService.GetUnreadNotificationCount(userId);
-
-                return Ok(unread);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching unread notifications count for user.", detail = ex.Message });
-            }
+                return _notificationService.GetUnreadNotificationCount(userId);
+            });
         }
 
         [HttpPost("{id}/read")]
         public IActionResult MarkAsRead(int id)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
                 _notificationService.MarkNotificationAsRead(userId, id);
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error marking notification as read.", detail = ex.Message });
-            }
+            });
         }
 
         [HttpPost("debug-generate")]
-        public IActionResult DebugGenerate()
+        public ActionResult<IEnumerable<PriceChangeNotificationResponse>> DebugGenerate()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
 
                 _notificationService.GenerateNotifications();
 
-                IEnumerable<PriceChangeNotificationResponse> notifications = _notificationService.GetUserNotifications(userId);
-
-                return Ok(notifications);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching notifications for user.", detail = ex.Message });
-            }
+                return _notificationService.GetUserNotifications(userId);
+            });
         }
     }
 }

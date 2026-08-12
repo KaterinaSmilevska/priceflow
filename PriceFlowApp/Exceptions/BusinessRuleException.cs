@@ -1,12 +1,10 @@
 ﻿namespace PriceFlowApp.Exceptions
 {
-    public class BusinessRuleException: Exception
+    public class BusinessRuleException: PriceFlowException
     {
-        public string ErrorCode { get; }
-
-        public BusinessRuleException(string errorCode, string message): base(message)
+        public BusinessRuleException(string code, string message): base(code, message, StatusCodes.Status400BadRequest)
         {
-            ErrorCode = errorCode;
+            
         }
     }
 }

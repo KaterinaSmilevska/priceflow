@@ -46,21 +46,21 @@ namespace PriceFlowApp.Services
                 .ToList();
         }
 
-        public string? FindSecurityCode(int id)
+        public string FindSecurityCode(int id)
         {
             HartiiOdVrednost security = GetSecurityById(id);
 
-            return _securitiesRepository.GetSecurityCode(id);
+            return _securitiesRepository.GetSecurityCode(security.Id);
         }
 
         public int? FindTotalNumShares(int id)
         {
             HartiiOdVrednost security = GetSecurityById(id);
 
-            return _securitiesRepository.GetTotalNumSharesById(id);
+            return _securitiesRepository.GetTotalNumSharesById(security.Id);
         }
 
-        public int? FindTotalNumShares(string securityCode)
+        public int FindTotalNumShares(string securityCode)
         {
             return _securitiesRepository.GetTotalNumSharesBySecurityCode(securityCode);
         }
@@ -79,8 +79,8 @@ namespace PriceFlowApp.Services
                 Isin = request.Isin,
                 Kod = request.Code,
                 VkupenBrojAkcii = request.TotalNumShares,
-                TipHvid = request.TypeSecurityId,
-                IzdavachId = request.IssuerId
+                TipHvid = typeSecurity.Id,
+                IzdavachId = issuer.Id
             };
 
             HartiiOdVrednost addedSecurity = _securitiesRepository.Add(security);
@@ -90,14 +90,14 @@ namespace PriceFlowApp.Services
 
         public Security Update(int id, UpdateSecurity security)
         {
-            HartiiOdVrednost? existingSecurity = GetSecurityById(id);
-            TipHv typeSecurity = GetTypeSecurityById(security.TypeSecurityId);
-            Izdavachi issuer = GetIssuerById(security.IssuerId);
-
             ValidationHelper.ValidateRequiredField(security.Isin, "ISIN", "ISIN_VALIDATION_REQUIRED");
             ValidationHelper.ValidateRequiredField(security.Code, "Code", "CODE_VALIDATION_REQUIRED");
 
             ValidateCodeAvailability(security.Code, id);
+
+            HartiiOdVrednost? existingSecurity = GetSecurityById(id);
+            TipHv typeSecurity = GetTypeSecurityById(security.TypeSecurityId);
+            Izdavachi issuer = GetIssuerById(security.IssuerId);
 
             existingSecurity.Isin = security.Isin;
             existingSecurity.Kod = security.Code;
