@@ -24,8 +24,8 @@ export class AdminService {
     return this.http.put<void>(`${this.apiUrl}/users/${id}`, user);
   }
 
-  deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/users/${id}`);
+  deleteUser(id: number): Observable<User> {
+    return this.http.delete<User>(`${this.apiUrl}/users/${id}`);
   }
 
   getCurrentUserStatus(): Observable<AuthStatus> {

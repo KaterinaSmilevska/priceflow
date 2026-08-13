@@ -39,8 +39,8 @@ export class SecuritiesService {
     return this.http.put<Security>(`${this.apiUrl}/${id}`, security);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  delete(id: number): Observable<Security> {
+    return this.http.delete<Security>(`${this.apiUrl}/${id}`);
   }
 
   getTypes(): Observable<TypeSecurity[]> {

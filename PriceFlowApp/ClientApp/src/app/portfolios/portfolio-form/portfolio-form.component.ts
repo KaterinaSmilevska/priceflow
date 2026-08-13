@@ -44,7 +44,7 @@ export class PortfolioFormComponent implements OnInit {
             this.successMessage = 'PORTFOLIOS.ADD_SUCCESS';
             setTimeout(() => this.close.emit(b), 800)
           },
-          error: () => this.errorMessage = 'PORTFOLIOS.ADD_ERROR'
+          error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
         });
     } else {
       this.portfoliosService.update(this.portfolioToEdit.id, updatedPortfolio)
@@ -53,7 +53,7 @@ export class PortfolioFormComponent implements OnInit {
             this.successMessage = 'PORTFOLIOS.UPDATE_SUCCESS';
             setTimeout(() => this.close.emit(updatedPortfolio), 800)
           },
-          error: () => this.errorMessage = 'PORTFOLIOS.UPDATE_ERROR'
+          error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
         });
     }
   }

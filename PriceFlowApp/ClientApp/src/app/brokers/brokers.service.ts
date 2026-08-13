@@ -23,7 +23,7 @@ export class BrokersService {
     return this.http.put<Broker>(`${this.apiUrl}/${id}`, broker);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  delete(id: number): Observable<Broker> {
+    return this.http.delete<Broker>(`${this.apiUrl}/${id}`);
   }
 }

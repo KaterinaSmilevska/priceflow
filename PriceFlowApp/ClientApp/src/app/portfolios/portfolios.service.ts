@@ -32,8 +32,8 @@ export class PortfoliosService {
     return this.http.put<Portfolio>(`${this.apiUrl}/${id}`, portfolio, { withCredentials: true });
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
+  delete(id: number): Observable<Portfolio> {
+    return this.http.delete<Portfolio>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
   getSecuritiesPriceTrend(period?: 'Monthly' | 'Yearly', resolution?: 'Day' | 'Week' | 'Month' | 'Quarter') {

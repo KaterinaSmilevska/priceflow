@@ -25,7 +25,6 @@ export class PortfoliosComponent implements OnInit {
 
   constructor(private portfoliosService: PortfoliosService, private router: Router) { }
 
-
   ngOnInit(): void {
     this.loadPortfolios();
   }

@@ -283,9 +283,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
             setTimeout(() => { this.close.emit(updated); }, 800);
           },
           error: (err) => {
-            this.errorMessage = err.error?.message
-              ? err.error.message
-              : 'TRANSACTIONS.UPDATE_ERROR';
+            this.errorMessage = `ERRORS.${err.error.code}`;
           }
         });
     } else {
@@ -300,9 +298,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
             setTimeout(() => { this.close.emit(newTransaction); }, 800);
           },
           error: (err) => {
-            this.errorMessage = err.error?.message
-              ? err.error.message
-              : 'TRANSACTIONS.ADD_ERROR';
+            this.errorMessage = `ERRORS.${err.error.code}`;
             }
         });
     }

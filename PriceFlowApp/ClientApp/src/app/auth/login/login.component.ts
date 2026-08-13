@@ -31,7 +31,7 @@ export class LoginComponent {
         this.router.navigate(['/']);
       },
       error: (err) => {
-        this.errorMessage = 'AUTH.INVALID_CREDENTIALS';
+        this.errorMessage = `ERRORS.${err.error.code}`;
       }
     });
   }

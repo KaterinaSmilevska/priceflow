@@ -19,6 +19,7 @@ import { ManageBrokersComponent } from './admin/manage-brokers/manage-brokers.co
 import { SecurityFilterComponent } from './security-filter/security-filter.component';
 import { AnalystGuard } from './security-filter/analyst.guard';
 import { AdminGuard } from './admin/admin.guard';
+import { ServerErrorComponent } from './error/server-error/server-error.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -37,5 +38,6 @@ export const routes: Routes = [
   { path: 'portfolios/:id', component: PortfolioDetailsComponent, canActivate: [InvestorGuard] },
   { path: 'price-alerts', component: ThresholdComponent, canActivate: [InvestorGuard] },
   { path: 'security-filter', component: SecurityFilterComponent, canActivate: [AnalystGuard] },
+  { path: 'server-error', component: ServerErrorComponent },
   { path: '**', redirectTo: '' },
 ];

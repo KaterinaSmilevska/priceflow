@@ -77,7 +77,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
     const upper = this.form.value.upperThreshold;
 
     if (lower >= upper) {
-      this.errorMessage = 'THRESHOLD_VALIDATION_ERROR';
+      this.errorMessage = `ERRORS.INVALID_THRESHOLD_RANGE`;
       return;
     }
 
@@ -93,7 +93,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
             this.successMessage = 'THRESHOLD.UPDATE_SUCCESS';
             setTimeout(() => this.saved.emit(), 800);
           },
-          error: () => this.errorMessage = 'THRESHOLD.UPDATE_ERROR'
+          error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
         });
     }
     else {
@@ -109,7 +109,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
             this.successMessage = 'THRESHOLD.ADD_SUCCESS';
             setTimeout(() => this.saved.emit(), 800);
           },
-          error: () => this.errorMessage = 'THRESHOLD.ADD_ERROR'
+          error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
         });
     }
   }

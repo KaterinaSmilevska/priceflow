@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Broker } from './Broker';
 import { BrokerFormComponent } from './broker-form/broker-form.component';
@@ -17,6 +17,7 @@ import { BrokersService } from '../../brokers/brokers.service';
 })
 export class ManageBrokersComponent implements OnInit {
   brokers: Broker[] = [];
+  successMessage: string | null = null;
   errorMessage: string | null = null;
 
   broker: Broker = { id: 0, company: '', commissionPercent: 0 }
@@ -26,6 +27,7 @@ export class ManageBrokersComponent implements OnInit {
   showDeleteModal = false;
   brokerToDelete: Broker | null = null;
 
+  @Output() close = new EventEmitter<Broker | null>();
 
   constructor(private brokersService: BrokersService) { }
 
@@ -75,12 +77,14 @@ export class ManageBrokersComponent implements OnInit {
     if (!this.brokerToDelete) return;
 
     this.brokersService.delete(this.brokerToDelete.id).subscribe({
-      next: () => {
+      next: (b) => {
         this.loadBrokers();
         this.closeDeleteModal();
+        this.successMessage = 'BROKERS.DELETE_SUCCESS';
+        setTimeout(() => this.close.emit(b), 800);
       },
-      error: () => {
-        this.errorMessage = 'BROKERS.DELETE_ERROR';
+      error: (err) => {
+        this.errorMessage = `ERRORS.${err.error.code}`;
         this.closeDeleteModal();
       }
     });

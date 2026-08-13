@@ -143,7 +143,7 @@ loadIssuers(): void {
           setTimeout(() => this.close.emit(updated), 1000);
         },
         error: (err) => {
-          this.errorMessage = 'SECURITIES.UPDATE_ERROR';
+          this.errorMessage = `ERRORS.${err.error.code}`;
           setTimeout(() => this.close.emit(err), 1000);
         }
        });
@@ -154,7 +154,7 @@ loadIssuers(): void {
           setTimeout(() => this.close.emit(newSecurity), 1000);
         },
         error: (err) => {
-          this.errorMessage = 'SECURITIES.ADD_ERROR';
+          this.errorMessage = `ERRORS.${err.error.code}`;
           setTimeout(() => this.close.emit(err), 1000);
         }
       });

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserFormComponent } from './user-form/user-form.component';
 import { AdminService } from '../admin.service';
@@ -7,6 +7,7 @@ import { User } from './User';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { DbValueTranslatePipe } from '../../shared/db-value-translate.pipe';
+import { Broker } from '../manage-brokers/Broker';
 
 @Component({
   selector: 'app-manage-users',
@@ -18,6 +19,7 @@ import { DbValueTranslatePipe } from '../../shared/db-value-translate.pipe';
 export class ManageUsersComponent implements OnInit {
   users: User[] = [];
 
+  successMessage: string | null = null;
   errorMessage: string | null = null;
   showDeleteModal = false;
   userToDelete: User | null = null;
@@ -25,6 +27,7 @@ export class ManageUsersComponent implements OnInit {
   showEditModal = false;
   userToEdit: User | null = null;
 
+  @Output() close = new EventEmitter<User | null>();
 
   constructor(private adminService: AdminService, private router: Router) { }
 
@@ -92,12 +95,14 @@ export class ManageUsersComponent implements OnInit {
     if (!this.userToDelete) return;
 
     this.adminService.deleteUser(this.userToDelete.id).subscribe({
-      next: () => {
+      next: (u) => {
         this.loadUsers();
         this.closeDeleteModal();
+        this.successMessage = 'USERS.DELETE_SUCCESS';
+        setTimeout(() => this.close.emit(u), 800);
       },
       error: (err) => {
-        this.errorMessage = 'USERS.DELETE_ERROR';
+        this.errorMessage = `ERRORS.${err.error.code}`;
         this.closeDeleteModal();
       }
     });

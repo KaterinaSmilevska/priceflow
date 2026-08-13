@@ -134,7 +134,7 @@ namespace PriceFlowApp.Services
         private void ValidateThresholdRange(UpdateThresholdRequest request)
         {
             if (request.LowerThreshold >= request.UpperThreshold)
-                throw new ValidationException("INVALID_THRESHOLD_RANGE", "Lower threshold must br less than upper threshold.");
+                throw new ValidationException("INVALID_THRESHOLD_RANGE", "Lower threshold must bе less than upper threshold.");
         }
 
         private void ValidateThresholdAvailability(int userId, int securityId, int? thresholdId = null)

@@ -31,7 +31,7 @@ export class ThresholdService {
     return this.http.put(`${this.apiUrl}/${id}`, request);
   }
 
-  delete(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  delete(id: number): Observable<Threshold> {
+    return this.http.delete<Threshold>(`${this.apiUrl}/${id}`);
   }
 }

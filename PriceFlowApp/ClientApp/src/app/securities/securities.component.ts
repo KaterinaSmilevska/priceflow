@@ -72,7 +72,7 @@ export class SecuritiesComponent implements OnInit {
         this.closeDeleteModal();
       },
       error: (err) => {
-        this.errorMessage = 'SECURITIES.DELETE_ERROR';
+        this.errorMessage = `ERRORS.${err.error.code}`;
         this.closeDeleteModal();
       }
     });

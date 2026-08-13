@@ -154,7 +154,7 @@ export class TransactionsComponent implements OnInit {
         this.closeDeleteModal();
       },
       error: (err) => {
-        this.errorMessage = 'TRANSACTIONS.DELETE_ERROR';
+        this.errorMessage = `ERRORS.${err.error.code}`;
         this.closeDeleteModal();
       }
     });

@@ -48,7 +48,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
             this.successMessage = 'BROKERS.ADD_SUCCESS';
             setTimeout(() => this.close.emit(b), 800);
           },
-          error: (err) => this.errorMessage = `BROKERS.${err.error.code}`
+          error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
         });
     }
         else {
@@ -58,7 +58,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
               this.successMessage = 'BROKERS.UPDATE_SUCCESS';
               setTimeout(() => this.close.emit(updatedBroker), 800);
             },
-            error: () => this.errorMessage = 'BROKERS.UPDATE_ERROR'
+            error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
           });
       }
   }

@@ -38,8 +38,8 @@ export class TransactionsService {
     );
   }
 
-  delete(portfolioId: number, transactionId: number): Observable<void> {
-    return this.http.delete<void>(
+  delete(portfolioId: number, transactionId: number): Observable<Transaction> {
+    return this.http.delete<Transaction>(
       `${this.apiUrl}/${portfolioId}/transactions/${transactionId}`,
       { withCredentials: true }
     );

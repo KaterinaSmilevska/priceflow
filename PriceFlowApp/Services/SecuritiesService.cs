@@ -181,7 +181,7 @@ namespace PriceFlowApp.Services
         {
             var typeSecurity = _typeSecurityRepository.GetById(typeSecurityId);
             if (typeSecurity == null)
-                throw new NotFoundException("TYPESECURITY_NOT_FOUND", "Type request not found.");
+                throw new NotFoundException("TYPESECURITY_NOT_FOUND", "Type security not found.");
 
             return typeSecurity;
         }

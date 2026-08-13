@@ -60,23 +60,23 @@ export class UserFormComponent implements OnInit, OnChanges {
 
     this.adminService.checkUsername(updatedUser.username).subscribe({
       next: (res) => {
-        if (res.exists && updatedUser.username !== this.originalUsername) {
-          this.errorMessage = 'USERS.USERNAME_TAKEN';
-          return;
-        }
+        //if (res.exists && updatedUser.username !== this.originalUsername) {
+        //  this.errorMessage = `ERRORS.${erro}`;
+        //  return;
+        //}
 
         this.adminService.updateUser(this.userToEdit.id, updatedUser).subscribe({
           next: () => {
             this.successMessage = 'USERS.UPDATE_SUCCESS';
             setTimeout(() => this.close.emit(updatedUser), 800);
           },
-          error: () => {
-            this.errorMessage = 'USERS.UPDATE_ERROR';
+          error: (err) => {
+            this.errorMessage = `ERRORS.${err.error.code}`;
           }
         });
       },
-      error: () => {
-        this.errorMessage = 'USERS.USERNAME_CHECK_ERROR';
+      error: (err) => {
+        this.errorMessage = `ERRORS.${err.error.code}`;
       }
     });
   }

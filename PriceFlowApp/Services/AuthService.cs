@@ -297,13 +297,13 @@ namespace PriceFlowApp.Services
         {
             if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Username)
                 || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
-                throw new ValidationException("VALIDATION_REQUIRED_FIELD", "All fields are required.");
+                throw new ValidationException("VALIDATION_REQUIRED_FIELD_REGISTER", "All fields are required.");
         }
 
         private void ValidateLoginFields(LoginRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
-                throw new ValidationException("VALIDATION_REQUIRED_FIELD", "Username and password are required.");
+                throw new ValidationException("VALIDATION_REQUIRED_FIELD_LOGIN", "Username and password are required.");
         }
 
         private Korisnici GetUserById(int  userId)

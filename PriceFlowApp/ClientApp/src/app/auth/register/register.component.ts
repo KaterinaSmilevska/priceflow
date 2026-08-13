@@ -68,11 +68,11 @@ export class RegisterComponent implements OnInit {
     this.registerService.checkUsername(this.username).subscribe({
       next: (response: UsernameCheckResponse) => {
         this.isUsernameValid = !response.exists;
-        this.usernameError = response.exists ? 'USERS.USERNAME_TAKEN' : null;
+        //this.usernameError = response.exists ? 'USERS.USERNAME_TAKEN' : null;
       },
       error: (err: any) => {
         this.isUsernameValid = true;
-        this.usernameError = 'USERS.USERNAME_CHECK_ERROR';
+        this.usernameError = `ERRORS.${err.error.code}`;
       }
     });
   }

@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AppComponent } from './app/app.component';
@@ -11,6 +11,7 @@ import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translat
 import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import zoomPlugin from 'chartjs-plugin-zoom';
+import { errorInterceptor } from './app/shared/error.interceptor';
 
 Chart.register(ChartDataLabels);
 Chart.register(zoomPlugin);
@@ -18,7 +19,9 @@ bootstrapApplication(AppComponent, {
 
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptors([errorInterceptor])
+    ),
       provideAnimations(),
     {
       provide: TRANSLATE_HTTP_LOADER_CONFIG,
