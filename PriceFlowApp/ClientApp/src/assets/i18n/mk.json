@@ -23,6 +23,7 @@
     "CONFIRM_PASSWORD": "Потврди лозинка",
     "NAME": "Име",
     "EMAIL": "Емаил",
+    "NEW_PASSWORD": "Нова лозинка",
     "FORGOT_PASSWORD": "Заборавена лозинка",
     "REGISTER": "Регистрирај се",
     "SITE_ACTIONS_MESSAGE": "За што би сакале да го користите сајтот",
@@ -33,11 +34,12 @@
     "SITE_ACTION_5": "Основно филтрирање и ограничено пребарување",
     "DONT_HAVE_ACCOUNT_MESSAGE": "Немате корисничка сметка",
     "HAVE_ACCOUNT_MESSAGE": "Веќе имате корисничка сметка",
-    "REGISTRATION_SUCCESS": "Успешно се регистриравте",
+    "REGISTRATION_SUCCESS": "Успешно се регистриравте!",
     "EMAIL_VERIFICATION_MESSAGE": "Проверете емаил за да ја верификувате вашата корисничка сметка",
-    "VERIFICATION_SUCCESS": "Верификацијата е успешна. Можете да се најавите",
+    "EMAIL_VERIFICATION_SUCCESS": "Верификацијата е успешна. Можете да се најавите.",
     "LOGIN_SUCCESS": "Успешно се најавивте",
     "REGISTER_ERROR": "Регистрацијата е неуспешна.",
+    "LOGIN_ERROR": "Најавата е неуспешна.",
     "INVALID_CREDENTIALS": "Невалидно корисничко име и/или лозинка.",
     "LOGIN_SUCCESS_TOOLTIP": "Успешно се најавивте!",
     "LOGOUT_SUCCESS_TOOLTIP": "Успешно се одјавивте!",
@@ -45,8 +47,7 @@
     "RESET_LINK_ERROR": "Корисничкото име не постои.",
     "FIELD_REQUIRED": "Ова поле е задолжително.",
     "INVALID_EMAIL": "Невалидна емаил адреса.",
-    "RESET_PASSWORD_ERROR": "Грешка при промена на лозинката.",
-    "PASSWORD_MISSMATCH": "Лозинките не се идентични."
+    "RESET_PASSWORD_ERROR": "Грешка при промена на лозинката."
   },
   "CURRENCY": {
     "MKD": "ден."
@@ -145,6 +146,7 @@
     "ADD_ERROR": "Грешка при додавањето на хартии од вредност.",
     "UPDATE_SUCCESS": "Хартиите од вредност се успешно ажурирани!",
     "UPDATE_ERROR": "Грешка при ажурирањето на хартиите од вредност.",
+    "DELETE_SUCCESS": "Хартиите од вредност се успешно избришани!",
     "DELETE_ERROR": "Грешка при бришењето на хартиите од вредност."
   },
   "PORTFOLIOS": {
@@ -179,7 +181,8 @@
     "ADD_SUCCESS": "Портфолиото е успешно додадено!",
     "ADD_ERROR": "Грешка при додавањето на портфолиото.",
     "UPDATE_SUCCESS": "Портфолиото е успешно ажурирано!",
-    "UPDATE_ERROR": "Грешка при ажурирањето на портфолиото."
+    "UPDATE_ERROR": "Грешка при ажурирањето на портфолиото.",
+    "DELETE_SUCCESS": "Портфолиото е успешно избришано!"
   },
   "TRANSACTIONS": {
     "TITLE": "Трансакции",
@@ -211,7 +214,8 @@
     "ADD_SUCCESS": "Трансакцијата е успешно додадена!",
     "ADD_ERROR": "Грешка при додавањето на трансакцијата.",
     "UPDATE_SUCCESS": "Трансакцијата е успешно ажурирана!",
-    "UPDATE_ERROR": "Грешка при ажурирањето на трансакцијата."
+    "UPDATE_ERROR": "Грешка при ажурирањето на трансакцијата.",
+    "DELETE_SUCCESS": "Трансакцијата е успешно избришана!"
   },
   "ACTIONS": "Акции",
   "VIEW": {
@@ -278,32 +282,49 @@
   },
   "ERRORS": {
     "VALIDATION_REQUIRED_FIELD_REGISTER": "Сите полиња се задолжителни.",
-    "VALIDATION_REQUIRED_FIELD": "Корисничкото име и лозинката се задолжителни.",
+    "VALIDATION_REQUIRED_FIELD_LOGIN": "Корисничкото име и лозинката се задолжителни.",
     "INVALID_CREDENTIALS": "Невалидно корисничко име и/или лозинка",
     "EMAIL_NOT_VERIFIED": "Ве молиме верификувајте го вашиот емаил за да се најавите.",
-    "EMAIL_VALIDATION_REQUIRED": "Невалиден формат на емаил.",
-    "PASSWORD_VALIDATION_REQUIRED": "",
+    "EMAIL_VALIDATION_REQUIRED": "Email адресата е задолжителна.",
+    "EMAIL_FORMAT": "Невалиден формат на емаил.",
+    "PASSWORD_VALIDATION_REQUIRED": "Лозинката е задолжителна.",
+    "PASSWORD_MISMATCH": "Лозинките не се идентични.",
+    "PASSWORD_STRENGTH": "Лозинката мора да содржи најмалку 8 карактери, со една мала буква, една голема буква, еден број, еден специјален карактер и да не содржи празни места.",
+    "INVALID_VERIFICATION_TOKEN": "Невалиден токен за верификација.",
+    "INVALID_RESET_TOKEN": "Невалиден токен за ресетирање на лозинка.",
     "USER_NOT_FOUND": "Корисникот не е пронајден.",
     "USERNAME_ALREADY_EXISTS": "Корисничкото име веќе постои.",
-    "USERNAME_VALIDATION_REQUIRED": "Невалидно корисничко име.",
+    "USERNAME_VALIDATION_REQUIRED": "Корисничкото име е задолжително.",
     "BROKER_NOT_FOUND": "Брокерот не е пронајден.",
     "COMPANY_ALREADY_EXISTS": "Компанијата веќе постои.",
-    "COMPANY_VALIDATION_REQUIRED": "Невалидна вредност за компанија.",
+    "COMPANY_VALIDATION_REQUIRED": "Компанијата е задолжителна.",
+    "COMMISSION_VALIDATION_REQUIRED": "Провизијата е задолжителна.",
+    "COMMISSION_INVALID": "Провизијата мора да биде поголема од 0.",
     "NAME_ALREADY_EXISTS": "Името веќе постои.",
-    "NAME_VALIDATION_REQUIRED": "Невалидно име.",
+    "NAME_VALIDATION_REQUIRED": "Името е задолжително.",
     "SECURITY_NOT_FOUND": "Хартиите од вредност не се пронајдени.",
     "TYPESECURITY_NOT_FOUND": "Типот не е пронајден.",
     "ISSUER_NOT_FOUND": "Издавачот не е пронајден.",
     "CODE_ALREADY_EXISTS": "Кодот веќе постои.",
-    "CODE_VALIDATION_REQUIRED": "Невалидна вредност за код.",
-    "ISIN_VALIDATION_REQUIRED": "Невалидна вредност за ISIN.",
+    "CODE_VALIDATION_REQUIRED": "Кодот е задолжителен.",
+    "ISIN_VALIDATION_REQUIRED": "ISIN полето е задолжително.",
+    "INVALID_ISIN": "Должината на ISIN полето не смее да надминува 12 карактери.",
+    "TOTALSHARES_VALIDATION_REQUIRED": "Вредноста за вкупен број на акции е задолжителна.",
+    "TOTALSHARES_INVALID": "Невалидна вредност за вкупен број на акции.",
     "INVALID_THRESHOLD_RANGE": "Долната граница мора да биде помала од горната граница.",
     "THRESHOLD_ALREADY_EXISTS": "Границата веќе постои.",
+    "LOWER_THRESHOLD_REQUIRED": "Долната граница е задолжителна.",
+    "UPPER_THRESHOLD_REQUIRED": "Горната граница е задолжителна.",
     "TRANSACTION_NOT_FOUND": "Трансакцијата не е пронајдена.",
     "TYPE_VALIDATION_REQUIRED": "Невалидна вредност за тип.",
+    "SHARES_QUANTITY_VALIDATION_REQUIRED": "Количината на акции е задолжителна.",
+    "INVALID_SHARES_QUANTITY": "Количината на акции мора да биде поголема од 0.",
+    "SHARES_UNITPRICE_VALIDATION_REQUIRED": "Единечната цена на акциите е задолжителна.",
+    "INVALID_SHARES_UNITPRICE": "Единечната цена на акциите мора да биде поголема од 0.",
     "SERVER_ERROR_TITLE": "Настана грешка.",
     "SERVER_ERROR_MESSAGE": "Настана неочекувана грешка. Ве молиме обидете се повторно подоцна.",
-    "REDIRECT_TO_HOME": "Назад на Почетна"
+    "REDIRECT_TO_HOME": "Назад на Почетна",
+    "INVALID_REGISTER_FORM": "Ве молиме пополнете ги сите полиња и изберете најмалку една задача."
   },
   "INVESTOR": "Инвеститор",
   "ANALYST": "Аналитичар",
@@ -404,7 +425,10 @@
   "THRESHOLD": {
     "TITLE": "граница",
     "ADD_SUCCESS": "Границата е успешно додадена!",
-    "UPDATE_SUCCESS": "Границата е успешно ажурирана!"
+    "UPDATE_SUCCESS": "Границата е успешно ажурирана!",
+    "DELETE_SUCCESS": "Границата е успешно избришана!",
+    "ADD_ERROR": "Грешка при додавањето на границата.",
+    "UPDATE_ERROR": "Грешка при ажурирањето на границата."
   },
   "THRESHOLDS": "граници"
 }

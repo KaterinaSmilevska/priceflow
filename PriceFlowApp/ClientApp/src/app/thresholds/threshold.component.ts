@@ -26,6 +26,7 @@ export class ThresholdComponent implements OnInit {
   thresholdToDelete?: Threshold;
 
   editingId: number | null = null;
+  successMessage: string | null = null;
   errorMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private thresholdService: ThresholdService, private router: Router) { }
@@ -82,11 +83,16 @@ export class ThresholdComponent implements OnInit {
 
     this.thresholdService
       .delete(this.thresholdToDelete.id)
-      .subscribe(() => {
-        this.showDeleteModal = false;
-        this.thresholdToDelete = undefined;
-
-        this.loadThresholds();
+      .subscribe({
+        next: () => {
+          this.closeDeleteModal();
+          this.successMessage = 'THRESHOLD.DELETE_SUCCESS';
+          setTimeout(() => this.successMessage = null, 800);
+        },
+        error: (err) => {
+          this.errorMessage = `ERRORS.${err.error.code}`;
+          this.closeDeleteModal();
+        }
       });
   }
 

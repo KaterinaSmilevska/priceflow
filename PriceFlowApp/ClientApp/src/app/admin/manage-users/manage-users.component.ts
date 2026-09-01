@@ -95,14 +95,14 @@ export class ManageUsersComponent implements OnInit {
     if (!this.userToDelete) return;
 
     this.adminService.deleteUser(this.userToDelete.id).subscribe({
-      next: (u) => {
+      next: () => {
         this.loadUsers();
         this.closeDeleteModal();
         this.successMessage = 'USERS.DELETE_SUCCESS';
-        setTimeout(() => this.close.emit(u), 800);
+        setTimeout(() => this.successMessage = null, 800);
       },
       error: (err) => {
-        this.errorMessage = `ERRORS.${err.error.code}`;
+        this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}` : 'USERS.DELETE_ERROR';
         this.closeDeleteModal();
       }
     });

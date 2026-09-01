@@ -20,6 +20,9 @@ export class BrokerFormComponent implements OnInit, OnChanges {
   errorMessage: string | null= null;
   successMessage: string | null = null;
 
+  companyError: string | null = null;
+  commissionError: string | null = null;
+
   constructor(private fb: FormBuilder, private brokersService: BrokersService) { }
 
   ngOnInit(): void { }
@@ -28,14 +31,70 @@ export class BrokerFormComponent implements OnInit, OnChanges {
     if (changes['brokerToEdit'] && this.brokerToEdit) {
       this.form = this.fb.group({
         company: [this.brokerToEdit.company || '', Validators.required],
-          commissionPercent: [this.brokerToEdit.commissionPercent || 0, [Validators.required, Validators.min(0)]]
+          commissionPercent: [this.brokerToEdit.commissionPercent ?? 0, [Validators.required, Validators.min(0)]]
+      });
+
+      this.form.get('company')?.valueChanges.subscribe(() => {
+        this.validateCompany();
+      });
+
+      this.form.get('commissionPercent')?.valueChanges.subscribe(() => {
+        this.validateCommission();
       });
     }
   }
 
+  validateCompany(): void {
+    this.errorMessage = null;
+
+    const company = this.form.get('company')?.value?.trim() || '';
+    if (company === '') {
+      this.companyError = 'ERRORS.COMPANY_VALIDATION_REQUIRED';
+    } else {
+      this.companyError = null;
+    }
+  }
+
+  validateCommission(): void {
+    this.errorMessage = null;
+
+    const commission = this.form.get('commissionPercent')?.value;
+    this.commissionError = null;
+
+    if (commission === null || commission === undefined || commission === '') {
+      this.commissionError = 'ERRORS.COMMISSION_VALIDATION_REQUIRED';
+
+      return;
+    }
+
+    if (Number(commission) < 0) {
+      this.commissionError = 'ERRORS.COMMISSION_INVALID';
+
+      return;
+    }
+  }
+
+  isFormValid(): boolean {
+    const company = this.form.get('company')?.value?.trim() || '';
+    const commission = this.form.get('commissionPercent')?.value;
+
+    return company !== '' &&
+      commission !== null &&
+      commission !== undefined &&
+      commission !== '' &&
+      Number(commission) >= 0 &&
+      !this.companyError &&
+      !this.commissionError;
+  }
+
   saveBroker(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    this.successMessage = null;
+    this.errorMessage = null;
+
+    this.validateCompany();
+    this.validateCommission();
+
+    if (!this.isFormValid()) {
       return;
     }
 
@@ -48,7 +107,10 @@ export class BrokerFormComponent implements OnInit, OnChanges {
             this.successMessage = 'BROKERS.ADD_SUCCESS';
             setTimeout(() => this.close.emit(b), 800);
           },
-          error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
+          error: (err) => {
+            this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}`
+              : 'BROKERS.ADD_ERROR';
+          }
         });
     }
         else {
@@ -58,7 +120,10 @@ export class BrokerFormComponent implements OnInit, OnChanges {
               this.successMessage = 'BROKERS.UPDATE_SUCCESS';
               setTimeout(() => this.close.emit(updatedBroker), 800);
             },
-            error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
+            error: (err) => {
+              this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}`
+                : 'BROKERS.UPDATE_ERROR';
+            }
           });
       }
   }

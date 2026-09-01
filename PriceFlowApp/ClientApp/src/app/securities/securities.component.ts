@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { SecuritiesService } from './securities.service';
 import { LoginService } from '../auth/login/login.service';
 import { CommonModule } from '@angular/common';
@@ -20,6 +20,7 @@ import { IssuersTranslatePipe } from '../shared/issuers-translate.pipe';
 export class SecuritiesComponent implements OnInit {
   securities: Security[] = [];
   loading: boolean = true;
+  successMessage: string | null = null;
   errorMessage: string | null = null;
   showDeleteModal = false;
   securityToDelete: Security | null = null;
@@ -30,6 +31,8 @@ export class SecuritiesComponent implements OnInit {
 
   searchTerm: string = '';
   loadingSearch = false;
+
+  @Output() close = new EventEmitter<Security | null>();
 
   constructor(private securitiesService: SecuritiesService, public loginService: LoginService, private router: Router) { }
 
@@ -70,6 +73,8 @@ export class SecuritiesComponent implements OnInit {
       next: () => {
         this.securities = this.securities.filter(s => s.id !== this.securityToDelete?.id);
         this.closeDeleteModal();
+        this.successMessage = 'SECURITIES.DELETE_SUCCESS';
+        setTimeout(() => this.successMessage = null, 1000);
       },
       error: (err) => {
         this.errorMessage = `ERRORS.${err.error.code}`;

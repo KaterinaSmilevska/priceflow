@@ -81,7 +81,7 @@ export class ManageBrokersComponent implements OnInit {
         this.loadBrokers();
         this.closeDeleteModal();
         this.successMessage = 'BROKERS.DELETE_SUCCESS';
-        setTimeout(() => this.close.emit(b), 800);
+        setTimeout(() => this.successMessage = null, 800);
       },
       error: (err) => {
         this.errorMessage = `ERRORS.${err.error.code}`;

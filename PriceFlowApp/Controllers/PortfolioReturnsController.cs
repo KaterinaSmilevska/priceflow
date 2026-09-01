@@ -5,7 +5,7 @@ using PriceFlowApp.Services;
 namespace PriceFlowApp.Controllers
 {
     [ApiController]
-    [Route("api/portfolio-portfolioReturns")]
+    [Route("api/portfolio-returns")]
     public class PortfolioReturnsController: PriceFlowController
     {
         private readonly IPortfolioReturnsService _portfolioReturnsService;

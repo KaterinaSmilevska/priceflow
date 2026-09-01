@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PortfoliosService } from './portfolios.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,10 +18,14 @@ export class PortfoliosComponent implements OnInit {
   portfolios: Portfolio[] = [];
   showEditModal = false;
   showDeleteModal = false;
+
+  successMessage: string | null = null;
   errorMessage: string | null = null;
 
   portfolioToEdit?: Portfolio;
   portfolioToDelete: Portfolio | null = null;
+
+  @Output() close = new EventEmitter<Portfolio | null>();
 
   constructor(private portfoliosService: PortfoliosService, private router: Router) { }
 
@@ -72,9 +76,18 @@ export class PortfoliosComponent implements OnInit {
   confirmDelete() {
     if (!this.portfolioToDelete) return;
 
-    this.portfoliosService.delete(this.portfolioToDelete.id).subscribe(() => {
-      this.portfolios = this.portfolios.filter(p => p.id !== this.portfolioToDelete?.id);
-      this.closeDeleteModal();
+    this.portfoliosService.delete(this.portfolioToDelete.id)
+      .subscribe({
+        next: () => {
+          this.portfolios = this.portfolios.filter(p => p.id !== this.portfolioToDelete?.id);
+          this.closeDeleteModal();
+          this.successMessage = 'PORTFOLIOS.DELETE_SUCCESS';
+          setTimeout(() => this.successMessage = null, 800);
+        },
+        error: (err) => {
+          this.errorMessage = `ERRORS.${err.error.code}`;
+          this.closeDeleteModal();
+        }
     });
   }
 }

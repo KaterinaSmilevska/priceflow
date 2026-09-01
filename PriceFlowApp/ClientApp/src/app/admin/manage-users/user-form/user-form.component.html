@@ -5,41 +5,49 @@
 
       <div class="mb-3">
         <label>{{ 'USERS.NAME' | translate }}</label>
-        <input class="form-control" formControlName="name">
-        <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('name')?.errors?.['required']" class="error">
+        <input class="form-control" formControlName="name" (input)="validateName()">
+        <div *ngIf="nameError" class="error mt-2">
+          {{ nameError | translate }}
+        </div>
+        <!--<div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('name')?.errors?.['required']" class="error mt-2">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
-        </div>
+        </div>-->
       </div>
 
       <div class="mb-3">
         <label>{{ 'USERS.USERNAME' | translate }}</label>
-        <input class="form-control" formControlName="username">
-        <div *ngIf="form.get('username')?.touched && form.get('username')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('username')?.errors?.['required']" class="error">
+        <input class="form-control" formControlName="username" (input)="validateUsername()">
+        <div *ngIf="usernameError" class="error mt-2">
+          {{ usernameError | translate }}
+        </div>
+        <!--<div *ngIf="form.get('username')?.touched && form.get('username')?.invalid" class="text-red-700 mt-1">
+          <div *ngIf="form.get('username')?.errors?.['required']" class="error mt-2">
             {{ 'AUTH.FIELD_REQUIRED' | translate }}
           </div>
-        </div>
+        </div>-->
       </div>
 
       <div class="mb-3">
         <label>{{ 'USERS.EMAIL' | translate }}</label>
-        <input type="email" class="form-control" formControlName="email">
-
-        <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('email')?.errors?.['required']" class="error">
-            {{ 'AUTH.FIELD_REQUIRED' | translate }}
-          </div>
-          <div *ngIf="form.get('email')?.errors?.['email']" class="error">
-            {{ 'AUTH.INVALID_EMAIL' | translate }}
-          </div>
+        <input type="email" class="form-control" formControlName="email" (input)="validateEmail()">
+        <div *ngIf="emailError" class="error mt-2">
+          {{ emailError | translate }}
         </div>
+        <!--<div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-red-700 mt-1">
+    <div *ngIf="form.get('email')?.errors?.['required']" class="error mt-2">
+      {{ 'AUTH.FIELD_REQUIRED' | translate }}
+    </div>
+    <div *ngIf="form.get('email')?.errors?.['email']" class="error mt-2">
+      {{ 'AUTH.INVALID_EMAIL' | translate }}
+    </div>
+  </div>-->
       </div>
 
       <div class="text-end">
         <button type="button" class="btn btn-secondary me-2" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
-        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">{{ 'SAVE_CHANGES' | translate }}</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()">{{ 'SAVE_CHANGES' | translate }}</button>
       </div>
 
       <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>

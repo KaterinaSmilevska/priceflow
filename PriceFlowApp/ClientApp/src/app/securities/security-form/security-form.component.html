@@ -5,30 +5,24 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="mb-3">
         <label>{{ 'SECURITIES.CODE' | translate }}</label>
-        <input formControlName="code" class="form-control">
-        <div *ngIf="form.get('code')?.touched && form.get('code')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('code')?.errors?.['required']" class="error">
-            {{ 'AUTH.FIELD_REQUIRED' | translate }}
-          </div>
+        <input formControlName="code" class="form-control" (input)="validateCode()">
+        <div *ngIf="codeError" class="error mt-2">
+          {{ codeError | translate }}
         </div>
       </div>
 
       <div class="mb-3">
         <label>{{ 'SECURITIES.ISIN' | translate }}</label>
-        <input formControlName="isin" class="form-control">
-        <div *ngIf="form.get('isin')?.touched && form.get('isin')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('isin')?.errors?.['required']" class="error">
-            {{ 'AUTH.FIELD_REQUIRED' | translate }}
-          </div>
+        <input formControlName="isin" class="form-control" (input)="validateIsin()">
+        <div *ngIf="isinError" class="error mt-2">
+          {{ isinError | translate }}
         </div>
       </div>
       <div class="mb-3">
         <label>{{ 'SECURITIES.TOTAL_SHARES' | translate }}</label>
-        <input type="number" formControlName="totalNumShares" class="form-control">
-        <div *ngIf="form.get('totalNumShares')?.touched && form.get('totalNumShares')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('totalNumShares')?.errors?.['required']" class="error">
-            {{ 'AUTH.FIELD_REQUIRED' | translate }}
-          </div>
+        <input type="number" formControlName="totalNumShares" class="form-control" (input)="validateTotalShares()">
+        <div *ngIf="totalSharesError" class="error mt-2">
+          {{ totalSharesError | translate }}
         </div>
       </div>
 
@@ -56,11 +50,11 @@
 
       <div class="text-end">
         <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
-        <button type="submit" class="btn btn-success ms-2" [disabled]="form.invalid">{{ (securityToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
+        <button type="submit" class="btn btn-success ms-2" [disabled]="!isFormValid()">{{ (securityToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
       </div>
 
       <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
-      <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage | translate }}</div>
+      <div *ngIf="successMessage" class="success-message mt-3">{{ successMessage | translate }}</div>
 
     </form>
   </div>

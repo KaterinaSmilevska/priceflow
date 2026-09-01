@@ -43,6 +43,9 @@ export class TransactionFormComponent implements OnInit, OnChanges {
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
+  sharesQuantityError: string | null = null;
+  sharesUnitPriceError: string | null = null;
+
   constructor(private fb: FormBuilder,
     private transactionsService: TransactionsService,
     private securitiesService: SecuritiesService,
@@ -89,9 +92,17 @@ export class TransactionFormComponent implements OnInit, OnChanges {
       this.calculateAmountPreview();
       this.evaluateLimits();
       this.validateSellDate();
+    });
+
+    this.form.get('sharesQuantity')?.valueChanges.subscribe(() => {
+      this.validateSharesQuantity();
+      this.evaluateLimits();
+      this.validateSellDate();
+      this.calculateAmountPreview();
     })
 
     this.form.get('sharesUnitPrice')?.valueChanges.subscribe(() => {
+      this.validateSharesUnitPrice();
       this.validatePriceRange();
       this.calculateAmountPreview();
     })
@@ -100,6 +111,57 @@ export class TransactionFormComponent implements OnInit, OnChanges {
       document.querySelectorAll('[data-bs-toggle="tooltip"]')
         .forEach(el => new Tooltip(el));
     });
+  }
+
+  validateSharesQuantity(): void {
+    this.errorMessage = null;
+
+    const quantity = this.form.get('sharesQuantity')?.value;
+    if (quantity === null || quantity === undefined || quantity === '') {
+      this.sharesQuantityError = 'ERRORS.SHARES_QUANTITY_VALIDATION_REQUIRED';
+      return;
+    }
+
+    if (Number(quantity) < 1) {
+      this.sharesQuantityError = 'ERRORS.INVALID_SHARES_QUANTITY';
+      return;
+    }
+
+    this.sharesQuantityError = null;
+  }
+
+  validateSharesUnitPrice(): void {
+    this.errorMessage = null;
+
+    const unitPrice = this.form.get('sharesUnitPrice')?.value;
+    if (unitPrice === null || unitPrice === undefined || unitPrice === '') {
+      this.sharesUnitPriceError = 'ERRORS.SHARES_UNITPRICE_VALIDATION_REQUIRED';
+      return;
+    }
+
+    if (Number(unitPrice) < 0.01) {
+      this.sharesUnitPriceError = 'ERRORS.INVALID_SHARES_UNITPRICE';
+      return;
+    }
+
+    this.sharesUnitPriceError = null;
+  }
+
+  isFormValid(): boolean {
+    const quantity = this.form.get('sharesQuantity')?.value;
+    const unitPrice = this.form.get('sharesUnitPrice')?.value;
+
+    return quantity !== null &&
+      quantity !== undefined &&
+      quantity !== '' &&
+      unitPrice !== null &&
+      unitPrice !== undefined &&
+      unitPrice !== '' &&
+      !this.sharesQuantityError &&
+      !this.sharesUnitPriceError &&
+      !this.sellLimitExceeded &&
+      !this.buyLimitExceeded &&
+      !this.dateSellInvalid;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -246,7 +308,13 @@ export class TransactionFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) {
+    this.errorMessage = null;
+    this.successMessage = null;
+
+    this.validateSharesQuantity();
+    this.validateSharesUnitPrice();
+
+    if (!this.isFormValid()) {
       this.form.markAllAsTouched();
       return;
     }
@@ -256,6 +324,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
     const raw = this.form.getRawValue();
 
     const payload = {
+      id: this.transaction?.id,
       hvCode: raw.hvCode,
       sharesQuantity: raw.sharesQuantity,
       sharesUnitPrice: raw.sharesUnitPrice,
@@ -283,7 +352,8 @@ export class TransactionFormComponent implements OnInit, OnChanges {
             setTimeout(() => { this.close.emit(updated); }, 800);
           },
           error: (err) => {
-            this.errorMessage = `ERRORS.${err.error.code}`;
+            this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}`
+              : 'TRANSACTIONS.UPDATE_ERROR';
           }
         });
     } else {
@@ -298,7 +368,8 @@ export class TransactionFormComponent implements OnInit, OnChanges {
             setTimeout(() => { this.close.emit(newTransaction); }, 800);
           },
           error: (err) => {
-            this.errorMessage = `ERRORS.${err.error.code}`;
+            this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}`
+              : 'TRANSACTIONS.ADD_ERROR';
             }
         });
     }

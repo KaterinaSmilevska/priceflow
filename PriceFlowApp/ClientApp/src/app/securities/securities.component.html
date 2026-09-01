@@ -5,6 +5,11 @@
     <button class="btn btn-success" (click)="openAddModal()">{{ 'ADD.ACTION_NAME' | translate }} {{ 'SECURITIES.TITLE' | translate }}</button>
   </div>
 
+  <div *ngIf="successMessage" class="success-message mb-2">{{ successMessage | translate }}</div>
+  <div *ngIf="errorMessage" class="error-message mt-2">
+    <p>{{ errorMessage | translate }}</p>
+  </div>
+
   <div class="search-panel mb-3">
     <div class="search-input-wrapper">
       <input type="text"

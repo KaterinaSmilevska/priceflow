@@ -195,11 +195,11 @@ namespace PriceFlowApp.Services
         {
             if (string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.ConfirmPassword))
             {
-                return new PasswordValidationResponse { IsValid = false, Message = "Password and Confirm Password are required." };
+                return new PasswordValidationResponse { IsValid = false, Code="PASSWORD_VALIDATION_REQUIRED", Message = "Password and Confirm Password are required." };
             }
             if (request.Password != request.ConfirmPassword)
             {
-                return new PasswordValidationResponse { IsValid = false, Message = "Passwords do not match." };
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_MISMATCH", Message = "Passwords do not match." };
             }
 
             if(!PasswordHelper.ValidatePasswordStrength(request.Password))
@@ -207,45 +207,46 @@ namespace PriceFlowApp.Services
                 return new PasswordValidationResponse
                 {
                     IsValid = false,
+                    Code = "PASSWORD_STRENGTH",
                     Message = "Password must contain at least 8 characters, " +
                     "with one lowercase letter, one uppercase letter, one number, one special character and no spaces."
                 };
             }
             if (request.Password.Length < 8)
             {
-                return new PasswordValidationResponse { IsValid = false, Message = "Password must be at least 8 characters long." };
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_LENGTH", Message = "Password must be at least 8 characters long." };
             }
 
             if (!Regex.IsMatch(request.Password, @"\d"))
             {
-                return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one number." };
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_FORMAT_NUMBER", Message = "Password must contain at least one number." };
             }
             if (!Regex.IsMatch(request.Password, @"[A-Z]"))
             {
-                return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one uppercase letter." };
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_FORMAT_LETTER", Message = "Password must contain at least one uppercase letter." };
             }
 
             if (!Regex.IsMatch(request.Password, @"[!@#$%^&*(),.?""':{}|<>]"))
             {
-                return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one special character." };
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_FORMAT_SPECIAL_CHARACTER", Message = "Password must contain at least one special character." };
             }
-            return new PasswordValidationResponse { IsValid = true, Message = "Password is valid." };
+            return new PasswordValidationResponse { IsValid = true, Code="PASSWORD_VALIDATION_SUCCESS", Message = "Password is valid." };
         }
 
         public EmailValidationResponse ValidateEmail(EmailValidationRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Email))
             {
-                return new EmailValidationResponse { IsValid = false, Message = "Email is required" };
+                return new EmailValidationResponse { IsValid = false, Code="EMAIL_VALIDATION_REQUIRED", Message = "Email is required." };
             }
             
             string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             if (!Regex.IsMatch(request.Email, emailPattern))
             {
-                return new EmailValidationResponse { IsValid = false, Message = "Invalid email format." };
+                return new EmailValidationResponse { IsValid = false, Code = "EMAIL_FORMAT", Message = "Invalid email format." };
             }
             
-            return new EmailValidationResponse { IsValid = true, Message = "Email is valid." };
+            return new EmailValidationResponse { IsValid = true, Code="EMAIL_VALIDATION_SUCCESS", Message = "Email is valid." };
         }
 
         public void VerifyEmail(Guid token)
@@ -350,7 +351,7 @@ namespace PriceFlowApp.Services
             });
 
             if (!emailValidation.IsValid)
-                throw new ValidationException("EMAIL_VALIDATION_REQUIRED", emailValidation.Message);
+                throw new ValidationException(emailValidation.Code, emailValidation.Message);
         }
 
         private void ValidatePasswordFormat(string password, string confirmPassword)
@@ -362,7 +363,7 @@ namespace PriceFlowApp.Services
             });
 
             if(!passwordValidation.IsValid)
-                throw new ValidationException("PASSWORD_VALIDATION_REQUIRED", passwordValidation.Message);
+                throw new ValidationException(passwordValidation.Code, passwordValidation.Message);
         }
 
         private void ValidateRoles(IEnumerable<string> roleNames)

@@ -9,6 +9,10 @@
     </button>
   </div>
 
+  <div *ngIf="successMessage"
+       class="success-message mb-2">
+    {{ successMessage | translate }}
+  </div>
   <div *ngIf="errorMessage"
        class="error-message">
     {{ errorMessage | translate }}

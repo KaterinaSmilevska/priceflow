@@ -14,11 +14,9 @@
         <div class="modal-body">
 
           <label class="form-label">{{ 'PORTFOLIOS.NAME' | translate }}</label>
-          <input class="form-control mb-3" formControlName="name">
-          <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" class="text-red-700 mt-1">
-            <div *ngIf="form.get('name')?.errors?.['required']" class="error">
-              {{ 'AUTH.FIELD_REQUIRED' | translate }}
-            </div>
+          <input class="form-control mb-2" formControlName="name" (input)="validateName()">
+          <div *ngIf="nameError" class="error mt-2">
+            {{ nameError | translate }}
           </div>
 
           <label class="form-label">{{ 'PORTFOLIOS.DESCRIPTION' | translate }}</label>
@@ -34,7 +32,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
-          <button type="submit" class="btn btn-success" [disabled]="form.invalid">
+          <button type="submit" class="btn btn-success" [disabled]="!isFormValid()">
             {{ (portfolioToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}
           </button>
         </div>

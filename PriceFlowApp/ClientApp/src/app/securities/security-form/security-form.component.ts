@@ -29,15 +29,31 @@ export class SecurityFormComponent implements OnInit, OnChanges {
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
+  codeError: string | null = null;
+  isinError: string | null = null;
+  totalSharesError: string | null = null;
+
   constructor(private fb: FormBuilder, private securitiesService: SecuritiesService, private router: Router) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       code: [this.securityToEdit?.code || '', Validators.required],
-      isin: [this.securityToEdit?.isin || '', Validators.required],
+      isin: [this.securityToEdit?.isin || '', [Validators.required, Validators.maxLength(12)]],
       totalNumShares: [this.securityToEdit?.totalNumShares || 0, [Validators.required, Validators.min(1)]],
       typeSecurityId: [null, Validators.required],
       issuerId: [null, Validators.required]
+    });
+
+    this.form.get('code')?.valueChanges.subscribe(() => {
+      this.validateCode();
+    });
+
+    this.form.get('isin')?.valueChanges.subscribe(() => {
+      this.validateIsin();
+    });
+
+    this.form.get('totalNumShares')?.valueChanges.subscribe(() => {
+      this.validateTotalShares();
     });
 
     this.loadTypes();
@@ -49,6 +65,68 @@ export class SecurityFormComponent implements OnInit, OnChanges {
     if (changes['securityToEdit'] && this.form) {
       this.loadSecurityData();
     }
+  }
+
+  validateCode(): void {
+    this.errorMessage = null;
+
+    const code = this.form.get('code')?.value?.trim() || '';
+    if (code === '') {
+      this.codeError = 'ERRORS.CODE_VALIDATION_REQUIRED';
+    } else {
+      this.codeError = null;
+    }
+  }
+
+  validateIsin(): void {
+    this.errorMessage = null;
+
+    const isin = this.form.get('isin')?.value?.trim() || '';
+    if (isin === '') {
+      this.isinError = 'ERRORS.ISIN_VALIDATION_REQUIRED';
+      return;
+    }
+
+    if (isin.length > 12) {
+      this.isinError = 'ERRORS.INVALID_ISIN';
+      return;
+    }
+
+    this.isinError = null;
+  }
+
+  validateTotalShares(): void {
+    this.errorMessage = null;
+
+    const totalShares = this.form.get('totalNumShares')?.value;
+    if (totalShares === null || totalShares === undefined || totalShares === '') {
+      this.totalSharesError = 'ERRORS.TOTALSHARES_VALIDATION_REQUIRED';
+
+      return;
+    }
+
+    if (Number(totalShares) < 1) {
+      this.totalSharesError = 'ERRORS.TOTALSHARES_INVALID';
+
+      return;
+    }
+    this.totalSharesError = null;
+  }
+
+  isFormValid(): boolean {
+    const code = this.form.get('code')?.value?.trim() || '';
+    const isin = this.form.get('isin')?.value?.trim() || '';
+    const totalNumShares = this.form.get('totalNumShares')?.value;
+
+    return code !== '' &&
+      isin !== '' &&
+      totalNumShares !== null &&
+      totalNumShares !== undefined &&
+      totalNumShares !== '' &&
+      Number(totalNumShares) >= 1 &&
+      !this.codeError &&
+      !this.isinError &&
+      !this.totalSharesError;
   }
 
 loadTypes(): void {
@@ -126,7 +204,11 @@ loadIssuers(): void {
     this.errorMessage = null;
     this.successMessage = null;
 
-    if (this.form.invalid) {
+    this.validateCode();
+    this.validateIsin();
+    this.validateTotalShares();
+
+    if (!this.isFormValid()) {
       this.form.markAllAsTouched();
       return;
     }
@@ -143,8 +225,8 @@ loadIssuers(): void {
           setTimeout(() => this.close.emit(updated), 1000);
         },
         error: (err) => {
-          this.errorMessage = `ERRORS.${err.error.code}`;
-          setTimeout(() => this.close.emit(err), 1000);
+          this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}`
+            : 'SECURITIES.UPDATE_ERROR';
         }
        });
     } else {
@@ -154,8 +236,8 @@ loadIssuers(): void {
           setTimeout(() => this.close.emit(newSecurity), 1000);
         },
         error: (err) => {
-          this.errorMessage = `ERRORS.${err.error.code}`;
-          setTimeout(() => this.close.emit(err), 1000);
+          this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}`
+          : 'SECURITIES.ADD_ERROR';
         }
       });
     }

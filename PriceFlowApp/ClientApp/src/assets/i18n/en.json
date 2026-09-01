@@ -23,6 +23,7 @@
     "CONFIRM_PASSWORD": "Confirm password",
     "NAME": "Name",
     "EMAIL": "Email",
+    "NEW_PASSOWORD": "New password",
     "FORGOT_PASSWORD": "Forgot password",
     "REGISTER": "Register",
     "SITE_ACTIONS_MESSAGE": "What would you like to do on the site",
@@ -33,11 +34,12 @@
     "SITE_ACTION_5": "Do basic filtering and limited searching",
     "DONT_HAVE_ACCOUNT_MESSAGE": "Don't have an account",
     "HAVE_ACCOUNT_MESSAGE": "Already have an account",
-    "REGISTRATION_SUCCESS": "Registration successfull",
+    "REGISTRATION_SUCCESS": "Registration successful!",
     "EMAIL_VERIFICATION_MESSAGE": "Please check your email to verify your account",
-    "VERIFICATION_SUCCESS": "Email successfully verified. You can now log in",
+    "EMAIL_VERIFICATION_SUCCESS": "Email successfully verified. You can now log in.",
     "LOGIN_SUCCESS": "You are successfuly logged in",
     "REGISTER_ERROR": "Registration failed.",
+    "LOGIN_ERROR": "Login failed.",
     "INVALID_CREDENTIALS": "Invalid username or password.",
     "LOGIN_SUCCESS_TOOLTIP": "Logged in successfully!",
     "LOGOUT_SUCCESS_TOOLTIP": "Logged out successfully!",
@@ -45,9 +47,7 @@
     "RESET_LINK_ERROR": "The username does not exist.",
     "FIELD_REQUIRED": "This field is required.",
     "INVALID_EMAIL": "The email is not valid.",
-    "RESET_PASSWORD_ERROR": "Failed to reset password.",
-    "PASSWORD_MISSMATCH": "Passwords do not match."
-
+    "RESET_PASSWORD_ERROR": "Failed to reset password."
   },
   "CURRENCY": {
     "MKD": "MKD"
@@ -146,6 +146,7 @@
     "ADD_ERROR": "Failed to add security.",
     "UPDATE_SUCCESS": "Security updated successfully!",
     "UPDATE_ERROR": "Failed to update security.",
+    "DELETE_SUCCESS": "Securities deleted successfully!",
     "DELETE_ERROR": "Failed to delete security."
   },
   "PORTFOLIOS": {
@@ -180,7 +181,8 @@
     "ADD_SUCCESS": "Portfolio added successfully!",
     "ADD_ERROR": "Failed to add portfolio.",
     "UPDATE_SUCCESS": "Portfolio updated successfully!",
-    "UPDATE_ERROR": "Failed to update portfolio."
+    "UPDATE_ERROR": "Failed to update portfolio.",
+    "DELETE_SUCCESS": "Portfolio deleted successfully!"
   },
   "TRANSACTIONS": {
     "TITLE": "Transactions",
@@ -212,7 +214,8 @@
     "ADD_SUCCESS": "Transaction added successfully!",
     "ADD_ERROR": "Failed to add transaction.",
     "UPDATE_SUCCESS": "Transactions updated successfully!",
-    "UPDATE_ERROR": "Failed to update transaction."
+    "UPDATE_ERROR": "Failed to update transaction.",
+    "DELETE_SUCCESS": "Transaction deleted successfully!"
   },
   "ACTIONS": "Actions",
   "VIEW": {
@@ -282,29 +285,46 @@
     "VALIDATION_REQUIRED_FIELD_LOGIN": "Username and password are required",
     "INVALID_CREDENTIALS": "Invalid username or password.",
     "EMAIL_NOT_VERIFIED": "Please verify your email before logging in.",
-    "EMAIL_VALIDATION_REQUIRED": "Invalid email format.",
-    "PASSWORD_VALIDATION_REQUIRED": "",
+    "EMAIL_VALIDATION_REQUIRED": "Email is required.",
+    "EMAIL_FORMAT": "Invalid email format.",
+    "PASSWORD_VALIDATION_REQUIRED": "Password is required.",
+    "PASSWORD_MISMATCH": "Passwords do not match.",
+    "PASSWORD_STRENGTH": "Password must contain at least 8 characters, with one lowercase letter, one uppercase letter, one number, one special character and no spaces.",
+    "INVALID_VERIFICATION_TOKEN": "Invalid verification token.",
+    "INVALID_RESET_TOKEN": "Invalid reset token.",
     "USER_NOT_FOUND": "User not found.",
     "USERNAME_ALREADY_EXISTS": "The username is taken by another user.",
-    "USERNAME_VALIDATION_REQUIRED": "Username cannot be null or empty.",
+    "USERNAME_VALIDATION_REQUIRED": "Username is required.",
     "BROKER_NOT_FOUND": "Broker not found.",
     "COMPANY_ALREADY_EXISTS": "Company already exists.",
     "COMPANY_VALIDATION_REQUIRED": "Company cannot be null or empty.",
+    "COMMISSION_VALIDATION_REQUIRED": "Commission cannot be null or empty.",
+    "COMMISSION_INVALID": "Commission must be greater than 0.",
     "NAME_ALREADY_EXISTS": "Name already exists.",
-    "NAME_VALIDATION_REQUIRED": "Name cannot be null or empty.",
+    "NAME_VALIDATION_REQUIRED": "Name is required.",
     "SECURITY_NOT_FOUND": "Security not found.",
     "TYPESECURITY_NOT_FOUND": "Type security not found.",
     "ISSUER_NOT_FOUND": "Issuer not found.",
     "CODE_ALREADY_EXISTS": "Code already exists.",
     "CODE_VALIDATION_REQUIRED": "Code cannot be null or empty.",
     "ISIN_VALIDATION_REQUIRED": "ISIN cannot be null or empty.",
+    "INVALID_ISIN": "The ISIN field length must not exceed 12 characters.",
+    "TOTALSHARES_VALIDATION_REQUIRED": "Total shares value is required.",
+    "TOTALSHARES_INVALID": "Invalid value for total shares.",
     "INVALID_THRESHOLD_RANGE": "Lower threshold must be less than upper threshold.",
     "THRESHOLD_ALREADY_EXISTS": "Threshold already exists.",
+    "LOWER_THRESHOLD_REQUIRED": "Lower threshold is required.",
+    "UPPER_THRESHOLD_REQUIRED": "Upper threshold is required.",
     "TRANSACTION_NOT_FOUND": "Transaction not found.",
     "TYPE_VALIDATION_REQUIRED": "Type cannot be null or empty.",
+    "SHARES_QUANTITY_VALIDATION_REQUIRED": "Shares quantity is required.",
+    "INVALID_SHARES_QUANTITY": "Shares quantity must be greater than 0.",
+    "SHARES_UNITPRICE_VALIDATION_REQUIRED": "Shares unit price is required.",
+    "INVALID_SHARES_UNITPRICE": "Shares unit price must be greater than 0.",
     "SERVER_ERROR_TITLE": "Something went wrong.",
     "SERVER_ERROR_MESSAGE": "An unexpected error occured. Please try again later.",
-    "REDIRECT_TO_HOME": "Back to Home"
+    "REDIRECT_TO_HOME": "Back to Home",
+    "INVALID_REGISTER_FORM": "Please fill all fields correctly and select at least one task."
   },
   "INVESTOR": "Investor",
   "ANALYST": "Analyst",
@@ -405,7 +425,10 @@
   "THRESHOLD": {
     "TITLE": "threshold",
     "ADD_SUCCESS": "Threshold added successfully!",
-    "UPDATE_SUCCESS": "Threshold updated successfully!"
+    "UPDATE_SUCCESS": "Threshold updated successfully!",
+    "DELETE_SUCCESS": "Threshold deleted successfully!",
+    "ADD_ERROR": "Failed to add threshold.",
+    "UPDATE_ERROR": "Failed to update threshold."
   },
   "THRESHOLDS": "thresholds"
 }

@@ -30,6 +30,8 @@ export class TransactionsComponent implements OnInit {
   showDeleteModal = false;
   showEditModal = false;
   loading: boolean = false;
+
+  successMessage: string | null = null;
   errorMessage: string | null = null;
 
   transactionToEdit: Transaction | undefined = undefined;
@@ -152,6 +154,8 @@ export class TransactionsComponent implements OnInit {
         this.reloadAll();
 
         this.closeDeleteModal();
+        this.successMessage = 'TRANSACTIONS.DELETE_SUCCESS';
+        setTimeout(() => this.successMessage = null, 1000);
       },
       error: (err) => {
         this.errorMessage = `ERRORS.${err.error.code}`;

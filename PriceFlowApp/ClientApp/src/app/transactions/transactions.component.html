@@ -84,6 +84,13 @@
       {{ 'ADD.ACTION_NAME' | translate }} {{ 'TRANSACTIONS.TRANSACTION' | translate }}
     </button>
 
+    <div *ngIf="successMessage" class="success mb-2">
+      {{ successMessage | translate }}
+    </div>
+    <div *ngIf="errorMessage" class="error mb-2">
+      {{ errorMessage | translate }}
+    </div>
+
     <div class="row g-4" *ngIf="!loading && transactions.length">
       <div class="col-xl-9 col-lg-8">
         <div class="table-responsive">

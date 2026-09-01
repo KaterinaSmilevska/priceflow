@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { PortfoliosService } from '../portfolios.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -20,6 +20,8 @@ export class PortfolioFormComponent implements OnInit {
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
+  nameError: string | null = null;
+
   constructor(private formBuilder: FormBuilder, private portfoliosService: PortfoliosService) { }
 
   ngOnInit(): void {
@@ -27,10 +29,38 @@ export class PortfolioFormComponent implements OnInit {
       name: [this.portfolioToEdit?.name || '', Validators.required],
       description: [this.portfolioToEdit?.description || '', Validators.maxLength(100)]
     });
+
+    this.form.get('name')?.valueChanges.subscribe(() => {
+      this.validateName();
+    });
+  }
+
+  validateName(): void {
+    this.errorMessage = null;
+
+    const name = this.form.get('name')?.value?.trim() || '';
+    if (name === '') {
+      this.nameError = 'ERRORS.NAME_VALIDATION_REQUIRED';
+    } else {
+      this.nameError = null;
+    }
+  }
+
+  isFormValid(): boolean {
+    const name = this.form.get('name')?.value?.trim() || '';
+
+    return name !== '' &&
+    !this.nameError;
   }
 
   onSubmit() {
-    if (this.form.invalid) {
+
+    this.errorMessage = null;
+    this.successMessage = null;
+
+    this.validateName();
+
+    if (!this.isFormValid()) {
       this.form.markAllAsTouched();
       return;
     };
@@ -44,7 +74,10 @@ export class PortfolioFormComponent implements OnInit {
             this.successMessage = 'PORTFOLIOS.ADD_SUCCESS';
             setTimeout(() => this.close.emit(b), 800)
           },
-          error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
+          error: (err) => {
+            this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}`
+              : 'PORTFOLIOS.ADD_ERROR';
+          }
         });
     } else {
       this.portfoliosService.update(this.portfolioToEdit.id, updatedPortfolio)
@@ -53,7 +86,10 @@ export class PortfolioFormComponent implements OnInit {
             this.successMessage = 'PORTFOLIOS.UPDATE_SUCCESS';
             setTimeout(() => this.close.emit(updatedPortfolio), 800)
           },
-          error: (err) => this.errorMessage = `ERRORS.${err.error.code}`
+          error: (err) => {
+            this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}`
+              : 'PORTFOLIOS.UPDATE_ERROR';
+          }
         });
     }
   }

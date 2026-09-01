@@ -28,11 +28,10 @@
         </label>
         <input type="number"
                class="form-control"
-               formControlName="lowerThreshold" />
-        <div *ngIf="form.get('lowerThreshold')?.touched && form.get('lowerThreshold')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('lowerThreshold')?.errors?.['required']" class="error">
-            {{ 'AUTH.FIELD_REQUIRED' | translate }}
-          </div>
+               formControlName="lowerThreshold"
+               (input)="validateLowerThreshold()" />
+        <div *ngIf="lowerThresholdError" class="error mt-2">
+          {{ lowerThresholdError | translate }}
         </div>
       </div>
 
@@ -43,22 +42,28 @@
         </label>
         <input type="number"
                class="form-control"
-               formControlName="upperThreshold" />
-        <div *ngIf="form.get('upperThreshold')?.touched && form.get('upperThreshold')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('upperThreshold')?.errors?.['required']" class="error">
-            {{ 'AUTH.FIELD_REQUIRED' | translate }}
-          </div>
+               formControlName="upperThreshold"
+               (input)="validateUpperThreshold()" />
+        <div *ngIf="upperThresholdError" class="error mt-2">
+          {{ upperThresholdError | translate }}
         </div>
+      </div>
+
+      <div *ngIf="thresholdRangeError" class="error mt-2">
+        {{ thresholdRangeError | translate }}
       </div>
 
       <div class="text-end">
         <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
-        <button type="submit" class="btn btn-success" [disabled]="form.invalid || invalidThresholdRange">{{ (thresholdToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
+        <button type="submit" class="btn btn-success" [disabled]="!isFormValid()">{{ (thresholdToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
       </div>
 
-      <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
-      <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage | translate }}</div>
-
+      <div *ngIf="errorMessage" class="error mt-2">
+        {{ errorMessage | translate }}
+      </div>
+      <div *ngIf="successMessage" class="success-message mt-2">
+        {{ successMessage | translate }}
+      </div>
     </form>
   </div>
 </div>

@@ -5,6 +5,9 @@
     <button class="btn btn-success" (click)="openAddModal()">{{ 'ADD.ACTION_NAME' | translate }} {{ 'PORTFOLIOS.PORTFOLIO' | translate }}</button>
   </div>
 
+  <div *ngIf="successMessage" class="success mt-2 mb-2">{{ successMessage | translate }}</div>
+  <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+
   <div *ngIf="portfolios.length > 0; else noData">
     <table>
       <thead>
@@ -30,8 +33,6 @@
   <p class="mt-4 text-center">
     <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
   </p>
-
-  <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
 
   <ng-template #noData>
     <p class="text-center mt-3">{{ 'NO_PORTFOLIOS_DATA_AVAILABLE' | translate }}</p>
