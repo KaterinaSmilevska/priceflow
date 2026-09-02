@@ -35,6 +35,19 @@ table {
   color: var(--text-color);
 }
 
+tbody tr {
+    border-bottom: 1px solid var(--input-border);
+    transition: background-color .25s ease, transform .2s ease;
+}
+
+tbody tr:hover {
+    background-color: var(--navbar-hover);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
 th, td {
   text-align: center;
   padding: 10px 5px;
@@ -43,10 +56,6 @@ th, td {
 th {
   border-bottom: 2px solid var(--primary-color);
   font-weight: 500;
-}
-
-tr:nth-child(even) {
-  background-color: var(--secondary-color);
 }
 
 .positive {
@@ -65,6 +74,17 @@ tr:nth-child(even) {
   font-weight: bold;
   font-size: 1.2rem;
   color: var(--primary-color);
+}
+
+.empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+    color: var(--text-color);
+    opacity: 0.7;
+    font-style: italic;
+    text-align: center;
 }
 
 @media (max-width: 1000px) {

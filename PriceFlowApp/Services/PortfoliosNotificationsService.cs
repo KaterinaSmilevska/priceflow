@@ -1,7 +1,7 @@
-﻿
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 
 namespace PriceFlowApp.Services
 {
@@ -20,34 +20,83 @@ namespace PriceFlowApp.Services
             _emailService = emailService;
         }
 
-        public async Task SendScheduledNotificationsAsync()
+        public PortfolioNotification FindByPortfolioId(int portfolioId)
         {
-            IEnumerable<Korisnici> users = await _usersRepository.GetAllAsync();
+            IzvestuvanjaPortfolija? notification = _portfoliosNotificationsRepository.GetByPortfolioId(portfolioId);
+
+            if (notification == null)
+            {
+                return new PortfolioNotification
+                {
+                    PortfolioId = portfolioId,
+                    IsEnabled = false,
+                    Frequency = "Weekly"
+                };
+            }
+
+            return MapToPortfolioNotification(notification);
+        }
+
+        public PortfolioNotification Update(UpdatePortfolioNotification portfolioNotification)
+        {
+            ValidatePortfolioNotificationFrequency(portfolioNotification);
+
+            IzvestuvanjaPortfolija? foundNotification = _portfoliosNotificationsRepository.GetByPortfolioId(portfolioNotification.PortfolioId);
+
+            if (foundNotification == null)
+            {
+                foundNotification = new IzvestuvanjaPortfolija
+                {
+                    PortfolioId = portfolioNotification.PortfolioId,
+                    Ovozmozeno = portfolioNotification.IsEnabled,
+                    Frekvencija = portfolioNotification.Frequency,
+                    PoslednoIsprateno = null
+                };
+
+                _portfoliosNotificationsRepository.Add(foundNotification);
+            }
+            else
+            {
+                foundNotification.Ovozmozeno = portfolioNotification.IsEnabled;
+                foundNotification.Frekvencija = portfolioNotification.Frequency;
+
+                IzvestuvanjaPortfolija updated = _portfoliosNotificationsRepository.Update(foundNotification);
+            }
+
+            return new PortfolioNotification
+            {
+                PortfolioId = portfolioNotification.PortfolioId,
+                IsEnabled = foundNotification.Ovozmozeno,
+                Frequency = foundNotification.Frekvencija
+            };
+        }
+
+        public void SendScheduledNotifications()
+        {
+            IEnumerable<Korisnici> users = _usersRepository.GetAll();
 
             foreach(Korisnici user in users)
             {
-                IEnumerable<IzvestuvanjaPortfolija> notifications = await _portfoliosNotificationsRepository.GetByUserIdAsync(user.Id);
+                IEnumerable<IzvestuvanjaPortfolija> notifications = _portfoliosNotificationsRepository.GetByUserId(user.Id);
 
                 IEnumerable<IzvestuvanjaPortfolija> enabledNotifications = notifications
-                    .Where(n => n.Ovozmozeno && ShouldSend(n))
+                    .Where<IzvestuvanjaPortfolija>(n => n.Ovozmozeno && ShouldSend(n))
                     .ToList();
-                if (!enabledNotifications.Any())
+                if (!enabledNotifications.Any<IzvestuvanjaPortfolija>())
                     continue;
 
                 foreach(IzvestuvanjaPortfolija notification in  enabledNotifications)
-                { 
-                    PortfolioAnalytics realAnalytics = await _transactionsService.GetAnalyticsAsync(notification.PortfolioId, true);
-                    PortfolioAnalytics simulatedAnalytics = await _transactionsService.GetAnalyticsAsync(notification.PortfolioId, false);
+                {
+                    PortfolioAnalytics realAnalytics = _transactionsService.GetAnalytics(notification.PortfolioId, true);
+                    PortfolioAnalytics simulatedAnalytics = _transactionsService.GetAnalytics(notification.PortfolioId, false);
 
                     string body = BuildEmailBody(notification.PortfolioId, realAnalytics, simulatedAnalytics);
 
-                    await _emailService.SendEmailAsync(user.Email, "Your Portfolio Performance Summary", body);
+                    _emailService.SendEmail(user.Email, "Your Portfolio Performance Summary", body);
 
                     notification.PoslednoIsprateno = DateTime.UtcNow;
-                    await _portfoliosNotificationsRepository.UpdateAsync(notification);
+                    _portfoliosNotificationsRepository.Update(notification);
                 }
-
-
             }
         }
 
@@ -80,61 +129,19 @@ namespace PriceFlowApp.Services
             ";
         }
 
-        public async Task<PortfolioNotification?> FindByPortfolioId(int portfolioId)
-        {
-            IzvestuvanjaPortfolija? notification = await _portfoliosNotificationsRepository.GetByPortfolioId(portfolioId);
-
-            if (notification == null)
-            {
-                return new PortfolioNotification
-                {
-                    PortfolioId = portfolioId,
-                    IsEnabled = false,
-                    Frequency = "Weekly"
-                };
-            }
-                
-            return new PortfolioNotification
-            {
-                PortfolioId = notification.PortfolioId,
-                IsEnabled = notification.Ovozmozeno,
-                Frequency = notification.Frekvencija
-            };
-        }
-
-        public async Task<PortfolioNotification> UpdateAsync(UpdatePortfolioNotification portfolioNotification)
+        private void ValidatePortfolioNotificationFrequency(UpdatePortfolioNotification portfolioNotification)
         {
             if (portfolioNotification.Frequency != "Weekly" && portfolioNotification.Frequency != "Monthly")
-                throw new ArgumentException("Frequency must be Weekly or Monthly.");
+                throw new ValidationException("FREQUENCY_VALIDATION_REQUIRED", "Frequency must be Weekly or Monthly.");
+        }
 
-            IzvestuvanjaPortfolija? foundNotification = await _portfoliosNotificationsRepository.GetByPortfolioId(portfolioNotification.PortfolioId);
-
-            if (foundNotification == null)
-            {
-                foundNotification = new IzvestuvanjaPortfolija
-                {
-                    PortfolioId = portfolioNotification.PortfolioId,
-                    Ovozmozeno = portfolioNotification.IsEnabled,
-                    Frekvencija = portfolioNotification.Frequency,
-                    PoslednoIsprateno = null
-                };
-
-                await _portfoliosNotificationsRepository.AddAsync(foundNotification);
-            }
-
-            else
-            {
-                foundNotification.Ovozmozeno = portfolioNotification.IsEnabled;
-                foundNotification.Frekvencija = portfolioNotification.Frequency;
-
-                IzvestuvanjaPortfolija updated = await _portfoliosNotificationsRepository.UpdateAsync(foundNotification);
-            }
-
+        private PortfolioNotification MapToPortfolioNotification(IzvestuvanjaPortfolija portfolioNotification)
+        {
             return new PortfolioNotification
             {
                 PortfolioId = portfolioNotification.PortfolioId,
-                IsEnabled = foundNotification.Ovozmozeno,
-                Frequency = foundNotification.Frekvencija
+                IsEnabled = portfolioNotification.Ovozmozeno,
+                Frequency = portfolioNotification.Frekvencija
             };
         }
     }

@@ -1,6 +1,6 @@
 export interface PortfolioTableView {
   date: string;
-  hvCode: string;
+  securityCode: string;
   type: 'Купување' | 'Продавање' | 'Дивиденден принос';
 
   sharesQuantity?: number;

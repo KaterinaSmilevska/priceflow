@@ -4,16 +4,16 @@ namespace DataAccess.Repositories
 {
     public interface IBrokersRepository
     {
-        Task<IEnumerable<Brokeri>> GetAllAsync();
+        Brokeri? GetById(int id);
 
-        Task<Brokeri?> GetByIdAsync(int id);
+        Brokeri? GetByCompany(string company);
 
-        Task<Brokeri?> GetByCompanyAsync(string company);
+        IEnumerable<Brokeri> GetAll();
 
-        Task<Brokeri> AddAsync(Brokeri broker);
+        Brokeri Add(Brokeri broker);
 
-        Task UpdateAsync(Brokeri broker);
+        Brokeri Update(Brokeri broker);
 
-        Task DeleteAsync(int id);
+        Brokeri Delete(Brokeri broker);
     }
 }

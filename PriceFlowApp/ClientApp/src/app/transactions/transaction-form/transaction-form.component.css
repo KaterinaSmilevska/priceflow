@@ -21,6 +21,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
   z-index: 1050;
 }
 
@@ -29,8 +30,10 @@
   color: var(--text-color);
   padding: 1.5rem;
   border-radius: 8px;
-  min-width: 320px;
-  max-width: 420px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-actions {
@@ -58,7 +61,7 @@
   .modal-content .form-select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px var(--primary-color)33;
+    box-shadow: 0 0 0 2px var(--primary-color);
   }
 
 .modal-content input[readonly],
@@ -79,14 +82,9 @@
 }
 
 .modal-content .btn-primary {
-  background-color: var(--primary-color);
-  color: var(--card-bg);
+  background-color: var(--success-bg);
+  color: white;
 }
-
-  .modal-content .btn-primary:hover {
-    opacity: 0.95;
-    transform: translateY(-1px);
-  }
 
 .modal-content .btn-secondary {
   background-color: var(--secondary-color);
@@ -110,3 +108,26 @@
   font-size: 0.875rem;
 }
 
+.price-warning {
+  font-size: 0.875rem;
+}
+
+.success {
+  background: #d1fae5;
+  border: 1px solid #10b981;
+  padding: 8px;
+  border-radius: 6px;
+  color: #065f46;
+  font-weight: 500;
+  text-align: center;
+}
+
+.error {
+  background: #fee2e2;
+  border: 1px solid var(--error-color);
+  padding: 8px;
+  border-radius: 6px;
+  color: var(--error-color);
+  font-weight: 500;
+  text-align: center;
+}

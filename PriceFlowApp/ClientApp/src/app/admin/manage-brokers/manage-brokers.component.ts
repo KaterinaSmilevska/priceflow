@@ -1,21 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AdminService } from '../admin.service';
 import { Broker } from './Broker';
-import { EditBrokerComponent } from './edit-broker/edit-broker.component';
+import { BrokerFormComponent } from './broker-form/broker-form.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { BrokersTranslatePipe } from '../../shared/brokers-translate.pipe';
+import { BrokersService } from '../../brokers/brokers.service';
 
 @Component({
   selector: 'app-manage-brokers',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, EditBrokerComponent, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, BrokerFormComponent, TranslateModule, BrokersTranslatePipe],
   templateUrl: './manage-brokers.component.html',
   styleUrl: './manage-brokers.component.css',
 })
 export class ManageBrokersComponent implements OnInit {
   brokers: Broker[] = [];
+  successMessage: string | null = null;
   errorMessage: string | null = null;
 
   broker: Broker = { id: 0, company: '', commissionPercent: 0 }
@@ -25,15 +27,16 @@ export class ManageBrokersComponent implements OnInit {
   showDeleteModal = false;
   brokerToDelete: Broker | null = null;
 
+  @Output() close = new EventEmitter<Broker | null>();
 
-  constructor(private adminService: AdminService) { }
+  constructor(private brokersService: BrokersService) { }
 
   ngOnInit(): void {
     this.loadBrokers();
   }
 
   loadBrokers(): void {
-    this.adminService.getBrokers().subscribe({
+    this.brokersService.getAll().subscribe({
       next: (data) => this.brokers = data,
       error: () => this.errorMessage = 'LOADING_DATA_ERROR'
     });
@@ -73,13 +76,15 @@ export class ManageBrokersComponent implements OnInit {
   confirmDelete(): void {
     if (!this.brokerToDelete) return;
 
-    this.adminService.deleteBroker(this.brokerToDelete.id).subscribe({
-      next: () => {
+    this.brokersService.delete(this.brokerToDelete.id).subscribe({
+      next: (b) => {
         this.loadBrokers();
         this.closeDeleteModal();
+        this.successMessage = 'BROKERS.DELETE_SUCCESS';
+        setTimeout(() => this.successMessage = null, 800);
       },
-      error: () => {
-        this.errorMessage = 'BROKERS.DELETE_ERROR';
+      error: (err) => {
+        this.errorMessage = `ERRORS.${err.error.code}`;
         this.closeDeleteModal();
       }
     });

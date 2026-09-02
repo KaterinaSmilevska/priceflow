@@ -1,43 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 
 namespace PriceFlowApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RolesController : ControllerBase
+    public class RolesController : PriceFlowController
     {
         private readonly RolesService _rolesService;
 
-        public RolesController(RolesService roleService) => _rolesService = roleService;
+        public RolesController(RolesService roleService)
+        {
+            _rolesService = roleService;
+        }
 
         [HttpGet("{name}")]
-        public async Task<IActionResult> GetRole(string name)
+        public ActionResult<Role> GetRole(string name)
         {
-            try
-            {
-                var response = await _rolesService.FindByNameAsync(name);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            return Execute(() => _rolesService.FindByName(name));
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRoleNames()
+        public ActionResult<List<string>> GetRoleNames()
         {
-            try
-            {
-                var response = await _rolesService.FindNamesAsync();
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            return Execute(() => _rolesService.FindNames());
         }
-
     }
 }

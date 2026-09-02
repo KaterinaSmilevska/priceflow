@@ -1,96 +1,79 @@
-<div class="container mt-4">
+<div class="thresholds-container">
 
-  <div class="card p-4 shadow-sm">
+  <h4 class="page-title">{{ 'PRICE_ALERTS' | translate }}</h4>
 
-    <h5 class="mb-3">
-      {{ (editingId ? 'UPDATE.ACTION_NAME' : 'EDIT.ACTION_NAME') | translate }}
-    </h5>
-
-    <div *ngIf="errorMessage"
-         class="alert alert-danger">
-      {{ errorMessage | translate }}
-    </div>
-
-    <form [formGroup]="form">
-      <div class="mb-3">
-        <label class="form-label">{{ 'SECURITIES.TITLE' | translate }}</label>
-          
-        <select class="form-select"
-                formControlName="hvId">
-
-          <option value="">{{ 'SELECT' | translate }} {{ 'SECURITIES.TITLE' | translate }}</option>
-
-          <option *ngFor="let s of owned"
-                  [value]="s.id"
-                  [disabled]="isSecurityAlreadyUsed(s.id) && editingId === null">
-            {{ s.hvCode }}
-          </option>
-
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">{{ 'LOWER' | translate }} {{ 'THRESHOLD' | translate }} (%)</label>
-        <input type="number"
-               class="form-control"
-               formControlName="lowerThreshold">
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">{{ 'UPPER' | translate }} {{ 'THRESHOLD' | translate }} (%)</label>
-        <input type="number"
-               class="form-control"
-               formControlName="upperThreshold">
-      </div>
-
-      <button class="btn btn-primary"
-              type="button"
-              (click)="submit()">
-        {{ (editingId ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }}
-      </button>
-
-      <button *ngIf="editingId"
-              class="btn btn-secondary ms-2"
-              type="button"
-              (click)="resetForm()">
-        {{ 'CANCEL' | translate }}
-      </button>
-
-    </form>
+  <div class="mb-4 text-end">
+    <button class="btn btn-success"
+            (click)="openAddModal()">
+      {{ 'ADD.ACTION_NAME' | translate }} {{ 'THRESHOLDS' | translate }}
+    </button>
   </div>
 
-  <hr>
+  <div *ngIf="successMessage"
+       class="success-message mb-2">
+    {{ successMessage | translate }}
+  </div>
+  <div *ngIf="errorMessage"
+       class="error-message">
+    {{ errorMessage | translate }}
+  </div>
 
-  <div class="card p-4 shadow-sm mt-4">
-    <h5>{{ 'PRICE_ALERTS' | translate }}</h5>
-
-    <table class="table table-bordered mt-3">
+  <div class="overflow-x-auto">
+    <table class="thresholds-table">
       <thead>
         <tr>
-          <th>{{ 'SECURITIES.CODE' | translate }}</th>
-          <th>{{ 'LOWER' | translate }} {{ 'THRESHOLD' | translate }} %</th>
-          <th>{{ 'UPPER' | translate }} {{ 'THRESHOLD' | translate }} %</th>
+          <th class="py-2 px-4 border-b">{{ 'SECURITIES.CODE' | translate }}</th>
+          <th class="py-2 px-4 border-b">{{ 'LOWER' | translate }} {{ 'THRESHOLD.TITLE' | translate }} (%)</th>
+          <th class="py-2 px-4 border-b">{{ 'UPPER' | translate }} {{ 'THRESHOLD.TITLE' | translate }} (%)</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let t of thresholds">
-          <td>{{ t.hvCode }}</td>
-          <td>{{ t.lowerThreshold }}%</td>
-          <td>{{ t.upperThreshold }}%</td>
-          <td>
-            <button class="btn btn-warning btn-sm me-2"
-                    (click)="edit(t)">
+        <tr *ngIf="thresholds.length === 0">
+          <td colspan="4" class="text-center">
+            {{ 'CHART.NO_DATA_AVAILABLE' | translate }}
+          </td>
+        </tr>
+        <tr *ngFor="let t of thresholds" class="hover:bg-gray-50">
+          <td class="py-2 px-4 border-b">{{ t.securityCode }}</td>
+          <td class="py-2 px-4 border-b">{{ t.lowerThreshold }}</td>
+          <td class="py-2 px-4 border-b">{{ t.upperThreshold }}</td>
+          <td class="py-2 px-4 border-b">
+            <button class="btn btn-warning me-3"
+                    (click)="openEditModal(t)">
               {{ 'EDIT.ACTION_NAME' | translate }}
             </button>
 
-            <button class="btn btn-danger btn-sm"
-                    (click)="delete(t.id)">
+            <button class="btn btn-danger"
+                    (click)="openDeleteModal(t)">
               {{ 'DELETE.ACTION_NAME' | translate }}
             </button>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+<p class="mt-4 text-center">
+  <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
+</p>
+
+<app-threshold-form *ngIf="showEditModal"
+                    [thresholdToEdit]="thresholdToEdit"
+                    [owned]="owned"
+                    [existingThresholds]="thresholds"
+                    (saved)="onSaved()"
+                    (close)="onEditModalClose()">
+</app-threshold-form>
+
+<div *ngIf="showDeleteModal" class="modal-overlay">
+  <div class="modal-content animate-in">
+    <h3>{{ 'DELETE.CONFIRM' | translate }}</h3>
+    <p>{{ 'DELETE.DELETE_THRESHOLD_MESSAGE' | translate }} <strong>{{ thresholdToDelete?.securityCode }}</strong>?</p>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>
+      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
+    </div>
   </div>
 </div>

@@ -1,11 +1,13 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using PriceFlowApp.DTOs;
-using PriceFlowSecurity;
-using System.Text.RegularExpressions;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
+using PriceFlowSecurity;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace PriceFlowApp.Services
 {
@@ -14,85 +16,93 @@ namespace PriceFlowApp.Services
         private readonly IAuthRepository _authRepository;
         private readonly IRolesRepository _rolesRepository;
         private readonly IUsersRolesRepository _usersRolesRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthService(IAuthRepository korisnikRepository, IRolesRepository rolesRepository, IUsersRolesRepository usersRolesRepository,
-            IHttpContextAccessor httpContextAccessor, IEmailService emailService)
+        public AuthService(IAuthRepository korisnikRepository, IRolesRepository rolesRepository, IUsersRolesRepository usersRolesRepository, 
+            IEmailService emailService, IHttpContextAccessor httpContextAccessor)
         {
             _authRepository = korisnikRepository;
             _rolesRepository = rolesRepository;
             _usersRolesRepository = usersRolesRepository;
-            _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<Korisnici?> FindByIdAsync(int id)
+        public User FindById(int id)
         {
-            return await _authRepository.GetByIdAsync(id);
+            Korisnici user = GetUserById(id);
+
+            return MapToUser(user);
         }
 
-        public async Task<IEnumerable<User>> FindAllAsync()
+        public User FindByUsername(string username)
         {
-            var users = await _authRepository.GetAllAsync();
-            var foundUsers = users.Select(item => new User
-            {
-                Id = item.Id,
-                Name = item.Ime,
-                Username = item.Username,
-                Email = item.Email,
-                Roles = item.KorisniciUlogi.Select(ku => ku.Uloga.Ime).ToList()
-            });
-            return foundUsers;
+            ValidationHelper.ValidateRequiredField(username, "Username", "USERNAME_VALIDATION_REQUIRED");
+
+            Korisnici user = GetUserByUsername(username);
+
+            return MapToUser(user);
         }
 
-        public async Task<Korisnici?> FindByUsernameAsync(string username)
+        public User FindByVerificationToken(Guid token)
         {
-            if (string.IsNullOrWhiteSpace(username))
-                throw new ArgumentException("Username cannot be null or empty.");
+            Korisnici user = GetUserByVerificationToken(token);
 
-            var korisnik = await _authRepository.GetByUsernameAsync(username);
-
-            if(korisnik == null)
-                throw new ArgumentException("Korisnik not found");
-            return korisnik;
+            return MapToUser(user);
         }
 
-        public async Task<RegisterResponse> RegisterAsync(RegisterRequest registerRequest)
+        public IEnumerable<User> FindAll()
         {
-            if (string.IsNullOrWhiteSpace(registerRequest.Name) ||
-                string.IsNullOrWhiteSpace(registerRequest.Username) ||
-                string.IsNullOrWhiteSpace(registerRequest.Email) ||
-                string.IsNullOrWhiteSpace(registerRequest.Password))
-                throw new ArgumentException("All fields are required.");
+            IEnumerable<Korisnici> users = _authRepository.GetAll();
 
-            var passwordValidation = await ValidatePasswordAsync(new PasswordValidationRequest
-            {
-                Password = registerRequest.Password,
-                ConfirmPassword = registerRequest.ConfirmPassword
-            });
-            if (!passwordValidation.IsValid)
-                throw new ArgumentException(passwordValidation.Message);
+            return users
+                .Select(MapToUser)
+                .ToList();
+        }
 
-            var emailValidation = await ValidateEmailAsync(new EmailValidationRequest
-            {
-                Email = registerRequest.Email,
-            });
-            if (!emailValidation.IsValid)
-                throw new ArgumentException(emailValidation.Message);
+        public User Update(int id, User user)
+        {
+            ValidationHelper.ValidateRequiredField(user.Username, "Username", "USERNAME_VALIDATION_REQUIRED");
+            ValidateUsernameAvailability(user.Username, user.Id);
+            ValidationHelper.ValidateRequiredField(user.Name, "Name", "NAME_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(user.Email, "Email", "EMAIL_VALIDATION_REQUIRED");
+            ValidateEmailFormat(user.Email);
 
-            if (await _authRepository.GetByUsernameAsync(registerRequest.Username) != null)
-                throw new ArgumentException("Username already exists.");
+            Korisnici existingUser = GetUserById(id);
 
-            var validRoleNames = await _rolesRepository.GetNamesAsync();
-            if (registerRequest.RoleNames.Any() && registerRequest.RoleNames.Any(name => !validRoleNames.Contains(name)))
-                throw new ArgumentException("One or more role names are invalid.");
+            existingUser.Ime = user.Name;
+            existingUser.Username = user.Username;
+            existingUser.Email = user.Email;
+            existingUser.IsEmailVerified = user.IsEmailVerified;
+
+            Korisnici updatedUser = _authRepository.Update(existingUser);
+
+            return MapToUser(updatedUser);
+        }
+
+        public User Delete(int id)
+        {
+            Korisnici existingUser = GetUserById(id);
+
+            Korisnici deletedUser = _authRepository.Delete(existingUser);
+
+            return MapToUser(deletedUser);
+        }
+
+        public RegisterResponse Register(RegisterRequest registerRequest)
+        {
+            ValidateRegistrationFields(registerRequest);
+            ValidatePasswordFormat(registerRequest.Password, registerRequest.ConfirmPassword);
+            ValidateEmailFormat(registerRequest.Email);
+            ValidateUsernameAvailability(registerRequest.Username);
+            ValidateRoles(registerRequest.RoleNames);
 
             byte[] fullPasswordBytes = PasswordHelper.CalculateHashAndSalt(registerRequest.Password);
 
             var token = Guid.NewGuid();
 
-            var user = new Korisnici
+            Korisnici user = new Korisnici
             {
                 Ime = registerRequest.Name,
                 Username = registerRequest.Username,
@@ -104,12 +114,12 @@ namespace PriceFlowApp.Services
                 ResetPasswordTokenExpiry = null
             };
 
-            await _authRepository.AddAsync(user);
+            Korisnici addedUser = _authRepository.Add(user);
 
-            var roleIds = await _rolesRepository.GetIdsByNamesAsync(registerRequest.RoleNames);
+            var roleIds = _rolesRepository.GetIdsByNames(registerRequest.RoleNames);
             foreach (var roleId in roleIds)
             {
-                await _usersRolesRepository.AddAsync(new KorisniciUlogi
+                _usersRolesRepository.Add(new KorisniciUlogi
                 {
                     KorisnikId = user.Id,
                     UlogaId = roleId
@@ -117,118 +127,35 @@ namespace PriceFlowApp.Services
             }
 
             var verificationLink = $"https://localhost:44413/api/auth/verify-email?token={token}";
-            await _emailService.SendEmailAsync(user.Email, "Verify your PriceFlow account",
+            _emailService.SendEmail(user.Email, "Verify your PriceFlow account",
                 $"<p>Welcome to PriceFlow, {user.Ime}!</p>" + $"<p>Please verify your email by clicking the link below:</p>"
                 + $"<a href='{verificationLink}'>Verify Email</a>");
 
             return new RegisterResponse
             {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
+                Id = addedUser.Id,
+                Username = addedUser.Username,
+                Email = addedUser.Email,
                 Roles = registerRequest.RoleNames,
-                Message = "Registration successfull"
+                Message = "Registration successful"
             };
         }
 
-        public async Task<List<string>> FindUlogaNamesAsync()
+        public async Task<LoginResponse> Login(LoginRequest loginRequest)
         {
-            return await _rolesRepository.GetNamesAsync();
-        }
+            ValidateLoginFields(loginRequest);
 
-        public async Task<bool> UsernameExistsAsync(string username)
-        {
-            return await _authRepository.UsernameExistsAsync(username);
-        }
+            Korisnici user = GetUserByUsername(loginRequest.Username);
 
-        public async Task<PasswordValidationResponse> ValidatePasswordAsync(PasswordValidationRequest request)
-        {
-            return await Task.Run(() =>
-            {
-
-                if (string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.ConfirmPassword))
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password and Confirm Password are required." };
-                }
-                if (request.Password != request.ConfirmPassword)
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Passwords do not match." };
-                }
-
-                if(!PasswordHelper.ValidatePasswordStrength(request.Password))
-                {
-                    return new PasswordValidationResponse
-                    {
-                        IsValid = false,
-                        Message = "Password must contain at least 8 characters long, " +
-                        "with one lowercase letter, one uppercase letter, one number, one special character and no spaces."
-                    };
-                }
-                if (request.Password.Length < 8)
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password must be at least 8 characters long." };
-                }
-
-                if (!Regex.IsMatch(request.Password, @"\d"))
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one number." };
-                }
-                if (!Regex.IsMatch(request.Password, @"[A-Z]"))
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one uppercase letter." };
-                }
-
-                if (!Regex.IsMatch(request.Password, @"[!@#$%^&*(),.?""':{}|<>]"))
-                {
-                    return new PasswordValidationResponse { IsValid = false, Message = "Password must contain at least one special character." };
-                }
-                return new PasswordValidationResponse { IsValid = true, Message = "Password is valid." };
-            });
-        }
-
-        public async Task<EmailValidationResponse> ValidateEmailAsync(EmailValidationRequest request)
-        {
-            return await Task.Run(() =>
-            {
-                if (string.IsNullOrWhiteSpace(request.Email))
-                {
-                    return new EmailValidationResponse { IsValid = false, Message = "Email is required" };
-                }
-
-                string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-                if (!Regex.IsMatch(request.Email, emailPattern))
-                {
-                    return new EmailValidationResponse { IsValid = false, Message = "Invalid email format." };
-                }
-
-                return new EmailValidationResponse { IsValid = true, Message = "Email is valid." };
-
-            });
-
-        }
-
-        public async Task<LoginResponse> LoginAsync(LoginRequest loginRequest)
-        {
-            if(string.IsNullOrWhiteSpace(loginRequest.Username) || string.IsNullOrWhiteSpace(loginRequest.Password))
-            {
-                throw new ArgumentException("Username and password are required.");
-            }
-
-            var user = await _authRepository.GetByUsernameAsync(loginRequest.Username);
-            if (user == null)
-                throw new ArgumentException("Invalid username or password.");
-            if (!PasswordHelper.VerifyPassword(loginRequest.Password, user.PasswordHash))
-                throw new ArgumentException("Invalid username or password.");
-
-            if (!user.IsEmailVerified)
-                throw new ArgumentException("Please verify your email before logging in.");
+            ValidateCredentials(loginRequest.Password, user);
+            ValidateEmailVerification(user);
 
             var httpContext = _httpContextAccessor.HttpContext;
 
             if (httpContext == null)
                 throw new Exception("No HttpContext available.");
 
-            List<string> roles = await _rolesRepository.GetByUserIdAsync(user.Id);
+            List<string> roles = _rolesRepository.GetByUserId(user.Id);
 
             var claims = new List<Claim>
             {
@@ -236,7 +163,7 @@ namespace PriceFlowApp.Services
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
-            foreach(var role in roles)
+            foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
@@ -254,12 +181,6 @@ namespace PriceFlowApp.Services
                 }
              );
 
-            //httpContext.Session.SetString("Username", user.Username);
-            //httpContext.Session.SetString("UserId", user.Id.ToString());
-            //httpContext.Session.SetString("Roles", string.Join(",", roleNames));
-            //httpContext.Response.Cookies.Append("Username", user.Username,new CookieOptions 
-            //    { HttpOnly = true, Expires = DateTimeOffset.Now.AddHours(1) });
-
             return new LoginResponse
             {
                 Id = user.Id,
@@ -270,75 +191,218 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public async Task UpdateAsync(User user)
+        public PasswordValidationResponse ValidatePassword(PasswordValidationRequest request)
         {
-            var existingUser = await _authRepository.GetByIdAsync(user.Id);
-            if (existingUser == null)
-                throw new Exception("User not found");
+            if (string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.ConfirmPassword))
+            {
+                return new PasswordValidationResponse { IsValid = false, Code="PASSWORD_VALIDATION_REQUIRED", Message = "Password and Confirm Password are required." };
+            }
+            if (request.Password != request.ConfirmPassword)
+            {
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_MISMATCH", Message = "Passwords do not match." };
+            }
 
-            var otherUser = await _authRepository.GetByUsernameAsync(user.Username);
-            if (otherUser != null && otherUser.Id != user.Id)
-                throw new Exception("Username is already taken by another user.");
+            if(!PasswordHelper.ValidatePasswordStrength(request.Password))
+            {
+                return new PasswordValidationResponse
+                {
+                    IsValid = false,
+                    Code = "PASSWORD_STRENGTH",
+                    Message = "Password must contain at least 8 characters, " +
+                    "with one lowercase letter, one uppercase letter, one number, one special character and no spaces."
+                };
+            }
+            if (request.Password.Length < 8)
+            {
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_LENGTH", Message = "Password must be at least 8 characters long." };
+            }
 
-            existingUser.Ime = user.Name;
-            existingUser.Username = user.Username;
-            existingUser.Email = user.Email;
+            if (!Regex.IsMatch(request.Password, @"\d"))
+            {
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_FORMAT_NUMBER", Message = "Password must contain at least one number." };
+            }
+            if (!Regex.IsMatch(request.Password, @"[A-Z]"))
+            {
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_FORMAT_LETTER", Message = "Password must contain at least one uppercase letter." };
+            }
 
-            await _authRepository.UpdateAsync(existingUser);
+            if (!Regex.IsMatch(request.Password, @"[!@#$%^&*(),.?""':{}|<>]"))
+            {
+                return new PasswordValidationResponse { IsValid = false, Code = "PASSWORD_FORMAT_SPECIAL_CHARACTER", Message = "Password must contain at least one special character." };
+            }
+            return new PasswordValidationResponse { IsValid = true, Code="PASSWORD_VALIDATION_SUCCESS", Message = "Password is valid." };
         }
 
-        public async Task UpdateAsync(Korisnici user)
+        public EmailValidationResponse ValidateEmail(EmailValidationRequest request)
         {
-            var existingUser = await _authRepository.GetByIdAsync(user.Id);
-            if (existingUser == null)
-                throw new Exception("User not found");
-
-            existingUser.Ime = user.Ime;
-            existingUser.Username = user.Username;
-            existingUser.Email = user.Email;
-            await _authRepository.UpdateAsync(existingUser);
+            if (string.IsNullOrWhiteSpace(request.Email))
+            {
+                return new EmailValidationResponse { IsValid = false, Code="EMAIL_VALIDATION_REQUIRED", Message = "Email is required." };
+            }
+            
+            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if (!Regex.IsMatch(request.Email, emailPattern))
+            {
+                return new EmailValidationResponse { IsValid = false, Code = "EMAIL_FORMAT", Message = "Invalid email format." };
+            }
+            
+            return new EmailValidationResponse { IsValid = true, Code="EMAIL_VALIDATION_SUCCESS", Message = "Email is valid." };
         }
 
-        public async Task DeleteAsync(int id)
+        public void VerifyEmail(Guid token)
         {
-            var user = await _authRepository.GetByIdAsync(id);
-            if (user == null) throw new Exception("User not found");
-            await _authRepository.DeleteAsync(user);
+            Korisnici user = GetUserByVerificationToken(token);
+
+            if (user.IsEmailVerified)
+                return;
+
+            user.IsEmailVerified = true;
+            user.EmailVerificationToken = null;
+
+            _authRepository.Update(user);
         }
 
-        public async Task<Korisnici?> FindByVerificationTokenAsync(Guid token)
+        public void ForgotPassword(string username)
         {
-            return await _authRepository.GetByVerificationTokenAsync(token);
-        }
-
-        public async Task ForgotPasswordAsync(string username)
-        {
-            Korisnici? user = await _authRepository.GetByUsernameAsync(username);
-            if (user == null)
-                throw new Exception("User not found");
+            Korisnici user = GetUserByUsername(username);
             
             Guid resetToken = Guid.NewGuid();
             user.ResetPasswordToken = resetToken;
             user.ResetPasswordTokenExpiry = DateTime.UtcNow.AddHours(1);
-            await _authRepository.UpdateAsync(user);
+            _authRepository.Update(user);
 
             string resetLink = $"https://localhost:44413/forgot-password?token={resetToken}";
-            await _emailService.SendEmailAsync(user.Email, "Reset password", $"Click <a href='{resetLink}'>here</a> to reset your password.");
+
+            _emailService.SendEmail(user.Email, "Reset password", $"Click <a href='{resetLink}'>here</a> to reset your password.");
         }
 
-        public async Task ResetPasswordAsync(Guid token, string newPassword)
+        public void ResetPassword(Guid token, string newPassword)
         {
-            Korisnici? user = await _authRepository.GetByResetPasswordTokenAsync(token);
-            if (user == null || user.ResetPasswordTokenExpiry < DateTime.UtcNow)
-                throw new Exception("Invalid or expired token");
+            ValidatePasswordFormat(newPassword, newPassword);
 
-            if(PasswordHelper.ValidatePasswordStrength(newPassword))
+            Korisnici user = GetByResetPasswordToken(token);
+
+            user.PasswordHash = PasswordHelper.CalculateHashAndSalt(newPassword);
+            user.ResetPasswordToken = null;
+            user.ResetPasswordTokenExpiry = null;
+
+            _authRepository.Update(user);
+        }
+
+        public bool UsernameExists(string username)
+        {
+            return _authRepository.UsernameExists(username);
+        }
+
+        private void ValidateRegistrationFields(RegisterRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Username)
+                || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+                throw new ValidationException("VALIDATION_REQUIRED_FIELD_REGISTER", "All fields are required.");
+        }
+
+        private void ValidateLoginFields(LoginRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
+                throw new ValidationException("VALIDATION_REQUIRED_FIELD_LOGIN", "Username and password are required.");
+        }
+
+        private Korisnici GetUserById(int  userId)
+        {
+            Korisnici? user = _authRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+
+            return user;
+        }
+
+        private Korisnici GetUserByUsername(string username)
+        {
+            Korisnici? user = _authRepository.GetByUsername(username);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", $"User with '{username}' not found.");
+
+            return user;
+        }
+
+        private Korisnici GetUserByVerificationToken(Guid token)
+        {
+            Korisnici? user = _authRepository.GetByVerificationToken(token);
+            if (user == null)
+                throw new ValidationException("INVALID_VERIFICATION_TOKEN", "Verification token is invalid.");
+
+            return user;
+        }
+
+        private Korisnici GetByResetPasswordToken(Guid token)
+        {
+            Korisnici? user = _authRepository.GetByResetPasswordToken(token);
+            if (user == null || user.ResetPasswordTokenExpiry < DateTime.UtcNow)
+                throw new ValidationException("INVALID_RESET_TOKEN", "Invalid or expired token");
+
+            return user;
+        }
+
+        private void ValidateEmailFormat(string email)
+        {
+            EmailValidationResponse emailValidation = ValidateEmail(new EmailValidationRequest
             {
-                user.PasswordHash = PasswordHelper.CalculateHashAndSalt(newPassword);
-                user.ResetPasswordToken = null;
-                user.ResetPasswordTokenExpiry = null;
-                await _authRepository.UpdateAsync(user);
-            }
+                Email = email
+            });
+
+            if (!emailValidation.IsValid)
+                throw new ValidationException(emailValidation.Code, emailValidation.Message);
+        }
+
+        private void ValidatePasswordFormat(string password, string confirmPassword)
+        {
+            PasswordValidationResponse passwordValidation = ValidatePassword(new PasswordValidationRequest
+            {
+                Password = password,
+                ConfirmPassword = confirmPassword
+            });
+
+            if(!passwordValidation.IsValid)
+                throw new ValidationException(passwordValidation.Code, passwordValidation.Message);
+        }
+
+        private void ValidateRoles(IEnumerable<string> roleNames)
+        {
+            IEnumerable<string> validRoleNames = _rolesRepository.GetNames();
+            if(roleNames.Any(name => !validRoleNames.Contains(name)))
+                throw new ValidationException("INVALID_ROLES", "One or more role names are invalid.");
+        }
+
+        private void ValidateUsernameAvailability(string username, int? userId = null)
+        {
+            Korisnici? existingUser = _authRepository.GetByUsername(username);
+            if (existingUser != null && existingUser.Id != userId)
+                throw new AlreadyExistsException("USERNAME_ALREADY_EXISTS", "The username is taken by another user.");
+        }
+
+        private void ValidateCredentials(string password, Korisnici user)
+        {
+            if (!PasswordHelper.VerifyPassword(password, user.PasswordHash))
+                throw new UnauthorizedException("INVALID_CREDENTIALS", "Invalid username or password.");
+        }
+
+        private void ValidateEmailVerification(Korisnici user)
+        {
+            if (!user.IsEmailVerified)
+                throw new UnauthorizedException("EMAIL_NOT_VERIFIED", "Please verify your email before logging in.");
+        }
+
+        private User MapToUser(Korisnici user)
+        {
+            return new User
+            {
+                Id = user.Id,
+                Name = user.Ime,
+                Username = user.Username,
+                Email = user.Email,
+                Roles = user.KorisniciUlogi.Select(x => x.Uloga.Ime).ToList(),
+                IsEmailVerified = user.IsEmailVerified
+            };
         }
     }
 }

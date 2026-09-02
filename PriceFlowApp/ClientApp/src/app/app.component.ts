@@ -16,7 +16,7 @@ export class AppComponent {
 
   constructor(public translateService: TranslateService) {
     translateService.addLangs(['mk', 'en']);
-    translateService.setDefaultLang('mk');
+    translateService.setFallbackLang('mk');
 
     const browserLang = translateService.getBrowserLang();
 

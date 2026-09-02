@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NotificationsComponent } from './notifications.component';
+import { PriceChangeNotificationsComponent } from './price-change-notifications.component';
 
-describe('NotificationsComponent', () => {
-  let component: NotificationsComponent;
-  let fixture: ComponentFixture<NotificationsComponent>;
+describe('PriceChangeNotificationsComponent', () => {
+  let component: PriceChangeNotificationsComponent;
+  let fixture: ComponentFixture<PriceChangeNotificationsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotificationsComponent]
+      imports: [PriceChangeNotificationsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NotificationsComponent);
+    fixture = TestBed.createComponent(PriceChangeNotificationsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

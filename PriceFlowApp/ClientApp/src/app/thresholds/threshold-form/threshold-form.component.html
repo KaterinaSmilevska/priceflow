@@ -1,0 +1,69 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h4>
+      {{ (thresholdToEdit ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'THRESHOLDS' | translate }}
+      {{ 'FOR' | translate }} {{ 'NAV.PRICE_ALERTS' | translate }}
+    </h4>
+
+    <form [formGroup]="form" (ngSubmit)="saveThreshold()">
+      <div class="mb-3">
+        <label>{{ 'SECURITIES.TITLE' | translate }}</label>
+        <select class="form-select" formControlName="hvId">
+          <option [ngValue]="null">
+            {{ 'SELECT' | translate }}
+            {{ 'SECURITIES.TITLE' | translate }}
+          </option>
+          <option *ngFor="let s of owned"
+                  [ngValue]="s.id"
+                  [disabled]="!thresholdToEdit && isSecurityAlreadyUsed(s.id)">
+            {{ s.securityCode }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">
+          {{ 'LOWER' | translate }}
+          {{ 'THRESHOLD.TITLE' | translate }} (%)
+        </label>
+        <input type="number"
+               class="form-control"
+               formControlName="lowerThreshold"
+               (input)="validateLowerThreshold()" />
+        <div *ngIf="lowerThresholdError" class="error mt-2">
+          {{ lowerThresholdError | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">
+          {{ 'UPPER' | translate }}
+          {{ 'THRESHOLD.TITLE' | translate }} (%)
+        </label>
+        <input type="number"
+               class="form-control"
+               formControlName="upperThreshold"
+               (input)="validateUpperThreshold()" />
+        <div *ngIf="upperThresholdError" class="error mt-2">
+          {{ upperThresholdError | translate }}
+        </div>
+      </div>
+
+      <div *ngIf="thresholdRangeError" class="error mt-2">
+        {{ thresholdRangeError | translate }}
+      </div>
+
+      <div class="text-end">
+        <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
+        <button type="submit" class="btn btn-success" [disabled]="!isFormValid()">{{ (thresholdToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
+      </div>
+
+      <div *ngIf="errorMessage" class="error mt-2">
+        {{ errorMessage | translate }}
+      </div>
+      <div *ngIf="successMessage" class="success-message mt-2">
+        {{ successMessage | translate }}
+      </div>
+    </form>
+  </div>
+</div>

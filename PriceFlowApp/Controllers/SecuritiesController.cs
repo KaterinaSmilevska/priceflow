@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PriceFlowApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SecuritiesController: ControllerBase
+    public class SecuritiesController: PriceFlowController
     {
         private readonly ISecuritiesService _securitiesService;
 
@@ -16,120 +15,61 @@ namespace PriceFlowApp.Controllers
             _securitiesService = securitiesService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Security>>> GetAll()
+        [HttpGet("{id}")]
+        public ActionResult<Security> GetById(int id)
         {
-            try
-            {
-                IEnumerable<Security> securities = await _securitiesService.FindAllAsync();
-                return Ok(securities);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching securities.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.FindById(id));
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Security>> GetAll()
+        {
+            return Execute(() => _securitiesService.FindAll());
         }
 
         [HttpGet("code/{id}")]
-        public async Task<ActionResult<Security>> GetSecurityCode(int id)
+        public ActionResult<string> GetSecurityCode(int id)
         {
-            string? code = await _securitiesService.FindSecurityCode(id);
-            if(code == null)
-                return NotFound();
-
-            return Ok(code);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Security>> GetById(int id)
-        {
-            Security? security = await _securitiesService.FindByIdAsync(id);
-            if (security == null)
-                return NotFound();
-
-            return Ok(security);
+            return Execute(() => _securitiesService.FindSecurityCode(id));
         }
 
         [HttpGet("{code}/total-shares")]
-        public async Task<ActionResult<int>> GetTotalNumShares(string code)
+        public ActionResult<int> GetTotalNumShares(string code)
         {
-            try
-            {
-                int? totalShares = await _securitiesService.FindTotalNumSharesAsync(code);
-                return Ok(totalShares);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = "Error fetching total shares.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.FindTotalNumShares(code));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateSecurity security)
+        public ActionResult<Security> Add([FromBody] AddSecurityRequest security)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var createdSecurity = await _securitiesService.AddAsync(security);
-            return CreatedAtAction(nameof(GetById), new { id = createdSecurity.Id }, createdSecurity);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                await _securitiesService.DeleteAsync(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error deleting security.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.Add(security));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Security>> Update(int id, [FromBody] CreateSecurity updatedSecurity)
+        public ActionResult<Security> Update(int id, [FromBody] UpdateSecurity security)
         {
-            try
-            {
-                Security security = await _securitiesService.UpdateAsync(id, updatedSecurity);
-                return Ok(security);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error updating security.", detail = ex.Message });
-            }
+            if(id != security.Id)
+                return BadRequest(new {message = "Security Id mismatch."});
+
+            return Execute(() => _securitiesService.Update(id, security));
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<Security> Delete(int id)
+        {
+            return Execute(() =>  (_securitiesService.Delete(id)));
         }
 
         [HttpGet("prices")]
-        public async Task<ActionResult<SecurityDailyPrices>> GetLatestPrices([FromQuery] string securityCode, [FromQuery] DateTime date)
+        public ActionResult<SecurityDailyPrices> GetLatestPrices([FromQuery] string securityCode, [FromQuery] DateTime date)
         {
-            try
-            {
-                SecurityDailyPrices? result = await _securitiesService.GetLatestPricesAsync(securityCode, date);
-                if (result == null)
-                    return NotFound();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching latest prices.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.GetLatestPrices(securityCode, date));
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<Security>>> SearchByCode([FromQuery] string searchTerm)
+        public ActionResult<IEnumerable<Security>> SearchByCode([FromQuery] string searchTerm)
         {
-            try
-            {
-                IEnumerable<Security> securities = await _securitiesService.SearchByCodeAsync(searchTerm);
-                return Ok(securities);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching securities.", detail = ex.Message });
-            }
+            return Execute(() => _securitiesService.SearchByCode(searchTerm));
         }
     }
 }

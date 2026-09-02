@@ -7,32 +7,42 @@
   max-height: 400px;
   overflow-y: auto;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .15);
-  background-color: #ffff;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   border-radius: 0.5rem;
   padding: 0.5rem 0;
 }
 
 .percent {
-    text-align: center;
+  text-align: center;
 }
 
 .dropdown-item {
   padding: 0.75rem 1rem;
   white-space: normal;
   word-wrap: break-word;
-  color: var(--primary-color);
+  color: var(--text-color);
   text-align: left;
+  transition: background-color .2s ease;
+  border-bottom: 2px solid white;
 }
 
-.dropdown-item:hover {
-    background-color: #f1f3f5;
-    cursor: pointer;
+  .dropdown-item:hover {
+    background-color: var(--navbar-hover);
+  }
+
+  .dropdown-item.unread {
+    background-color: var(--secondary-color);
+  }
+
+  .dropdown-item.read {
+    opacity: 0.85;
+  }
+
+.notification-message {
+  color: var(--text-color);
 }
 
-.dropdown-item:not(.bg-light) {
-    font-weight: 500;
-}
-
-.bg-light {
-    background-color: #f8f9fa !important;
+.notification-date {
+  opacity: 0.7;
 }

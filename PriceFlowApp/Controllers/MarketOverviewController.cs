@@ -1,5 +1,4 @@
-﻿using DataAccess.Enums;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 
@@ -7,83 +6,47 @@ namespace PriceFlowApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MarketOverviewController : ControllerBase
+    public class MarketOverviewController : PriceFlowController
     {
-
         private readonly IMarketOverviewService _marketOverviewService;
 
-        public MarketOverviewController(IMarketOverviewService marketOverviewService) => _marketOverviewService = marketOverviewService;
+        public MarketOverviewController(IMarketOverviewService marketOverviewService)
+        {
+            _marketOverviewService = marketOverviewService;
+        }
 
         [HttpGet]
-        public async Task<ActionResult<MarketOverview>> GetMarketOverview()
+        public ActionResult<MarketOverview> GetMarketOverview()
         {
-            try
-            {
-                MarketOverview overview = await _marketOverviewService.GetOverviewAsync();
-                return Ok(overview);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching market overview.", detail = ex.Message });
-            }
-
+            return Execute(() => _marketOverviewService.GetOverview());
         }
 
         [HttpGet("top-gainers")]
-        public async Task<IActionResult> GetTopGainers([FromQuery] int count)
+        public ActionResult<IEnumerable<SecurityPerformance>> GetTopGainers([FromQuery] int count)
         {
-            try
-            {
-                IEnumerable<SecurityPerformance> securityPerformance = await _marketOverviewService.GetTopGainersAsync(count);
-                return Ok(securityPerformance);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching top gainers.", detail = ex.Message });
-            }
+            return Execute(() => _marketOverviewService.GetTopGainers(count));
         }
 
         [HttpGet("top-losers")]
-        public async Task<IActionResult> GetTopLosers([FromQuery] int count)
+        public ActionResult<IEnumerable<SecurityPerformance>> GetTopLosers([FromQuery] int count)
         {
-            try
-            {
-                IEnumerable<SecurityPerformance> securityPerformance = await _marketOverviewService.GetTopLosersAsync(count);
-                return Ok(securityPerformance);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching top losers.", detail = ex.Message });
-            }
+            return Execute(() => _marketOverviewService.GetTopLosers(count));
         }
 
         [HttpGet("most-traded")]
-        public async Task<IActionResult> GetMostTraded([FromQuery] int count)
+        public ActionResult<IEnumerable<SecurityPerformance>> GetMostTraded([FromQuery] int count)
         {
-            try
-            {
-                IEnumerable<SecurityPerformance> securityPerformance = await _marketOverviewService.GetMostTradedAsync(count);
-                return Ok(securityPerformance);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching most traded securities.", detail = ex.Message });
-            }
+            return Execute(() => _marketOverviewService.GetMostTrade(count));
         }
 
         [HttpGet("liquidity")]
-        public async Task<ActionResult<LiquidityOverview>> GetLiquidity([FromQuery] int months = 6, [FromQuery] bool onlyOwned = true)
+        public ActionResult<LiquidityOverview> GetLiquidity([FromQuery] int months = 6, [FromQuery] bool onlyOwned = true)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                LiquidityOverview result = await _marketOverviewService.FindLiquidityAsync(userId, months, onlyOwned);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching securities liquidity.", detail = ex.Message });
-            }
+                return _marketOverviewService.FindLiquidity(userId, months, onlyOwned);
+            });
         }
     }
 }

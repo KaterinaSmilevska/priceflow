@@ -1,77 +1,62 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
+using System.Runtime.Intrinsics.Arm;
 
 namespace PriceFlowApp.Services
 {
     public class ChartService : IChartService
     {
-        private readonly PriceFlowDbContext _dbContext;
+        private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
+        private readonly IPortfoliosRepository _portfoliosRepository;
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly ISecuritiesRepository _securitiesRepository;
 
-        public ChartService(PriceFlowDbContext dbContext, ITransactionsRepository transactionsRepository, ISecuritiesRepository securitiesRepository)
+        public ChartService(IDailyTurnoverRepository dailyTurnoverRepository, ITransactionsRepository transactionsRepository, ISecuritiesRepository securitiesRepository, IPortfoliosRepository portfoliosRepository)
         {
-            _dbContext = dbContext;
+            _dailyTurnoverRepository = dailyTurnoverRepository;
             _transactionsRepository = transactionsRepository;
             _securitiesRepository = securitiesRepository;
+            _portfoliosRepository = portfoliosRepository;
         }
 
-        public async Task<IEnumerable<PriceTrend>> GetPriceTrendAsync(int securityId, DateTime startDate, DateTime endDate)
+        public IEnumerable<PriceTrend> GetPriceTrend(int securityId, DateTime startDate, DateTime endDate)
         {
-            return await _dbContext.DnevenPromet
-                .Where(dp => dp.Hvid == securityId && dp.Datum >= startDate && dp.Datum <= endDate)
-                .OrderBy(dp => dp.Datum)
+            ValidateDateRange(startDate, endDate);
+
+            HartiiOdVrednost security = GetSecurityById(securityId);
+
+            IEnumerable<DnevenPromet> dailyPrices = _dailyTurnoverRepository.GetBySecurityAndDateRange(securityId, startDate, endDate);
+
+            return dailyPrices
                 .Select(dp => new PriceTrend
                 {
                     Date = dp.Datum,
                     Price = (decimal)dp.CenaPoslednaTransakcija
                 })
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<SectorDistribution>> GetSectorDistributionAsync(DateTime date)
+        public IEnumerable<SectorDistribution> GetSectorDistribution(DateTime date)
         {
-            return await _dbContext.HartiiOdVrednost
-                .Join(_dbContext.DnevenPromet, hv => hv.Id, dp => dp.Hvid, (hv, dp) => new { hv, dp })
-                .Where(x => x.dp.Datum == date)
-                .Select( x => new
-                {
-                    SectorName = x.hv.Izdavach.Sektor.Ime,
-                    MarketCap = x.hv.VkupenBrojAkcii * x.dp.CenaPoslednaTransakcija
-                })
-                .GroupBy(x => x.SectorName)
+            IEnumerable<DnevenPromet> dailyTurnover = _dailyTurnoverRepository.GetByDateWithSecurity(date);
+
+            return dailyTurnover
+                .GroupBy(dp => dp.Hv.Izdavach.Sektor.Ime)
                 .Select(g => new SectorDistribution
                 {
                     SectorName = g.Key,
-                    MarketCap = (decimal)g.Sum(x => x.MarketCap)
-
+                    MarketCap = g.Sum(dp => dp.Hv.VkupenBrojAkcii * (dp.CenaPoslednaTransakcija ?? 0))
                 })
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<Security>> GetSecurities()
+        public IEnumerable<MonthlyIncome> GetMonthlyIncome(int portfolioId, bool isReal)
         {
-            IEnumerable<HartiiOdVrednost> foundSecurities = await _securitiesRepository.GetAllAsync();
-            return foundSecurities.Select(security => new Security
-            {
-                Id = security.Id,
-                Code = security.Kod,
-            });
-        }
+            Portfolija portfolio = GetPortfolioById(portfolioId);
 
-        public DateTime? FindLatestDate()
-        {
-            return _dbContext.DnevenPromet
-                .OrderByDescending(dp => dp.Datum)
-                .Select(dp => dp.Datum)
-                .FirstOrDefault();
-        }
-
-        public async Task<IEnumerable<MonthlyIncome>> GetMonthlyIncomeAsync(int portfolioid, bool isReal)
-        {
-            List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioid);
+            IEnumerable<Transakcii> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
 
             List<MonthlyIncome> monthlyIncome = transactions
                 .Where(t => t.TipTransakcija == "Продавање" && t.Realna == isReal)
@@ -89,9 +74,11 @@ namespace PriceFlowApp.Services
             return monthlyIncome;
         }
 
-        public async Task<IEnumerable<SecurityAllocation>> GetAllocationAsync(int portfolioId, bool isReal)
+        public IEnumerable<SecurityAllocation> GetAllocation(int portfolioId, bool isReal)
         {
-            List<Transakcii> transactions = await _transactionsRepository.GetByPortfolioIdAsync(portfolioId);
+            Portfolija portfolio = GetPortfolioById(portfolioId);
+
+            IEnumerable<Transakcii> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
 
             List<SecurityAllocation> securityAllocation = transactions
                 .Where(t => t.Realna == isReal)
@@ -105,6 +92,45 @@ namespace PriceFlowApp.Services
                 .ToList();
 
             return securityAllocation;
+        }
+
+        public IEnumerable<Security> GetSecurities()
+        {
+            IEnumerable<HartiiOdVrednost> foundSecurities = _securitiesRepository.GetAll();
+            return foundSecurities.Select(security => new Security
+            {
+                Id = security.Id,
+                Code = security.Kod
+            });
+        }
+
+        public DateTime FindLatestDate()
+        {
+            return _dailyTurnoverRepository.GetLatestDate();
+        }
+
+        private HartiiOdVrednost GetSecurityById(int securityId)
+        {
+            HartiiOdVrednost? security = _securitiesRepository.GetById(securityId);
+            if (security == null)
+                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+
+            return security;
+        }
+
+        private Portfolija GetPortfolioById(int portfolioId)
+        {
+            Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
+            if (portfolio == null)
+                throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
+
+            return portfolio;
+        }
+
+        private void ValidateDateRange(DateTime startDate, DateTime endDate)
+        {
+            if (startDate > endDate)
+                throw new ValidationException("INVALID_DATE_RANGE", "Start date cannot be after end date.");
         }
     }
 }

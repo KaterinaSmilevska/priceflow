@@ -1,22 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { SecuritiesService } from './securities.service';
 import { LoginService } from '../auth/login/login.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AddSecurityComponent } from './add-security/add-security.component';
+import { SecurityFormComponent } from './security-form/security-form.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { Security } from './Security';
+import { Router, RouterModule } from '@angular/router';
+import { DbValueTranslatePipe } from '../shared/db-value-translate.pipe';
+import { IssuersTranslatePipe } from '../shared/issuers-translate.pipe';
 
 @Component({
   selector: 'app-securities',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddSecurityComponent, TranslateModule],
+  imports: [CommonModule, FormsModule, RouterModule, SecurityFormComponent, TranslateModule, DbValueTranslatePipe, IssuersTranslatePipe],
   templateUrl: './securities.component.html',
   styleUrls: ['./securities.component.css']
 })
 export class SecuritiesComponent implements OnInit {
   securities: Security[] = [];
   loading: boolean = true;
+  successMessage: string | null = null;
   errorMessage: string | null = null;
   showDeleteModal = false;
   securityToDelete: Security | null = null;
@@ -28,7 +32,9 @@ export class SecuritiesComponent implements OnInit {
   searchTerm: string = '';
   loadingSearch = false;
 
-  constructor(private securitiesService: SecuritiesService, public loginService: LoginService) { }
+  @Output() close = new EventEmitter<Security | null>();
+
+  constructor(private securitiesService: SecuritiesService, public loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
     this.loadSecurities();
@@ -37,7 +43,6 @@ export class SecuritiesComponent implements OnInit {
     })
   }
  
-
   loadSecurities(): void {
     this.securitiesService.getAll().subscribe({
       next: (securities) => {
@@ -64,13 +69,15 @@ export class SecuritiesComponent implements OnInit {
   confirmDelete(): void {
     if (!this.securityToDelete) return;
 
-    this.securitiesService.deleteSecurity(this.securityToDelete.id).subscribe({
+    this.securitiesService.delete(this.securityToDelete.id).subscribe({
       next: () => {
         this.securities = this.securities.filter(s => s.id !== this.securityToDelete?.id);
         this.closeDeleteModal();
+        this.successMessage = 'SECURITIES.DELETE_SUCCESS';
+        setTimeout(() => this.successMessage = null, 1000);
       },
       error: (err) => {
-        this.errorMessage = 'SECURITIES.DELETE_ERROR';
+        this.errorMessage = `ERRORS.${err.error.code}`;
         this.closeDeleteModal();
       }
     });

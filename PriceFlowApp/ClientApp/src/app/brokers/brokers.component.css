@@ -41,13 +41,8 @@
     border-bottom: 2px solid var(--input-border);
   }
 
-  .brokers-table tr:nth-child(even) {
-    background-color: var(--input-bg);
-  }
-
   .brokers-table tr:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-1px);
+    background-color: var(--navbar-hover);
   }
 
   .brokers-table td {

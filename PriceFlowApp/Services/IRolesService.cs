@@ -1,13 +1,13 @@
-﻿using DataAccess.Models;
+﻿using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {
     public interface IRolesService
     {
-        Task<Ulogi?> FindByNameAsync(string name);
+        List<string> FindByUserId(int userId);
 
-        Task<List<string>> FindNamesAsync();
+        Role FindByName(string name);
 
-        Task<List<string>> FindByUserIdAsync(int  userId);
+        List<string> FindNames();
     }
 }

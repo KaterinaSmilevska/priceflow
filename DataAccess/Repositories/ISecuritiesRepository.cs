@@ -1,34 +1,31 @@
 ﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface ISecuritiesRepository
     {
-        Task<IEnumerable<HartiiOdVrednost>> GetAllAsync();
+        HartiiOdVrednost? GetById(int id);
 
-        Task<HartiiOdVrednost?> GetByIdAsync(int id);
+        HartiiOdVrednost? GetByCode(string code);
 
-        Task<IEnumerable<HartiiOdVrednost>> GetAllByIds(List<int> securitiesIds);
+        IEnumerable<HartiiOdVrednost> GetAllByIds(List<int> securitiesIds);
 
-        Task<HartiiOdVrednost?> GetByCodeAsync(string code);
+        IEnumerable<HartiiOdVrednost> GetAll();
 
-        Task<string?> GetSecurityCode(int id);
+        string GetSecurityCode(int id);
 
-        Task<int?> GetTotalNumShares(int id);
+        int? GetTotalNumSharesById(int id);
 
-        Task<int?> GetTotalNumSharesAsync(string securityCode);
+        int GetTotalNumSharesBySecurityCode(string securityCode);
 
-        Task<HartiiOdVrednost> AddAsync(HartiiOdVrednost security);
+        int GetTotalNumSecurities();
 
-        Task DeleteAsync(int id);
+        HartiiOdVrednost Add(HartiiOdVrednost security);
 
-        Task UpdateAsync(HartiiOdVrednost security);
+        HartiiOdVrednost Update(HartiiOdVrednost security);
 
-        Task<IEnumerable<HartiiOdVrednost>> SearchByCodeAsync(string searchTerm);
+        HartiiOdVrednost Delete(HartiiOdVrednost security);
+
+        IEnumerable<HartiiOdVrednost?> SearchByCode(string searchTerm);
     }
 }

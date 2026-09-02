@@ -1,6 +1,6 @@
 export interface PriceChangeNotification {
   id: number;
-  hvId: number;
+  securityId: number;
   changePercent: number;
   tradingDate: string;
   message: string;

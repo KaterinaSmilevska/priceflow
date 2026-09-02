@@ -5,26 +5,26 @@ namespace PriceFlowApp.Services
 {
     public interface ISecurityFilterService
     {
-        Task<IEnumerable<FilteredSecurity>> FindMostProfitableSecuritiesByDividendYieldAsync();
+        IEnumerable<FilteredSecurity> FindMostProfitableSecuritiesByDividendYield();
 
-        Task<IEnumerable<FilteredSecurity>> FindMostProfitableSecuritiesByDividendPerShareAsync();
+        IEnumerable<FilteredSecurity> FindMostProfitableSecuritiesByDividendPerShare();
 
-        Task<IEnumerable<FilteredSecurity>> FindSecuritiesWithBiggestPriceOscillationsAsync();
+        IEnumerable<FilteredSecurity> FindSecuritiesWithBiggestPriceOscillations();
 
-        Task<IEnumerable<FilteredSecurity>> FindSecuritiesWithSmallestPriceOscillationsAsync();
+        IEnumerable<FilteredSecurity> FindSecuritiesWithSmallestPriceOscillations();
 
-        Task<IEnumerable<FilteredSecurity>> FindLeastLiquidSecuritiesByTradedQuantityAsync();
+        IEnumerable<FilteredSecurity> FindLeastLiquidSecuritiesByTradedQuantity();
 
-        Task<IEnumerable<FilteredSecurity>> FindMostLiquidSecuritiesByTradedQuantityAsync();
+        IEnumerable<FilteredSecurity> FindMostLiquidSecuritiesByTradedQuantity();
 
-        Task<IEnumerable<FilteredSecurity>> FindMostLiquidSecuritiesByNumTradingDaysAsync();
+        IEnumerable<FilteredSecurity> FindLeastLiquidSecuritiesByNumTradingDays();
 
-        Task<IEnumerable<FilteredSecurity>> FindLeastLiquidSecuritiesByNumTradingDaysAsync();
+        IEnumerable<FilteredSecurity> FindMostLiquidSecuritiesByNumTradingDays();
 
-        Task<IEnumerable<Sector>> FindMostProfitableSectorsByDividendYieldAsync();
+        IEnumerable<Sector> FindMostProfitableSectorsByDividendYield();
 
-        Task<IEnumerable<Sector>> FindMostProfitableSectorsByProfitAsync();
+        IEnumerable<Sector> FindMostProfitableSectorsByProfit();
 
-        Task<IEnumerable<FilteredSecurity>> FindSecuritiesValuationAsync();
+        IEnumerable<FilteredSecurity> FindSecuritiesValuation();
     }
 }

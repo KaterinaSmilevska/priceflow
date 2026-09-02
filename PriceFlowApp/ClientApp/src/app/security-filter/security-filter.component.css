@@ -53,8 +53,17 @@
 
 .analytics-body {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 60% auto;
+  align-items: flex-start;
   gap: 25px;
+}
+
+.chart-card {
+    min-width: 500px;
+}
+
+.table-card {
+    width: fit-content;
 }
 
 .chart-card,
@@ -67,9 +76,10 @@
 }
 
   .table-card table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
     color: var(--text-color);
+    white-space: nowrap;
   }
 
   .table-card th {
@@ -91,7 +101,7 @@
   }
 
     .table-card tbody tr:hover {
-      background: var(--hover-bg);
+      background-color: var(--navbar-hover);
     }
 
 .loading-panel {
@@ -113,6 +123,7 @@
 
 .neutral {
   color: var(--text-muted);
+  font-weight: 600;
 }
 
 .valuation-legend {
@@ -127,6 +138,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  font-weight: 500;
 }
 
 .legend-color {

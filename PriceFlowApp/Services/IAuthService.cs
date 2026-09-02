@@ -1,36 +1,35 @@
-﻿using DataAccess.Models;
-using PriceFlowApp.DTOs;
+﻿using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {
     public interface IAuthService
     {
-        Task<Korisnici?> FindByIdAsync(int id);
+        User FindById(int id);
 
-        Task<Korisnici?> FindByUsernameAsync(string username);
+        User FindByUsername(string username);
 
-        Task<Korisnici?> FindByVerificationTokenAsync(Guid token);
+        User FindByVerificationToken(Guid token);
 
-        Task<IEnumerable<User>> FindAllAsync();
+        IEnumerable<User> FindAll();
 
-        Task UpdateAsync(User user);
+        User Update(int id, User user);
 
-        Task UpdateAsync(Korisnici user);
+        User Delete(int id);
 
-        Task DeleteAsync(int id);
+        RegisterResponse Register(RegisterRequest registerRequest);
 
-        Task<bool> UsernameExistsAsync(string username);
+        Task<LoginResponse> Login(LoginRequest loginRequest);
 
-        Task<RegisterResponse> RegisterAsync(RegisterRequest registerRequest);
+        PasswordValidationResponse ValidatePassword(PasswordValidationRequest request);
 
-        Task<LoginResponse> LoginAsync(LoginRequest loginRequest);
+        EmailValidationResponse ValidateEmail(EmailValidationRequest request);
 
-        Task<PasswordValidationResponse> ValidatePasswordAsync(PasswordValidationRequest request);
+        void VerifyEmail(Guid token);
 
-        Task<EmailValidationResponse> ValidateEmailAsync(EmailValidationRequest request);
+        void ForgotPassword(string email);
 
-        Task ForgotPasswordAsync(string email);
+        void ResetPassword(Guid token, string newPassword);
 
-        Task ResetPasswordAsync(Guid token, string newPassword);
+        bool UsernameExists(string username);
     }
 }

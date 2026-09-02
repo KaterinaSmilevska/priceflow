@@ -1,6 +1,6 @@
 export interface Transaction {
   id: number;
-  hvCode: string;
+  securityCode: string;
   sharesQuantity: number;
   sharesUnitPrice: number;
   amount: number;

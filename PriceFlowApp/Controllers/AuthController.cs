@@ -1,316 +1,173 @@
-﻿using DataAccess.Models;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace PriceFlowApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController : PriceFlowController
     {
         private readonly IAuthService _authService;
         private readonly IRolesService _rolesService;
-        private readonly IBrokersService _brokersService;
 
-        public AuthController(IAuthService authService, IRolesService rolesService, IBrokersService brokersService)
+        public AuthController(IAuthService authService, IRolesService rolesService)
         {
             _authService = authService;
             _rolesService = rolesService;
-            _brokersService = brokersService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
+        public ActionResult<RegisterResponse> Register([FromBody] RegisterRequest registerRequest)
         {
-            try
-            {
-                var response = await _authService.RegisterAsync(registerRequest);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                {
-                    return BadRequest(new { message = ex.Message });
-                }
-
-            }
+            return Execute(() => _authService.Register(registerRequest));   
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
-            try
-            {
-                var response = await _authService.LoginAsync(request);
-                return Ok(response);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            return await ExecuteAsync(() => _authService.Login(request));
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<ActionResult<LogoutResponse>> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Ok(new { success = true, message = "Logged out successfully." });
+            return await ExecuteAsync(async () =>
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                return new LogoutResponse
+                {
+                    Success = true,
+                    Message = "Logged out successfully!"
+                };
+            });
         }
 
         [HttpGet("ulogi")]
-        public async Task<IActionResult> GetRolesNames()
+        public ActionResult<List<string>> GetRolesNames()
         {
-            try
-            {
-                var roles = await _rolesService.FindNamesAsync();
-                return Ok(roles);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error has occured while fetching roles.", detail = ex.Message });
-            }
+            return Execute(() => _rolesService.FindNames());
         }
 
         [HttpGet("check-username/{username}")]
-        public async Task<IActionResult> CheckUsername(string username)
+        public ActionResult<bool> CheckUsername(string username)
         {
-            try
-            {
-                var exists = await _authService.UsernameExistsAsync(username);
-                return Ok(new { exists });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while checking username.", detail = ex.Message });
-            }
+            return Execute(() => _authService.UsernameExists(username));
         }
 
         [HttpPost("validate-password")]
-        public async Task<IActionResult> ValidatePassword([FromBody] PasswordValidationRequest request)
+        public ActionResult<PasswordValidationResponse> ValidatePassword([FromBody] PasswordValidationRequest request)
         {
-            try
-            {
-                var response = await _authService.ValidatePasswordAsync(request);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while validating password.", detail = ex.Message });
-            }
+            return Execute(() => _authService.ValidatePassword(request));
         }
 
         [HttpPost("validate-email")]
-        public async Task<IActionResult> ValidateEmail([FromBody] EmailValidationRequest request)
+        public ActionResult<EmailValidationResponse> ValidateEmail([FromBody] EmailValidationRequest request)
         {
-            try
-            {
-                var response = await _authService.ValidateEmailAsync(request);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while validating email.", detail = ex.Message });
-            }
+            return Execute(() => _authService.ValidateEmail(request));
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        public ActionResult<MessageResponse> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
-            try
+            return Execute(() =>
             {
-                await _authService.ForgotPasswordAsync(request.Username);
-                return Ok(new { message = "Reset link has been sent to your email. " });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = ex.Message });
-            }
+                _authService.ForgotPassword(request.Username);
+
+                return new MessageResponse
+                {
+                    Message = "Reset link has been sent to your email."
+                };
+            });
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        public ActionResult<MessageResponse> ResetPassword([FromBody] ResetPasswordRequest request)
         {
-            try
+            return Execute(() =>
             {
-                await _authService.ResetPasswordAsync(request.Token, request.NewPassword);
-                return Ok(new { message = "Password reset successful." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = ex.Message });
-            }
+                _authService.ResetPassword(request.Token, request.NewPassword);
+
+                return new MessageResponse
+                {
+                    Message = "Password reset successful."
+                };
+            });
         }
 
         [HttpGet("status")]
-        public IActionResult Status()
+        public ActionResult<SessionStatusResponse> Status()
         {
-            if (!User.Identity!.IsAuthenticated)
-                return Ok(new { isLoggedIn = false });
-
-            var username = User.Identity!.Name;
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var roles = User.Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToList();
-
-            return Ok(new
+            return Execute(() =>
             {
-                isLoggedIn = true,
-                username,
-                userId,
-                roles
+                if (!(User.Identity?.IsAuthenticated ?? false))
+                {
+                    return new SessionStatusResponse
+                    {
+                        IsLoggedIn = false
+                    };
+                }
+                var username = User.Identity?.Name;
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var roles = User.Claims
+                    .Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .ToList();
+
+                return new SessionStatusResponse
+                {
+                    IsLoggedIn = true,
+                    Username = username,
+                    UserId = userId,
+                    Roles = roles
+                };
             });
         }
 
         [HttpGet("users")]
-        public async Task<IActionResult> GetUsers()
+        public ActionResult<IEnumerable<User>> GetUsers()
         {
-            try
-            {
-                var users = await _authService.FindAllAsync();
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching users.", detail = ex.Message });
-            }
+            return Execute(() => _authService.FindAll());
         }
 
         [HttpGet("users/{id}")]
-        public async Task<IActionResult> GetUser(int id)
+        public ActionResult<User> GetUser(int id)
         {
-            var foundUser = await _authService.FindByIdAsync(id);
-            if (foundUser == null)
-                return NotFound();
-
-            User user = new User
-            {
-                Id = foundUser.Id,
-                Name = foundUser.Ime,
-                Username = foundUser.Username,
-                Email = foundUser.Email
-            };
-
-            return Ok(user);
+            return Execute(() => _authService.FindById(id));
         }
 
         [HttpPut("users/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] User user)
+        public ActionResult<User> UpdateUser(int id, [FromBody] User user)
         {
             if (id != user.Id)
                 return BadRequest(new { message = "User Id mismatch." });
-            try
-            {
-                await _authService.UpdateAsync(user);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = ex.Message });
-            }
+
+            return Execute(() => _authService.Update(id, user));
         }
 
         [HttpDelete("users/{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public ActionResult<User> DeleteUser(int id)
         {
-            try
-            {
-                await _authService.DeleteAsync(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(400, new { message = ex.Message });
-            }
-        }
-
-        [HttpGet("brokers")]
-        public async Task<IActionResult> GetBrokers()
-        {
-            try
-            {
-                var brokers = await _brokersService.FindAllAsync();
-                return Ok(brokers);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching brokers.", detail = ex.Message });
-            }
-        }
-
-        [HttpPost("brokers")]
-        public async Task<IActionResult> AddBroker([FromBody] CreateBrokerRequest broker)
-        {
-            try
-            {
-                Broker result = await _brokersService.AddAsync(broker);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error creating broker.", detail = ex.Message });
-            }
-        }
-
-        [HttpPut("brokers/{id}")]
-        public async Task<IActionResult> UpdateBroker(int id, [FromBody] UpdateBrokerRequest broker)
-        {
-            try
-            {
-                BrokerResponse result = await _brokersService.UpdateAsync(broker);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error updating broker.", detail = ex.Message });
-            }
-        }
-
-        [HttpDelete("brokers/{id}")]
-        public async Task<IActionResult> DeleteBroker(int id)
-        {
-            try
-            {
-                await _brokersService.DeleteAsync(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error deleting broker.", detail = ex.Message });
-            }
+            return Execute(() => _authService.Delete(id));
         }
 
         [HttpGet("verify-email")]
-        public async Task<IActionResult> VerifyEmail([FromQuery] Guid token)
+        public ActionResult<MessageResponse> VerifyEmail([FromQuery] Guid token)
         {
-            try
+            return Execute(() =>
             {
-                var user = await _authService.FindByVerificationTokenAsync(token);
-                if (user == null)
-                    return BadRequest("Invalid  or expired verification link.");
+                _authService.VerifyEmail(token);
 
-                if (user.IsEmailVerified)
-                    return Redirect("https://localhost:44413/register?verified=true");
-
-                user.IsEmailVerified = true;
-                user.EmailVerificationToken = null;
-
-                await _authService.UpdateAsync(user);
-
-                return Redirect("https://localhost:44413/register?verified=true");
-            }
-            
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred during email verification.", detail = ex.Message });
-            }
+                return new MessageResponse
+                {
+                    Message = "Email verification successful."
+                };
+            });
         }
 
         [AllowAnonymous]
@@ -320,6 +177,7 @@ namespace PriceFlowApp.Controllers
             var userId = HttpContext.Session.GetString("UserId");
             var username = HttpContext.Session.GetString("Username");
             var roles = HttpContext.Session.GetString("Roles");
+
             return Ok(new { userId, username, roles });
         }
     }

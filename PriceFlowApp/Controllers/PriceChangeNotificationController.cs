@@ -1,7 +1,7 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 using PriceFlowApp.Services;
 
 namespace PriceFlowApp.Controllers
@@ -9,7 +9,7 @@ namespace PriceFlowApp.Controllers
     [ApiController]
     [Route("api/price-change-notification")]
     [Authorize]
-    public class PriceChangeNotificationController : ControllerBase
+    public class PriceChangeNotificationController : PriceFlowController
     {
         private readonly IPriceChangeNotificationService _notificationService;
 
@@ -19,69 +19,49 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByUserId()
+        public ActionResult<IEnumerable<PriceChangeNotificationResponse>> GetByUserId()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
 
-                await _notificationService.CheckAndGenerateNotificationsAsync();
+                _notificationService.GenerateNotifications();
 
-                List<PriceChangeNotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
-                return Ok(notifications);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching notifications for user.", detail = ex.Message });
-            }
-        }
-
-        [HttpPost("debug-generate")]
-        public async Task<IActionResult> DebugGenerate()
-        {
-            try
-            {
-                int userId = User.GetUserId();
-
-                await _notificationService.CheckAndGenerateNotificationsAsync();
-
-                List<PriceChangeNotificationResponse> notifications = await _notificationService.GetUserNotificationsAsync(userId);
-                return Ok(notifications);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching notifications for user.", detail = ex.Message });
-            }
+                return _notificationService.GetUserNotifications(userId);
+            });
         }
 
         [HttpGet("unread-count")]
-        public async Task<IActionResult> GetUnreadCount()
+        public ActionResult<int> GetUnreadCount()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-
-                int unread = await _notificationService.GetUnreadNotificationCountAsync(userId);
-                return Ok(unread);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching unread notifications count for user.", detail = ex.Message });
-            }
+                return _notificationService.GetUnreadNotificationCount(userId);
+            });
         }
 
         [HttpPost("{id}/read")]
-        public async Task<IActionResult> MarkAsRead(int id)
+        public IActionResult MarkAsRead(int id)
         {
-            try
-            { 
-                await _notificationService.MarkNotificationAsReadAsync(id);
-                return NoContent();
-            }
-            catch (Exception ex)
+            return Execute(() =>
             {
-                return StatusCode(500, new { message = "Error marking notification as read.", detail = ex.Message });
-            }
+                int userId = User.GetUserId();
+                _notificationService.MarkNotificationAsRead(userId, id);
+            });
+        }
+
+        [HttpPost("debug-generate")]
+        public ActionResult<IEnumerable<PriceChangeNotificationResponse>> DebugGenerate()
+        {
+            return Execute(() =>
+            {
+                int userId = User.GetUserId();
+
+                _notificationService.GenerateNotifications();
+
+                return _notificationService.GetUserNotifications(userId);
+            });
         }
     }
 }

@@ -1,24 +1,21 @@
 ﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface IThresholdRepository
     {
-        Task<IEnumerable<HvPromenaCena>> GetByUserAsync(int userId);
+        HvPromenaCena? GetById(int id);
 
-        Task<HvPromenaCena?> GetByIdAsync(int id);
+        IEnumerable<HvPromenaCena> GetByUserId(int userId);
 
-        Task<HvPromenaCena?> GetByUserandSecurityCodeAsync(int userId, int securityId);
+        IEnumerable<HvPromenaCena> GetBySecurityId(int securityId);
 
-        Task<HvPromenaCena> AddAsync(HvPromenaCena entity);
+        HvPromenaCena? GetByUserIdAndSecurityId(int userId, int securityId);
 
-        Task<HvPromenaCena> UpdateAsync(HvPromenaCena entity);
+        HvPromenaCena Add(HvPromenaCena entity);
 
-        Task DeleteAsync(HvPromenaCena entity);
+        HvPromenaCena Update(HvPromenaCena entity);
+
+        HvPromenaCena Delete(HvPromenaCena entity);
     }
 }

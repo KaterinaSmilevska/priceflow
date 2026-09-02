@@ -1,10 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -17,48 +12,58 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<HvPromenaCena> AddAsync(HvPromenaCena entity)
+        public HvPromenaCena? GetById(int id)
         {
-           await _dbContext.HvPromenaCena.AddAsync(entity);
-           await _dbContext.SaveChangesAsync();
-            return entity;
-        }
-
-        public async Task DeleteAsync(HvPromenaCena entity)
-        {
-
-           _dbContext.HvPromenaCena.Remove(entity);
-           await _dbContext.SaveChangesAsync();
-
-        }
-
-        public async Task<HvPromenaCena?> GetByIdAsync(int id)
-        {
-            return await _dbContext.HvPromenaCena
+            return _dbContext.HvPromenaCena
                 .Include(e => e.Hv)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<HvPromenaCena?> GetByUserandSecurityCodeAsync(int userId, int securityId)
-        {
-            return await _dbContext.HvPromenaCena
-                .FirstOrDefaultAsync(e => e.KorisnikId == userId && e.Hvid == securityId);
-        }
 
-        public async Task<IEnumerable<HvPromenaCena>> GetByUserAsync(int userId)
+        public IEnumerable<HvPromenaCena> GetByUserId(int userId)
         {
-            return await _dbContext.HvPromenaCena
+            return _dbContext.HvPromenaCena
                 .Where(e => e.KorisnikId == userId)
                 .Include(e => e.Hv)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<HvPromenaCena> UpdateAsync(HvPromenaCena entity)
+        public IEnumerable<HvPromenaCena> GetBySecurityId(int securityId)
+        {
+            return _dbContext.HvPromenaCena
+                .Include(e => e.Hv)
+                .Where(e => e.Hvid == securityId)
+                .ToList();
+        }
+
+        public HvPromenaCena? GetByUserIdAndSecurityId(int userId, int securityId)
+        {
+            return _dbContext.HvPromenaCena
+                .FirstOrDefault(e => e.KorisnikId == userId && e.Hvid == securityId);
+        }
+
+        public HvPromenaCena Add(HvPromenaCena entity)
+        {
+           _dbContext.HvPromenaCena.Add(entity);
+           _dbContext.SaveChanges();
+
+           return entity;
+        }
+
+        public HvPromenaCena Update(HvPromenaCena entity)
         {
             _dbContext.HvPromenaCena.Update(entity);
-            await _dbContext.SaveChangesAsync();
-            return entity;
+            _dbContext.SaveChanges();
 
+            return entity;
+        }
+
+        public HvPromenaCena Delete(HvPromenaCena entity)
+        {
+           _dbContext.HvPromenaCena.Remove(entity);
+           _dbContext.SaveChanges();
+            
+            return entity;
         }
     }
 }

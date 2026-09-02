@@ -1,24 +1,19 @@
 ﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface IPriceChangeNotificationsRepository
     {
-        Task<IzvestuvanjaPromenaCena?> GetById(int id);
+        IzvestuvanjaPromenaCena? GetById(int id);
 
-        Task<List<IzvestuvanjaPromenaCena>> GetByUserAsync(int userId);
+        IEnumerable<IzvestuvanjaPromenaCena> GetByUserId(int userId);
 
-        Task<int> GetUnreadNotificationCountAsync(int userId);
+        int GetUnreadNotificationCount(int userId);
 
-        Task MarkNotificationAsReadAsync(int notificationId);
+        bool ExistsForUserAndSecurityAndDate(int userId, int securityId, DateTime date);
 
-        Task GenerateNotificationsAsync(DateTime tradingDate);
+        IzvestuvanjaPromenaCena Add(IzvestuvanjaPromenaCena notification);
 
-        Task<bool> NotificationExistsForDateAsync(DateTime date);
+        void MarkNotificationAsRead(IzvestuvanjaPromenaCena notification);
     }
 }

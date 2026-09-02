@@ -27,7 +27,7 @@ thead {
   thead th {
     padding: 14px;
     font-weight: 600;
-    border: none;
+    border-bottom: 2px solid var(--input-border);
   }
 
 tbody td {
@@ -36,7 +36,7 @@ tbody td {
 }
 
 tbody tr:hover {
-  background: var(--input-bg);
+  background-color: var(--navbar-hover);
   transition: background 0.2s ease;
 }
 
@@ -57,28 +57,27 @@ tbody tr:hover {
 
 .btn-success {
   background-color: var(--success-bg);
-  color: var(--text-color);
+  color: white;
 }
 
 .btn-info {
   background-color: var(--info-bg);
-  color: var(--text-color);
-}
-
-.btn-warning {
-  background-color: var(--warning-bg);
+  color: white;
 }
 
 .btn-danger {
   background-color: var(--danger-bg);
-  color: var(--text-color);
+  color: white;
 }
 
 .btn-secondary {
-  background-color: var(--input-bg);
-  border: 1px solid var(--input-border);
+  background-color: var(--secondary-color);
   color: var(--text-color);
 }
+
+  .btn-secondary:hover {
+    background-color: var(--input-border);
+  }
 
 .text-muted {
   color: var(--disabled-text);
@@ -119,4 +118,30 @@ tbody tr:hover {
   display: flex;
   justify-content: center;
   gap: 10px;
+}
+
+.page-link {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+
+.success{
+  background: #d1fae5;
+  border: 1px solid #10b981;
+  padding: 8px;
+  border-radius: 6px;
+  color: #065f46;
+  font-weight: 500;
+  text-align: center;
+}
+
+.error {
+  background: #fee2e2;
+  border: 1px solid var(--error-color);
+  padding: 8px;
+  border-radius: 6px;
+  color: var(--error-color);
+  font-weight: 500;
+  text-align: center;
 }

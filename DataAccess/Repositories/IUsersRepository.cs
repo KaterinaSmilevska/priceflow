@@ -1,16 +1,11 @@
 ﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface IUsersRepository
     {
-        Task<IEnumerable<Korisnici>> GetAllAsync();
+        Korisnici Update(Korisnici user);
 
-        Task UpdateAsync(Korisnici user);
+        IEnumerable<Korisnici> GetAll();
     }
 }

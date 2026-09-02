@@ -1,0 +1,39 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h4>{{ 'EDIT.ACTION_NAME' | translate }} {{ 'USERS.USER' | translate }}</h4>
+    <form [formGroup]="form" (ngSubmit)="saveUser()">
+
+      <div class="mb-3">
+        <label>{{ 'USERS.NAME' | translate }}</label>
+        <input class="form-control" formControlName="name" (input)="validateName()">
+        <div *ngIf="nameError" class="error mt-2">
+          {{ nameError | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label>{{ 'USERS.USERNAME' | translate }}</label>
+        <input class="form-control" formControlName="username" (input)="validateUsername()">
+        <div *ngIf="usernameError" class="error mt-2">
+          {{ usernameError | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label>{{ 'USERS.EMAIL' | translate }}</label>
+        <input type="email" class="form-control" formControlName="email" (input)="validateEmail()">
+        <div *ngIf="emailError" class="error mt-2">
+          {{ emailError | translate }}
+        </div>
+      </div>
+
+      <div class="text-end">
+        <button type="button" class="btn btn-secondary me-2" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()">{{ 'SAVE_CHANGES' | translate }}</button>
+      </div>
+
+      <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+      <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage | translate }}</div>
+    </form>
+  </div>
+</div>

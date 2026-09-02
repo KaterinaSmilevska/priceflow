@@ -1,0 +1,48 @@
+<div class="modal fade show" tabindex="-1" style="display: block;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content animate-in">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ (portfolioToEdit ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'PORTFOLIOS.PORTFOLIO' | translate }}
+        </h5>
+        <button type="button" class="btn-close" (click)="onCancel()"></button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div class="modal-body">
+
+          <label class="form-label">{{ 'PORTFOLIOS.NAME' | translate }}</label>
+          <input class="form-control mb-2" formControlName="name" (input)="validateName()">
+          <div *ngIf="nameError" class="error mt-2">
+            {{ nameError | translate }}
+          </div>
+
+          <label class="form-label">{{ 'PORTFOLIOS.DESCRIPTION' | translate }}</label>
+          <textarea class="form-control portfolio-textarea"
+                    maxlength="100"
+                    formControlName="description"></textarea>
+
+          <small class="text-muted">
+            {{ form.get('description')?.value?.length || 0 }}/100
+          </small>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
+          <button type="submit" class="btn btn-success" [disabled]="!isFormValid()">
+            {{ (portfolioToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}
+          </button>
+        </div>
+        <div class="px-3 pb-3">
+          <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+          <div *ngIf="successMessage" class="success mt-2">{{ successMessage | translate }}</div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade show"></div>

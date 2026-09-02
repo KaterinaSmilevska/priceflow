@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
@@ -9,7 +8,7 @@ namespace PriceFlowApp.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class ThresholdController : ControllerBase
+    public class ThresholdController : PriceFlowController
     {
         private readonly IThresholdService _thresholdService;
 
@@ -19,78 +18,53 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ThresholdResponse>>> GetUserThresholds()
+        public ActionResult<IEnumerable<ThresholdResponse>> GetUserThresholds()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                IEnumerable<ThresholdResponse> response = await _thresholdService.GetUserThresholdsAsync(userId);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching thresholds.", detail = ex.Message });
-            }
+                return _thresholdService.GetUserThresholds(userId);
+            });
         }
 
         [HttpGet("owned")]
-        public async Task<ActionResult<IEnumerable<OwnedSecurity>>> GetOwned()
+        public ActionResult<IEnumerable<OwnedSecurity>> GetOwned()
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                IEnumerable<OwnedSecurity> response = await _thresholdService.GetOwnedSecuritiesAsync(userId);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching owned securities.", detail = ex.Message });
-            }
+                return _thresholdService.GetOwnedSecurities(userId);
+            });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddThreshold([FromBody] CreateThresholdRequest request)
+        public ActionResult<ThresholdResponse> Add([FromBody] AddThresholdRequest request)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                await _thresholdService.AddAsync(userId, request);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error creating threshold.", detail = ex.Message });
-            }
+                return _thresholdService.Add(userId, request);
+            });
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateThreshold(int id, [FromBody] UpdateThresholdRequest request)
+        public ActionResult<ThresholdResponse> Update(int id, [FromBody] UpdateThresholdRequest request)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                await _thresholdService.UpdateAsync(userId, id, request);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error updating threshold.", detail = ex.Message });
-            }
+                return _thresholdService.Update(userId, id, request);
+            });
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteThreshold(int id)
+        public ActionResult<ThresholdResponse> Delete(int id)
         {
-            try
+            return Execute(() =>
             {
                 int userId = User.GetUserId();
-                await _thresholdService.DeleteAsync(userId, id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error deleting threshold.", detail = ex.Message });
-            }
+                return _thresholdService.Delete(userId, id);
+            });
         }
     }
 }

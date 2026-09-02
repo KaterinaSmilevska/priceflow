@@ -15,15 +15,28 @@
     <p>{{ overview.averageDailyVolume | number }}</p>
   </div>
 
+  <div class="card market-card-volume">
+    <div class="card-icon">
+      <i class="bi bi-bar-chart-line"></i>
+    </div>
+    <h5>{{'MARKET_OVERVIEW.AVG_MONTHLY_VOLUME' | translate }}</h5>
+    <p>{{ overview.averageMonthlyVolume | number }}</p>
+  </div>
+
   <div class="card market-card-gainer">
     <div class="card-icon">
       <i class="bi bi-arrow-up-circle"></i>
     </div>
     <h5>{{'MARKET_OVERVIEW.TOP_GAINER' | translate }}</h5>
-    <p>
+    <p *ngIf="overview?.topGainer; else noGainer">
       {{ overview.topGainer }}
       <span class="badge badge-up">{{ overview.topGainerChange | number:'1.2-2' }}%</span>
     </p>
+    <ng-template #noGainer>
+      <p class="no-data-color">
+        {{ 'MARKET_OVERVIEW.NO_GAINERS' | translate }}
+      </p>
+    </ng-template>
   </div>
 
   <div class="card market-card-loser">
@@ -31,19 +44,24 @@
       <i class="bi bi-arrow-down-circle"></i>
     </div>
     <h5>{{'MARKET_OVERVIEW.TOP_LOSER' | translate }}</h5>
-    <p>
+    <p *ngIf="overview?.topLoser; else noLoser">
       {{ overview.topLoser }}
       <span class="badge badge-down">{{ overview.topLoserChange | number:'1.2-2' }}%</span>
     </p>
+    <ng-template #noLoser>
+      <p class="no-data-color">
+        {{ 'MARKET_OVERVIEW.NO_LOSERS' | translate }}
+      </p>
+    </ng-template>
   </div>
 
-  <div class="card market-card-securities">
-    <div class="card-icon">
-      <i class="bi bi-collection"></i>
+  <!--<div class="card market-card-securities">
+      <div class="card-icon">
+        <i class="bi bi-collection"></i>
+      </div>
+      <h5>{{'MARKET_OVERVIEW.TOTAL_SECURITIES' | translate }}</h5>
+      <p>{{ overview.totalSecurities }}</p>
     </div>
-    <h5>{{'MARKET_OVERVIEW.TOTAL_SECURITIES' | translate }}</h5>
-    <p>{{ overview.totalSecurities }}</p>
-  </div>
-</div>
+  </div>-->
 
-<div *ngIf="loading" class="text-center">{{'LOADING' | translate }} {{'MARKET_OVERVIEW.TITLE' | translate }}...</div>
+  <div *ngIf="loading" class="text-center">{{'LOADING' | translate }} {{'MARKET_OVERVIEW.TITLE' | translate }}...</div>

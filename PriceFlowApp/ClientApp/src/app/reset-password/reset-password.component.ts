@@ -17,7 +17,11 @@ export class ResetPasswordComponent implements OnInit {
   newPassword: string = '';
   confirmPassword: string = '';
   resetToken: string | null = null;
-  errorMessage: string = '';
+  usernameError: string | null = null;
+  passwordError: string | null = null;
+  confirmPasswordError: string | null = null;
+  errorMessage: string | null = null;
+  successMessage: string = '';
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
 
@@ -25,20 +29,60 @@ export class ResetPasswordComponent implements OnInit {
     this.resetToken = this.route.snapshot.queryParamMap.get('token');
   }
 
+  validateUsername(): void {
+    this.errorMessage = null;
+
+    const username = this.username.trim();
+    if (username === '') {
+      this.usernameError = 'ERRORS.USERNAME_VALIDATION_REQUIRED';
+    } else {
+      this.usernameError = null;
+    }
+  }
+
+  validatePassword(): void {
+    this.errorMessage = null;
+
+    const password = this.newPassword.trim();
+    if (password === '') {
+      this.passwordError = 'ERRORS.PASSWORD_VALIDATION_REQUIRED';
+    } else {
+      this.passwordError = null;
+    }
+  }
+
+  validateConfirmPassword(): void {
+    this.errorMessage = null;
+
+    const password = this.confirmPassword.trim();
+    if (password === '') {
+      this.confirmPasswordError = 'ERRORS.PASSWORD_VALIDATION_REQUIRED';
+    } else {
+      this.confirmPasswordError = null;
+    }
+  }
+
   sendResetLink(): void {
+    this.validateUsername();
+    this.successMessage = '';
+    this.errorMessage = '';
+
     this.http.post('/api/auth/forgot-password', { username: this.username }).subscribe({
       next: () => {
-        this.errorMessage = 'AUTH.RESET_LINK_SUCCESS';
+        this.successMessage = 'AUTH.RESET_LINK_SUCCESS';
       },
       error: (err) => {
-        this.errorMessage = err.error.message || 'AUTH.RESET_LINK_ERROR';
+        this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}` : 'AUTH.RESET_LINK_ERROR';
       }
     });
   }
 
   resetPassword(): void {
+    this.validatePassword();
+    this.validateConfirmPassword();
+
     if (this.newPassword !== this.confirmPassword) {
-      this.errorMessage = 'AUTH.PASSWORD_MISSMATCH';
+      this.errorMessage = 'ERRORS.PASSWORD_MISMATCH';
       return;
     }
     this.http.post('/api/auth/reset-password', { token: this.resetToken, newPassword: this.newPassword }).subscribe({
@@ -46,7 +90,7 @@ export class ResetPasswordComponent implements OnInit {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        this.errorMessage = err.error.message || 'AUTH.RESET_PASSWORD_ERROR';
+        this.errorMessage = err.error?.code ? `ERRORS.${err.error.code}` : 'AUTH.RESET_PASSWORD_ERROR';
       }
     });
   }

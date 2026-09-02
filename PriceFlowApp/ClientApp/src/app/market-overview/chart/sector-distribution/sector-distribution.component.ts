@@ -1,10 +1,12 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { Chart, ChartData, ChartType, registerables } from "chart.js";
 import { ChartService } from "../chart.service";
 import { BaseChartDirective } from 'ng2-charts';
 import { FormsModule } from "@angular/forms";
 import { TranslateModule, TranslateService } from "@ngx-translate/core";
+import { SectorsTranslatePipe } from "../../../shared/sectors-translate.pipe";
+import { Subscription } from "rxjs";
 
 Chart.register(...registerables);
 
@@ -15,9 +17,11 @@ Chart.register(...registerables);
   templateUrl: './sector-distribution.component.html',
 })
 
-export class SectorDistributionComponent implements OnInit {
+export class SectorDistributionComponent implements OnInit, OnChanges, OnDestroy {
   @Input() date!: string;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  private langSubscription?: Subscription;
 
   public type: ChartType = 'pie';
   public data: ChartData<'pie', number[], string> = {
@@ -30,13 +34,8 @@ export class SectorDistributionComponent implements OnInit {
   public noDataMessage: string | null = null;
   public defaultDate = new Date().getDay() - 7;
 
-  constructor(private chartService: ChartService, private translateService: TranslateService) { }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['date'] && !changes['date'].firstChange) {
-      this.loadChart();
-    }
-  }
+  constructor(private chartService: ChartService, private translateService: TranslateService,
+    private sectorsTranslatePipe: SectorsTranslatePipe) { }
 
   ngOnInit(): void {
     if (!this.date) {
@@ -53,6 +52,19 @@ export class SectorDistributionComponent implements OnInit {
     else {
       this.loadChart();
     }
+    this.langSubscription = this.translateService.onLangChange.subscribe(() => {
+      this.loadChart();
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['date'] && !changes['date'].firstChange) {
+      this.loadChart();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.langSubscription?.unsubscribe();
   }
 
   loadChart(): void {
@@ -70,7 +82,9 @@ export class SectorDistributionComponent implements OnInit {
         const values = res.map((x) => x.marketCap);
         const colors = this.chartService.generateColors(values.length);
         this.data = {
-          labels: res.map((x) => x.sectorName),
+          labels: res.map((x) =>
+            this.translateService.instant(this.sectorsTranslatePipe.transform(x.sectorName))
+          ),
           datasets: [
             {
               data: values,

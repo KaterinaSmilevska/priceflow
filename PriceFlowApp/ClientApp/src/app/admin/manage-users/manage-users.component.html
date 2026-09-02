@@ -1,5 +1,6 @@
-<div class="users-container">
+  <div class="users-container">
   <h2 class="page-title">{{ 'ADMIN.MANAGE' | translate }} {{ 'USERS.TITLE' | translate }}</h2>
+  <div *ngIf="successMessage" class="success-message mb-2">{{ successMessage | translate }}</div>
   <div *ngIf="errorMessage" class="error-message">
     <p class="text-red-700">{{ errorMessage | translate }}</p>
   </div>
@@ -19,7 +20,12 @@
           <td class="py-2 px-4 border-b">{{ user.name }}</td>
           <td class="py-2 px-4 border-b">{{ user.username }}</td>
           <td class="py-2 px-4 border-b">{{ user.email }}</td>
-          <td class="py-2 px-4 border-b">{{ user.roles.join(', ') }}</td>
+          <td class="py-2 px-4 border-b">
+            <ng-container *ngFor="let role of user.roles; let last = last">
+              {{ role | dbTranslate | translate}}
+              <span *ngIf="!last">, </span>
+            </ng-container>
+          </td>
           <td class="py-2 px-4 border-b">
             <button (click)="editUser(user.id)"
                     class="btn btn-warning btn-sm me-3">
@@ -36,15 +42,15 @@
       </tbody>
     </table>
   </div>
-  <p class="mt-4 text-center">
-    <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
-  </p>
 </div>
+<p class="text-center">
+  <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
+</p>
 
-<app-edit-user *ngIf="showEditModal"
+<app-user-form *ngIf="showEditModal"
                [userToEdit]="userToEdit!"
                (close)="onEditModalClose($event)">
-</app-edit-user>
+</app-user-form>
 
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">
@@ -52,8 +58,8 @@
     <p>{{ 'DELETE.DELETE_USER_MESSAGE' | translate }} <strong>{{ userToDelete?.username }}</strong>?</p>
 
     <div class="modal-actions">
-      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
       <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>
+      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }}</button>
     </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
 export interface SecurityPerformance {
-  code: string;
+  securityCode: string;
   changePercent: number;
   volume: number;
 }

@@ -1,0 +1,28 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h4>{{ (brokerToEdit.id === 0 ? 'ADD.ACTION_NAME' : 'EDIT.ACTION_NAME') | translate}} {{ 'BROKERS.BROKER' | translate }} </h4>
+    <form [formGroup]="form" (ngSubmit)="saveBroker()">
+      <div class="mb-3">
+        <label>{{ 'BROKERS.COMPANY' | translate }}</label>
+        <input class="form-control" formControlName="company" (input)="validateCompany()">
+        <div *ngIf="companyError" class="error mt-2">
+          {{ companyError | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label>{{ 'BROKERS.COMMISSION' | translate }} (%)</label>
+        <input type="number" step="0.01" class="form-control" formControlName="commissionPercent" (input)="validateCommission()">
+        <div *ngIf="commissionError" class="error mt-2">
+          {{ commissionError | translate }}
+        </div>
+      </div>
+      <div class="text-end">
+        <button type="button" class="btn btn-secondary me-2" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button type="submit" class="btn btn-success" [disabled]="!isFormValid()">{{ (brokerToEdit.id === 0 ? 'ADD.ACTION_NAME' : 'SAVE_CHANGES') | translate}}</button>
+      </div>
+      <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+      <div *ngIf="successMessage" class="success-message mt-2">{{ successMessage | translate }}</div>
+    </form>
+  </div>
+</div>

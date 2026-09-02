@@ -1,11 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -18,11 +12,129 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Sektori>> GetMostProfitableSectorsByDividendYieldAsync()
+        public IEnumerable<HartiiOdVrednost> GetMostProfitableSecuritiesByDividendYield()
         {
-            int latestYear = await this.GetLatestYearAsync();
+            int latestYear = this.GetLatestYear();
 
-            return await _dbContext.Sektori
+            return _dbContext.HartiiOdVrednost
+                 .Include(hv => hv.Izdavach)
+                .ThenInclude(i => i.FinansiskiPokazateli)
+                .Where(h => h.Izdavach.FinansiskiPokazateli
+                    .Any(fp => fp.Godina == latestYear && fp.DividendenPrinos != null && fp.DividendenPrinos != 0))
+                .OrderByDescending(h => h.Izdavach.FinansiskiPokazateli
+                        .Where(fp => fp.Godina == latestYear && fp.DividendenPrinos != null && fp.DividendenPrinos != 0)
+                        .Select(fp => fp.DividendenPrinos)
+                        .FirstOrDefault())
+                    .ToList();
+        }
+
+        public IEnumerable<HartiiOdVrednost> GetMostProfitableSecuritiesByDividendPerShare()
+        {
+            int latestYear = this.GetLatestYear();
+
+            return _dbContext.HartiiOdVrednost
+                .Include(hv => hv.Izdavach)
+                .ThenInclude(i => i.FinansiskiPokazateli)
+                .Where(h => h.Izdavach.FinansiskiPokazateli
+                    .Any(fp => fp.Godina == latestYear && fp.DividendaPoAkcija != null && fp.DividendaPoAkcija != 0))
+                .OrderByDescending(h => h.Izdavach.FinansiskiPokazateli
+                        .Where(fp => fp.Godina == latestYear && fp.DividendaPoAkcija != null && fp.DividendaPoAkcija != 0)
+                        .Select(fp => fp.DividendaPoAkcija)
+                        .FirstOrDefault())
+                    .ToList();
+        }
+
+        public IEnumerable<HartiiOdVrednost> GetSecuritiesWithBiggestPriceOscillations()
+        {
+            DateTime latestDate = this.GetLatestDate();
+
+            return _dbContext.HartiiOdVrednost
+                .Include(hv => hv.DnevenPromet)
+                .Where(hv => hv.DnevenPromet
+                    .Any(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null))
+                .OrderByDescending(hv => hv.DnevenPromet
+                    .Where(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null
+                        && (dp.MaxCena - dp.MinCena) > 0)
+                    .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
+                    .FirstOrDefault())
+                .ToList();
+        }
+
+        public IEnumerable<HartiiOdVrednost> GetSecuritiesWithSmallestPriceOscillations()
+        {
+            DateTime latestDate = this.GetLatestDate();
+
+            return _dbContext.HartiiOdVrednost
+                .Include(hv => hv.DnevenPromet)
+                .Where(hv => hv.DnevenPromet
+                    .Any(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null))
+                .OrderBy(hv => hv.DnevenPromet
+                    .Where(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null 
+                        && (dp.MaxCena - dp.MinCena) > 0)
+                    .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
+                    .FirstOrDefault())
+                .ToList();
+        }
+
+        public IEnumerable<HartiiOdVrednost> GetLeastLiquidSecuritiesByTradedQuantity()
+        {
+            DateTime latestDate = this.GetLatestDate();
+
+            return _dbContext.HartiiOdVrednost
+                .Include(hv => hv.DnevenPromet)
+                .Where(hv => hv.DnevenPromet
+                    .Any(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0))
+                .OrderBy(hv => hv.DnevenPromet
+                    .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0)
+                    .Select(dp => dp.KolicinaIstrguvaniAkcii)
+                    .FirstOrDefault())
+                .ToList();
+        }
+
+        public IEnumerable<HartiiOdVrednost> GetMostLiquidSecuritiesByTradedQuantity()
+        {
+            {
+                DateTime latestDate = this.GetLatestDate();
+
+                return _dbContext.HartiiOdVrednost
+                    .Include(hv => hv.DnevenPromet)
+                    .Where(hv => hv.DnevenPromet
+                        .Any(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0))
+                    .OrderByDescending(hv => hv.DnevenPromet
+                        .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0)
+                        .Select(dp => dp.KolicinaIstrguvaniAkcii)
+                        .FirstOrDefault())
+                    .ToList();
+            }
+        }
+
+        public IEnumerable<HartiiOdVrednost> GetLeastLiquidSecuritiesByNumTradingDays()
+        {
+            return _dbContext.HartiiOdVrednost
+                .Include(hv => hv.DnevenPromet)
+                .Where(hv => hv.DnevenPromet
+                    .Any(dp => dp.KolicinaIstrguvaniAkcii > 0))
+                .OrderBy(hv => hv.DnevenPromet
+                    .Count(dp => dp.KolicinaIstrguvaniAkcii > 0))
+                .ToList();
+        }
+
+        public IEnumerable<HartiiOdVrednost> GetMostLiquidSecuritiesByNumTradingDays()
+        {
+            return _dbContext.HartiiOdVrednost
+                .Include(hv => hv.DnevenPromet)
+                .Where(hv => hv.DnevenPromet
+                    .Any(dp => dp.KolicinaIstrguvaniAkcii > 0))
+                .OrderByDescending(hv => hv.DnevenPromet
+                    .Count(dp => dp.KolicinaIstrguvaniAkcii > 0))
+                .ToList();
+        }
+
+        public IEnumerable<Sektori> GetMostProfitableSectorsByDividendYield()
+        {
+            int latestYear = this.GetLatestYear();
+
+            return _dbContext.Sektori
                 .Include(s => s.Izdavachi)
                 .ThenInclude(i => i.FinansiskiPokazateli)
                 .Where(s => s.Izdavachi
@@ -32,15 +144,14 @@ namespace DataAccess.Repositories
                     .SelectMany(i => i.FinansiskiPokazateli)
                     .Where(fp => fp.Godina == latestYear && fp.DividendenPrinos != null)
                     .Sum(fp => fp.DividendenPrinos ?? 0))
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<Sektori>> GetMostProfitableSectorsByProfitAsync()
+        public IEnumerable<Sektori> GetMostProfitableSectorsByProfit()
         {
+            int latestYear = this.GetLatestYear();
 
-            int latestYear = await this.GetLatestYearAsync();
-
-            return await _dbContext.Sektori
+            return _dbContext.Sektori
                 .Include(s => s.Izdavachi)
                 .ThenInclude(i => i.FinansiskiPokazateli)
                 .Where(s => s.Izdavachi
@@ -50,102 +161,23 @@ namespace DataAccess.Repositories
                     .SelectMany(i => i.FinansiskiPokazateli)
                     .Where(fp => fp.Godina == latestYear && fp.OperativnaDobivka != null && fp.OperativnaDobivka > 0)
                     .Sum(fp => fp.OperativnaDobivka ?? 0))
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<HartiiOdVrednost>> GetMostProfitableSecuritiesByDividendPerShareAsync()
+        public IEnumerable<HartiiOdVrednost> GetSecuritiesValuation()
         {
-            int latestYear = await this.GetLatestYearAsync();
+            int latestYear = this.GetLatestYear();
 
-            return await _dbContext.HartiiOdVrednost
-                .Include(hv => hv.Izdavach)
-                .ThenInclude(i => i.FinansiskiPokazateli)
-                .Where(h => h.Izdavach.FinansiskiPokazateli
-                    .Any(fp => fp.Godina == latestYear && fp.DividendaPoAkcija != null && fp.DividendaPoAkcija != 0))
-                .OrderByDescending(h => h.Izdavach.FinansiskiPokazateli
-                        .Where(fp => fp.Godina == latestYear && fp.DividendaPoAkcija != null && fp.DividendaPoAkcija != 0)
-                        .Select(fp => fp.DividendaPoAkcija)
-                        .FirstOrDefault())
-                    .ToListAsync();
-        }
+            DateTime latestDate = this.GetLatestDate();
 
-        public async Task<IEnumerable<HartiiOdVrednost>> GetMostProfitableSecuritiesByDividendYieldAsync()
-        {
-            int latestYear = await this.GetLatestYearAsync();
-
-            return await _dbContext.HartiiOdVrednost
-                 .Include(hv => hv.Izdavach)
-                .ThenInclude(i => i.FinansiskiPokazateli)
-                .Where(h => h.Izdavach.FinansiskiPokazateli
-                    .Any(fp => fp.Godina == latestYear && fp.DividendenPrinos != null && fp.DividendenPrinos != 0))
-                .OrderByDescending(h => h.Izdavach.FinansiskiPokazateli
-                        .Where(fp => fp.Godina == latestYear && fp.DividendenPrinos != null && fp.DividendenPrinos != 0)
-                        .Select(fp => fp.DividendenPrinos)
-                        .FirstOrDefault())
-                    .ToListAsync();
-        }
-
-        public async Task<IEnumerable<HartiiOdVrednost>> GetSecuritiesWithBiggestPriceOscillationsAsync()
-        {
-            DateTime latestDate = await this.GetLatestDateAsync();
-
-            return await _dbContext.HartiiOdVrednost
-                .Include(hv => hv.DnevenPromet)
-                .Where(hv => hv.DnevenPromet
-                    .Any(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null))
-                .OrderByDescending(hv => hv.DnevenPromet
-                    .Where(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null
-                        && (dp.MaxCena - dp.MinCena) > 0)
-                    .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
-                    .FirstOrDefault())
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<HartiiOdVrednost>> GetSecuritiesWithSmallestPriceOscillationsAsync()
-        {
-            DateTime latestDate = await this.GetLatestDateAsync();
-
-            return await _dbContext.HartiiOdVrednost
-                .Include(hv => hv.DnevenPromet)
-                .Where(hv => hv.DnevenPromet
-                    .Any(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null))
-                .OrderBy(hv => hv.DnevenPromet
-                    .Where(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null 
-                        && (dp.MaxCena - dp.MinCena) > 0)
-                    .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
-                    .FirstOrDefault())
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<HartiiOdVrednost>> GetLeastLiquidSecuritiesByTradedQuantityAsync()
-        {
-            DateTime latestDate = await this.GetLatestDateAsync();
-
-            return await _dbContext.HartiiOdVrednost
-                .Include(hv => hv.DnevenPromet)
-                .Where(hv => hv.DnevenPromet
-                    .Any(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0))
-                .OrderBy(hv => hv.DnevenPromet
-                    .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0)
-                    .Select(dp => dp.KolicinaIstrguvaniAkcii)
-                    .FirstOrDefault())
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<HartiiOdVrednost>> GetSecuritiesValuationAsync()
-        {
-            int latestYear = await this.GetLatestYearAsync();
-
-            DateTime latestDate = await this.GetLatestDateAsync();
-
-            return await _dbContext.HartiiOdVrednost
+            return _dbContext.HartiiOdVrednost
                 .Include(hv => hv.DnevenPromet)
                 .Include(hv => hv.Izdavach)
                 .ThenInclude(hv => hv.FinansiskiPokazateli)
                 .Where(hv => hv.DnevenPromet
                     .Any(dp => dp.Datum == latestDate && dp.CenaPoslednaTransakcija != null) &&
                     hv.Izdavach.FinansiskiPokazateli
-                    .Any(fp => fp.Godina == latestYear && fp.KnigovodstvenaVrednostPoAkcija != null 
+                    .Any(fp => fp.Godina == latestYear && fp.KnigovodstvenaVrednostPoAkcija != null
                         && fp.KnigovodstvenaVrednostPoAkcija > 0))
                 .OrderByDescending(hv =>
                 (
@@ -161,60 +193,19 @@ namespace DataAccess.Repositories
                     .Select(fp => fp.KnigovodstvenaVrednostPoAkcija ?? 1)
                     .FirstOrDefault()
                 ))
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<HartiiOdVrednost>> GetMostLiquidSecuritiesByTradedQuantityAsync()
+        public DateTime GetLatestDate()
         {
-            {
-                DateTime latestDate = await this.GetLatestDateAsync();
-
-                return await _dbContext.HartiiOdVrednost
-                    .Include(hv => hv.DnevenPromet)
-                    .Where(hv => hv.DnevenPromet
-                        .Any(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0))
-                    .OrderByDescending(hv => hv.DnevenPromet
-                        .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0)
-                        .Select(dp => dp.KolicinaIstrguvaniAkcii)
-                        .FirstOrDefault())
-                    .ToListAsync();
-            }
+            return _dbContext.DnevenPromet
+                .Max(dp => dp.Datum);
         }
 
-        public async Task<IEnumerable<HartiiOdVrednost>> GetMostLiquidSecuritiesByNumTradingDaysAsync()
+        public int GetLatestYear()
         {
-            return await _dbContext.HartiiOdVrednost
-                .Include(hv => hv.DnevenPromet)
-                .Where(hv => hv.DnevenPromet
-                    .Any(dp => dp.KolicinaIstrguvaniAkcii > 0))
-                .OrderByDescending(hv => hv.DnevenPromet
-                    .Count(dp => dp.KolicinaIstrguvaniAkcii > 0))
-                .ToListAsync();
-
-        }
-
-        public async Task<IEnumerable<HartiiOdVrednost>> GetLeastLiquidSecuritiesByNumTradingDaysAsync()
-        {
-            return await _dbContext.HartiiOdVrednost
-                .Include(hv => hv.DnevenPromet)
-                .Where(hv => hv.DnevenPromet
-                    .Any(dp => dp.KolicinaIstrguvaniAkcii > 0))
-                .OrderBy(hv => hv.DnevenPromet
-                    .Count(dp => dp.KolicinaIstrguvaniAkcii > 0))
-                .ToListAsync();
-
-        }
-
-        public async Task<int> GetLatestYearAsync()
-        {
-            return await _dbContext.FinansiskiPokazateli
-                .MaxAsync(fp => fp.Godina) - 1;
-        }
-
-        public async Task<DateTime> GetLatestDateAsync()
-        {
-            return await _dbContext.DnevenPromet
-                .MaxAsync(dp => dp.Datum);
+            return _dbContext.FinansiskiPokazateli
+                .Max(fp => fp.Godina);
         }
     }
 }

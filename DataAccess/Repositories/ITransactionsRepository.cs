@@ -1,30 +1,29 @@
 ﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface ITransactionsRepository
     {
-        Task<Transakcii?> GetByIdAsync(int id);
+        Transakcii? GetById(int id);
 
-        Task<List<Transakcii>> GetByPortfolioIdAsync(int portfolioId);
+        IEnumerable<Transakcii> GetByPortfolioId(int portfolioId);
 
-        Task<int> GetOwnedSharesAsync(int portfolioId, int securityId, bool isReal);
+        IEnumerable<Transakcii> GetByPortfolioId(int portfolioId, bool isReal);
 
-        Task<Transakcii> AddAsync(Transakcii transaction);
+        IEnumerable<Transakcii> GetByPortfolioIdUntilDate(int portfolioId, DateOnly date);
 
-        Task<Transakcii> UpdateAsync(Transakcii transaction);
+        List<int> GetOwnedSecuritiesIds(int userId);
 
-        Task DeleteAsync(Transakcii transaction);
+        int GetOwnedShares(int portfolioId, int securityId, bool isReal);
 
-        Task<List<int>> GetOwnedSecuritiesIdsAsync(int userId);
+        int GetOwnedSharesAtDate(int portfolioId, int securityId, bool isReal, DateOnly date, int? transactionToExclude);
 
-        Task<int> GetOwnedSharesAtDateAsync(int portfolioId, int securityId, bool isReal, DateOnly date, int? excludeTransactionId = null);
+        int GetOwnedSharesByUser(int userId, int securityId);
 
-        Task<IEnumerable<Transakcii>> GetByPortfolioUntilDateAsync(int portfolioId, DateOnly date);
+        Transakcii Add(Transakcii transaction);
+
+        Transakcii Update(Transakcii transaction);
+
+        Transakcii Delete(Transakcii transaction);
     }
 }

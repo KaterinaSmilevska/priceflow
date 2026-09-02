@@ -11,15 +11,15 @@ export class PortfolioReturnsService {
 
   constructor(private http: HttpClient) { }
 
-  create(model: PortfolioReturns): Observable<PortfolioReturns> {
+  getByPortfolioId(portfolioId: number): Observable<PortfolioReturns[]> {
+    return this.http.get<PortfolioReturns[]>(`${this.apiUrl}/${portfolioId}`);
+  }
+
+  add(model: PortfolioReturns): Observable<PortfolioReturns> {
     return this.http.post<PortfolioReturns>(this.apiUrl, model);
   }
 
-  getSummary(portfolioId: number): Observable<PortfolioReturnsSummary>  {
+  getSummary(portfolioId: number): Observable<PortfolioReturnsSummary> {
     return this.http.get<PortfolioReturnsSummary>(`${this.apiUrl}/summary/${portfolioId}`);
-  }
-
-  getByPortfolioId(portfolioId: number): Observable<PortfolioReturns[]> {
-    return this.http.get<PortfolioReturns[]>(`${this.apiUrl}/${portfolioId}`);
   }
 }

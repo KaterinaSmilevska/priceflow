@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartService } from '../chart/chart.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-portfolio-income',
@@ -13,9 +14,11 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './portfolio-income.component.html',
   styleUrl: './portfolio-income.component.css',
 })
-export class PortfolioIncomeComponent implements OnInit {
+export class PortfolioIncomeComponent implements OnInit, OnChanges, OnDestroy {
   @Input() portfolioId!: number;
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  private langSubscription?: Subscription;
 
   @Input() isReal: boolean = true;
 
@@ -27,13 +30,13 @@ export class PortfolioIncomeComponent implements OnInit {
 
   public noDataMessage: string | null = null;
 
-  public options: ChartOptions<'line'> = {
+  chartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
-        text: 'Portfolio income over time',
+        text: this.translateService.instant('PORTFOLIOS.PORTFOLIO_INCOME'),
         font: {
           size: 16,
           weight: 'bold'
@@ -41,7 +44,7 @@ export class PortfolioIncomeComponent implements OnInit {
         padding: {
           top: 10,
           bottom: 20
-        }
+        },
       },
       legend: {
         display: true
@@ -49,10 +52,13 @@ export class PortfolioIncomeComponent implements OnInit {
     }
   };
 
-  constructor(private chartService: ChartService) { }
+  constructor(private chartService: ChartService, private translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.loadChart();
+    this.langSubscription = this.translateService.onLangChange.subscribe(() => {
+      this.loadChart();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -62,6 +68,10 @@ export class PortfolioIncomeComponent implements OnInit {
     if (changes['isReal'] && !changes['isReal'].firstChange) {
       this.loadChart();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.langSubscription?.unsubscribe();
   }
 
   loadChart(): void {
@@ -81,7 +91,7 @@ export class PortfolioIncomeComponent implements OnInit {
           labels,
           datasets: [
             {
-              label: 'Income',
+              label: this.translateService.instant('PORTFOLIOS.INCOME'),
               data: res.map(x => x.income),
               borderColor: '#007bff',
               backgroundColor: 'rgba(0,123,255,0.2)',
@@ -91,8 +101,10 @@ export class PortfolioIncomeComponent implements OnInit {
           ],
         };
 
-        (this.options as any).plugins.title.text =
-          `Portfolio income (${labels[0]} - ${labels[labels.length - 1]})`;
+        (this.chartOptions as any).plugins.title.text = this.translateService.instant(
+          'CHART.PORTFOLIO_INCOME_MESSAGE',
+          { start: labels[0], end: labels[labels.length - 1] }
+        );
         this.chart?.update();
       },
       error: (err) => {

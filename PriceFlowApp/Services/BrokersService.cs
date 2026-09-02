@@ -1,104 +1,130 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 
 namespace PriceFlowApp.Services
 {
     public class BrokersService : IBrokersService
     {
-        private readonly IBrokersRepository _brokerRepository;
+        private readonly IBrokersRepository _brokersRepository;
 
-        public BrokersService(IBrokersRepository brokerRepository)
+        public BrokersService(IBrokersRepository brokersRepository)
         {
-            _brokerRepository = brokerRepository;
+            _brokersRepository = brokersRepository;
         }
 
-        public Task<Brokeri?> FindById(int id)
+        public BrokerResponse FindById(int id)
         {
-            return _brokerRepository.GetByIdAsync(id);
+            Brokeri broker = GetBrokerById(id);
+
+            return MapToBroker(broker);
         }
 
-        public async Task<Brokeri?> FindByCompanyAsync(string company)
+        public BrokerResponse FindByCompany(string company)
         {
-            if (string.IsNullOrWhiteSpace(company))
-                throw new ArgumentException("Kompanija cannot be null or empty.");
+            ValidationHelper.ValidateRequiredField(company, "Company", "COMPANY_VALIDATION_REQUIRED");
 
-            var broker = await _brokerRepository.GetByCompanyAsync(company);
-            if (broker == null)
-                throw new ArgumentException($"Broker with Kompanija '{company}' not found.");
+            Brokeri broker = GetBrokerByCompany(company);
 
-            return broker;
+            return MapToBroker(broker);
         }
 
-        public async Task<IEnumerable<Broker>> FindAllAsync()
+        public IEnumerable<BrokerResponse> FindAll()
         {
-            IEnumerable<Brokeri> brokers = await _brokerRepository.GetAllAsync();
+            IEnumerable<Brokeri> brokers = _brokersRepository.GetAll();
 
-            return brokers.Select(b => new Broker
-            {
-                Id = b.Id,
-                Company = b.Kompanija,
-                CommissionPercent = b.ProcentProvizija
-            });
+            return brokers.
+                Select(MapToBroker)
+                .ToList();
         }
 
-        public async Task<IEnumerable<BrokerResponse>> GetAllAsync()
+        public BrokerResponse Add(AddBrokerRequest request)
         {
-            IEnumerable<Brokeri> brokers = await _brokerRepository.GetAllAsync();
+            ValidationHelper.ValidateRequiredField(request.Company, "Company", "COMPANY_VALIDATION_REQUIRED");
+            ValidateCompanyAvailability(request.Company);
+            ValidateCommissionPercent(request.CommissionPercent);
 
-            return brokers.Select(b => new BrokerResponse
-            {
-                Id = b.Id,
-                Company = b.Kompanija,
-                CommissionPercent = b.ProcentProvizija
-            });
-        }
-
-        public async Task<BrokerResponse> UpdateAsync(UpdateBrokerRequest request)
-        {
-            if (request.CommissionPercent < 0)
-                throw new ArgumentException("Commission percent cannot be negative.");
-
-            Brokeri? broker = await _brokerRepository.GetByIdAsync(request.Id);
-
-            if (broker == null)
-                throw new Exception("Broker cannot be found");
-
-            broker.Kompanija = request.Company;
-            broker.ProcentProvizija = request.CommissionPercent;
-
-            await _brokerRepository.UpdateAsync(broker);
-
-            return new BrokerResponse
-            {
-                Id = broker.Id,
-                Company = broker.Kompanija,
-                CommissionPercent = broker.ProcentProvizija
-            };
-        }
-
-        public async Task DeleteAsync(int brokerId)
-        {
-            await _brokerRepository.DeleteAsync(brokerId);
-        }
-
-        public async Task<Broker> AddAsync(CreateBrokerRequest request)
-        {
-            var entity = new Brokeri
+            Brokeri broker = new Brokeri
             {
                 Kompanija = request.Company,
                 ProcentProvizija = request.CommissionPercent
             };
 
-            var createdBroker = await _brokerRepository.AddAsync(entity);
+            Brokeri addedBroker = _brokersRepository.Add(broker);
 
-            var result = await _brokerRepository.GetByIdAsync(createdBroker.Id);
+            return MapToBroker(addedBroker);
+        }
 
-            return new Broker
+        public BrokerResponse Update(int id, UpdateBrokerRequest request)
+        {
+            ValidationHelper.ValidateRequiredField(request.Company, "Company", "COMPANY_VALIDATION_REQUIRED");
+            ValidateCompanyAvailability(request.Company, id);
+            ValidateCommissionPercent(request.CommissionPercent);
+
+            Brokeri existingBroker = GetBrokerById(id);
+
+            existingBroker.Kompanija = request.Company;
+            existingBroker.ProcentProvizija = request.CommissionPercent;
+
+            Brokeri updatedBroker = _brokersRepository.Update(existingBroker);
+
+            return new BrokerResponse
             {
-                Id = result.Id,
-                Company = result.Kompanija,
-                CommissionPercent = result.ProcentProvizija
+                Id = updatedBroker.Id,
+                Company = updatedBroker.Kompanija,
+                CommissionPercent = updatedBroker.ProcentProvizija
+            };
+        }
+
+        public BrokerResponse Delete(int id)
+        {
+            Brokeri existingBroker = GetBrokerById(id);
+
+            Brokeri deletedBroker = _brokersRepository.Delete(existingBroker);
+
+            return MapToBroker(deletedBroker);
+        }
+
+        private Brokeri GetBrokerById(int brokerId)
+        {
+            Brokeri? broker = _brokersRepository.GetById(brokerId);
+            if (broker == null)
+                throw new NotFoundException("BROKER_NOT_FOUND", "Broker not found.");
+
+            return broker;
+        }
+
+        private Brokeri GetBrokerByCompany(string company)
+        {
+            Brokeri? broker = _brokersRepository.GetByCompany(company);
+            if(broker == null)
+                throw new NotFoundException("BROKER_NOT_FOUND", $"Broker with company '{company}' not found.");
+
+            return broker;
+        }
+
+        private void ValidateCompanyAvailability(string company, int? brokerId = null)
+        {
+            Brokeri? existingBroker = _brokersRepository.GetByCompany(company);
+            if (existingBroker != null && existingBroker.Id != brokerId)
+                throw new AlreadyExistsException("COMPANY_ALREADY_EXISTS", "Company already exists.");
+        }
+
+        private void ValidateCommissionPercent(decimal commissionPercent)
+        {
+            if (commissionPercent < 0)
+                throw new ValidationException("INVALID_COMMISSION_PERCENT", "Commission percent cannot be negative.");
+        }
+
+        private BrokerResponse MapToBroker(Brokeri broker)
+        {
+            return new BrokerResponse
+            {
+                Id = broker.Id,
+                Company = broker.Kompanija,
+                CommissionPercent = broker.ProcentProvizija
             };
         }
     }

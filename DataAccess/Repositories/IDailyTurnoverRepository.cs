@@ -1,25 +1,32 @@
 ﻿using DataAccess.Enums;
 using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface IDailyTurnoverRepository
     {
-        Task<IEnumerable<DnevenPromet?>> GetBySecurityCode(string securityCode, DateTime date);
+        IEnumerable<DnevenPromet> GetBySecurityCode(string securityCode, DateTime date);
 
-        Task<IEnumerable<DnevenPromet>> GetBySecuritiesIdsAsync(List<int> securitiesIds, PriceTrendPeriod period, int periodsBack);
+        IEnumerable<DnevenPromet> GetBySecuritiesIds(List<int> securitiesIds, PriceTrendPeriod? period, PriceTrendResolution? resolution);
 
-        Task<IEnumerable<DnevenPromet>> GetLiquidityAsync(IEnumerable<int>? securityIds, DateTime fromDate);
+        IEnumerable<DnevenPromet> GetLiquidity(IEnumerable<int>? securityIds, DateTime fromDate);
 
-        Task<bool> ExistsForDateAsync(DateTime date);
+        IEnumerable<DnevenPromet> GetBySecurityAndDateRange(int securityId, DateTime startDate, DateTime endDate);
 
-        Task<decimal> GetLatestPriceAsync(int securityId, DateOnly date);
+        IEnumerable<DnevenPromet> GetByDateWithSecurity(DateTime date);
 
-        Task<DateTime> GetLatestDateAsync();
+        IEnumerable<DnevenPromet> GetDailyTurnoverForTotalMarketCap(DateTime date);
+
+        IEnumerable<DnevenPromet> GetByDateRange(DateTime startDate, DateTime endDate);
+
+        IEnumerable<DnevenPromet> GetLatestPrices(IEnumerable<int> securityIds);
+
+        decimal? GetLatestPrice(int securityId, DateOnly date);
+
+        DateTime GetLatestDate();
+
+        bool ExistsForDate(DateTime date);
+
+        IEnumerable<DnevenPromet> GetByDate(DateTime date);
     }
 }

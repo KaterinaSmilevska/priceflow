@@ -4,14 +4,14 @@ namespace PriceFlowApp.Services
 {
     public interface IThresholdService
     {
-        Task<IEnumerable<ThresholdResponse>> GetUserThresholdsAsync(int userId);
+        IEnumerable<ThresholdResponse> GetUserThresholds(int userId);
 
-        Task AddAsync(int userId, CreateThresholdRequest request);
+        IEnumerable<OwnedSecurity> GetOwnedSecurities(int userId);
 
-        Task UpdateAsync(int userId, int id, UpdateThresholdRequest request);
+        ThresholdResponse Add(int userId, AddThresholdRequest request);
 
-        Task DeleteAsync(int userId, int id);
+        ThresholdResponse Update(int userId, int id, UpdateThresholdRequest request);
 
-        Task<IEnumerable<OwnedSecurity>> GetOwnedSecuritiesAsync(int userId);
+        ThresholdResponse Delete(int userId, int id);
     }
 }

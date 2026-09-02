@@ -5,20 +5,23 @@ namespace PriceFlowApp.Services
 {
     public interface ITransactionsService
     {
-        Task<List<Transaction>> FindByPortfolioIdAsync(int portfolioid);
+        IEnumerable<Transaction> FindByPortfolioId(int portfolioid);
 
-        Task<int> FindOwnedSharesAsync(int portfolioId, string securityCode, bool isReal);
+        int FindOwnedShares(int portfolioId, string securityCode, bool isReal);
 
-        Task<int> FindOwnedSharesAtDateAsync(int portfolioId, string securityCode, bool isReal, DateOnly date);
+        int FindOwnedSharesAtDate(int portfolioId, string securityCode, bool isReal, DateOnly date, int? transactionIdToExclude);
 
-        Task<Transaction> AddAsync(int portfolioId, Transaction transaction);
+        Transaction Add(int portfolioId, Transaction transaction);
 
-        Task<Transaction> UpdateAsync(int id, Transaction transaction);
+        Transaction Update(int portfolioId, int id, Transaction transaction);
 
-        Task DeleteAsync(int id);
+        Transaction Delete(int id);
 
-        Task<PortfolioAnalytics> GetAnalyticsAsync(int portfolioid, bool isReal);
+        PortfolioAnalytics GetAnalytics(int portfolioId, bool isReal);
 
-        Task<List<OwnedSecuritiesPriceTrend>> FindPriceTrendAsync(int userId, PriceTrendPeriod period, int periodsBack = 12);
+        IEnumerable<OwnedSecuritiesPriceTrend> FindPriceTrend(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution);
+
+        IEnumerable<SecurityPriceTrendReport> GetSecuritiesPriceTrendReport(int userId, PriceTrendPeriod? period, PriceTrendResolution? resolution, string? securityCode);
+
     }
 }

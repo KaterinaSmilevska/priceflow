@@ -1,17 +1,17 @@
 <div class="hero-section">
   <h1>{{'HOME.WELCOME_TO' | translate }} PriceFlow</h1>
   <p>{{'HOME.DESCRIPTION' | translate }}</p>
-  <button class="get-started-btn" (click)="onGetStarted()">{{'HOME.GET_STARTED' | translate }}</button>
+  <button *ngIf="!(loginService.isLoggedIn() | async)"  class="get-started-btn" (click)="onGetStarted()">{{'HOME.GET_STARTED' | translate }}</button>
 </div>
 
 <app-brokers *ngIf="(loginService.isInvestor() | async)"></app-brokers>
 
+<app-market-overview></app-market-overview>
+<app-top-performers></app-top-performers>
+
 <app-liquidity *ngIf="(loginService.isInvestor() | async)"></app-liquidity>
 
 <app-securities-price-trend *ngIf="(loginService.isInvestor() | async)"></app-securities-price-trend>
-
-<app-market-overview></app-market-overview>
-<app-top-performers></app-top-performers>
 
 <app-chart></app-chart>
 
@@ -25,15 +25,10 @@
     <div class="footer-center">
       <h4>{{ 'FOOTER.LINKS' | translate }}</h4>
       <ul>
-        <!--<li><a routerLink="/"
-               routerLinkActive="active-link"
-               [routerLinkActiveOptions]="{ exact: true }">
-            {{ 'FOOTER.HOME_LINK' | translate }}
-            </a>
-        </li>-->
-        <li><a routerLink="/securities"
-               routerLinkActive="active-link"
-               [routerLinkActiveOptions]="{ exact: true }">
+        <li>
+          <a routerLink="/securities"
+             routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
             {{ 'FOOTER.SECURITIES_LINK' | translate }}
           </a>
         </li>
@@ -43,7 +38,7 @@
     <div class="footer-right">
       <h4>{{'FOOTER.CONTACT' | translate }}</h4>
       <p>{{ 'FOOTER.EMAIL' | translate }}: <a href="mailto:support@priceflow.com">support&#64;priceflow.com</a></p>
-      <p>{{ 'FOOTER.PHONE_NUMBER' | translate }}: +389 2 123 4567</p>
+      <p>{{ 'FOOTER.PHONE_NUMBER' | translate }}: 123 456 789</p>
       <p>{{ 'FOOTER.LOCATION' | translate }}</p>
     </div>
   </div>

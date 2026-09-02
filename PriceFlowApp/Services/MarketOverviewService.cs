@@ -1,59 +1,57 @@
-﻿using DataAccess.Enums;
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
-using System.Runtime.Intrinsics.Arm;
 
 namespace PriceFlowApp.Services
 {
     public class MarketOverviewService : IMarketOverviewService
     {
-        private readonly PriceFlowDbContext _dbContext;
+        private readonly ISecuritiesRepository _securitiesRepository;
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
 
-        public MarketOverviewService(PriceFlowDbContext dbContext, ITransactionsRepository transactionsRepository,
+        public MarketOverviewService(ISecuritiesRepository securitiesRepository, ITransactionsRepository transactionsRepository,
                 IDailyTurnoverRepository dailyTurnoverRepository) 
         {
-            _dbContext = dbContext;
+            _securitiesRepository = securitiesRepository;
             _transactionsRepository = transactionsRepository;
             _dailyTurnoverRepository = dailyTurnoverRepository;
-
         } 
 
-        public async Task<MarketOverview> GetOverviewAsync()
+        public MarketOverview GetOverview()
         {
-            DateTime latestDate = await _dbContext.DnevenPromet.MaxAsync(dp => dp.Datum);
+            DateTime latestDate = FindLatestDate();
+            DateTime startMonth = new DateTime(latestDate.Year, latestDate.Month, 1);
 
-            decimal? totalMarketCap = await _dbContext.HartiiOdVrednost
-                .Join(_dbContext.DnevenPromet, hv => hv.Id, dp => dp.Hvid, (hv, dp) => new { hv, dp })
-                .Where(x => x.dp.Datum == latestDate && x.dp.CenaPoslednaTransakcija != null)
-                .SumAsync(x => x.hv.VkupenBrojAkcii * x.dp.CenaPoslednaTransakcija);
+            decimal? totalMarketCap = _dailyTurnoverRepository.GetDailyTurnoverForTotalMarketCap(latestDate)
+                .Sum(dp => dp.Hv.VkupenBrojAkcii * dp.CenaPoslednaTransakcija);
 
-            double? averageDailyVolume = await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii != null)
-                .AverageAsync(dp => dp.KolicinaIstrguvaniAkcii);
+            double? averageDailyVolume = _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.KolicinaIstrguvaniAkcii != null)
+                .Average(dp => dp.KolicinaIstrguvaniAkcii);
 
-            var topGainer = await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena > 0)
+            double? averageMonthlyVolume = _dailyTurnoverRepository.GetByDateRange(startMonth, latestDate)
+                .Average(dp => dp.KolicinaIstrguvaniAkcii);
+                
+            var topGainer = _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.ProcentPromena > 0)
                 .OrderByDescending(dp => dp.ProcentPromena)
                 .Select(dp => new { dp.Hv.Kod, dp.ProcentPromena })
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
 
-            var topLoser = await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena < 0)
+            var topLoser = _dailyTurnoverRepository.GetByDateWithSecurity (latestDate)
+                .Where(dp => dp.ProcentPromena < 0)
                 .OrderBy(dp => dp.ProcentPromena)
                 .Select(dp => new { dp.Hv.Kod, dp.ProcentPromena })
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
 
-            var totalSecurities = await _dbContext.HartiiOdVrednost
-                .CountAsync();
+            var totalSecurities = _securitiesRepository.GetTotalNumSecurities();
 
             return new MarketOverview
             {
                 TotalMarketCap = (decimal)(totalMarketCap ?? 0),
                 AverageDailyVolume = (int)(averageDailyVolume ?? 0),
+                AverageMonthlyVolume = (int)(averageMonthlyVolume ?? 0),
                 TopGainer = topGainer?.Kod ?? "",
                 TopGainerChange = topGainer?.ProcentPromena ?? 0,
                 TopLoser = topLoser?.Kod ?? "",
@@ -62,58 +60,58 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public async Task<IEnumerable<SecurityPerformance>> GetTopGainersAsync(int count)
+        public IEnumerable<SecurityPerformance> GetTopGainers(int count)
         {
-            DateTime latestDate = await _dbContext.DnevenPromet.MaxAsync(dp => dp.Datum);
+            DateTime latestDate = FindLatestDate();
 
-            return await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena > 0 && dp.KolicinaIstrguvaniAkcii != null)
+            return _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.ProcentPromena > 0 && dp.KolicinaIstrguvaniAkcii != null)
                 .OrderByDescending(dp => dp.ProcentPromena)
                 .Take(count)
                 .Select(dp => new SecurityPerformance
                 {
-                    Code = dp.Hv.Kod,
+                    SecurityCode = dp.Hv.Kod,
                     ChangePercent = (decimal?)dp.ProcentPromena,
                     Volume = (int)(dp.KolicinaIstrguvaniAkcii ?? 0)
                 })
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<SecurityPerformance>> GetTopLosersAsync(int count)
+        public IEnumerable<SecurityPerformance> GetTopLosers(int count)
         {
-            DateTime latestDate = await _dbContext.DnevenPromet.MaxAsync(dp => dp.Datum);
+            DateTime latestDate = FindLatestDate();
 
-            return await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena < 0 && dp.KolicinaIstrguvaniAkcii != null)
+            return _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.ProcentPromena < 0 && dp.KolicinaIstrguvaniAkcii != null)
                 .OrderBy(dp => dp.ProcentPromena)
                 .Take(count)
                 .Select(dp => new SecurityPerformance
                 {
-                    Code = dp.Hv.Kod,
+                    SecurityCode = dp.Hv.Kod,
                     ChangePercent = (decimal?)dp.ProcentPromena,
                     Volume = (int)(dp.KolicinaIstrguvaniAkcii ?? 0)
                 })
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<SecurityPerformance>> GetMostTradedAsync(int count)
+        public IEnumerable<SecurityPerformance> GetMostTrade(int count)
         {
-            DateTime latestDate = await _dbContext.DnevenPromet.MaxAsync(dp => dp.Datum);
+            DateTime latestDate = FindLatestDate();
 
-            return await _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii != null)
+            return _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.KolicinaIstrguvaniAkcii != null)
                 .OrderByDescending(dp => dp.KolicinaIstrguvaniAkcii)
                 .Take(count)
                 .Select(dp => new SecurityPerformance
                 {
-                    Code = dp.Hv.Kod,
+                    SecurityCode = dp.Hv.Kod,
                     ChangePercent = (decimal?)dp.ProcentPromena,
                     Volume = (int)(dp.KolicinaIstrguvaniAkcii ?? 0)
                 })
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<LiquidityOverview> FindLiquidityAsync(int userId, int monthsBack, bool onlyOwned)
+        public LiquidityOverview FindLiquidity(int userId, int monthsBack, bool onlyOwned)
         {
             DateTime fromDate = DateTime.Today.AddMonths(-monthsBack);
 
@@ -121,10 +119,10 @@ namespace PriceFlowApp.Services
 
             if (onlyOwned)
             {
-                securitiesIds = await _transactionsRepository.GetOwnedSecuritiesIdsAsync(userId);
+                securitiesIds = _transactionsRepository.GetOwnedSecuritiesIds(userId);
             }
 
-            IEnumerable<DnevenPromet> dailyTurnover = await _dailyTurnoverRepository.GetLiquidityAsync(securitiesIds, fromDate);
+            IEnumerable<DnevenPromet> dailyTurnover = _dailyTurnoverRepository.GetLiquidity(securitiesIds, fromDate);
 
             var grouped = dailyTurnover.GroupBy(dp => new { dp.Hvid, dp.Hv.Kod })
                 .Select(g => new
@@ -158,6 +156,11 @@ namespace PriceFlowApp.Services
                 .OrderBy(x => x.TradingDays)
                 .Take(5)
             };
+        }
+
+        private DateTime FindLatestDate()
+        {
+            return _dailyTurnoverRepository.GetLatestDate();
         }
     }
 }

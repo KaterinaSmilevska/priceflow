@@ -4,15 +4,16 @@
     {{ 'NO_NOTIFICATIONS' | translate }}
   </div>
   <div *ngFor="let n of notifications"
-       [class.bg-light]="!n.isRead"
-       class="dropdown-item">
+       class="dropdown-item"
+       [class.unread]="!n.isRead"
+       [class.read]="n.isRead">
     <div class="small fw-bold percent">
       {{ n.changePercent }} %
     </div>
-    <div class="small text-muted">
+    <div class="small notification-message">
       {{ n.message }}
     </div>
-    <div class="small text-secondary">
+    <div class="small notification-date">
       {{ n.tradingDate | date: 'short'}}
     </div>
     <button *ngIf="!n.isRead"

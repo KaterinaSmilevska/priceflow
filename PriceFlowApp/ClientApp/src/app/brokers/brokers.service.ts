@@ -14,4 +14,16 @@ export class BrokersService {
   getAll(): Observable<Broker[]> {
     return this.http.get<Broker[]>(this.apiUrl, { withCredentials: true });
   }
+
+  add(broker: Broker): Observable<Broker> {
+    return this.http.post<Broker>(`${this.apiUrl}`, broker);
+  }
+
+  update(id: number, broker: Broker): Observable<Broker> {
+    return this.http.put<Broker>(`${this.apiUrl}/${id}`, broker);
+  }
+
+  delete(id: number): Observable<Broker> {
+    return this.http.delete<Broker>(`${this.apiUrl}/${id}`);
+  }
 }

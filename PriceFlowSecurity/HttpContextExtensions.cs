@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Session;
-using System;
 using System.Text;
 
 namespace PriceFlowSecurity
@@ -17,6 +14,7 @@ namespace PriceFlowSecurity
                 throw new Exception("User not authenticated.");
             
             var value = Encoding.UTF8.GetString(bytes);
+
             return int.Parse(value);
         }
     }

@@ -1,20 +1,15 @@
 ﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface IPortfoliosNotificationsRepository
     {
-        Task<IEnumerable<IzvestuvanjaPortfolija>> GetByUserIdAsync(int userId);
+        IEnumerable<IzvestuvanjaPortfolija> GetByUserId(int userId);
 
-        Task<IzvestuvanjaPortfolija?> GetByPortfolioId(int portfolioId);
+        IzvestuvanjaPortfolija? GetByPortfolioId(int portfolioId);
 
-        Task<IzvestuvanjaPortfolija> UpdateAsync(IzvestuvanjaPortfolija portfolioNotification);
+        IzvestuvanjaPortfolija Add(IzvestuvanjaPortfolija portfolioNotification);
 
-        Task<IzvestuvanjaPortfolija> AddAsync(IzvestuvanjaPortfolija portfolioNotification);
+        IzvestuvanjaPortfolija Update(IzvestuvanjaPortfolija portfolioNotification);
     }
 }

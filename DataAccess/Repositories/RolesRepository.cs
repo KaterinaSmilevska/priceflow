@@ -7,56 +7,61 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public RolesRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
-
-        public async Task<Ulogi?> GetByIdAsync(int id)
+        public RolesRepository(PriceFlowDbContext dbContext)
         {
-            return await _dbContext.Ulogi
-                .FindAsync(id);
+            _dbContext = dbContext;
         }
 
-        public async Task<Ulogi?> GetByNameAsync(string name)
+        public Ulogi? GetById(int id)
         {
-            return await _dbContext.Ulogi
-                .FirstOrDefaultAsync(u => u.Ime == name);
+            return _dbContext.Ulogi
+                .Find(id);
         }
 
-        public async Task<IEnumerable<Ulogi>> GetAllAsync()
+        public List<string> GetByUserId(int id)
         {
-            return await _dbContext.Ulogi.ToListAsync();
-        }
-
-        public async Task<List<string>> GetNamesAsync()
-        {
-            return await _dbContext.Ulogi
-                .Select(u => u.Ime).ToListAsync();
-        }
-
-        public async Task<List<int>> GetIdsByNamesAsync(List<string> names)
-        {
-            return await _dbContext.Ulogi
-               .Where(u => names.Contains(u.Ime))
-               .Select(u => u.Id)
-               .ToListAsync();
-        }
-
-        public async Task<List<string>> GetByUserIdAsync(int id)
-        {
-            return await _dbContext.KorisniciUlogi
+            return _dbContext.KorisniciUlogi
                 .Where(ku => ku.KorisnikId == id)
                 .Include(ku => ku.Uloga)
                 .Select(ku => ku.Uloga.Ime)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<List<string>> GetNamesAsync(IEnumerable<Ulogi> roles)
+        public Ulogi? GetByName(string name)
+        {
+            return _dbContext.Ulogi
+                .FirstOrDefault(u => u.Ime == name);
+        }
+
+        public IEnumerable<Ulogi> GetAll()
+        {
+            return _dbContext.Ulogi
+                .ToList();
+        }
+
+        public List<string> GetNames()
+        {
+            return _dbContext.Ulogi
+                .Select(u => u.Ime)
+                .ToList();
+        }
+
+        public List<int> GetIdsByNames(List<string> names)
+        {
+            return _dbContext.Ulogi
+               .Where(u => names.Contains(u.Ime))
+               .Select(u => u.Id)
+               .ToList();
+        }
+
+        public List<string> GetNames(IEnumerable<Ulogi> roles)
         {
             List<int> roleIds = roles.Select(r => r.Id).ToList();
 
-            return await _dbContext.Ulogi
+            return _dbContext.Ulogi
                 .Where(r => roleIds.Contains(r.Id))
                 .Select(r => r.Ime)
-                .ToListAsync();
+                .ToList();
         }
     }
 }

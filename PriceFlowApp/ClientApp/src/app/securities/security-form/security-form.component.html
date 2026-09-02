@@ -1,0 +1,61 @@
+<div class="modal-overlay">
+  <div class="modal-content p-4">
+    <h5>{{ (securityToEdit ? 'EDIT.ACTION_NAME' : 'ADD.ACTION_NAME') | translate }} {{ 'SECURITIES.TITLE' | translate }}</h5>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label>{{ 'SECURITIES.CODE' | translate }}</label>
+        <input formControlName="code" class="form-control" (input)="validateCode()">
+        <div *ngIf="codeError" class="error mt-2">
+          {{ codeError | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label>{{ 'SECURITIES.ISIN' | translate }}</label>
+        <input formControlName="isin" class="form-control" (input)="validateIsin()">
+        <div *ngIf="isinError" class="error mt-2">
+          {{ isinError | translate }}
+        </div>
+      </div>
+      <div class="mb-3">
+        <label>{{ 'SECURITIES.TOTAL_SHARES' | translate }}</label>
+        <input type="number" formControlName="totalNumShares" class="form-control" (input)="validateTotalShares()">
+        <div *ngIf="totalSharesError" class="error mt-2">
+          {{ totalSharesError | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label>{{ 'SECURITIES.TYPE' | translate }}</label>
+        <select formControlName="typeSecurityId" class="form-select">
+          <option [ngValue]="null">
+            {{ 'SELECT' | translate }}
+            {{ 'SECURITIES.TYPE' | translate }}
+          </option>
+          <option *ngFor="let type of types" [ngValue]="type.id">{{ type.name }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label>{{ 'SECURITIES.ISSUER' | translate }}</label>
+        <select formControlName="issuerId" class="form-select">
+          <option [ngValue]="null">
+            {{ 'SELECT' | translate }}
+            {{ 'SECURITIES.ISSUER' | translate }}
+          </option>
+          <option *ngFor="let issuer of issuers" [ngValue]="issuer.id">{{ issuer.name }}</option>
+        </select>
+      </div>
+
+      <div class="text-end">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ 'CANCEL' | translate }}</button>
+        <button type="submit" class="btn btn-success ms-2" [disabled]="!isFormValid()">{{ (securityToEdit ? 'SAVE_CHANGES' : 'ADD.ACTION_NAME') | translate }}</button>
+      </div>
+
+      <div *ngIf="errorMessage" class="error mt-2">{{ errorMessage | translate }}</div>
+      <div *ngIf="successMessage" class="success-message mt-3">{{ successMessage | translate }}</div>
+
+    </form>
+  </div>
+</div>

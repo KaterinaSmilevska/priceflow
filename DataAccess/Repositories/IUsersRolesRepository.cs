@@ -4,8 +4,8 @@ namespace DataAccess.Repositories
 {
     public interface IUsersRolesRepository
     {
-        Task AddAsync(KorisniciUlogi userRole);
+        KorisniciUlogi Add(KorisniciUlogi userRole);
 
-        Task RemoveByUserIdAsync(int id);
+        int RemoveByUserId(int id);
     }
 }

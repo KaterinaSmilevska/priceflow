@@ -1,8 +1,6 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore;
 using PriceFlowApp.DTOs;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace PriceFlowApp.Services
 {
@@ -15,169 +13,11 @@ namespace PriceFlowApp.Services
             _securityFilterRepository = securityFilterRepository;
         }
 
-        public async Task<IEnumerable<FilteredSecurity>> FindLeastLiquidSecuritiesByNumTradingDaysAsync()
+        public IEnumerable<FilteredSecurity> FindMostProfitableSecuritiesByDividendYield()
         {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.GetLeastLiquidSecuritiesByNumTradingDaysAsync();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetMostProfitableSecuritiesByDividendYield();
 
-            return securities.Select(s =>
-            {
-                int numTradingDays = s.DnevenPromet
-                .Count(dp => dp.KolicinaIstrguvaniAkcii > 0);
-
-                return new FilteredSecurity
-                {
-                    SecurityId = s.Id,
-                    SecurityCode = s.Kod,
-                    Value = numTradingDays
-                };
-            })
-            .Where(x => x.Value > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<FilteredSecurity>> FindLeastLiquidSecuritiesByTradedQuantityAsync()
-        {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.GetLeastLiquidSecuritiesByTradedQuantityAsync();
-
-            DateTime latestDate = await _securityFilterRepository.GetLatestDateAsync();
-
-            return securities.Select(s =>
-            {
-                int? tradedQuantity = s.DnevenPromet
-                    .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0)
-                    .Select(dp => dp.KolicinaIstrguvaniAkcii)
-                    .FirstOrDefault();
-
-                return new FilteredSecurity
-                {
-                    SecurityId = s.Id,
-                    SecurityCode = s.Kod,
-                    Value = tradedQuantity
-                };
-            })
-            .Where(x => x.Value > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<FilteredSecurity>> FindMostLiquidSecuritiesByNumTradingDaysAsync()
-        {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.GetMostLiquidSecuritiesByNumTradingDaysAsync();
-
-            return securities.Select(s =>
-            {
-                int numTradingDays = s.DnevenPromet
-                .Count(dp => dp.KolicinaIstrguvaniAkcii > 0);
-
-                return new FilteredSecurity
-                {
-                    SecurityId = s.Id,
-                    SecurityCode = s.Kod,
-                    Value = numTradingDays
-                };
-            })
-            .Where(x => x.Value > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<FilteredSecurity>> FindMostLiquidSecuritiesByTradedQuantityAsync()
-        {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.GetMostLiquidSecuritiesByTradedQuantityAsync();
-
-            DateTime latestDate = await _securityFilterRepository.GetLatestDateAsync();
-
-            return securities.Select(s =>
-            {
-                int? tradedQuantity = s.DnevenPromet
-                    .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0)
-                    .Select(dp => dp.KolicinaIstrguvaniAkcii)
-                    .FirstOrDefault();
-
-                return new FilteredSecurity
-                {
-                    SecurityId = s.Id,
-                    SecurityCode = s.Kod,
-                    Value = tradedQuantity
-                };
-            })
-            .Where(x => x.Value > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<Sector>> FindMostProfitableSectorsByDividendYieldAsync()
-        {
-            IEnumerable<Sektori> sectors = await _securityFilterRepository.GetMostProfitableSectorsByDividendYieldAsync();
-
-            int latestYear = await _securityFilterRepository.GetLatestYearAsync();
-            return sectors.Select(s =>
-            {
-                decimal dividendYield = s.Izdavachi
-                .SelectMany(i => i.FinansiskiPokazateli)
-                .Where(fp => fp.Godina == latestYear && fp.DividendenPrinos != null)
-                .Sum(fp => fp.DividendenPrinos ?? 0);
-
-                return new Sector
-                {
-                    SectorId = s.Id,
-                    SectorName = s.Ime,
-                    TotalValue = dividendYield
-                };
-            })
-            .Where(x => x.TotalValue > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<Sector>> FindMostProfitableSectorsByProfitAsync()
-        {
-            IEnumerable<Sektori> sectors = await _securityFilterRepository.GetMostProfitableSectorsByProfitAsync();
-
-            int latestYear = await _securityFilterRepository.GetLatestYearAsync();
-            return sectors.Select(s =>
-            {
-                decimal profit = s.Izdavachi
-                .SelectMany(i => i.FinansiskiPokazateli)
-                .Where(fp => fp.Godina == latestYear && fp.OperativnaDobivka != null && fp.OperativnaDobivka > 0)
-                .Sum(fp => fp.OperativnaDobivka ?? 0);
-
-                return new Sector
-                {
-                    SectorId = s.Id,
-                    SectorName = s.Ime,
-                    TotalValue = profit
-                };
-            })
-            .Where(x => x.TotalValue > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<FilteredSecurity>> FindMostProfitableSecuritiesByDividendPerShareAsync()
-        {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.GetMostProfitableSecuritiesByDividendPerShareAsync();
-
-            int latestYear = await _securityFilterRepository.GetLatestYearAsync();
-
-            return securities.Select(s =>
-            {
-                decimal? dividendPerShare = s.Izdavach.FinansiskiPokazateli
-                     .Where(fp => fp.Godina == latestYear && fp.DividendaPoAkcija != null && fp.DividendaPoAkcija != 0)
-                     .Select(fp => fp.DividendaPoAkcija)
-                     .FirstOrDefault();
-
-                return new FilteredSecurity
-                {
-                    SecurityId = s.Id,
-                    SecurityCode = s.Kod,
-                    Value = dividendPerShare
-                };
-            })
-            .Where(x => x.Value > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<FilteredSecurity>> FindMostProfitableSecuritiesByDividendYieldAsync()
-        {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.GetMostProfitableSecuritiesByDividendYieldAsync();
-
-            int latestYear = await _securityFilterRepository.GetLatestYearAsync();
+            int latestYear = _securityFilterRepository.GetLatestYear();
 
             return securities.Select(s =>
             {
@@ -197,13 +37,225 @@ namespace PriceFlowApp.Services
             .ToList();
         }
 
-        public async Task<IEnumerable<FilteredSecurity>> FindSecuritiesValuationAsync()
+
+        public IEnumerable<FilteredSecurity> FindMostProfitableSecuritiesByDividendPerShare()
         {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.GetSecuritiesValuationAsync();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetMostProfitableSecuritiesByDividendPerShare();
 
-            int latestYear = await _securityFilterRepository.GetLatestYearAsync();
+            int latestYear = _securityFilterRepository.GetLatestYear();
 
-            DateTime latestDate = await _securityFilterRepository.GetLatestDateAsync();
+            return securities.Select(s =>
+            {
+                decimal? dividendPerShare = s.Izdavach.FinansiskiPokazateli
+                     .Where(fp => fp.Godina == latestYear && fp.DividendaPoAkcija != null && fp.DividendaPoAkcija != 0)
+                     .Select(fp => fp.DividendaPoAkcija)
+                     .FirstOrDefault();
+
+                return new FilteredSecurity
+                {
+                    SecurityId = s.Id,
+                    SecurityCode = s.Kod,
+                    Value = dividendPerShare
+                };
+            })
+            .Where(x => x.Value > 0)
+            .ToList();
+        }
+
+
+        public IEnumerable<FilteredSecurity> FindSecuritiesWithBiggestPriceOscillations()
+        {
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetSecuritiesWithBiggestPriceOscillations();
+
+            DateTime latestDate = _securityFilterRepository.GetLatestDate();
+
+            return securities.Select(s =>
+            {
+                decimal priceOscillation = s.DnevenPromet
+                .Where(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null
+                    && (dp.MaxCena - dp.MinCena) > 0)
+                .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
+                .FirstOrDefault();
+
+                return new FilteredSecurity
+                {
+                    SecurityId = s.Id,
+                    SecurityCode = s.Kod,
+                    Value = priceOscillation
+                };
+            })
+            .Where(x => x.Value > 0)
+            .ToList();
+        }
+
+        public IEnumerable<FilteredSecurity> FindSecuritiesWithSmallestPriceOscillations()
+        {
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetSecuritiesWithSmallestPriceOscillations();
+
+            DateTime latestDate = _securityFilterRepository.GetLatestDate();
+
+            return securities.Select(s =>
+            {
+                decimal priceOscillation = s.DnevenPromet
+                .Where(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null
+                    && (dp.MaxCena - dp.MinCena) > 0)
+                .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
+                .FirstOrDefault();
+
+                return new FilteredSecurity
+                {
+                    SecurityId = s.Id,
+                    SecurityCode = s.Kod,
+                    Value = Math.Round(priceOscillation, 4)
+                };
+            })
+            .Where(x => x.Value > 0)
+            .ToList();
+        }
+
+        public IEnumerable<FilteredSecurity> FindLeastLiquidSecuritiesByTradedQuantity()
+        {
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetLeastLiquidSecuritiesByTradedQuantity();
+
+            DateTime latestDate = _securityFilterRepository.GetLatestDate();
+
+            return securities.Select(s =>
+            {
+                int? tradedQuantity = s.DnevenPromet
+                    .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0)
+                    .Select(dp => dp.KolicinaIstrguvaniAkcii)
+                    .FirstOrDefault();
+
+                return new FilteredSecurity
+                {
+                    SecurityId = s.Id,
+                    SecurityCode = s.Kod,
+                    Value = tradedQuantity
+                };
+            })
+            .Where(x => x.Value > 0)
+            .ToList();
+        }
+
+        public IEnumerable<FilteredSecurity> FindMostLiquidSecuritiesByTradedQuantity()
+        {
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetMostLiquidSecuritiesByTradedQuantity();
+
+            DateTime latestDate = _securityFilterRepository.GetLatestDate();
+
+            return securities.Select(s =>
+            {
+                int? tradedQuantity = s.DnevenPromet
+                    .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii > 0)
+                    .Select(dp => dp.KolicinaIstrguvaniAkcii)
+                    .FirstOrDefault();
+
+                return new FilteredSecurity
+                {
+                    SecurityId = s.Id,
+                    SecurityCode = s.Kod,
+                    Value = tradedQuantity
+                };
+            })
+            .Where(x => x.Value > 0)
+            .ToList();
+        }
+
+        public IEnumerable<FilteredSecurity> FindLeastLiquidSecuritiesByNumTradingDays()
+        {
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetLeastLiquidSecuritiesByNumTradingDays();
+
+            return securities.Select(s =>
+            {
+                int numTradingDays = s.DnevenPromet
+                .Count(dp => dp.KolicinaIstrguvaniAkcii > 0);
+
+                return new FilteredSecurity
+                {
+                    SecurityId = s.Id,
+                    SecurityCode = s.Kod,
+                    Value = numTradingDays
+                };
+            })
+            .Where(x => x.Value > 0)
+            .ToList();
+        }
+
+        public IEnumerable<FilteredSecurity> FindMostLiquidSecuritiesByNumTradingDays()
+        {
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetMostLiquidSecuritiesByNumTradingDays();
+
+            return securities.Select(s =>
+            {
+                int numTradingDays = s.DnevenPromet
+                .Count(dp => dp.KolicinaIstrguvaniAkcii > 0);
+
+                return new FilteredSecurity
+                {
+                    SecurityId = s.Id,
+                    SecurityCode = s.Kod,
+                    Value = numTradingDays
+                };
+            })
+            .Where(x => x.Value > 0)
+            .ToList();
+        }
+
+        public IEnumerable<Sector> FindMostProfitableSectorsByDividendYield()
+        {
+            IEnumerable<Sektori> sectors = _securityFilterRepository.GetMostProfitableSectorsByDividendYield();
+
+            int latestYear = _securityFilterRepository.GetLatestYear();
+
+            return sectors.Select(s =>
+            {
+                decimal dividendYield = s.Izdavachi
+                .SelectMany(i => i.FinansiskiPokazateli)
+                .Where(fp => fp.Godina == latestYear && fp.DividendenPrinos != null)
+                .Sum(fp => fp.DividendenPrinos ?? 0);
+
+                return new Sector
+                {
+                    Id = s.Id,
+                    Name = s.Ime,
+                    TotalValue = dividendYield
+                };
+            })
+            .Where(x => x.TotalValue > 0)
+            .ToList();
+        }
+
+        public IEnumerable<Sector> FindMostProfitableSectorsByProfit()
+        {
+            IEnumerable<Sektori> sectors = _securityFilterRepository.GetMostProfitableSectorsByProfit();
+
+            int latestYear = _securityFilterRepository.GetLatestYear();
+
+            return sectors.Select(s =>
+            {
+                decimal profit = s.Izdavachi
+                .SelectMany(i => i.FinansiskiPokazateli)
+                .Where(fp => fp.Godina == latestYear && fp.OperativnaDobivka != null && fp.OperativnaDobivka > 0)
+                .Sum(fp => fp.OperativnaDobivka ?? 0);
+
+                return new Sector
+                {
+                    Id = s.Id,
+                    Name = s.Ime,
+                    TotalValue = profit
+                };
+            })
+            .Where(x => x.TotalValue > 0)
+            .ToList();
+        }
+
+        public IEnumerable<FilteredSecurity> FindSecuritiesValuation()
+        {
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetSecuritiesValuation();
+
+            int latestYear = _securityFilterRepository.GetLatestYear();
+
+            DateTime latestDate = _securityFilterRepository.GetLatestDate();
 
             return securities.Select(s =>
             {
@@ -224,58 +276,6 @@ namespace PriceFlowApp.Services
                     SecurityId = s.Id,
                     SecurityCode = s.Kod,
                     Value = valuation
-                };
-            })
-            .Where(x => x.Value > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<FilteredSecurity>> FindSecuritiesWithBiggestPriceOscillationsAsync()
-        {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.GetSecuritiesWithBiggestPriceOscillationsAsync();
-
-            DateTime latestDate = await _securityFilterRepository.GetLatestDateAsync();
-
-            return securities.Select(s =>
-            {
-                decimal priceOscillation = s.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null 
-                    && (dp.MaxCena - dp.MinCena) > 0)
-                .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
-                .FirstOrDefault();
-
-
-                return new FilteredSecurity
-                {
-                    SecurityId = s.Id,
-                    SecurityCode = s.Kod,
-                    Value = priceOscillation
-                };
-            })
-            .Where(x => x.Value > 0)
-            .ToList();
-        }
-
-        public async Task<IEnumerable<FilteredSecurity>> FindSecuritiesWithSmallestPriceOscillationsAsync()
-        {
-            IEnumerable<HartiiOdVrednost> securities = await _securityFilterRepository.GetSecuritiesWithSmallestPriceOscillationsAsync();
-
-            DateTime latestDate = await _securityFilterRepository.GetLatestDateAsync();
-
-            return securities.Select(s =>
-            {
-                decimal priceOscillation = s.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.MaxCena != null && dp.MinCena != null
-                    && (dp.MaxCena - dp.MinCena) > 0)
-                .Select(dp => (dp.MaxCena ?? 0) - (dp.MinCena ?? 0))
-                .FirstOrDefault();
-
-
-                return new FilteredSecurity
-                {
-                    SecurityId = s.Id,
-                    SecurityCode = s.Kod,
-                    Value = Math.Round(priceOscillation, 4)
                 };
             })
             .Where(x => x.Value > 0)

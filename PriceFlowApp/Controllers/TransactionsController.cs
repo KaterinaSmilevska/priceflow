@@ -8,7 +8,7 @@ namespace PriceFlowApp.Controllers
     [ApiController]
     [Route("api/portfolios/{portfolioId}/[controller]")]
     [Authorize(Roles = "Инвеститор")]
-    public class TransactionsController: ControllerBase
+    public class TransactionsController: PriceFlowController
     {
         private readonly ITransactionsService _transactionsService;
         private readonly IPortfolioValueService _portfolioValueService;
@@ -20,125 +20,55 @@ namespace PriceFlowApp.Controllers
         } 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int portfolioId)
+        public ActionResult<IEnumerable<Transaction>> GetAll(int portfolioId)
         {
-            try
-            {
-                IEnumerable<Transaction> transactions = await _transactionsService.FindByPortfolioIdAsync(portfolioId);
-                return Ok(transactions);
-            }
-            catch (Exception ex)
-             {
-                    return StatusCode(500, new { message = "Error fetching transactions for portfolio.", detail = ex.Message });
-             }
-         }
+            return Execute(() => _transactionsService.FindByPortfolioId(portfolioId));
+        }
 
         [HttpGet("owned-shares")]
-        public async Task<ActionResult<int>> GetOwnedShares(int portfolioId, [FromQuery] string code, [FromQuery] bool isReal)
+        public ActionResult<int> GetOwnedShares(int portfolioId, [FromQuery] string securityCode, [FromQuery] bool isReal)
         {
-            try
-            {
-                int ownedShares = await _transactionsService.FindOwnedSharesAsync(portfolioId, code, isReal);
-                return Ok(ownedShares);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching number of owned shares.", detail = ex.Message });
-            }
+            return Execute(() => _transactionsService.FindOwnedShares(portfolioId, securityCode, isReal));
         }
 
 
         [HttpGet("owned-shares-date")]
-        public async Task<ActionResult<int>> GetOwnedSharesAtDate(int portfolioId, [FromQuery] string code, [FromQuery] bool isReal, [FromQuery] DateOnly date)
+        public ActionResult<int> GetOwnedSharesAtDate(int portfolioId, [FromQuery] string securityCode, [FromQuery] bool isReal, [FromQuery] DateOnly date, [FromQuery] int? transactionIdToExclude)
         {
-            try
-            {
-                int ownedSharesAtDate = await _transactionsService.FindOwnedSharesAtDateAsync(portfolioId, code, isReal, date);
-                return Ok(ownedSharesAtDate);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching number of owned shares at the specified date.", detail = ex.Message });
-            }
+            return Execute(() => _transactionsService.FindOwnedSharesAtDate(portfolioId, securityCode, isReal, date, transactionIdToExclude));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(int portfolioId, [FromBody] Transaction transaction)
+        public ActionResult<Transaction> Add(int portfolioId, [FromBody] Transaction transaction)
         {
-            try
-            {
-                Transaction createdTransaction = await _transactionsService.AddAsync(portfolioId, transaction);
-                return Ok(createdTransaction);
-            }
-            catch(InvalidOperationException ex)
-            {
-                return BadRequest(new {message = ex.Message});
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error adding transaction to portfolio.", detail = ex.Message });
-            }
+            return Execute(() => _transactionsService.Add(portfolioId, transaction));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int portfolioId, int id, [FromBody] Transaction transaction)
+        public ActionResult<Transaction> Update(int portfolioId, int id, [FromBody] Transaction transaction)
         {
-            try
-            {
-                Transaction updatedTransaction = await _transactionsService.UpdateAsync(id, transaction);
-                return Ok(updatedTransaction);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error updating transaction in portfolio.", detail = ex.Message });
-            }
+            if(id != transaction.Id)
+                return BadRequest(new { message = "Transaction id mismatch." });
+
+            return Execute(() => _transactionsService.Update(portfolioId, id, transaction));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int portfolioId, int id)
+        public ActionResult<Transaction> Delete(int id)
         {
-            try
-            {
-                await _transactionsService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error deleting transaction from portfolio.", detail = ex.Message });
-            }
+            return Execute(() => _transactionsService.Delete(id));
         }
 
-
         [HttpGet("analytics")]
-        public async Task<IActionResult> GetAnalytics(int portfolioId, [FromQuery] bool isReal)
+        public ActionResult<PortfolioAnalytics> GetAnalytics(int portfolioId, [FromQuery] bool isReal)
         {
-            try
-            {
-                PortfolioAnalytics analytics = await _transactionsService.GetAnalyticsAsync(portfolioId, isReal);
-                return Ok(analytics);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching portfolio analytics", detail = ex.Message });
-            }
+            return Execute(() => _transactionsService.GetAnalytics(portfolioId, isReal));
         }
 
         [HttpGet("value")]
-        public async Task<ActionResult<List<PortfolioValue>>> GetPortfolioValue(int portfolioId, [FromQuery] bool isReal)
+        public ActionResult<IEnumerable<PortfolioValue>> GetPortfolioValue(int portfolioId, [FromQuery] bool isReal)
         {
-            try
-            {
-                List<PortfolioValue> result = await _portfolioValueService.GetCurrentValueAsync(portfolioId, isReal);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error fetching portfolio value.", detail = ex.Message });
-            }
+            return Execute(() => _portfolioValueService.GetCurrentValue(portfolioId, isReal));
         }
     }
 }

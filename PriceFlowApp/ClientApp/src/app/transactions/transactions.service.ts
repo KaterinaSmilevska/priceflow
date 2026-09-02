@@ -38,8 +38,8 @@ export class TransactionsService {
     );
   }
 
-  delete(portfolioId: number, transactionId: number): Observable<void> {
-    return this.http.delete<void>(
+  delete(portfolioId: number, transactionId: number): Observable<Transaction> {
+    return this.http.delete<Transaction>(
       `${this.apiUrl}/${portfolioId}/transactions/${transactionId}`,
       { withCredentials: true }
     );
@@ -54,9 +54,14 @@ export class TransactionsService {
       { params: { code, isReal }, withCredentials: true });
   }
 
-  getOwnedSharesAtDate(portfolioId: number, code: string, isReal: boolean, date: string) {
+  getOwnedSharesAtDate(portfolioId: number, code: string, isReal: boolean, date: string, transactionIdToExclude?: number) {
+    const params: any = { code, isReal, date };
+
+    if (transactionIdToExclude !== undefined) {
+      params.transactionIdToExclude = transactionIdToExclude;
+    }
     return this.http.get<number>(`${this.apiUrl}/${portfolioId}/transactions/owned-shares-date`,
-      { params: { code, isReal, date }, withCredentials: true });
+      { params, withCredentials: true });
   }
 
   getTotalShares(code: string) {

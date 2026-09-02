@@ -24,6 +24,8 @@ export class NavMenuComponent implements OnInit {
   isAdmin$: Observable<boolean>
   private previousLoginState = false;
 
+  isEnglish = false;
+
   notifications: PriceChangeNotification[] = [];
   unreadCount = 0;
   showDropdown = false;
@@ -34,7 +36,13 @@ export class NavMenuComponent implements OnInit {
       map(roles => roles.includes('Администратор')));
   }
 
-   ngOnInit(): void {
+  ngOnInit(): void {
+    this.isEnglish = this.translateService.getCurrentLang() === 'en';
+
+    this.translateService.onLangChange.subscribe(event => {
+      this.isEnglish = event.lang === 'en';
+    });
+
      this.loginService.isLoggedIn().subscribe(currentState => {
        if (this.previousLoginState != currentState) {
          if (currentState) {
@@ -90,9 +98,7 @@ export class NavMenuComponent implements OnInit {
   }
 
   toggleLanguage() {
-    const current = this.translateService.getCurrentLang();
-
-    const next = current === 'en' ? 'mk' : 'en';
+    const next = this.isEnglish ? 'mk' : 'en';
 
     this.translateService.use(next);
     localStorage.setItem('lang', next);

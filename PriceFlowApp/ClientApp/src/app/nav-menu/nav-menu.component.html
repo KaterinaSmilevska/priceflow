@@ -47,7 +47,7 @@
           <li *ngIf="(loginService.isLoggedIn() | async) && (loginService.isAnalyst() | async)" class="nav-item">
             <a class="nav-link text-white fw-bold"
                routerLink="/security-filter"
-               routerLinkActive="active-link">{{ 'MARKET_DASHBOARD' | translate }}</a>
+               routerLinkActive="active-link">{{ 'ADVANCED_ANALYTICS' | translate }}</a>
           </li>
         </ul>
 
@@ -80,7 +80,7 @@
 
           <div class="language-switch-container">
             <label class="language-switch">
-              <input type="checkbox" id="languageToggle" (change)="toggleLanguage()">
+              <input type="checkbox" id="languageToggle" [checked]="isEnglish" (change)="toggleLanguage()">
               <span class="language-slider"></span>
             </label>
           </div>

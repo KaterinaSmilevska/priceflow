@@ -39,6 +39,7 @@ export class RegisterComponent implements OnInit {
   roleNames: string[] = [];
   response: RegisterResponse | null = null;
   generalError: string | null = null;
+  nameError: string | null = null;
   usernameError: string | null = null;
   emailError: string | null = null;
   passwordError: string | null = null;
@@ -59,68 +60,106 @@ export class RegisterComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  validateName(): void {
+    const name = this.name.trim();
+    if (name === '') {
+      this.nameError = 'ERRORS.NAME_VALIDATION_REQUIRED';
+    } else {
+      this.nameError = null;
+    }
+  }
+
   validateUsername(): void {
-    if (this.username.trim() === '') {
-      this.usernameError = null;
+    const username = this.username.trim();
+    if (username === '') {
+      this.usernameError = 'ERRORS.USERNAME_VALIDATION_REQUIRED';
       this.isUsernameValid = false;
       return;
     }
-    this.registerService.checkUsername(this.username).subscribe({
+    this.registerService.checkUsername(username).subscribe({
       next: (response: UsernameCheckResponse) => {
         this.isUsernameValid = !response.exists;
-        this.usernameError = response.exists ? 'USERS.USERNAME_TAKEN' : null;
+        this.usernameError = response.exists ? 'ERRORS.USERNAME_ALREADY_EXISTS' : null;
       },
       error: (err: any) => {
         this.isUsernameValid = true;
-        this.usernameError = 'USERS.USERNAME_CHECK_ERROR';
+        this.usernameError = `ERRORS.${err.error.code}`;
       }
     });
   }
 
   validateEmail(): void {
     if (this.email.trim() === '') {
-      this.emailError = null;
+      this.emailError = 'ERRORS.EMAIL_VALIDATION_REQUIRED';
       this.isEmailValid = false;
       return;
     }
     this.registerService.validateEmail({ email: this.email }).subscribe({
       next: (response: EmailValidationResponse) => {
         this.isEmailValid = response.isValid;
-        this.emailError = response.isValid ? null : response.message;
+        this.emailError = response.isValid ? null : `ERRORS.${response.code}`;
       },
       error: (err: any) => {
-        this.isEmailValid = true;
-        this.emailError = 'USERS.EMAIL_VALIDATION_ERROR';
+        this.isEmailValid = false;
+        this.emailError = err.error?.code ? `ERRORS.${err.error.code}` : 'ERRORS.EMAIL_VALIDATION_REQUIRED';
       }
     });
   }
 
   validatePassword(): void {
-    if (this.password.trim() === '' || this.confirmPassword.trim() === '') {
-      this.passwordError = null;
-      this.confirmPasswordError = null;
+    const password = this.password.trim();
+    const confirmPassword = this.confirmPassword.trim();
+
+    this.passwordError = null;
+    this.confirmPasswordError = null;
+
+    if (password === '') {
+      this.passwordError = 'ERRORS.PASSWORD_VALIDATION_REQUIRED';
       this.isPasswordValid = false;
+
+      if (confirmPassword === '') {
+        this.confirmPasswordError = 'ERRORS.PASSWORD_VALIDATION_REQUIRED';
+      }
       return;
     }
+
+    if (confirmPassword === '') {
+      this.confirmPasswordError = 'ERRORS.PASSWORD_VALIDATION_REQUIRED';
+      this.isPasswordValid = false;
+
+      this.registerService.validatePassword({ password: this.password, confirmPassword: this.confirmPassword }).subscribe({
+        next: (response: PasswordValidationResponse) => {
+          if (!response.isValid && response.code !== 'PASSWORD_MISMATCH') {
+            this.passwordError = `ERRORS.${response.code}`;
+          }
+         }
+        });
+      return;
+    }
+
     this.registerService.validatePassword({ password: this.password, confirmPassword: this.confirmPassword }).subscribe({
       next: (response: PasswordValidationResponse) => {
-        this.isPasswordValid = response.isValid;
-        if (!response.isValid) {
-          if (response.message.includes('do not match')) {
-            this.passwordError = null;
-            this.confirmPasswordError = response.message;
-          } else {
-            this.passwordError = response.message;
-            this.confirmPasswordError = null;
-          }
-        } else {
+        if (response.isValid) {
           this.passwordError = null;
+          this.confirmPasswordError = null;
+          this.isPasswordValid = true;
+          return;
+        }
+
+        this.isPasswordValid = false;
+
+        if (response.code === 'PASSWORD_MISMATCH') {
+          this.passwordError = null;
+          this.confirmPasswordError = `ERRORS.${response.code}`;
+        } else {
+          this.passwordError = `ERRORS.${response.code}`;
           this.confirmPasswordError = null;
         }
       },
       error: (err: any) => {
-        this.isPasswordValid = true;
-        this.passwordError = 'USERS.PASSWORD_VALIDATION_ERROR';
+        this.isPasswordValid = false;
+        this.passwordError = err.error?.code
+        ? `ERRORS.${err.error.code}` : 'ERRORS.PASSWORD_VALIDATION_REQUIRED';
         this.confirmPasswordError = null;
       }
     });
@@ -138,13 +177,14 @@ export class RegisterComponent implements OnInit {
       this.password.trim() !== '' &&
       this.confirmPassword.trim() !== '' &&
       this.roleNames.length > 0 &&
+      this.isUsernameValid &&
       this.isEmailValid &&
       this.isPasswordValid;
   }
 
   register(): void {
     if (!this.isFormValid()) {
-      this.generalError = 'Please fill all fields correctly and select at least one task.';
+      this.generalError = 'ERRORS.INVALID_REGISTER_FORM';
       return;
     }
 
@@ -166,7 +206,9 @@ export class RegisterComponent implements OnInit {
       },
       error: (err: any) => {
         this.response = null;
-        this.generalError = err.error?.message || 'AUTH.REGISTER_ERROR';
+        this.generalError = err.error?.code
+          ? `ERRORS.${err.error.code}`
+        : `ERRORS.REGISTER_ERROR`
       }
     });
   }

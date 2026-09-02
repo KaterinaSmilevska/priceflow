@@ -1,10 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -12,17 +7,23 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public UsersRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
-
-        public async Task<IEnumerable<Korisnici>> GetAllAsync()
+        public UsersRepository(PriceFlowDbContext dbContext)
         {
-            return await _dbContext.Korisnici.ToListAsync();
+            _dbContext = dbContext;
         }
 
-        public async Task UpdateAsync(Korisnici user)
+        public Korisnici Update(Korisnici user)
         {
             _dbContext.Korisnici.Update(user);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
+            return user;
+        }
+
+        public IEnumerable<Korisnici> GetAll()
+        {
+            return _dbContext.Korisnici
+                .ToList();
         }
     }
 }

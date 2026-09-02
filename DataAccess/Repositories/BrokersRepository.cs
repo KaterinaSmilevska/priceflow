@@ -1,10 +1,4 @@
 ﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -12,46 +6,50 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public BrokersRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
-
-        public async Task<Brokeri?> GetByIdAsync(int id)
+        public BrokersRepository(PriceFlowDbContext dbContext)
         {
-            return await _dbContext.Brokeri
-                .FindAsync(id);
+            _dbContext = dbContext;
         }
 
-        public async Task<Brokeri?> GetByCompanyAsync(string company)
+        public Brokeri? GetById(int id)
         {
-            return await _dbContext.Brokeri
-                .FirstOrDefaultAsync(b => b.Kompanija == company);
+            return _dbContext.Brokeri
+                .Find(id);
         }
 
-        public async Task<IEnumerable<Brokeri>> GetAllAsync()
+        public Brokeri? GetByCompany(string company)
         {
-            return await _dbContext.Brokeri
-                .ToListAsync();
+            return _dbContext.Brokeri
+                .FirstOrDefault(b => b.Kompanija == company);
         }
 
-        public async Task UpdateAsync(Brokeri broker)
+        public IEnumerable<Brokeri> GetAll()
+        {
+            return _dbContext.Brokeri
+                .ToList();
+        }
+
+        public Brokeri Add(Brokeri broker)
+        {
+            _dbContext.Brokeri.Add(broker);
+            _dbContext.SaveChanges();
+
+            return broker;
+        }
+
+        public Brokeri Update(Brokeri broker)
         {
             _dbContext.Brokeri.Update(broker);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
+            return broker;
         }
 
-        public async Task DeleteAsync(int id)
+        public Brokeri Delete(Brokeri broker)
         {
-            Brokeri? broker = await _dbContext.Brokeri.FindAsync(id);
-            if (broker != null)
-            {
-                _dbContext.Brokeri.Remove(broker);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
+            _dbContext.Brokeri.Remove(broker);
+            _dbContext.SaveChanges();
 
-        public async Task<Brokeri> AddAsync(Brokeri broker)
-        {
-            await _dbContext.Brokeri.AddAsync(broker);
-            await _dbContext.SaveChangesAsync();
             return broker;
         }
     }

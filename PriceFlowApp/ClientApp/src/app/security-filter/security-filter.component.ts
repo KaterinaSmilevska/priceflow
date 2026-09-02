@@ -1,25 +1,30 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SecurityFilterService } from './security-filter.service';
 import { ChartConfiguration } from 'chart.js';
 import { FormsModule } from '@angular/forms';
-import { BaseChartDirective } from 'ng2-charts';
-import { Observable } from 'rxjs';
-import { TranslateModule } from '@ngx-translate/core';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { Observable, Subscription } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { SectorsTranslatePipe } from '../shared/sectors-translate.pipe';
 
 @Component({
   selector: 'app-security-filter',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule],
+  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule, SectorsTranslatePipe],
   templateUrl: './security-filter.component.html',
   styleUrl: './security-filter.component.css',
 })
-export class SecurityFilterComponent implements OnInit {
+export class SecurityFilterComponent implements OnInit, OnDestroy {
   data: any[] = [];
   loading = false;
   error = '';
   private _topN = 10;
   selectedMetric = '';
+
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  private langSubscription?: Subscription;
 
   chartData: ChartConfiguration<'bar'>['data'] = {
     labels: [],
@@ -55,11 +60,19 @@ export class SecurityFilterComponent implements OnInit {
     }
   };
 
-  constructor(private securityFilterService: SecurityFilterService) { }
+  constructor(private securityFilterService: SecurityFilterService, private translateService: TranslateService,
+    private sectorsTranslatePipe: SectorsTranslatePipe) { }
 
   ngOnInit(): void {
     this.selectedMetric = 'Market price : Book value';
     this.loadMetric(this.selectedMetric);
+    this.langSubscription = this.translateService.onLangChange.subscribe(() => {
+      this.prepareChart();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.langSubscription?.unsubscribe();
   }
 
   get topN(): number {
@@ -134,20 +147,63 @@ export class SecurityFilterComponent implements OnInit {
   prepareChart() {
     const values = this.data.map(x => x.value ?? x.totalValue);
 
-    this.chartData.labels = this.data.map(x => x.securityCode || x.sectorName);
+    this.chartData.labels = this.data.map(x => x.securityCode ||
+      this.translateService.instant(this.sectorsTranslatePipe.transform(x.sectorName)));
 
     this.chartData.datasets[0].data = values;
 
-    this.chartData.datasets[0].label = this.selectedMetric;
+    this.chartData.datasets[0].label = this.translateService.instant(this.getMetricTranslationKey(this.selectedMetric));
 
     if (this.selectedMetric === 'Market price : Book value') {
       this.chartData.datasets[0].backgroundColor = values.map(v => {
-        if (v > 1) return '#dc2626';
-        if (v < 1) return '#16a34a';
+        if (v > 1.05) return '#dc2626';
+        if (v < 0.95) return '#16a34a';
         return '#6b7280';
       });
     } else {
       this.chartData.datasets[0].backgroundColor = '#87ceeb';
+    }
+
+    this.chart?.update();
+  }
+
+  getMetricTranslationKey(metric: string): string {
+    switch (metric) {
+      case 'mostProfitableSecuritiesByDividendYield':
+        return 'METRIC.MOST_PROFITABLE_SECURITIES_DIVIDEND_YIELD';
+
+      case 'mostProfitableSecuritiesByDividendPerShare':
+        return 'METRIC.MOST_PROFITABLE_SECURITIES_DIVIDEND_PER_SHARE';
+
+      case 'securitiesWithBiggestPriceOscillations':
+        return 'METRIC.BIGGEST_PRICE_OSCILLATIONS';
+
+      case 'securitiesWithSmallestPriceOscillations':
+        return 'METRIC.SMALLEST_PRICE_OSCILLATIONS';
+
+      case 'mostLiquidSecuritiesByTradedQuantity':
+        return 'METRIC.MOST_LIQUID_SECURITIES_TRADED_QTY';
+
+      case 'leastLiquidSecuritiesByNumTradedQuantity':
+        return 'METRIC.LEAST_LIQUID_SECURITIES_TRADED_QTY';
+
+      case 'mostLiquidSecuritiesByNumTradingDays':
+        return 'METRIC.MOST_LIQUID_SECURITIES_TRADING_DAYS';
+
+      case 'leastLiquidSecuritiesByNumTradingDays':
+        return 'METRIC.LEAST_LIQUID_SECURITIES_TRADING_DAYS';
+
+      case 'mostProfitableSectorsByDividendYield':
+        return 'METRIC.MOST_PROFITABLE_SECTORS_DIVIDEND_YIELD';
+
+      case 'mostProfitableSectorsByProfit':
+        return 'METRIC.MOST_PROFITABLE_SECTORS_PROFIT';
+
+      case 'Market price : Book value':
+        return 'METRIC.SECURITIES_VALUATION';
+
+      default:
+        return metric;
     }
   }
 
@@ -157,10 +213,10 @@ export class SecurityFilterComponent implements OnInit {
     }
     const value = item.value || item.totalValue;
 
-    if (value > 1) {
+    if (value > 1.05) {
       return 'overvalued';
     }
-    if (value < 1) {
+    if (value < 0.95) {
       return 'undervalued';
     }
     return 'neutral';

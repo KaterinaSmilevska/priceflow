@@ -1,38 +1,33 @@
 ﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface ISecurityFilterRepository
     {
-        Task<IEnumerable<HartiiOdVrednost>> GetMostProfitableSecuritiesByDividendYieldAsync();
+        IEnumerable<HartiiOdVrednost> GetMostProfitableSecuritiesByDividendYield();
 
-        Task<IEnumerable<HartiiOdVrednost>> GetMostProfitableSecuritiesByDividendPerShareAsync();
+        IEnumerable<HartiiOdVrednost> GetMostProfitableSecuritiesByDividendPerShare();
 
-        Task<IEnumerable<HartiiOdVrednost>> GetSecuritiesWithBiggestPriceOscillationsAsync();
+        IEnumerable<HartiiOdVrednost> GetSecuritiesWithBiggestPriceOscillations();
 
-        Task<IEnumerable<HartiiOdVrednost>> GetSecuritiesWithSmallestPriceOscillationsAsync();
+        IEnumerable<HartiiOdVrednost> GetSecuritiesWithSmallestPriceOscillations();
 
-        Task<IEnumerable<HartiiOdVrednost>> GetLeastLiquidSecuritiesByTradedQuantityAsync();
+        IEnumerable<HartiiOdVrednost> GetLeastLiquidSecuritiesByTradedQuantity();
 
-        Task<IEnumerable<HartiiOdVrednost>> GetMostLiquidSecuritiesByTradedQuantityAsync();
+        IEnumerable<HartiiOdVrednost> GetMostLiquidSecuritiesByTradedQuantity();
 
-        Task<IEnumerable<HartiiOdVrednost>> GetMostLiquidSecuritiesByNumTradingDaysAsync();
+        IEnumerable<HartiiOdVrednost> GetLeastLiquidSecuritiesByNumTradingDays();
 
-        Task<IEnumerable<HartiiOdVrednost>> GetLeastLiquidSecuritiesByNumTradingDaysAsync();
+        IEnumerable<HartiiOdVrednost> GetMostLiquidSecuritiesByNumTradingDays();
 
-        Task<IEnumerable<Sektori>> GetMostProfitableSectorsByDividendYieldAsync();
+        IEnumerable<Sektori> GetMostProfitableSectorsByDividendYield();
 
-        Task<IEnumerable<Sektori>> GetMostProfitableSectorsByProfitAsync();
+        IEnumerable<Sektori> GetMostProfitableSectorsByProfit();
 
-        Task<IEnumerable<HartiiOdVrednost>> GetSecuritiesValuationAsync();
+        IEnumerable<HartiiOdVrednost> GetSecuritiesValuation();
 
-        Task<int> GetLatestYearAsync();
+        DateTime GetLatestDate();
 
-        Task<DateTime> GetLatestDateAsync();
+        int GetLatestYear();
     }
 }

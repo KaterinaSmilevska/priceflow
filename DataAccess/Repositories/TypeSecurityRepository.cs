@@ -1,10 +1,4 @@
 ﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -12,17 +6,21 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public TypeSecurityRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
-
-        public async Task<IEnumerable<TipHv>> GetAllAsync()
+        public TypeSecurityRepository(PriceFlowDbContext dbContext)
         {
-            return await _dbContext.TipHv.ToListAsync();
+            _dbContext = dbContext;
         }
 
-        public async Task<TipHv?> GetByIdAsync(int id)
+        public TipHv? GetById(int id)
         {
-            return await _dbContext.TipHv
-                .FindAsync(id);
+            return _dbContext.TipHv
+                .Find(id);
+        }
+
+        public IEnumerable<TipHv> GetAll()
+        {
+            return _dbContext.TipHv
+                .ToList();
         }
     }
 }

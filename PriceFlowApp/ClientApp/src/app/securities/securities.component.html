@@ -5,12 +5,17 @@
     <button class="btn btn-success" (click)="openAddModal()">{{ 'ADD.ACTION_NAME' | translate }} {{ 'SECURITIES.TITLE' | translate }}</button>
   </div>
 
+  <div *ngIf="successMessage" class="success-message mb-2">{{ successMessage | translate }}</div>
+  <div *ngIf="errorMessage" class="error-message mt-2">
+    <p>{{ errorMessage | translate }}</p>
+  </div>
+
   <div class="search-panel mb-3">
     <div class="search-input-wrapper">
       <input type="text"
              placeholder="{{ 'SEARCH' | translate }} {{ 'BY' | translate }} {{ 'SECURITIES.CODE' | translate }}..."
              [(ngModel)]="searchTerm"
-             (input)="onSearch()"/>
+             (input)="onSearch()" />
       <button *ngIf="searchTerm"
               class="clear-btn"
               (click)="clearSearch()">
@@ -35,8 +40,8 @@
         <tr *ngFor="let sec of securities">
           <td>{{ sec.code }}</td>
           <td>{{ sec.isin }}</td>
-          <td>{{ sec.typeSecurityName }}</td>
-          <td>{{ sec.issuerName }}</td>
+          <td>{{ sec.typeSecurityName | dbTranslate | translate }}</td>
+          <td>{{ sec.issuerName | issuersTranslate | translate }}</td>
           <td>{{ sec.totalNumShares | number }}</td>
           <td *ngIf="isAdmin">
             <button class="btn btn-warning" (click)="openEditModal(sec)">{{ 'EDIT.ACTION_NAME' | translate }} </button>
@@ -45,18 +50,20 @@
         </tr>
       </tbody>
     </table>
+    <p class="mt-4 text-center">
+      <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
+    </p>
   </div>
 
   <ng-template #noData>
-    <p class="text-center text-muted mt-3">No securities available.</p>
+    <p class="text-center mt-3">{{ 'NO_SECURITIES_DATA_AVAILABLE' | translate }}</p>
   </ng-template>
 </div>
 
-<app-add-security
-  *ngIf="showEditModal"
-  [securityToEdit]="securityToEdit"
-  (close)="onModalClose($event)">
-</app-add-security>
+<app-security-form *ngIf="showEditModal"
+                  [securityToEdit]="securityToEdit"
+                  (close)="onModalClose($event)">
+</app-security-form>
 
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">
@@ -66,8 +73,8 @@
       <strong>{{ securityToDelete?.code }}</strong>?
     </p>
     <div class="modal-actions">
-      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }} </button>
       <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }} </button>
+      <button class="btn btn-danger" (click)="confirmDelete()">{{ 'DELETE.ACTION_NAME' | translate }} </button>
     </div>
   </div>
 </div>

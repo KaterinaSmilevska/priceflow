@@ -20,7 +20,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-//builder.Services.AddControllersWithViews();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -29,7 +28,6 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<PriceFlowDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PriceFlowDatabase")));
 
-//builder.Services.AddScoped<SessionHelper>();
 builder.Services.AddScoped<IBrokersRepository, BrokersRepository>();
 builder.Services.AddScoped<IBrokersService, BrokersService>();
 builder.Services.AddScoped<IRolesRepository, RolesRepository>();
@@ -65,17 +63,10 @@ builder.Services.AddScoped<IPortfoliosNotificationsService, PortfoliosNotificati
 builder.Services.AddHostedService<NotificationBackgroundService>();
 builder.Services.AddScoped<ISecurityFilterRepository, SecurityFilterRepository>();
 builder.Services.AddScoped<ISecurityFilterService, SecurityFilterService>();
+builder.Services.AddScoped<ISecurityPriceTrendReportService, SecurityPriceTrendReportService>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
-//builder.Services.AddDistributedMemoryCache();
-//builder.Services.AddSession(options =>
-//{
-//    options.IdleTimeout = TimeSpan.FromHours(1);
-//    options.Cookie.HttpOnly = true;
-//    options.Cookie.IsEssential = true;
-//    options.Cookie.SameSite = SameSiteMode.None;
-//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-//    options.Cookie.Name = "PriceFlow.Session";
-//});
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -125,41 +116,38 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseExceptionHandler();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("AllowFrontend");
-//app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-app.UseExceptionHandler(appError =>
-{
-    app.Run(async context =>
-    {
-        var exception = context.Features
-        .Get<IExceptionHandlerFeature>()?.Error;
+//app.UseExceptionHandler(appError =>
+//{
+//    app.Run(async context =>
+//    {
+//        var exception = context.Features
+//        .Get<IExceptionHandlerFeature>()?.Error;
 
-        if (exception is BusinessRuleException bre)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+//        if (exception is BusinessRuleException bre)
+//        {
+//            context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
-            await context.Response.WriteAsJsonAsync(new
-            {
-                message = bre.Message,
-                code = bre.Code
-            });
-            return;
-        }
-        throw exception!;
-    });
-});
-
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller}/{action=Index}/{id?}");
+//            await context.Response.WriteAsJsonAsync(new
+//            {
+//                message = bre.Message,
+//                code = bre.SecurityCode
+//            });
+//            return;
+//        }
+//        throw exception!;
+//    });
+//});
 
 app.MapFallbackToFile("index.html");
 

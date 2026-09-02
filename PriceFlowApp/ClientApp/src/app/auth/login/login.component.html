@@ -3,17 +3,23 @@
   <form (ngSubmit)="onLogin()" class="login-form">
     <div>
       <label for="username">{{ 'AUTH.USERNAME' | translate }}:</label>
-      <input type="text" id="username" [(ngModel)]="username" name="username" required>
+      <input type="text" id="username" [(ngModel)]="username" name="username" (ngModelChange)="validateUsername()" required>
+      <div *ngIf="usernameError" class="error">
+        {{ usernameError | translate }}
+      </div>
     </div>
     <div>
       <label for="password">{{ 'AUTH.PASSWORD' | translate }}:</label>
-      <input type="password" id="password" [(ngModel)]="password" name="password" required>
+      <input type="password" id="password" [(ngModel)]="password" name="password" (ngModelChange)="validatePassword()" required>
+      <div *ngIf="passwordError" class="error">
+        {{ passwordError | translate }}
+      </div>
     </div>
-    <button type="submit" class="login-btn">{{ 'AUTH.LOG_IN' | translate }}</button>
+    <button type="submit" class="login-btn" [disabled]="!isFormValid()">{{ 'AUTH.LOG_IN' | translate }}</button>
     <div *ngIf="errorMessage" class="error">{{ errorMessage | translate }}</div>
   </form>
   <div *ngIf="loginService.isLoggedIn() | async" class="success">
-    {{ 'LOGIN_SUCCESS' | translate }} {{ 'AS' | translate }} {{ loginService.getUsername() | async }}.
+    {{ 'AUTH.LOGIN_SUCCESS' | translate }} {{ 'AS' | translate }} {{ loginService.getUsername() | async }}.
     <div *ngIf="roles?.length">Roles: {{ roles.join(', ') }}</div>
   </div>
   <p class="forgot-password-link mt-4 text-center text-gray-600">

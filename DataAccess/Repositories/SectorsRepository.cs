@@ -1,10 +1,4 @@
 ﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -12,17 +6,21 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public SectorsRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
-
-        public async Task<IEnumerable<Sektori>> GetAllAsync()
+        public SectorsRepository(PriceFlowDbContext dbContext)
         {
-            return await _dbContext.Sektori.ToListAsync();
+            _dbContext = dbContext;
         }
 
-        public async Task<Sektori?> GetByIdAsync(int id)
+        public Sektori? GetById(int id)
         {
-            return await _dbContext.Sektori
-                .FindAsync(id);
+            return _dbContext.Sektori
+                .Find(id);
+        }
+
+        public IEnumerable<Sektori> GetAll()
+        {
+            return _dbContext.Sektori
+                .ToList();
         }
     }
 }

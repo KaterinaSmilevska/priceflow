@@ -1,10 +1,9 @@
-﻿using DataAccess.Models;
-using PriceFlowApp.DTOs;
+﻿using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {
     public interface IIssuersService
     {
-        Task<IEnumerable<Issuer>> FindAllAsync();
+        IEnumerable<Issuer> FindAll();
     }
 }

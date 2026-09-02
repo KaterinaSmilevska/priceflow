@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from './manage-users/User';
-import { Broker } from './manage-brokers/Broker';
 import { AuthStatus } from './AuthStatus';
 
 @Injectable({
@@ -21,28 +20,12 @@ export class AdminService {
     return this.http.get<User>(`${this.apiUrl}/users/${userId}`);
   }
 
-  updateUser(user: User): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/users/${user.id}`, user);
+  updateUser(id: number, user: User): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/users/${id}`, user);
   }
 
-  deleteUser(userId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/users/${userId}`);
-  }
-
-  getBrokers(): Observable<Broker[]> {
-    return this.http.get<Broker[]>(`${this.apiUrl}/brokers`);
-  }
-
-  addBroker(broker: Broker): Observable<Broker> {
-    return this.http.post<Broker>(`${this.apiUrl}/brokers`, broker);
-  } 
-
-  updateBroker(broker: Broker): Observable<Broker> {
-    return this.http.put<Broker>(`${this.apiUrl}/brokers/${broker.id}`, broker);
-  }
-
-  deleteBroker(brokerId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/brokers/${brokerId}`);
+  deleteUser(id: number): Observable<User> {
+    return this.http.delete<User>(`${this.apiUrl}/users/${id}`);
   }
 
   getCurrentUserStatus(): Observable<AuthStatus> {

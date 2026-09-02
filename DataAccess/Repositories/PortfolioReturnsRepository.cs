@@ -1,10 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -12,29 +7,33 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public PortfolioReturnsRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
-
-        public async Task<PortfolioPrinosi> AddAsync(PortfolioPrinosi portfolioPrinosi)
+        public PortfolioReturnsRepository(PriceFlowDbContext dbContext)
         {
-            _dbContext.PortfolioPrinosi.Add(portfolioPrinosi);
-            await _dbContext.SaveChangesAsync();
-            return portfolioPrinosi;
+            _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<PortfolioPrinosi>> GetByPortfolioIdAsync(int portfolioId)
+        public IEnumerable<PortfolioPrinosi> GetByPortfolioId(int portfolioId)
         {
-            return await _dbContext.PortfolioPrinosi
+            return _dbContext.PortfolioPrinosi
                 .Where(pp => pp.PortfolioId == portfolioId)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<PortfolioPrinosi>> GetByPortfolioIdForPeriod(int portfolioId, DateOnly from, DateOnly to)
+        public IEnumerable<PortfolioPrinosi> GetByPortfolioIdForPeriod(int portfolioId, DateOnly from, DateOnly to)
         {
-            return await _dbContext.PortfolioPrinosi
-                .Where(pp => pp.PortfolioId == portfolioId 
+            return _dbContext.PortfolioPrinosi
+                .Where(pp => pp.PortfolioId == portfolioId
                 && pp.Datum >= from
                 && pp.Datum <= to)
-                .ToListAsync();
+                .ToList();
+        }
+
+        public PortfolioPrinosi Add(PortfolioPrinosi portfolioPrinosi)
+        {
+            _dbContext.PortfolioPrinosi.Add(portfolioPrinosi);
+            _dbContext.SaveChanges();
+
+            return portfolioPrinosi;
         }
     }
 }

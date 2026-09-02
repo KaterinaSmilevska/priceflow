@@ -8,17 +8,26 @@ namespace PriceFlowApp.Services
     {
         private readonly IIssuersRepository _issuersRepository;
 
-        public IssuersService(IIssuersRepository issuersRepository) => _issuersRepository = issuersRepository;
-
-        public async Task<IEnumerable<Issuer>> FindAllAsync()
+        public IssuersService(IIssuersRepository issuersRepository)
         {
-            IEnumerable<Izdavachi> issuers = await _issuersRepository.GetAllAsync();
+            _issuersRepository = issuersRepository;
+        }
 
-            return issuers.Select(i => new Issuer
+        public IEnumerable<Issuer> FindAll()
+        {
+            IEnumerable<Izdavachi> issuers = _issuersRepository.GetAll();
+
+            return issuers
+                .Select(MapToIssuer);
+        }
+
+        private Issuer MapToIssuer(Izdavachi issuer)
+        {
+            return new Issuer
             {
-                Id = i.Id,
-                Name = i.Ime
-            });
+                Id = issuer.Id,
+                Name = issuer.Ime
+            };
         }
     }
 }

@@ -1,22 +1,19 @@
-﻿using DataAccess.Models;
-using PriceFlowApp.DTOs;
+﻿using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {
     public interface IBrokersService
     {
-        Task<IEnumerable<Broker>> FindAllAsync();
+        BrokerResponse FindById(int id);
 
-        Task<IEnumerable<BrokerResponse>> GetAllAsync();
+        BrokerResponse FindByCompany(string company);
 
-        Task<Brokeri?> FindById(int id);
+        IEnumerable<BrokerResponse> FindAll();
 
-        Task<Brokeri?> FindByCompanyAsync(string company);
+        BrokerResponse Add(AddBrokerRequest request);
 
-        Task<Broker> AddAsync(CreateBrokerRequest request);
+        BrokerResponse Update(int id, UpdateBrokerRequest request);
 
-        Task<BrokerResponse> UpdateAsync(UpdateBrokerRequest request);
-
-        Task DeleteAsync(int brokerId);
+        BrokerResponse Delete(int id);
     }
 }

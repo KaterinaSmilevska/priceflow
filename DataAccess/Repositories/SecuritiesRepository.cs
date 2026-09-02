@@ -1,11 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -13,90 +7,99 @@ namespace DataAccess.Repositories
     {
         private readonly PriceFlowDbContext _dbContext;
 
-        public SecuritiesRepository(PriceFlowDbContext dbContext) => _dbContext = dbContext;
+        public SecuritiesRepository(PriceFlowDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
-        public async Task<HartiiOdVrednost> AddAsync(HartiiOdVrednost security)
+        public HartiiOdVrednost? GetById(int id)
+        {
+            return _dbContext.HartiiOdVrednost
+                .Include(hv => hv.Izdavach)
+                .Include(hv => hv.TipHv)
+                .FirstOrDefault(hv => hv.Id == id);
+        }
+
+        public HartiiOdVrednost? GetByCode(string code)
+        {
+            return _dbContext.HartiiOdVrednost
+                .FirstOrDefault(hv => hv.Kod == code);
+        }
+
+        public IEnumerable<HartiiOdVrednost> GetAllByIds(List<int> securitiesIds)
+        {
+            return _dbContext.HartiiOdVrednost
+                .Where(s => securitiesIds.Contains(s.Id))
+                .ToList();
+        }
+
+        public IEnumerable<HartiiOdVrednost> GetAll()
+        {
+            return _dbContext.HartiiOdVrednost
+                .Include(hv => hv.Izdavach)
+                .Include(hv => hv.TipHv)
+                .ToList();
+        }
+
+        public string GetSecurityCode(int id)
+        {
+            HartiiOdVrednost? security = _dbContext.HartiiOdVrednost
+                .FirstOrDefault(hv => hv.Id == id);
+
+            return security!.Kod;
+        }
+
+        public int? GetTotalNumSharesById(int id)
+        {
+            HartiiOdVrednost? security = this.GetById(id);
+
+            return security?.VkupenBrojAkcii;
+        }
+
+        public int GetTotalNumSharesBySecurityCode(string securityCode)
+        {
+            HartiiOdVrednost? security = this.GetByCode(securityCode);
+
+            return security!.VkupenBrojAkcii;
+        }
+
+        public int GetTotalNumSecurities()
+        {
+            return _dbContext.HartiiOdVrednost
+                .Count();
+        }
+
+        public HartiiOdVrednost Add(HartiiOdVrednost security)
         {
             _dbContext.HartiiOdVrednost.Add(security);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
             return security;
         }
 
-        public async Task DeleteAsync(int id)
-        {
-            var security = await _dbContext.HartiiOdVrednost.FindAsync(id);
-            if(security != null)
-            {
-                _dbContext.HartiiOdVrednost.Remove(security);
-                await _dbContext.SaveChangesAsync();
-            }
-
-        }
-
-        public async Task<IEnumerable<HartiiOdVrednost>> GetAllAsync()
-        {
-            return await _dbContext.HartiiOdVrednost
-                .Include(hv => hv.Izdavach)
-                .Include(hv => hv.TipHv)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<HartiiOdVrednost>> GetAllByIds(List<int> securitiesIds)
-        {
-            return await _dbContext.HartiiOdVrednost
-                .Where(s => securitiesIds.Contains(s.Id))
-                .ToListAsync();
-        }
-
-        public async Task<HartiiOdVrednost?> GetByCodeAsync(string code)
-        {
-            return await _dbContext.HartiiOdVrednost
-                .FirstOrDefaultAsync(hv => hv.Kod == code);
-        }
-
-        public async Task<HartiiOdVrednost?> GetByIdAsync(int id)
-        {
-            return await _dbContext.HartiiOdVrednost
-                .Include(hv => hv.Izdavach)
-                .Include(hv => hv.TipHv)
-                .FirstOrDefaultAsync(hv => hv.Id == id);
-        }
-
-        public async Task<string?> GetSecurityCode(int id)
-        {
-            HartiiOdVrednost? security = await _dbContext.HartiiOdVrednost
-                .FirstOrDefaultAsync(hv => hv.Id == id);
-
-            return security?.Kod;
-        }
-
-        public async Task<int?> GetTotalNumShares(int id)
-        {
-            HartiiOdVrednost? security = await this.GetByIdAsync(id);
-
-            return security?.VkupenBrojAkcii;
-        }
-
-        public async Task<int?> GetTotalNumSharesAsync(string securityCode)
-        {
-            HartiiOdVrednost? security = await this.GetByCodeAsync(securityCode);
-
-            return security?.VkupenBrojAkcii;
-        }
-
-        public async Task UpdateAsync(HartiiOdVrednost security)
+        public HartiiOdVrednost Update(HartiiOdVrednost security)
         {
             _dbContext.HartiiOdVrednost.Update(security);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+
+            return security;
         }
 
-        public async Task<IEnumerable<HartiiOdVrednost>> SearchByCodeAsync(string searchTerm)
+        public HartiiOdVrednost Delete(HartiiOdVrednost security)
         {
-            return await _dbContext.HartiiOdVrednost
+            _dbContext.HartiiOdVrednost.Remove(security);
+            _dbContext.SaveChanges();
+
+            return security;
+        }
+
+        public IEnumerable<HartiiOdVrednost?> SearchByCode(string searchTerm)
+        {
+            return _dbContext.HartiiOdVrednost
                 .Include(hv => hv.TipHv)
                 .Include(hv => hv.Izdavach)
                 .Where(hv => hv.Kod.Contains(searchTerm))
-                .ToListAsync();
+                .ToList();
         }
     }
 }

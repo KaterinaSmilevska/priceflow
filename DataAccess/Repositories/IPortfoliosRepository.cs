@@ -1,22 +1,19 @@
 ﻿using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface IPortfoliosRepository
     {
-        Task<Portfolija?> GetByIdAsync(int id);
+        Portfolija? GetById(int id);
 
-        Task<IEnumerable<Portfolija>> GetByUserAsync(int userId);
+        Portfolija? GetByName(string name, int userId);
 
-        Task<Portfolija> CreateAsync(Portfolija portfolio);
+        IEnumerable<Portfolija> GetByUserId(int userId);
 
-        Task<Portfolija> UpdateAsync(Portfolija portfolio);
+        Portfolija Add(Portfolija portfolio);
 
-        Task DeleteAsync(Portfolija portfolio);
+        Portfolija Update(Portfolija portfolio);
+
+        Portfolija Delete(Portfolija portfolio);
     }
 }

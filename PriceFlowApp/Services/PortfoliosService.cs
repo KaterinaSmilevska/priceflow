@@ -1,119 +1,108 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 
 namespace PriceFlowApp.Services
 {
     public class PortfoliosService : IPortfoliosService
     {
-
-        private readonly IPortfoliosRepository _portfolijaRepository;
+        private readonly IPortfoliosRepository _portfoliosRepository;
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
         private readonly IPortfolioReturnsService _portfolioReturnsService;
+        private readonly IAuthRepository _authRepository;
 
-        public PortfoliosService(IPortfoliosRepository portfolijaRepository, ITransactionsRepository transactionsRepository,
-            IDailyTurnoverRepository dailyTurnoverRepository, IPortfolioReturnsService portfolioReturnsService)
+        public PortfoliosService(IPortfoliosRepository portfoliosRepository, ITransactionsRepository transactionsRepository,
+            IDailyTurnoverRepository dailyTurnoverRepository, IPortfolioReturnsService portfolioReturnsService, IAuthRepository authRepository)
         {
-            _portfolijaRepository = portfolijaRepository;
+            _portfoliosRepository = portfoliosRepository;
             _transactionsRepository = transactionsRepository;
             _dailyTurnoverRepository = dailyTurnoverRepository;
             _portfolioReturnsService = portfolioReturnsService;
-        } 
-
-        public async Task DeletePortfolio(int id, int userId)
-        {
-            var portfolio = await _portfolijaRepository.GetByIdAsync(id);
-            if (portfolio == null || portfolio.KorisnikId != userId)
-                throw new Exception("Portfolio not found");
-
-            await _portfolijaRepository.DeleteAsync(portfolio);
+            _authRepository = authRepository;
         }
 
-        public async Task<IEnumerable<Portfolio>> FindUserPortfoliosAsync(int userId)
+        public Portfolio FindById(int id)
         {
-            IEnumerable<Portfolija?> items = await _portfolijaRepository.GetByUserAsync(userId);
+            Portfolija portfolio = GetPortfolioById(id);
 
-            return items.Select(p => new Portfolio
-            {
-                Id = p.Id,
-                Name = p.Ime,
-                Description = p.Opis
-            }).ToList();
+            return MapToPortfolio(portfolio);
         }
 
-        public async Task<Portfolio> CreatePortfolio(int userId, CreatePortfolio portfolio)
+        public IEnumerable<Portfolio> FindUserPortfolios(int userId)
         {
-            Portfolija entity = new Portfolija
+            Korisnici user = GetUserById(userId);
+
+            IEnumerable<Portfolija> portfolios = _portfoliosRepository.GetByUserId(user.Id);
+
+            return portfolios
+                .Select(MapToPortfolio)
+                .ToList();
+        }
+
+        public Portfolio Add(int userId, AddPortfolioRequest request)
+        {
+            Korisnici user = GetUserById(userId);
+
+            ValidationHelper.ValidateRequiredField(request.Name, "Name", "NAME_VALIDATION_REQUIRED");
+            ValidateNameAvailability(request.Name, user.Id);
+
+            Portfolija portfolio = new Portfolija
             {
-                Ime = portfolio.Name,
-                Opis = portfolio.Description,
-                KorisnikId = userId
+                Ime = request.Name,
+                Opis = request.Description,
+                KorisnikId = user.Id
             };
 
-            entity = await _portfolijaRepository.CreateAsync(entity);
+            Portfolija addedPortfolio = _portfoliosRepository.Add(portfolio);
 
-            return new Portfolio
-            {
-                Id = entity.Id,
-                Name = entity.Ime,
-                Description = entity.Opis
-            };
+            return MapToPortfolio(addedPortfolio);
         }
 
-        public async Task<Portfolio> UpdatePortfolio(int id, int userId, UpdatePortfolio portfolio)
+        public Portfolio Update(int id, int userId, UpdatePortfolio portfolio)
         {
-            var foundPortfolio = await _portfolijaRepository.GetByIdAsync(id);
+            ValidationHelper.ValidateRequiredField(portfolio.Name, "Name", "NAME_VALIDATION_REQUIRED");
+            ValidateNameAvailability(portfolio.Name, userId, id);
+            
+            Portfolija existingPortfolio = GetPortfolioById(id);
 
-            if (foundPortfolio == null || foundPortfolio.KorisnikId != userId)
-                throw new Exception("Portfolio not found");
+            existingPortfolio.Ime = portfolio.Name;
+            existingPortfolio.Opis = portfolio.Description;
 
-            foundPortfolio.Ime = portfolio.Name;
-            foundPortfolio.Opis = portfolio.Description;
+            Portfolija updatedPortfolio = _portfoliosRepository.Update(existingPortfolio);
 
-            var updated = await _portfolijaRepository.UpdateAsync(foundPortfolio);
-
-            return new Portfolio
-            {
-                Id = updated.Id,
-                Name = updated.Ime,
-                Description = updated.Opis
-            };
+            return MapToPortfolio(updatedPortfolio);
         }
 
-        public async Task<Portfolio> FindById(int id)
+        public Portfolio Delete(int id, int userId)
         {
-            Portfolija? portfolio = await _portfolijaRepository.GetByIdAsync(id);
+            Portfolija existingPortfolio = GetPortfolioById(id);
 
-            if (portfolio == null)
-                throw new Exception("Portfolio not found");
+            if (existingPortfolio.KorisnikId != userId)
+                throw new UnauthorizedException("ACCESS_DENIED", "You cannot access this portfolio.");
 
-            return new Portfolio
-            {
-                Id = portfolio.Id,
-                Name = portfolio.Ime,
-                Description = portfolio.Opis
-            };
+            Portfolija deletedPortfolio = _portfoliosRepository.Delete(existingPortfolio);
+
+            return MapToPortfolio(deletedPortfolio);
         }
 
-        public async Task<PortfolioPerformanceSummary> GeneratePerformanceSummaryAsync(int portfolioId, DateOnly from, DateOnly to)
+        public PortfolioPerformanceSummary GeneratePerformanceSummary(int portfolioId, DateOnly from, DateOnly to)
         {
-            Portfolija? portfolio = await _portfolijaRepository.GetByIdAsync(portfolioId);
+            Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            if (portfolio == null)
-                throw new Exception("Portfolio not found.");
-
-            IEnumerable<Transakcii> transactions = await _transactionsRepository.GetByPortfolioUntilDateAsync(portfolioId, to);
+            IEnumerable<Transakcii> transactions = _transactionsRepository.GetByPortfolioIdUntilDate(portfolio.Id, to);
 
             Dictionary<int, decimal> holdingsAtStart = CalculateHoldingsUntilDate(transactions, from);
 
             Dictionary<int, decimal> holdingsAtEnd = CalculateHoldingsUntilDate(transactions, to);
 
-            decimal startingValue = await CalculatePortfolioValueAsync(holdingsAtStart, from);
+            decimal startingValue = CalculatePortfolioValue(holdingsAtStart, from);
 
-            decimal endingValue = await CalculatePortfolioValueAsync(holdingsAtEnd, to);
+            decimal endingValue = CalculatePortfolioValue(holdingsAtEnd, to);
 
-            PortfolioReturnsSummary returns = await _portfolioReturnsService.CalculateSummaryForPeriodAsync(portfolioId, from, to);
+            PortfolioReturnsSummary returns = _portfolioReturnsService.CalculateSummaryForPeriod(portfolio.Id, from, to);
             decimal dividends = returns.TotalDividends;
 
             decimal commissions = CalculateTotalCommissions(transactions, from, to);
@@ -146,24 +135,27 @@ namespace PriceFlowApp.Services
                     ? t.KolicinaAkcii
                     : -t.KolicinaAkcii;
             }
+
             return holdings;
         }
 
-        private async Task<decimal> CalculatePortfolioValueAsync(Dictionary<int, decimal> holdings, DateOnly date)
+        private decimal CalculatePortfolioValue(Dictionary<int, decimal> holdings, DateOnly date)
         {
             decimal totalValue = 0;
 
             foreach(var holding in holdings)
             {
-                decimal? price = await GetLatestPriceAsync(holding.Key, date);
+                decimal? price = GetLatestPrice(holding.Key, date);
                 totalValue += (decimal)(holding.Value * price);
             }
+
             return totalValue;
         }
 
-        private async Task<decimal> GetLatestPriceAsync(int securityId, DateOnly date)
+        private decimal? GetLatestPrice(int securityId, DateOnly date)
         {
-            decimal price = await _dailyTurnoverRepository.GetLatestPriceAsync(securityId, date);
+            decimal? price = _dailyTurnoverRepository.GetLatestPrice(securityId, date);
+
             return price;
         }
 
@@ -184,6 +176,41 @@ namespace PriceFlowApp.Services
             decimal commission = tradeValue * commissionPercent / 100;
 
             return Math.Round(commission, 2);
+        }
+
+        private Portfolija GetPortfolioById(int portfolioId)
+        {
+            Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
+            if (portfolio == null)
+                throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
+
+            return portfolio;
+        }
+
+        private Korisnici GetUserById(int userId)
+        {
+            Korisnici? user = _authRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException("USER_NOT_FOUND", "User not found.");
+
+            return user;
+        }
+
+        private void ValidateNameAvailability(string name, int userId, int? portfolioId = null)
+        {
+            Portfolija? existingPortfolio = _portfoliosRepository.GetByName(name, userId);
+            if (existingPortfolio != null && existingPortfolio.Id != portfolioId && existingPortfolio.KorisnikId == userId)
+                throw new AlreadyExistsException("NAME_ALREADY_EXISTS", "Portfolio already exists for this user.");
+        }
+
+        private Portfolio MapToPortfolio(Portfolija portfolio)
+        {
+            return new Portfolio
+            {
+                Id = portfolio.Id,
+                Name = portfolio.Ime,
+                Description = portfolio.Opis
+            };
         }
     }
 }

@@ -1,5 +1,5 @@
 export interface Sector {
-  sectorId: number;
-  sectorName: string;
+  id: number;
+  name: string;
   totalValue: number;
 }

@@ -1,32 +1,59 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
+using PriceFlowApp.Exceptions;
 
 namespace PriceFlowApp.Services
 {
     public class PortfolioReturnsService : IPortfolioReturnsService
     {
-        private readonly DataAccess.Repositories.IPortfolioReturnsRepository _portfolioReturnsRepository;
+        private readonly IPortfolioReturnsRepository _portfolioReturnsRepository;
+        private readonly IPortfoliosRepository _portfoliosRepository;
+        private readonly ISecuritiesRepository _securitiesRepository;
 
-        public PortfolioReturnsService(DataAccess.Repositories.IPortfolioReturnsRepository portfolioReturnsRepository)
+        public PortfolioReturnsService(IPortfolioReturnsRepository portfolioReturnsRepository, IPortfoliosRepository portfoliosRepository, ISecuritiesRepository securitiesRepository)
         {
             _portfolioReturnsRepository = portfolioReturnsRepository;
+            _portfoliosRepository = portfoliosRepository;
+            _securitiesRepository = securitiesRepository;
         }
 
-        public async Task<PortfolioReturnsSummary> CalculateSummaryAsync(int portfolioId)
+        public IEnumerable<PortfolioReturns> FindByPortfolioId(int portfolioId)
         {
-            IEnumerable<PortfolioPrinosi> returns = await _portfolioReturnsRepository.GetByPortfolioIdAsync(portfolioId);
+            Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            return new PortfolioReturnsSummary
+            IEnumerable<PortfolioPrinosi> portfolioReturns = _portfolioReturnsRepository.GetByPortfolioId(portfolio.Id);
+
+            return portfolioReturns
+                .Select(MapToPortfolioReturns)
+                .ToList();
+        }
+
+        public PortfolioReturns Add(PortfolioReturns portfolioReturns)
+        {
+            Portfolija portfolio = GetPortfolioById(portfolioReturns.PortfolioId);
+
+            HartiiOdVrednost security = GetBySecurityId(portfolioReturns.SecurityId);
+
+            PortfolioPrinosi portfolioReturn = new PortfolioPrinosi
             {
-                    TotalDividends = returns.Sum(x => x.NetoIznos),
-                    TotalTaxes = returns.Sum(x => x.Danok)
+                Datum = portfolioReturns.Date,
+                NetoIznos = portfolioReturns.NetAmount,
+                Danok = portfolioReturns.Tax,
+                PortfolioId = portfolio.Id,
+                Hvid = security.Id,
             };
+
+            PortfolioPrinosi createdPortfolioReturns = _portfolioReturnsRepository.Add(portfolioReturn);
+
+            return MapToPortfolioReturns(createdPortfolioReturns);
         }
 
-        public async Task<PortfolioReturnsSummary> CalculateSummaryForPeriodAsync(int portfolioId, DateOnly from, DateOnly to)
+        public PortfolioReturnsSummary CalculateSummary(int portfolioId)
         {
-            IEnumerable<PortfolioPrinosi> returns = await _portfolioReturnsRepository.GetByPortfolioIdForPeriod(portfolioId, from, to);
+            Portfolija portfolio = GetPortfolioById(portfolioId);
+
+            IEnumerable<PortfolioPrinosi> returns = _portfolioReturnsRepository.GetByPortfolioId(portfolio.Id);
 
             return new PortfolioReturnsSummary
             {
@@ -35,34 +62,55 @@ namespace PriceFlowApp.Services
             };
         }
 
-        public async Task<PortfolioReturns> CreateAsync(PortfolioReturns portfolioReturns)
+        public PortfolioReturnsSummary CalculateSummaryForPeriod(int portfolioId, DateOnly fromDate, DateOnly toDate)
         {
-            var entity = new PortfolioPrinosi
+            Portfolija portfolio = GetPortfolioById(portfolioId);
+
+            ValidateDateRange(fromDate, toDate);
+
+            IEnumerable<PortfolioPrinosi> returns = _portfolioReturnsRepository.GetByPortfolioIdForPeriod(portfolio.Id, fromDate, toDate);
+
+            return new PortfolioReturnsSummary
             {
-                Datum = portfolioReturns.Date,
-                NetoIznos = portfolioReturns.NetAmount,
-                Danok = portfolioReturns.Tax,
-                PortfolioId = portfolioReturns.PortfolioId,
-                Hvid = portfolioReturns.HVId,
+                TotalDividends = returns.Sum(x => x.NetoIznos),
+                TotalTaxes = returns.Sum(x => x.Danok)
             };
-
-            await _portfolioReturnsRepository.AddAsync(entity);
-
-            return portfolioReturns;
         }
 
-        public async Task<IEnumerable<PortfolioReturns>> FindByPortfolioId(int portfolioId)
+        private Portfolija GetPortfolioById(int portfolioId)
         {
-            IEnumerable<PortfolioPrinosi> entities = await _portfolioReturnsRepository.GetByPortfolioIdAsync(portfolioId);
+            Portfolija? portfolio = _portfoliosRepository.GetById(portfolioId);
+            if(portfolio == null)
+                throw new NotFoundException("PORTFOLIO_NOT_FOUND", "Portfolio not found.");
 
-            return entities.Select(e => new PortfolioReturns
+            return portfolio;
+        }
+
+        private HartiiOdVrednost GetBySecurityId(int securityId)
+        {
+            HartiiOdVrednost? security = _securitiesRepository.GetById(securityId);
+            if (security == null)
+                throw new NotFoundException("SECURITY_NOT_FOUND", "Security not found.");
+
+            return security;
+        }
+
+        private void ValidateDateRange(DateOnly fromDate, DateOnly toDate)
+        {
+            if (fromDate > toDate)
+                throw new ValidationException("INVALID_DATE_RANGE", "FromDate cannot be after ToDate.");
+        }
+
+        private PortfolioReturns MapToPortfolioReturns(PortfolioPrinosi portfolioReturns)
+        {
+            return new PortfolioReturns
             {
-                Date = e.Datum,
-                NetAmount = e.NetoIznos,
-                Tax = e.Danok,
-                PortfolioId = e.PortfolioId,
-                HVId = e.Hvid
-            });
+                Date = portfolioReturns.Datum,
+                NetAmount = portfolioReturns.NetoIznos,
+                Tax = portfolioReturns.Danok,
+                PortfolioId = portfolioReturns.PortfolioId,
+                SecurityId = portfolioReturns.Hvid
+            };
         }
     }
 }

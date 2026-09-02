@@ -4,24 +4,24 @@ namespace DataAccess.Repositories
 {
     public interface IAuthRepository
     {
-        Task<Korisnici?> GetByIdAsync(int id);
+        Korisnici? GetById(int id);
 
-        Task<Korisnici?> GetByUsernameAsync(string username);
+        Korisnici? GetByUsername(string username);
 
-        Task<Korisnici?> GetByVerificationTokenAsync(Guid token);
+        Korisnici? GetByVerificationToken(Guid token);
 
-        Task<Korisnici?> GetByEmailAsync(string email);
+        Korisnici? GetByEmail(string email);
 
-        Task<Korisnici?> GetByResetPasswordTokenAsync(Guid token);
+        Korisnici? GetByResetPasswordToken(Guid token);
+        
+        IEnumerable<Korisnici> GetAll();
+        
+        Korisnici Add(Korisnici user);
 
-        Task<IEnumerable<Korisnici>> GetAllAsync();
+        Korisnici Update(Korisnici user);
 
-        Task AddAsync(Korisnici user);
+        Korisnici Delete(Korisnici user);
 
-        Task UpdateAsync(Korisnici user);
-
-        Task DeleteAsync(Korisnici user);
-
-        Task<bool> UsernameExistsAsync(string username);        
+        bool UsernameExists(string username);        
     }
 }

@@ -1,22 +1,24 @@
 ﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
+using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
 
 namespace PriceFlowApp.Services
 {
     public class PortfolioValueService: IPortfolioValueService
     {
-        private readonly PriceFlowDbContext _dbContext;
+        private readonly ITransactionsRepository _transactionsRepository;
+        private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
 
-        public PortfolioValueService(PriceFlowDbContext dbContext)
+        public PortfolioValueService(ITransactionsRepository transactionsRepository, IDailyTurnoverRepository dailyTurnoverRepository)
         {
-            _dbContext = dbContext;
+            _transactionsRepository = transactionsRepository;
+            _dailyTurnoverRepository = dailyTurnoverRepository;
         }
 
-        public async Task<List<PortfolioValue>> GetCurrentValueAsync(int portfolioId, bool isReal)
+        public IEnumerable<PortfolioValue> GetCurrentValue(int portfolioId, bool isReal)
         {
-            List<PortfolioValue> result = await _dbContext.Transakcii
-                .Where(t => t.PortfolioId == portfolioId && t.Realna == isReal)
+            IEnumerable<Transakcii> transactions = _transactionsRepository.GetByPortfolioId(portfolioId, isReal);
+            var holdings = transactions
                 .GroupBy(t => new
                 {
                     t.Hvid,
@@ -24,8 +26,8 @@ namespace PriceFlowApp.Services
                 })
                 .Select(g => new
                 {
-                    g.Key.Hvid,
-                    g.Key.Kod,
+                    SecurityId = g.Key.Hvid,
+                    SecurityCode = g.Key.Kod,
                     Quantity =
                         g.Sum(t =>
                             t.TipTransakcija == "Купување" ? t.KolicinaAkcii :
@@ -34,34 +36,36 @@ namespace PriceFlowApp.Services
                         )
                 })
                 .Where(g => g.Quantity > 0)
-                .Join(
-                    _dbContext.DnevenPromet
-                    .GroupBy(dp => dp.Hvid)
-                    .Select(g => new
+                .ToList();
+
+            IEnumerable<int> securityIds = holdings
+                .Select(x => x.SecurityId);
+
+            IEnumerable<DnevenPromet> latestPrices = _dailyTurnoverRepository.GetLatestPrices(securityIds);
+            var priceBySecurity = latestPrices
+                .ToDictionary(
+                    x => x.Hvid,
+                    x => x.CenaPoslednaTransakcija);
+
+            return holdings
+                .Where(x => priceBySecurity.ContainsKey(x.SecurityId))
+                .Select(x =>
+                {
+                    decimal? lastPrice = priceBySecurity[x.SecurityId];
+
+                    return new PortfolioValue
                     {
-                        HvId = g.Key,
-                        LastPrice = g.OrderByDescending(x => x.Datum)
-                                .Select(x => x.CenaPoslednaTransakcija)
-                                .FirstOrDefault()
-                    })
-                    .Where(x => x.LastPrice != null),
-                    t => t.Hvid,
-                    p => p.HvId,
-                    (t, p) => new PortfolioValue
-                    {
-                        HvId = t.Hvid,
-                        HvCode = t.Kod,
-                        TotalQuantity = t.Quantity,
-                        LastPrice = p.LastPrice.Value,
-                        CurrentValue = t.Quantity * p.LastPrice.Value,
+                        SecurityId = x.SecurityId,
+                        SecurityCode = x.SecurityCode,
+                        TotalQuantity = x.Quantity,
+                        LastPrice = lastPrice.Value,
+                        CurrentValue = x.Quantity * lastPrice.Value,
                         IsReal = isReal
-                    }
-                )
+                    };
+                })
                 .OrderByDescending(x => x.CurrentValue)
-                .ToListAsync();
-
-            return result;
-
+                .ToList();
         }
     }
 }
+

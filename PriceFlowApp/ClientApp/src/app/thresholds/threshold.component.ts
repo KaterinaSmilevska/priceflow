@@ -5,11 +5,13 @@ import { Threshold } from './Threshold';
 import { OwnedSecurity } from './OwnedSecurity';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { ThresholdFormComponent } from './threshold-form/threshold-form.component';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-threshold',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule, ThresholdFormComponent],
   templateUrl: './threshold.component.html',
   styleUrl: './threshold.component.css',
 })
@@ -18,10 +20,16 @@ export class ThresholdComponent implements OnInit {
   owned: OwnedSecurity[] = [];
   thresholds: Threshold[] = [];
 
+  showEditModal = false;
+  thresholdToEdit?: Threshold;
+  showDeleteModal = false;
+  thresholdToDelete?: Threshold;
+
   editingId: number | null = null;
+  successMessage: string | null = null;
   errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private thresholdService: ThresholdService) { }
+  constructor(private fb: FormBuilder, private thresholdService: ThresholdService, private router: Router) { }
 
   form = this.fb.group({
     hvId: [null as number | null, Validators.required,],
@@ -44,67 +52,53 @@ export class ThresholdComponent implements OnInit {
       .subscribe(data => this.thresholds = data);
   }
 
-  submit() {
-    this.errorMessage = null;
+  openAddModal() {
+    this.thresholdToEdit = undefined;
+    this.showEditModal = true;
+  }
 
-    if (this.form.invalid) return;
+  openEditModal(threshold: Threshold) {
+    this.thresholdToEdit = threshold;
+    this.showEditModal = true;
+  }
 
-    const hvId = this.form.value.hvId!;
-    const lower = this.form.value.lowerThreshold!;
-    const upper = this.form.value.upperThreshold!;
+  onEditModalClose() {
+    this.showEditModal = false;
+    this.thresholdToEdit = undefined;
+  }
 
-    if (lower >= upper) {
-      this.errorMessage = 'THRESHOLD_VALIDATION_ERROR';
-      return;
-    }
+  onSaved() {
+    this.showEditModal = false;
+    this.thresholdToEdit = undefined;
+    this.loadThresholds();
+  }
 
-    if (this.editingId) {
-      const updatePayload = {
-        lowerThreshold: lower,
-        upperThreshold: upper
-      };
+  openDeleteModal(threshold: Threshold) {
+    this.thresholdToDelete = threshold;
+    this.showDeleteModal = true;
+  }
 
-      this.thresholdService.updateThreshold(this.editingId, updatePayload)
-        .subscribe(() => {
-          this.resetForm();
-          this.loadThresholds();
-        });
-    }
-    else {
-      const createPayload = {
-        hvId: hvId,
-        lowerThreshold: lower,
-        upperThreshold: upper
-      };
+  confirmDelete() {
+    if (!this.thresholdToDelete) return;
 
-      this.thresholdService.addThreshold(createPayload)
-          .subscribe({
-            next: () => {
-              this.resetForm();
-              this.loadThresholds();
-            },
-            error: err => {
-              this.errorMessage = err.error?.message || 'THRESHOLD_EXISTS';
-            }
-          });
+    this.thresholdService
+      .delete(this.thresholdToDelete.id)
+      .subscribe({
+        next: () => {
+          this.closeDeleteModal();
+          this.successMessage = 'THRESHOLD.DELETE_SUCCESS';
+          setTimeout(() => this.successMessage = null, 800);
+        },
+        error: (err) => {
+          this.errorMessage = `ERRORS.${err.error.code}`;
+          this.closeDeleteModal();
         }
-  }
-
-    edit(th: Threshold) {
-      this.editingId = th.id;
-
-      this.form.patchValue({
-        hvId: th.hvId,
-        lowerThreshold: th.lowerThreshold,
-        upperThreshold: th.upperThreshold
       });
-
-      this.form.get('hvId')?.disable();
   }
 
-  delete(id: number) {
-    this.thresholdService.deleteThreshold(id)
-      .subscribe(() => this.loadThresholds());
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.thresholdToDelete = undefined;
   }
 
     resetForm() {
@@ -112,9 +106,5 @@ export class ThresholdComponent implements OnInit {
       this.form.reset();
 
       this.form.get('hvId')?.enable();
-  }
-
-  isSecurityAlreadyUsed(hvId: number): boolean {
-    return this.thresholds.some(t => t.hvId === hvId);
   }
 }

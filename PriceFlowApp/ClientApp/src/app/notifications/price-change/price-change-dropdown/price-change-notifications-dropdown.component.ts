@@ -11,7 +11,7 @@ import { TranslateModule } from "@ngx-translate/core";
   styleUrl: './price-change-notifications-dropdown.component.css',
 })
 
-export class PriceChangeNotificationsDropDownComponent {
+export class PriceChangeNotificationsDropDownComponent{
   @Input() notifications: PriceChangeNotification[] = [];
   @Output() markRead = new EventEmitter<number>();
 
