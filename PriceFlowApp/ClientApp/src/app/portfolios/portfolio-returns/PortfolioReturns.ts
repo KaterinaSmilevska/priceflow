@@ -3,5 +3,5 @@ export interface PortfolioReturns {
   netAmount: number;
   tax: number;
   portfolioId: number;
-  hvId: number;
+  securityId: number;
 }

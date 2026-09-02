@@ -26,16 +26,16 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("owned-shares")]
-        public ActionResult<int> GetOwnedShares(int portfolioId, [FromQuery] string code, [FromQuery] bool isReal)
+        public ActionResult<int> GetOwnedShares(int portfolioId, [FromQuery] string securityCode, [FromQuery] bool isReal)
         {
-            return Execute(() => _transactionsService.FindOwnedShares(portfolioId, code, isReal));
+            return Execute(() => _transactionsService.FindOwnedShares(portfolioId, securityCode, isReal));
         }
 
 
         [HttpGet("owned-shares-date")]
-        public ActionResult<int> GetOwnedSharesAtDate(int portfolioId, [FromQuery] string code, [FromQuery] bool isReal, [FromQuery] DateOnly date, [FromQuery] int? transactionIdToExclude)
+        public ActionResult<int> GetOwnedSharesAtDate(int portfolioId, [FromQuery] string securityCode, [FromQuery] bool isReal, [FromQuery] DateOnly date, [FromQuery] int? transactionIdToExclude)
         {
-            return Execute(() => _transactionsService.FindOwnedSharesAtDate(portfolioId, code, isReal, date, transactionIdToExclude));
+            return Execute(() => _transactionsService.FindOwnedSharesAtDate(portfolioId, securityCode, isReal, date, transactionIdToExclude));
         }
 
         [HttpPost]

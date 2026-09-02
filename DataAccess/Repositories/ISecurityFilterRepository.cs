@@ -4,27 +4,27 @@ namespace DataAccess.Repositories
 {
     public interface ISecurityFilterRepository
     {
-        IEnumerable<HartiiOdVrednost?> GetMostProfitableSecuritiesByDividendYield();
+        IEnumerable<HartiiOdVrednost> GetMostProfitableSecuritiesByDividendYield();
 
-        IEnumerable<HartiiOdVrednost?> GetMostProfitableSecuritiesByDividendPerShare();
+        IEnumerable<HartiiOdVrednost> GetMostProfitableSecuritiesByDividendPerShare();
 
-        IEnumerable<HartiiOdVrednost?> GetSecuritiesWithBiggestPriceOscillations();
+        IEnumerable<HartiiOdVrednost> GetSecuritiesWithBiggestPriceOscillations();
 
-        IEnumerable<HartiiOdVrednost?> GetSecuritiesWithSmallestPriceOscillations();
+        IEnumerable<HartiiOdVrednost> GetSecuritiesWithSmallestPriceOscillations();
 
-        IEnumerable<HartiiOdVrednost?> GetLeastLiquidSecuritiesByTradedQuantity();
+        IEnumerable<HartiiOdVrednost> GetLeastLiquidSecuritiesByTradedQuantity();
 
-        IEnumerable<HartiiOdVrednost?> GetMostLiquidSecuritiesByTradedQuantity();
+        IEnumerable<HartiiOdVrednost> GetMostLiquidSecuritiesByTradedQuantity();
 
-        IEnumerable<HartiiOdVrednost?> GetLeastLiquidSecuritiesByNumTradingDays();
+        IEnumerable<HartiiOdVrednost> GetLeastLiquidSecuritiesByNumTradingDays();
 
-        IEnumerable<HartiiOdVrednost?> GetMostLiquidSecuritiesByNumTradingDays();
+        IEnumerable<HartiiOdVrednost> GetMostLiquidSecuritiesByNumTradingDays();
 
-        IEnumerable<Sektori?> GetMostProfitableSectorsByDividendYield();
+        IEnumerable<Sektori> GetMostProfitableSectorsByDividendYield();
 
-        IEnumerable<Sektori?> GetMostProfitableSectorsByProfit();
+        IEnumerable<Sektori> GetMostProfitableSectorsByProfit();
 
-        IEnumerable<HartiiOdVrednost?> GetSecuritiesValuation();
+        IEnumerable<HartiiOdVrednost> GetSecuritiesValuation();
 
         DateTime GetLatestDate();
 

@@ -72,7 +72,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
 
     if (this.thresholdToEdit) {
       this.form.patchValue({
-        hvId: this.thresholdToEdit.hvId,
+        hvId: this.thresholdToEdit.securityId,
         lowerThreshold: this.thresholdToEdit.lowerThreshold,
         upperThreshold: this.thresholdToEdit.upperThreshold
       });
@@ -181,7 +181,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
     }
     else {
       const createRequest: CreateThresholdRequest = {
-        hvId: this.form.value.hvId,
+        securityId: this.form.value.hvId,
         lowerThreshold: lower,
         upperThreshold: upper
       };
@@ -205,7 +205,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
   }
 
   isSecurityAlreadyUsed(hvId: number): boolean {
-    return this.existingThresholds.some(t => t.hvId === hvId);
+    return this.existingThresholds.some(t => t.securityId === hvId);
   }
 
   get invalidThresholdRange(): boolean {

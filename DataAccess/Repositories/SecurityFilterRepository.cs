@@ -12,7 +12,7 @@ namespace DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetMostProfitableSecuritiesByDividendYield()
+        public IEnumerable<HartiiOdVrednost> GetMostProfitableSecuritiesByDividendYield()
         {
             int latestYear = this.GetLatestYear();
 
@@ -28,7 +28,7 @@ namespace DataAccess.Repositories
                     .ToList();
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetMostProfitableSecuritiesByDividendPerShare()
+        public IEnumerable<HartiiOdVrednost> GetMostProfitableSecuritiesByDividendPerShare()
         {
             int latestYear = this.GetLatestYear();
 
@@ -44,7 +44,7 @@ namespace DataAccess.Repositories
                     .ToList();
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetSecuritiesWithBiggestPriceOscillations()
+        public IEnumerable<HartiiOdVrednost> GetSecuritiesWithBiggestPriceOscillations()
         {
             DateTime latestDate = this.GetLatestDate();
 
@@ -60,7 +60,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetSecuritiesWithSmallestPriceOscillations()
+        public IEnumerable<HartiiOdVrednost> GetSecuritiesWithSmallestPriceOscillations()
         {
             DateTime latestDate = this.GetLatestDate();
 
@@ -76,7 +76,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetLeastLiquidSecuritiesByTradedQuantity()
+        public IEnumerable<HartiiOdVrednost> GetLeastLiquidSecuritiesByTradedQuantity()
         {
             DateTime latestDate = this.GetLatestDate();
 
@@ -91,7 +91,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetMostLiquidSecuritiesByTradedQuantity()
+        public IEnumerable<HartiiOdVrednost> GetMostLiquidSecuritiesByTradedQuantity()
         {
             {
                 DateTime latestDate = this.GetLatestDate();
@@ -108,7 +108,7 @@ namespace DataAccess.Repositories
             }
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetLeastLiquidSecuritiesByNumTradingDays()
+        public IEnumerable<HartiiOdVrednost> GetLeastLiquidSecuritiesByNumTradingDays()
         {
             return _dbContext.HartiiOdVrednost
                 .Include(hv => hv.DnevenPromet)
@@ -119,7 +119,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetMostLiquidSecuritiesByNumTradingDays()
+        public IEnumerable<HartiiOdVrednost> GetMostLiquidSecuritiesByNumTradingDays()
         {
             return _dbContext.HartiiOdVrednost
                 .Include(hv => hv.DnevenPromet)
@@ -130,7 +130,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<Sektori?> GetMostProfitableSectorsByDividendYield()
+        public IEnumerable<Sektori> GetMostProfitableSectorsByDividendYield()
         {
             int latestYear = this.GetLatestYear();
 
@@ -147,7 +147,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<Sektori?> GetMostProfitableSectorsByProfit()
+        public IEnumerable<Sektori> GetMostProfitableSectorsByProfit()
         {
             int latestYear = this.GetLatestYear();
 
@@ -164,7 +164,7 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
-        public IEnumerable<HartiiOdVrednost?> GetSecuritiesValuation()
+        public IEnumerable<HartiiOdVrednost> GetSecuritiesValuation()
         {
             int latestYear = this.GetLatestYear();
 

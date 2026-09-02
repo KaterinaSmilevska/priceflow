@@ -6,6 +6,6 @@
         public decimal NetAmount { get; set; }
         public decimal Tax {  get; set; }
         public int PortfolioId { get; set; }
-        public int HVId { get; set; }
+        public int SecurityId { get; set; }
     }
 }

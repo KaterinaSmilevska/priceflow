@@ -28,6 +28,14 @@ namespace DataAccess.Repositories
                 .ToList();
         }
 
+        public IEnumerable<Transakcii> GetByPortfolioId(int portfolioId, bool isReal)
+        {
+            return _dbContext.Transakcii
+                .Include(t => t.Hv)
+                .Where(t => t.PortfolioId == portfolioId && t.Realna == isReal)
+                .ToList();
+        }
+
         public IEnumerable<Transakcii> GetByPortfolioIdUntilDate(int portfolioId, DateOnly date)
         {
             return _dbContext.Transakcii

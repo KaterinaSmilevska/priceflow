@@ -132,7 +132,7 @@ namespace PriceFlowApp.Services
             return new PriceChangeNotificationResponse
             {
                 Id = priceChangeNotification.Id,
-                HvId = priceChangeNotification.Hvid,
+                SecurityId = priceChangeNotification.Hvid,
                 ChangePercent = priceChangeNotification.ProcentPromena,
                 TradingDate = priceChangeNotification.DatumTrguvanje.Date,
                 Message = priceChangeNotification.Poraka,

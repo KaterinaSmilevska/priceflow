@@ -16,7 +16,7 @@
           <option *ngFor="let s of owned"
                   [ngValue]="s.id"
                   [disabled]="!thresholdToEdit && isSecurityAlreadyUsed(s.id)">
-            {{ s.hvCode }}
+            {{ s.securityCode }}
           </option>
         </select>
       </div>

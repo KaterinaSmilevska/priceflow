@@ -26,8 +26,8 @@ namespace PriceFlowApp.Services
         {
             return new Sector
             {
-                SectorId = sector.Id,
-                SectorName = sector.Ime
+                Id = sector.Id,
+                Name = sector.Ime
             };
         }
     }

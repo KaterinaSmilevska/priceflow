@@ -1,8 +1,5 @@
-﻿using Azure.Core;
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Office2016.Excel;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
 
@@ -46,7 +43,7 @@ namespace PriceFlowApp.Services
             return securities.Select(s => new OwnedSecurity
             {
                 Id = s.Id,
-                hvCode = s.Kod
+                SecurityCode = s.Kod
             }).ToList();
         }
 
@@ -55,10 +52,10 @@ namespace PriceFlowApp.Services
             if (request.LowerThreshold >= request.UpperThreshold)
                 throw new ValidationException("INVALID_THRESHOLD_RANGE", "Lower threshold must be less than upper threshold.");
 
-            ValidateThresholdAvailability(userId, request.HvId);
+            ValidateThresholdAvailability(userId, request.SecurityId);
 
             Korisnici user = GetUserById(userId);
-            HartiiOdVrednost security = GetSecurityById(request.HvId);
+            HartiiOdVrednost security = GetSecurityById(request.SecurityId);
 
             HvPromenaCena threshold = new HvPromenaCena
             {
@@ -76,7 +73,7 @@ namespace PriceFlowApp.Services
         public ThresholdResponse Update(int userId, int id, UpdateThresholdRequest request)
         {
             ValidateThresholdRange(request);
-            ValidateThresholdAvailability(userId, request.HvId, id);
+            ValidateThresholdAvailability(userId, request.SecurityId, id);
 
             HvPromenaCena existingThreshold = GetThresholdById(id);
 
@@ -149,8 +146,8 @@ namespace PriceFlowApp.Services
             return new ThresholdResponse
             {
                 Id = threshold.Id,
-                HvId = threshold.Hvid,
-                HvCode = threshold.Hv.Kod,
+                SecurityId = threshold.Hvid,
+                SecurityCode = threshold.Hv.Kod,
                 LowerThreshold = threshold.DolnaGranica,
                 UpperThreshold = threshold.GornaGranica
             };

@@ -68,7 +68,7 @@ namespace PriceFlowApp.Services
         public Security Add(AddSecurityRequest request)
         {
             ValidationHelper.ValidateRequiredField(request.Isin, "ISIN", "ISIN_VALIDATION_REQUIRED");
-            ValidationHelper.ValidateRequiredField(request.Code, "Code", "CODE_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(request.Code, "SecurityCode", "CODE_VALIDATION_REQUIRED");
             ValidateCodeAvailability(request.Code);
 
             TipHv typeSecurity = GetTypeSecurityById(request.TypeSecurityId);
@@ -91,7 +91,7 @@ namespace PriceFlowApp.Services
         public Security Update(int id, UpdateSecurity security)
         {
             ValidationHelper.ValidateRequiredField(security.Isin, "ISIN", "ISIN_VALIDATION_REQUIRED");
-            ValidationHelper.ValidateRequiredField(security.Code, "Code", "CODE_VALIDATION_REQUIRED");
+            ValidationHelper.ValidateRequiredField(security.Code, "SecurityCode", "CODE_VALIDATION_REQUIRED");
 
             ValidateCodeAvailability(security.Code, id);
 
@@ -199,7 +199,7 @@ namespace PriceFlowApp.Services
         {
             HartiiOdVrednost? existingSecurity = _securitiesRepository.GetByCode(code);
             if (existingSecurity != null && existingSecurity.Id != securityId)
-                throw new AlreadyExistsException("CODE_ALREADY_EXISTS", "Code already exists.");
+                throw new AlreadyExistsException("CODE_ALREADY_EXISTS", "SecurityCode already exists.");
         }
 
         private Security MapToSecurity(HartiiOdVrednost security)

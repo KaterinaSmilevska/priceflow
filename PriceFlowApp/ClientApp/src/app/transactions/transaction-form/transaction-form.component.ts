@@ -173,7 +173,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
   loadTransactionData(): void {
     if (!this.transaction || !this.form) return;
     this.form.patchValue({
-      hvCode: this.transaction.hvCode,
+      hvCode: this.transaction.securityCode,
       sharesQuantity: this.transaction.sharesQuantity,
       sharesUnitPrice: this.transaction.sharesUnitPrice,
       typeTransaction: this.transaction.typeTransaction,

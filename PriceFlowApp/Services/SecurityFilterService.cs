@@ -15,7 +15,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<FilteredSecurity> FindMostProfitableSecuritiesByDividendYield()
         {
-            IEnumerable<HartiiOdVrednost?> securities = _securityFilterRepository.GetMostProfitableSecuritiesByDividendYield();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetMostProfitableSecuritiesByDividendYield();
 
             int latestYear = _securityFilterRepository.GetLatestYear();
 
@@ -40,7 +40,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<FilteredSecurity> FindMostProfitableSecuritiesByDividendPerShare()
         {
-            IEnumerable<HartiiOdVrednost?> securities = _securityFilterRepository.GetMostProfitableSecuritiesByDividendPerShare();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetMostProfitableSecuritiesByDividendPerShare();
 
             int latestYear = _securityFilterRepository.GetLatestYear();
 
@@ -65,7 +65,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<FilteredSecurity> FindSecuritiesWithBiggestPriceOscillations()
         {
-            IEnumerable<HartiiOdVrednost?> securities = _securityFilterRepository.GetSecuritiesWithBiggestPriceOscillations();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetSecuritiesWithBiggestPriceOscillations();
 
             DateTime latestDate = _securityFilterRepository.GetLatestDate();
 
@@ -90,7 +90,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<FilteredSecurity> FindSecuritiesWithSmallestPriceOscillations()
         {
-            IEnumerable<HartiiOdVrednost?> securities = _securityFilterRepository.GetSecuritiesWithSmallestPriceOscillations();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetSecuritiesWithSmallestPriceOscillations();
 
             DateTime latestDate = _securityFilterRepository.GetLatestDate();
 
@@ -115,7 +115,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<FilteredSecurity> FindLeastLiquidSecuritiesByTradedQuantity()
         {
-            IEnumerable<HartiiOdVrednost?> securities = _securityFilterRepository.GetLeastLiquidSecuritiesByTradedQuantity();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetLeastLiquidSecuritiesByTradedQuantity();
 
             DateTime latestDate = _securityFilterRepository.GetLatestDate();
 
@@ -139,7 +139,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<FilteredSecurity> FindMostLiquidSecuritiesByTradedQuantity()
         {
-            IEnumerable<HartiiOdVrednost?> securities = _securityFilterRepository.GetMostLiquidSecuritiesByTradedQuantity();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetMostLiquidSecuritiesByTradedQuantity();
 
             DateTime latestDate = _securityFilterRepository.GetLatestDate();
 
@@ -163,7 +163,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<FilteredSecurity> FindLeastLiquidSecuritiesByNumTradingDays()
         {
-            IEnumerable<HartiiOdVrednost?> securities = _securityFilterRepository.GetLeastLiquidSecuritiesByNumTradingDays();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetLeastLiquidSecuritiesByNumTradingDays();
 
             return securities.Select(s =>
             {
@@ -183,7 +183,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<FilteredSecurity> FindMostLiquidSecuritiesByNumTradingDays()
         {
-            IEnumerable<HartiiOdVrednost?> securities = _securityFilterRepository.GetMostLiquidSecuritiesByNumTradingDays();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetMostLiquidSecuritiesByNumTradingDays();
 
             return securities.Select(s =>
             {
@@ -203,7 +203,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<Sector> FindMostProfitableSectorsByDividendYield()
         {
-            IEnumerable<Sektori?> sectors = _securityFilterRepository.GetMostProfitableSectorsByDividendYield();
+            IEnumerable<Sektori> sectors = _securityFilterRepository.GetMostProfitableSectorsByDividendYield();
 
             int latestYear = _securityFilterRepository.GetLatestYear();
 
@@ -216,8 +216,8 @@ namespace PriceFlowApp.Services
 
                 return new Sector
                 {
-                    SectorId = s.Id,
-                    SectorName = s.Ime,
+                    Id = s.Id,
+                    Name = s.Ime,
                     TotalValue = dividendYield
                 };
             })
@@ -227,7 +227,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<Sector> FindMostProfitableSectorsByProfit()
         {
-            IEnumerable<Sektori?> sectors = _securityFilterRepository.GetMostProfitableSectorsByProfit();
+            IEnumerable<Sektori> sectors = _securityFilterRepository.GetMostProfitableSectorsByProfit();
 
             int latestYear = _securityFilterRepository.GetLatestYear();
 
@@ -240,8 +240,8 @@ namespace PriceFlowApp.Services
 
                 return new Sector
                 {
-                    SectorId = s.Id,
-                    SectorName = s.Ime,
+                    Id = s.Id,
+                    Name = s.Ime,
                     TotalValue = profit
                 };
             })
@@ -251,7 +251,7 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<FilteredSecurity> FindSecuritiesValuation()
         {
-            IEnumerable<HartiiOdVrednost?> securities = _securityFilterRepository.GetSecuritiesValuation();
+            IEnumerable<HartiiOdVrednost> securities = _securityFilterRepository.GetSecuritiesValuation();
 
             int latestYear = _securityFilterRepository.GetLatestYear();
 

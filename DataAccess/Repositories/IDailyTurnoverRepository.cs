@@ -11,6 +11,16 @@ namespace DataAccess.Repositories
 
         IEnumerable<DnevenPromet> GetLiquidity(IEnumerable<int>? securityIds, DateTime fromDate);
 
+        IEnumerable<DnevenPromet> GetBySecurityAndDateRange(int securityId, DateTime startDate, DateTime endDate);
+
+        IEnumerable<DnevenPromet> GetByDateWithSecurity(DateTime date);
+
+        IEnumerable<DnevenPromet> GetDailyTurnoverForTotalMarketCap(DateTime date);
+
+        IEnumerable<DnevenPromet> GetByDateRange(DateTime startDate, DateTime endDate);
+
+        IEnumerable<DnevenPromet> GetLatestPrices(IEnumerable<int> securityIds);
+
         decimal? GetLatestPrice(int securityId, DateOnly date);
 
         DateTime GetLatestDate();

@@ -106,7 +106,7 @@ export class TransactionsComponent implements OnInit {
 
     const transactionRows: PortfolioTableView[] = this.transactions.map(t => ({
       date: t.date,
-      hvCode: t.hvCode,
+      securityCode: t.securityCode,
       type: t.typeTransaction,
 
       sharesQuantity: t.sharesQuantity,
@@ -122,7 +122,7 @@ export class TransactionsComponent implements OnInit {
 
     const dividendRows: PortfolioTableView[] = this.portfolioReturns.map(r => ({
       date: r.date,
-      hvCode: this.securityCodeMap.get(r.hvId) ?? '-',
+      securityCode: this.securityCodeMap.get(r.securityId) ?? '-',
       type: 'Дивиденден принос',
 
       amount: r.netAmount,

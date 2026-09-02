@@ -6,14 +6,14 @@ namespace PriceFlowApp.Services
 {
     public class MarketOverviewService : IMarketOverviewService
     {
-        private readonly PriceFlowDbContext _dbContext;
+        private readonly ISecuritiesRepository _securitiesRepository;
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
 
-        public MarketOverviewService(PriceFlowDbContext dbContext, ITransactionsRepository transactionsRepository,
+        public MarketOverviewService(ISecuritiesRepository securitiesRepository, ITransactionsRepository transactionsRepository,
                 IDailyTurnoverRepository dailyTurnoverRepository) 
         {
-            _dbContext = dbContext;
+            _securitiesRepository = securitiesRepository;
             _transactionsRepository = transactionsRepository;
             _dailyTurnoverRepository = dailyTurnoverRepository;
         } 
@@ -23,33 +23,29 @@ namespace PriceFlowApp.Services
             DateTime latestDate = FindLatestDate();
             DateTime startMonth = new DateTime(latestDate.Year, latestDate.Month, 1);
 
-            decimal? totalMarketCap = _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.CenaPoslednaTransakcija != null)
-                .Join(_dbContext.HartiiOdVrednost, dp => dp.Hvid, hv => hv.Id, (dp, hv) => new { dp, hv })
-                .Sum(x => x.hv.VkupenBrojAkcii * x.dp.CenaPoslednaTransakcija);
+            decimal? totalMarketCap = _dailyTurnoverRepository.GetDailyTurnoverForTotalMarketCap(latestDate)
+                .Sum(dp => dp.Hv.VkupenBrojAkcii * dp.CenaPoslednaTransakcija);
 
-            double? averageDailyVolume = _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii != null)
+            double? averageDailyVolume = _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.KolicinaIstrguvaniAkcii != null)
                 .Average(dp => dp.KolicinaIstrguvaniAkcii);
 
-            double? averageMonthlyVolume = _dbContext.DnevenPromet
-                .Where(dp => dp.Datum >= startMonth && dp.Datum <= latestDate && dp.KolicinaIstrguvaniAkcii != null)
+            double? averageMonthlyVolume = _dailyTurnoverRepository.GetByDateRange(startMonth, latestDate)
                 .Average(dp => dp.KolicinaIstrguvaniAkcii);
-
-            var topGainer = _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena > 0)
+                
+            var topGainer = _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.ProcentPromena > 0)
                 .OrderByDescending(dp => dp.ProcentPromena)
                 .Select(dp => new { dp.Hv.Kod, dp.ProcentPromena })
                 .FirstOrDefault();
 
-            var topLoser = _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena < 0)
+            var topLoser = _dailyTurnoverRepository.GetByDateWithSecurity (latestDate)
+                .Where(dp => dp.ProcentPromena < 0)
                 .OrderBy(dp => dp.ProcentPromena)
                 .Select(dp => new { dp.Hv.Kod, dp.ProcentPromena })
                 .FirstOrDefault();
 
-            var totalSecurities = _dbContext.HartiiOdVrednost
-                .Count();
+            var totalSecurities = _securitiesRepository.GetTotalNumSecurities();
 
             return new MarketOverview
             {
@@ -68,13 +64,13 @@ namespace PriceFlowApp.Services
         {
             DateTime latestDate = FindLatestDate();
 
-            return _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena > 0 && dp.KolicinaIstrguvaniAkcii != null)
+            return _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.ProcentPromena > 0 && dp.KolicinaIstrguvaniAkcii != null)
                 .OrderByDescending(dp => dp.ProcentPromena)
                 .Take(count)
                 .Select(dp => new SecurityPerformance
                 {
-                    Code = dp.Hv.Kod,
+                    SecurityCode = dp.Hv.Kod,
                     ChangePercent = (decimal?)dp.ProcentPromena,
                     Volume = (int)(dp.KolicinaIstrguvaniAkcii ?? 0)
                 })
@@ -85,13 +81,13 @@ namespace PriceFlowApp.Services
         {
             DateTime latestDate = FindLatestDate();
 
-            return _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.ProcentPromena < 0 && dp.KolicinaIstrguvaniAkcii != null)
+            return _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.ProcentPromena < 0 && dp.KolicinaIstrguvaniAkcii != null)
                 .OrderBy(dp => dp.ProcentPromena)
                 .Take(count)
                 .Select(dp => new SecurityPerformance
                 {
-                    Code = dp.Hv.Kod,
+                    SecurityCode = dp.Hv.Kod,
                     ChangePercent = (decimal?)dp.ProcentPromena,
                     Volume = (int)(dp.KolicinaIstrguvaniAkcii ?? 0)
                 })
@@ -102,13 +98,13 @@ namespace PriceFlowApp.Services
         {
             DateTime latestDate = FindLatestDate();
 
-            return _dbContext.DnevenPromet
-                .Where(dp => dp.Datum == latestDate && dp.KolicinaIstrguvaniAkcii != null)
+            return _dailyTurnoverRepository.GetByDateWithSecurity(latestDate)
+                .Where(dp => dp.KolicinaIstrguvaniAkcii != null)
                 .OrderByDescending(dp => dp.KolicinaIstrguvaniAkcii)
                 .Take(count)
                 .Select(dp => new SecurityPerformance
                 {
-                    Code = dp.Hv.Kod,
+                    SecurityCode = dp.Hv.Kod,
                     ChangePercent = (decimal?)dp.ProcentPromena,
                     Volume = (int)(dp.KolicinaIstrguvaniAkcii ?? 0)
                 })
@@ -126,7 +122,7 @@ namespace PriceFlowApp.Services
                 securitiesIds = _transactionsRepository.GetOwnedSecuritiesIds(userId);
             }
 
-            IEnumerable<DnevenPromet?> dailyTurnover = _dailyTurnoverRepository.GetLiquidity(securitiesIds, fromDate);
+            IEnumerable<DnevenPromet> dailyTurnover = _dailyTurnoverRepository.GetLiquidity(securitiesIds, fromDate);
 
             var grouped = dailyTurnover.GroupBy(dp => new { dp.Hvid, dp.Hv.Kod })
                 .Select(g => new
@@ -164,8 +160,7 @@ namespace PriceFlowApp.Services
 
         private DateTime FindLatestDate()
         {
-            return _dbContext.DnevenPromet
-                .Max(dp => dp.Datum);
+            return _dailyTurnoverRepository.GetLatestDate();
         }
     }
 }

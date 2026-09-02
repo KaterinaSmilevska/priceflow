@@ -179,7 +179,7 @@ td.fw-bold {
 }
 
 .bg-info-subtle {
-  background-color: var(--primary-color)22;
+  background-color: var(--primary-color);
   color: var(--primary-color);
 }
 

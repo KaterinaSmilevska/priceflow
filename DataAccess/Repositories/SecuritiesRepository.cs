@@ -63,6 +63,12 @@ namespace DataAccess.Repositories
             return security!.VkupenBrojAkcii;
         }
 
+        public int GetTotalNumSecurities()
+        {
+            return _dbContext.HartiiOdVrednost
+                .Count();
+        }
+
         public HartiiOdVrednost Add(HartiiOdVrednost security)
         {
             _dbContext.HartiiOdVrednost.Add(security);

@@ -18,6 +18,8 @@ namespace DataAccess.Repositories
 
         int GetTotalNumSharesBySecurityCode(string securityCode);
 
+        int GetTotalNumSecurities();
+
         HartiiOdVrednost Add(HartiiOdVrednost security);
 
         HartiiOdVrednost Update(HartiiOdVrednost security);

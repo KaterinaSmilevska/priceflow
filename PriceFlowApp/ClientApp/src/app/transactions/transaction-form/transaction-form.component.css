@@ -61,7 +61,7 @@
   .modal-content .form-select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px var(--primary-color)33;
+    box-shadow: 0 0 0 2px var(--primary-color);
   }
 
 .modal-content input[readonly],

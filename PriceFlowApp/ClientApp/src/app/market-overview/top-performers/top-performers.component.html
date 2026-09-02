@@ -7,7 +7,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let s of topGainers">
-          <td>{{ s.code }}</td>
+          <td>{{ s.securityCode }}</td>
           <td class="positive">+{{ s.changePercent | number:'1.2-2' }}%</td>
         </tr>
       </tbody>
@@ -27,7 +27,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let s of topLosers">
-          <td>{{ s.code }}</td>
+          <td>{{ s.securityCode }}</td>
           <td class="negative">{{ s.changePercent | number:'1.2-2' }}%</td>
         </tr>
       </tbody>
@@ -47,7 +47,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let s of mostTraded">
-          <td>{{ s.code }}</td>
+          <td>{{ s.securityCode }}</td>
           <td>{{ s.volume | number }}</td>
         </tr>
       </tbody>

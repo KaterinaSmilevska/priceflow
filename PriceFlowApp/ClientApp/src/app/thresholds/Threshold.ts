@@ -1,7 +1,7 @@
 export interface Threshold {
   id: number;
-  hvId: number;
-  hvCode: string;
+  securityId: number;
+  securityCode: string;
   lowerThreshold: number;
   upperThreshold: number;
 }

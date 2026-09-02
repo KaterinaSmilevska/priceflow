@@ -92,7 +92,7 @@ namespace PriceFlowApp.Services
         {
             Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioIdUntilDate(portfolio.Id, to);
+            IEnumerable<Transakcii> transactions = _transactionsRepository.GetByPortfolioIdUntilDate(portfolio.Id, to);
 
             Dictionary<int, decimal> holdingsAtStart = CalculateHoldingsUntilDate(transactions, from);
 

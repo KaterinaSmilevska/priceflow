@@ -9,11 +9,6 @@
         <div *ngIf="nameError" class="error mt-2">
           {{ nameError | translate }}
         </div>
-        <!--<div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('name')?.errors?.['required']" class="error mt-2">
-            {{ 'AUTH.FIELD_REQUIRED' | translate }}
-          </div>
-        </div>-->
       </div>
 
       <div class="mb-3">
@@ -22,11 +17,6 @@
         <div *ngIf="usernameError" class="error mt-2">
           {{ usernameError | translate }}
         </div>
-        <!--<div *ngIf="form.get('username')?.touched && form.get('username')?.invalid" class="text-red-700 mt-1">
-          <div *ngIf="form.get('username')?.errors?.['required']" class="error mt-2">
-            {{ 'AUTH.FIELD_REQUIRED' | translate }}
-          </div>
-        </div>-->
       </div>
 
       <div class="mb-3">
@@ -35,14 +25,6 @@
         <div *ngIf="emailError" class="error mt-2">
           {{ emailError | translate }}
         </div>
-        <!--<div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-red-700 mt-1">
-    <div *ngIf="form.get('email')?.errors?.['required']" class="error mt-2">
-      {{ 'AUTH.FIELD_REQUIRED' | translate }}
-    </div>
-    <div *ngIf="form.get('email')?.errors?.['email']" class="error mt-2">
-      {{ 'AUTH.INVALID_EMAIL' | translate }}
-    </div>
-  </div>-->
       </div>
 
       <div class="text-end">

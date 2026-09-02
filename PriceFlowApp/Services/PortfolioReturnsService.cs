@@ -33,7 +33,7 @@ namespace PriceFlowApp.Services
         {
             Portfolija portfolio = GetPortfolioById(portfolioReturns.PortfolioId);
 
-            HartiiOdVrednost security = GetBySecurityId(portfolioReturns.HVId);
+            HartiiOdVrednost security = GetBySecurityId(portfolioReturns.SecurityId);
 
             PortfolioPrinosi portfolioReturn = new PortfolioPrinosi
             {
@@ -109,7 +109,7 @@ namespace PriceFlowApp.Services
                 NetAmount = portfolioReturns.NetoIznos,
                 Tax = portfolioReturns.Danok,
                 PortfolioId = portfolioReturns.PortfolioId,
-                HVId = portfolioReturns.Hvid
+                SecurityId = portfolioReturns.Hvid
             };
         }
     }

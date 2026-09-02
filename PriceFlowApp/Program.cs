@@ -141,7 +141,7 @@ app.UseEndpoints(endpoints => endpoints.MapControllers());
 //            await context.Response.WriteAsJsonAsync(new
 //            {
 //                message = bre.Message,
-//                code = bre.Code
+//                code = bre.SecurityCode
 //            });
 //            return;
 //        }

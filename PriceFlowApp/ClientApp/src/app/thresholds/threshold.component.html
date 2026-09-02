@@ -35,7 +35,7 @@
           </td>
         </tr>
         <tr *ngFor="let t of thresholds" class="hover:bg-gray-50">
-          <td class="py-2 px-4 border-b">{{ t.hvCode }}</td>
+          <td class="py-2 px-4 border-b">{{ t.securityCode }}</td>
           <td class="py-2 px-4 border-b">{{ t.lowerThreshold }}</td>
           <td class="py-2 px-4 border-b">{{ t.upperThreshold }}</td>
           <td class="py-2 px-4 border-b">
@@ -69,7 +69,7 @@
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content animate-in">
     <h3>{{ 'DELETE.CONFIRM' | translate }}</h3>
-    <p>{{ 'DELETE.DELETE_THRESHOLD_MESSAGE' | translate }} <strong>{{ thresholdToDelete?.hvCode }}</strong>?</p>
+    <p>{{ 'DELETE.DELETE_THRESHOLD_MESSAGE' | translate }} <strong>{{ thresholdToDelete?.securityCode }}</strong>?</p>
 
     <div class="modal-actions">
       <button class="btn btn-secondary" (click)="closeDeleteModal()">{{ 'CANCEL' | translate }}</button>

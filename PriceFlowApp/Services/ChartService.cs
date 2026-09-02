@@ -2,19 +2,20 @@
 using DataAccess.Repositories;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
+using System.Runtime.Intrinsics.Arm;
 
 namespace PriceFlowApp.Services
 {
     public class ChartService : IChartService
     {
-        private readonly PriceFlowDbContext _dbContext;
+        private readonly IDailyTurnoverRepository _dailyTurnoverRepository;
         private readonly IPortfoliosRepository _portfoliosRepository;
         private readonly ITransactionsRepository _transactionsRepository;
         private readonly ISecuritiesRepository _securitiesRepository;
 
-        public ChartService(PriceFlowDbContext dbContext, ITransactionsRepository transactionsRepository, ISecuritiesRepository securitiesRepository, IPortfoliosRepository portfoliosRepository)
+        public ChartService(IDailyTurnoverRepository dailyTurnoverRepository, ITransactionsRepository transactionsRepository, ISecuritiesRepository securitiesRepository, IPortfoliosRepository portfoliosRepository)
         {
-            _dbContext = dbContext;
+            _dailyTurnoverRepository = dailyTurnoverRepository;
             _transactionsRepository = transactionsRepository;
             _securitiesRepository = securitiesRepository;
             _portfoliosRepository = portfoliosRepository;
@@ -26,9 +27,9 @@ namespace PriceFlowApp.Services
 
             HartiiOdVrednost security = GetSecurityById(securityId);
 
-            return _dbContext.DnevenPromet
-                .Where(dp => dp.Hvid == securityId && dp.Datum >= startDate && dp.Datum <= endDate)
-                .OrderBy(dp => dp.Datum)
+            IEnumerable<DnevenPromet> dailyPrices = _dailyTurnoverRepository.GetBySecurityAndDateRange(securityId, startDate, endDate);
+
+            return dailyPrices
                 .Select(dp => new PriceTrend
                 {
                     Date = dp.Datum,
@@ -39,20 +40,14 @@ namespace PriceFlowApp.Services
 
         public IEnumerable<SectorDistribution> GetSectorDistribution(DateTime date)
         {
-            return _dbContext.HartiiOdVrednost
-                .Join(_dbContext.DnevenPromet, hv => hv.Id, dp => dp.Hvid, (hv, dp) => new { hv, dp })
-                .Where(x => x.dp.Datum == date)
-                .Select( x => new
-                {
-                    SectorName = x.hv.Izdavach.Sektor.Ime,
-                    MarketCap = x.hv.VkupenBrojAkcii * x.dp.CenaPoslednaTransakcija
-                })
-                .GroupBy(x => x.SectorName)
+            IEnumerable<DnevenPromet> dailyTurnover = _dailyTurnoverRepository.GetByDateWithSecurity(date);
+
+            return dailyTurnover
+                .GroupBy(dp => dp.Hv.Izdavach.Sektor.Ime)
                 .Select(g => new SectorDistribution
                 {
                     SectorName = g.Key,
-                    MarketCap = (decimal)g.Sum(x => x.MarketCap)
-
+                    MarketCap = g.Sum(dp => dp.Hv.VkupenBrojAkcii * (dp.CenaPoslednaTransakcija ?? 0))
                 })
                 .ToList();
         }
@@ -61,7 +56,7 @@ namespace PriceFlowApp.Services
         {
             Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
+            IEnumerable<Transakcii> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
 
             List<MonthlyIncome> monthlyIncome = transactions
                 .Where(t => t.TipTransakcija == "Продавање" && t.Realna == isReal)
@@ -83,7 +78,7 @@ namespace PriceFlowApp.Services
         {
             Portfolija portfolio = GetPortfolioById(portfolioId);
 
-            IEnumerable<Transakcii?> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
+            IEnumerable<Transakcii> transactions = _transactionsRepository.GetByPortfolioId(portfolioId);
 
             List<SecurityAllocation> securityAllocation = transactions
                 .Where(t => t.Realna == isReal)
@@ -111,10 +106,7 @@ namespace PriceFlowApp.Services
 
         public DateTime FindLatestDate()
         {
-            return _dbContext.DnevenPromet
-                .OrderByDescending(dp => dp.Datum)
-                .Select(dp => dp.Datum)
-                .FirstOrDefault();
+            return _dailyTurnoverRepository.GetLatestDate();
         }
 
         private HartiiOdVrednost GetSecurityById(int securityId)

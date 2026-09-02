@@ -1,5 +1,5 @@
 export interface CreateThresholdRequest {
-  hvId: number;
+  securityId: number;
   lowerThreshold: number;
   upperThreshold: number
 }

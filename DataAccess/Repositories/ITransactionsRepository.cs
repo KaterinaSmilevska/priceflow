@@ -8,6 +8,8 @@ namespace DataAccess.Repositories
 
         IEnumerable<Transakcii> GetByPortfolioId(int portfolioId);
 
+        IEnumerable<Transakcii> GetByPortfolioId(int portfolioId, bool isReal);
+
         IEnumerable<Transakcii> GetByPortfolioIdUntilDate(int portfolioId, DateOnly date);
 
         List<int> GetOwnedSecuritiesIds(int userId);

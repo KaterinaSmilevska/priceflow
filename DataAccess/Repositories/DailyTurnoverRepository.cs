@@ -144,6 +144,50 @@ namespace DataAccess.Repositories
             return query.ToList();
         }
 
+        public IEnumerable<DnevenPromet> GetBySecurityAndDateRange(int securityId, DateTime startDate, DateTime endDate)
+        {
+            return _dbContext.DnevenPromet
+                .Where(dp => dp.Hvid == securityId && dp.Datum >= startDate && dp.Datum <= endDate)
+                .OrderBy(dp => dp.Datum)
+                .ToList();
+        }
+
+        public IEnumerable<DnevenPromet> GetByDateWithSecurity(DateTime date)
+        {
+            return _dbContext.DnevenPromet
+                .Include(dp => dp.Hv)
+                .ThenInclude(hv => hv.Izdavach)
+                .ThenInclude(i => i.Sektor)
+                .Where(dp => dp.Datum >= date && dp.Datum < date.AddDays(1))
+                .ToList();
+        }
+
+        public IEnumerable<DnevenPromet> GetDailyTurnoverForTotalMarketCap(DateTime date)
+        {
+            return _dbContext.DnevenPromet
+                .Include(dp => dp.Hv)
+                .Where(dp => dp.Datum >= date && dp.Datum < date.AddDays(1) && dp.CenaPoslednaTransakcija != null)
+                .ToList();
+        }
+
+        public IEnumerable<DnevenPromet> GetByDateRange(DateTime startDate, DateTime endDate)
+        {
+            return _dbContext.DnevenPromet
+                .Where(dp => dp.Datum >= startDate && dp.Datum <= endDate && dp.KolicinaIstrguvaniAkcii != null)
+                .ToList();
+        }
+
+        public IEnumerable<DnevenPromet> GetLatestPrices(IEnumerable<int> securityIds)
+        {
+            return _dbContext.DnevenPromet
+                .Where(dp => securityIds.Contains(dp.Hvid) && dp.CenaPoslednaTransakcija != null)
+                .GroupBy(dp => dp.Hvid)
+                .Select(g =>
+                    g.OrderByDescending(dp => dp.Datum)
+                    .First())
+                .ToList();
+        }
+
         public decimal? GetLatestPrice(int securityId, DateOnly date)
         {
             return _dbContext.DnevenPromet

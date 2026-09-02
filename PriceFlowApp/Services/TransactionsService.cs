@@ -50,7 +50,7 @@ namespace PriceFlowApp.Services
 
         public Transaction Add(int portfolioId, Transaction transaction)
         {
-            HartiiOdVrednost security = GetSecurityByCode(transaction.HVCode);
+            HartiiOdVrednost security = GetSecurityByCode(transaction.SecurityCode);
 
             ValidationHelper.ValidateRequiredField(transaction.TypeTransaction, "Type", "TYPE_VALIDATION_REQUIRED");
 
@@ -85,7 +85,7 @@ namespace PriceFlowApp.Services
             if (existingTransaction.PortfolioId != portfolioId)
                 throw new NotFoundException("TRANSACTION_NOT_FOUND", "Transaction not found.");
 
-            HartiiOdVrednost security = GetSecurityByCode(transaction.HVCode);
+            HartiiOdVrednost security = GetSecurityByCode(transaction.SecurityCode);
             ValidateShares(portfolioId, security, transaction, id);
 
             existingTransaction.Hvid = security.Id;
@@ -121,9 +121,9 @@ namespace PriceFlowApp.Services
                 .Where(t => t.Realna == isReal)
                 .ToList();
 
-            IEnumerable<Transakcii?> sellTransactions = transactions.FindAll(t => t.TipTransakcija == "Продавање");
+            IEnumerable<Transakcii> sellTransactions = transactions.FindAll(t => t.TipTransakcija == "Продавање");
 
-            IEnumerable<Transakcii?> buyTransactions = transactions.FindAll(t => t.TipTransakcija == "Купување");
+            IEnumerable<Transakcii> buyTransactions = transactions.FindAll(t => t.TipTransakcija == "Купување");
 
             PortfolioReturnsSummary summary = _portfolioReturnsService.CalculateSummary(portfolioId);
 
@@ -156,7 +156,7 @@ namespace PriceFlowApp.Services
             period ??= PriceTrendPeriod.Monthly;
             resolution ??= DetermineResolution(ownedSecuritiesIds.Count, period.Value);
 
-            IEnumerable<DnevenPromet?> dailyPrices = _dailyTurnoverRepository
+            IEnumerable<DnevenPromet> dailyPrices = _dailyTurnoverRepository
                 .GetBySecuritiesIds(ownedSecuritiesIds, period, resolution);
 
             return dailyPrices.Select(dp => new OwnedSecuritiesPriceTrend
@@ -180,7 +180,7 @@ namespace PriceFlowApp.Services
 
             int periodsBack = period == PriceTrendPeriod.Monthly ? 1 : 12;
 
-            IEnumerable<DnevenPromet?> dailyPrices = _dailyTurnoverRepository.GetBySecuritiesIds(ownedSecuritiesIds, period, resolution);
+            IEnumerable<DnevenPromet> dailyPrices = _dailyTurnoverRepository.GetBySecuritiesIds(ownedSecuritiesIds, period, resolution);
 
             if (!string.IsNullOrWhiteSpace(securityCode))
             {
@@ -364,8 +364,8 @@ namespace PriceFlowApp.Services
             return new Transaction
             {
                 Id = transaction.Id,
-                HVId = transaction.Hvid,
-                HVCode = transaction.Hv.Kod,
+                SecurityId = transaction.Hvid,
+                SecurityCode = transaction.Hv.Kod,
                 SharesQuantity = transaction.KolicinaAkcii,
                 SharesUnitPrice = transaction.EdinecnaCenaAkcija,
                 Amount = transaction.Iznos,

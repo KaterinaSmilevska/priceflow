@@ -1,6 +1,6 @@
 export interface PortfolioValue {
-  hvid: number;
-  hvCode: string;
+  securityId: number;
+  securityCode: string;
   totalQuantity: number;
   lastPrice: number;
   currentValue: number;
