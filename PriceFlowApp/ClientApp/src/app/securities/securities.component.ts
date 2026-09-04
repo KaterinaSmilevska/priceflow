@@ -9,11 +9,12 @@ import { Security } from './Security';
 import { Router, RouterModule } from '@angular/router';
 import { DbValueTranslatePipe } from '../shared/db-value-translate.pipe';
 import { IssuersTranslatePipe } from '../shared/issuers-translate.pipe';
+import { SecuritiesAgentComponent } from '../agents/securities-agent/securities-agent.component';
 
 @Component({
   selector: 'app-securities',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, SecurityFormComponent, TranslateModule, DbValueTranslatePipe, IssuersTranslatePipe],
+  imports: [CommonModule, FormsModule, RouterModule, SecurityFormComponent, TranslateModule, DbValueTranslatePipe, IssuersTranslatePipe, SecuritiesAgentComponent],
   templateUrl: './securities.component.html',
   styleUrls: ['./securities.component.css']
 })

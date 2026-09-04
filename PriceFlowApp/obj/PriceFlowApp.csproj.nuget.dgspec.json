@@ -148,6 +148,14 @@
               "target": "Package",
               "version": "[0.105.0, )"
             },
+            "Microsoft.Agents.AI": {
+              "target": "Package",
+              "version": "[1.20.0, )"
+            },
+            "Microsoft.Agents.AI.OpenAI": {
+              "target": "Package",
+              "version": "[1.20.0, )"
+            },
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
               "version": "[2.3.9, )"

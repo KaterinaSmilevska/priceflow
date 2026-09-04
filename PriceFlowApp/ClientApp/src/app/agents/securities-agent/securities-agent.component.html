@@ -1,0 +1,108 @@
+<button
+        *ngIf="!isOpen"
+        type="button"
+        class="agent-launcher"
+        (click)="toggleAgent()"
+        aria-label="Open Securities Agent">
+  <span class="agent-launcher-icon">✦</span>
+
+  <span class="agent-launcher-text">
+    {{ 'AGENTS.SECURITIES_AGENT.NAME' | translate }}
+  </span>
+</button>
+
+<div *ngIf="isOpen" class="agent-window">
+  <div class="agent-header">
+    <div class="agent-title-section">
+      <div class="agent-avatar">
+        ✦
+      </div>
+
+      <div>
+        <div class="agent-title">
+          {{'AGENTS.SECURITIES_AGENT.TITLE' | translate }}
+        </div>
+        <div class="agent-status">
+          <span class="status-dot"></span>
+          {{ 'AGENTS.STATUS' | translate }}
+        </div>
+      </div>
+</div>
+      <button type="button"
+              class="agent-close"
+              (click)="closeAgent()"
+              aria-label="Close Securities Agent">
+        ×
+      </button>
+    </div>
+
+    <div class="agent-chat">
+      <div *ngFor="let message of messages"
+           class="message-row"
+           [class.user-row]="message.role === 'user'"
+           [class.agent-row]="message.role === 'agent'">
+        <div *ngIf="message.role === 'agent'"
+             class="message-avatar">
+          ✦
+        </div>
+        <div class="message-wrapper">
+          <div class="message-label">
+            {{
+              message.role === 'agent'
+              ? ('AGENTS.SECURITIES_AGENT.NAME' | translate)
+              : ('AGENTS.YOU' | translate)
+            }}
+          </div>
+
+          <div class="message-content"
+               [class.agent-content]="message.role === 'agent'"
+               [class.user-content]="message.role === 'user'">
+            {{ message.content | translate }}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="loading" class="message-row agent-row">
+        <div class="message-avatar">
+          ✦
+        </div>
+        <div class="message-wrapper">
+          <div class="message-label">
+            {{ 'AGENTS.SECURITIES_AGENT.NAME' | translate }}
+          </div>
+          <div class="thinking-bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="agent-error">
+        {{ errorMessage | translate }}
+      </div>
+    </div>
+
+    <div class="agent-input">
+      <textarea
+                [(ngModel)]="question"
+                [disabled]="loading"
+                [placeholder]="'AGENTS.SECURITIES_AGENT.PLACEHOLDER' | translate"
+                rows="1"
+                (keydown.enter)="onEnter($event)">
+      </textarea>
+      <button
+              type="button"
+              class="send-button"
+              [disabled]="!question?.trim() || loading"
+              (click)="askAgent()"
+              aria-label="Send question">
+        <span *ngIf="!loading">➤</span>
+        <span *ngIf="loading" class="send-spinner"></span>
+      </button>
+    </div>
+
+    <div class="agent-footer">
+      {{ 'AGENTS.FOOTER' | translate }}
+    </div>
+</div>

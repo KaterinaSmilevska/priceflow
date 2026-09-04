@@ -50,6 +50,9 @@
         </tr>
       </tbody>
     </table>
+
+    <app-securities-agent *ngIf="(loginService.isLoggedIn() | async)"></app-securities-agent>
+
     <p class="mt-4 text-center">
       <a [routerLink]="['/']" class="page-link">{{ 'BACK_TO' | translate }} {{ 'HOME.TITLE' | translate }}</a>
     </p>

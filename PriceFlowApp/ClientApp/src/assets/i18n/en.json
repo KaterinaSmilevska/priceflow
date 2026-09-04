@@ -280,7 +280,22 @@
     "SECURITY_ALLOCATION_MESSAGE": "Security allocation",
     "SHOWING_DATA_FOR": "Showing data for"
   },
+  "AGENTS": {
+    "SECURITIES_AGENT": {
+      "TITLE": "Securities Intelligent Agent",
+      "NAME": "Securities Intelligent Agent",
+      "DESCRIPTION": "Intelligent agent that analyses securities data.",
+      "GREETING": "Hi, I can help you find information about securities price trend.",
+      "PLACEHOLDER": "Ask about the securities..."
+    },
+    "STATUS": "Active",
+    "FOOTER": "PriceFlow",
+    "YOU": "You",
+    "THINKING": "Thinking",
+    "ASK": "Send"
+  },
   "ERRORS": {
+    "GENERAL_ERROR": "An error occured.",
     "VALIDATION_REQUIRED_FIELD_REGISTER": "All fields are required.",
     "VALIDATION_REQUIRED_FIELD_LOGIN": "Username and password are required",
     "INVALID_CREDENTIALS": "Invalid username or password.",

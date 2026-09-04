@@ -1,11 +1,12 @@
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
+using OpenAI;
+using PriceFlowApp.Agents;
 using PriceFlowApp.Exceptions;
 using PriceFlowApp.Services;
-using PriceFlowSecurity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,11 @@ builder.Services.AddControllers()
     });
 builder.Services.AddDbContext<PriceFlowDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PriceFlowDatabase")));
+
+var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
+builder.Services.AddChatClient(sp => new OpenAIClient(apiKey).GetChatClient("gpt-5").AsIChatClient());
+builder.Services.AddHttpClient("SecuritiesApi", client => client.BaseAddress = new Uri("https://localhost:7248"));
 
 builder.Services.AddScoped<IBrokersRepository, BrokersRepository>();
 builder.Services.AddScoped<IBrokersService, BrokersService>();
@@ -64,6 +70,8 @@ builder.Services.AddHostedService<NotificationBackgroundService>();
 builder.Services.AddScoped<ISecurityFilterRepository, SecurityFilterRepository>();
 builder.Services.AddScoped<ISecurityFilterService, SecurityFilterService>();
 builder.Services.AddScoped<ISecurityPriceTrendReportService, SecurityPriceTrendReportService>();
+
+builder.Services.AddScoped<SecuritiesAgent>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 

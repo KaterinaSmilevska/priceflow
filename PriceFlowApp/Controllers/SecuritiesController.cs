@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PriceFlowApp.Agents;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 
@@ -9,10 +10,12 @@ namespace PriceFlowApp.Controllers
     public class SecuritiesController: PriceFlowController
     {
         private readonly ISecuritiesService _securitiesService;
+        private readonly SecuritiesAgent _securitiesAgent;
 
-        public SecuritiesController(ISecuritiesService securitiesService)
+        public SecuritiesController(ISecuritiesService securitiesService, SecuritiesAgent securitiesAgent)
         {
             _securitiesService = securitiesService;
+            _securitiesAgent = securitiesAgent;
         }
 
         [HttpGet("{id}")]
@@ -71,5 +74,18 @@ namespace PriceFlowApp.Controllers
         {
             return Execute(() => _securitiesService.SearchByCode(searchTerm));
         }
+
+        [HttpPost("agent")]
+        public async Task<IActionResult> AskSecuritiesAgent([FromBody] ChatRequest request)
+        {
+            if(string.IsNullOrWhiteSpace(request.Question))
+            {
+                return BadRequest(new { error = "Question is required." });
+            }
+
+            var answer = await _securitiesAgent.AskAsync(request.Question);
+            return Ok(new { answer });
+        }
+        public record ChatRequest(string Question);
     }
 }
