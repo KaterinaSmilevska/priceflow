@@ -37,6 +37,8 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\admin\AuthStatus.ts" />
+    <None Remove="ClientApp\src\app\agents\AgentConversation.ts" />
+    <None Remove="ClientApp\src\app\agents\AgentMessageResponse.ts" />
     <None Remove="ClientApp\src\app\auth\login\LoginRequest.ts" />
     <None Remove="ClientApp\src\app\auth\login\LoginResponse.ts" />
     <None Remove="ClientApp\src\app\auth\register\EmailValidationRequest.ts" />
@@ -88,6 +90,8 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\admin\AuthStatus.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\agents\AgentConversation.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\agents\AgentMessageResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\auth\login\LoginRequest.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\auth\login\LoginResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\auth\register\EmailValidationRequest.ts" />
@@ -154,7 +158,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
-      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

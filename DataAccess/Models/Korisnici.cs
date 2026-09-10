@@ -25,6 +25,10 @@ public partial class Korisnici
 
     public DateTime DateModified { get; set; }
 
+    public virtual ICollection<AgentKoristenje> AgentKoristenje { get; set; } = new List<AgentKoristenje>();
+
+    public virtual ICollection<AgentRazgovori> AgentRazgovori { get; set; } = new List<AgentRazgovori>();
+
     public virtual ICollection<HvPromenaCena> HvPromenaCena { get; set; } = new List<HvPromenaCena>();
 
     public virtual ICollection<IzvestuvanjaPromenaCena> IzvestuvanjaPromenaCena { get; set; } = new List<IzvestuvanjaPromenaCena>();

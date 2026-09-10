@@ -15,6 +15,12 @@ public partial class PriceFlowDbContext : DbContext
     {
     }
 
+    public virtual DbSet<AgentKoristenje> AgentKoristenje { get; set; }
+
+    public virtual DbSet<AgentPoraki> AgentPoraki { get; set; }
+
+    public virtual DbSet<AgentRazgovori> AgentRazgovori { get; set; }
+
     public virtual DbSet<AplikativniParametri> AplikativniParametri { get; set; }
 
     public virtual DbSet<Brokeri> Brokeri { get; set; }
@@ -55,6 +61,48 @@ public partial class PriceFlowDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Macedonian_FYROM_100_CI_AS");
+
+        modelBuilder.Entity<AgentKoristenje>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pk_AgentKoristenje");
+
+            entity.HasIndex(e => new { e.KorisnikId, e.Datum }, "un_AgentKoristenje_KorisnikId_Datum").IsUnique();
+
+            entity.HasOne(d => d.Korisnik).WithMany(p => p.AgentKoristenje)
+                .HasForeignKey(d => d.KorisnikId)
+                .HasConstraintName("fk_AgentKoristenje_Korisnici");
+        });
+
+        modelBuilder.Entity<AgentPoraki>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pk_AgentPoraki");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getutcdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Sodrzina).HasMaxLength(1000);
+            entity.Property(e => e.Uloga).HasMaxLength(20);
+
+            entity.HasOne(d => d.Razgovor).WithMany(p => p.AgentPoraki)
+                .HasForeignKey(d => d.RazgovorId)
+                .HasConstraintName("fk_AgentPoraki_AgentRazgovori");
+        });
+
+        modelBuilder.Entity<AgentRazgovori>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pk_AgentRazgovori");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getutcdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getutcdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Korisnik).WithMany(p => p.AgentRazgovori)
+                .HasForeignKey(d => d.KorisnikId)
+                .HasConstraintName("fk_AgentRazgovori_Korisnici");
+        });
 
         modelBuilder.Entity<AplikativniParametri>(entity =>
         {

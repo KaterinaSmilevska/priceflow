@@ -36,8 +36,53 @@
       </button>
     </div>
 
-    <div class="agent-chat">
-      <div *ngFor="let message of messages"
+    <div class="agent-toolbar">
+      <button type="button"
+              class="new-conversation-button"
+              [disabled]="loading"
+              (click)="newConversation()">
+        <span>+</span>
+        <span>
+          {{ 'AGENTS.NEW_CONVERSATION' | translate }}
+        </span>
+      </button>
+      </div>
+  <div class="agent-conversations">
+    <button type="button"
+            class="conversations-toggle"
+            (click)="showConversations = !showConversations">
+      <span>
+        {{ 'AGENTS.PREVIOUS_CONVERSATIONS' | translate }}
+      </span>
+      <span>
+        {{ showConversations ? '▲' : '▼' }}
+      </span>
+    </button>
+    <div *ngIf="showConversations"
+         class="conversation-list">
+      <div *ngIf="loadingConversations"
+           class="conversation-loading">
+        {{ 'AGENTS.LOADING_CONVERSATIONS' | translate }}
+      </div>
+      <button *ngFor="let conversation of conversations"
+              type="button"
+              class="conversation-item"
+              [class.active-conversation]="conversation.id === conversationId"
+              (click)="openConversation(conversation)">
+        <span class="conversation-title">
+          {{ conversation.title }}
+        </span>
+      </button>
+
+      <div *ngIf="!loadingConversations && conversations.length === 0"
+           class="no-conversations">
+        {{ 'AGENTS.NO_CONVERSATIONS' | translate }}
+      </div>
+    </div>
+  </div>
+  <div class="agent-chat-container">
+    <div #agentChat class="agent-chat">
+      <div *ngFor="let message of messages; let i = index"
            class="message-row"
            [class.user-row]="message.role === 'user'"
            [class.agent-row]="message.role === 'agent'">
@@ -48,17 +93,27 @@
         <div class="message-wrapper">
           <div class="message-label">
             {{
-              message.role === 'agent'
-              ? ('AGENTS.SECURITIES_AGENT.NAME' | translate)
-              : ('AGENTS.YOU' | translate)
+            message.role === 'agent'
+            ? ('AGENTS.SECURITIES_AGENT.NAME' | translate)
+            : ('AGENTS.YOU' | translate)
             }}
           </div>
-
-          <div class="message-content"
-               [class.agent-content]="message.role === 'agent'"
-               [class.user-content]="message.role === 'user'">
-            {{ message.content | translate }}
+          <div class="message-content-container">
+            <div class="message-content"
+                 [class.agent-content]="message.role === 'agent'"
+                 [class.user-content]="message.role === 'user'">
+              {{ message.content | translate }}
+            </div>
+            <button *ngIf="message.role === 'agent' && i !== 0"
+                    type="button"
+                    class="copy-button"
+                    (click)="copyMessage(message.content, i)"
+                    [attr.aria-label]="'AGENTS.COPY' | translate">
+              <span *ngIf="copiedMessageIndex !== i">📋</span>
+              <span *ngIf="copiedMessageIndex === i">✓</span>
+            </button>
           </div>
+
         </div>
       </div>
 
@@ -83,6 +138,22 @@
       </div>
     </div>
 
+    <button type="button"
+            class="scroll-button scroll-to-top"
+            (click)="scrollToTop()"
+            aria-label="Scroll to top">
+      ↑
+    </button>
+
+    <button type="button"
+            class="scroll-button scroll-to-bottom"
+            (click)="scrollToBottom()"
+            aria-label="Scroll to bottom">
+      ↓
+    </button>
+
+  </div>
+  
     <div class="agent-input">
       <textarea
                 [(ngModel)]="question"
@@ -94,7 +165,7 @@
       <button
               type="button"
               class="send-button"
-              [disabled]="!question?.trim() || loading"
+              [disabled]="!question?.trim() || loading || dailyLimitReached"
               (click)="askAgent()"
               aria-label="Send question">
         <span *ngIf="!loading">➤</span>

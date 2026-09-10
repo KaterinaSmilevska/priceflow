@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[AgentRazgovori]
+(
+	[Id] INT IDENTITY(1, 1) NOT NULL,
+	[KorisnikId] INT NOT NULL,
+	[CreatedAt] DATETIME NOT NULL DEFAULT (GETUTCDATE()),
+	[UpdatedAt] DATETIME NOT NULL DEFAULT (GETUTCDATE()),
+
+	CONSTRAINT pk_AgentRazgovori PRIMARY KEY (Id),
+	CONSTRAINT fk_AgentRazgovori_Korisnici FOREIGN KEY (KorisnikId) REFERENCES Korisnici(Id) ON DELETE CASCADE
+)

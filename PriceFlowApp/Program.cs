@@ -70,8 +70,15 @@ builder.Services.AddHostedService<NotificationBackgroundService>();
 builder.Services.AddScoped<ISecurityFilterRepository, SecurityFilterRepository>();
 builder.Services.AddScoped<ISecurityFilterService, SecurityFilterService>();
 builder.Services.AddScoped<ISecurityPriceTrendReportService, SecurityPriceTrendReportService>();
+builder.Services.AddScoped<IAgentConversationsRepository, AgentConversationsRepository>();
+builder.Services.AddScoped<IAgentMessagesRepository, AgentMessagesRepository>();
+builder.Services.AddScoped<IAgentConversationsService, AgentConversationsService>();
+builder.Services.AddScoped<IAgentMessagesService, AgentMessagesService>();
+builder.Services.AddScoped<IAgentUsageRepository, AgentUsageRepository>();
+builder.Services.AddScoped<IAgentUsageService, AgentUsageService>();
 
 builder.Services.AddScoped<SecuritiesAgent>();
+builder.Services.AddScoped<SecuritiesTools>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 

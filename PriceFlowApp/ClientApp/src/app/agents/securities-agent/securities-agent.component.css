@@ -134,15 +134,165 @@
 }
 
 .agent-close:hover {
-    background: rgba(255, 255, 255. 0.15);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.agent-chat-container {
+    position: relative;
+    flex: 1;
+    min-height: 0;
 }
 
 .agent-chat {
-   flex: 1;
+   height: 100%;
    overflow-y: auto;
    padding: 18px 15px;
    background: var(--input-bg);
    scroll-behavior: smooth;
+}
+
+.agent-toolbar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--input-border);
+}
+
+.new-conversation-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--primary-color);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.new-conversation-button:hover:not(:disabled) {
+    background: var(--secondary-color);
+}
+
+.new-conversation-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.new-conversation-button span:first-child {
+    font-size: 17px;
+    line-height: 1;
+}
+
+.agent-conversations {
+    border-bottom: 1px solid var(--border-color);
+    background: var(--input-bg);
+}
+
+.conversations-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.conversations-toggle:hover {
+    background: var(--primary-hover);
+    color: white;
+}
+
+.conversations-list {
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 5px 8px 8px;
+}
+
+.conversation-title {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.conversation-item {
+    width: 100%;
+    display: block;
+    padding: 9px 10px;
+    margin-bottom: 3px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-color);
+    text-align: left;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s ease;
+}
+
+.conversation-item:hover {
+    background: var(--primary-hover);
+}
+
+.conversation-item.active-conversation {
+    background: var(--secondary-color);
+}
+
+.conversation-loading, .no-conversations {
+    padding: 10px;
+    text-align: center;
+    color: var(--disabled-text);
+    font-size: 12px;
+}
+
+.conversation-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.conversation-list::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 10px;
+}
+
+.message-content-container {
+    position: relative;
+}
+
+.copy-button {
+    display: block;
+    margin-top: 4px;
+    margin-left: 2px;
+    padding: 3px 6px;
+    border: none;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--disabled-text);
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.message-content-container:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: var(--secondary-color);
+    color: var(--text-color);
 }
 
 .message-row {
@@ -200,7 +350,8 @@
 
 .agent-content {
     border-radius: 4px 14px 14px 14px;
-    background: var(--secondary-color);
+    background: var(--agent-bg);
+    border: 1px solid var(--input-border);
 }
 
 .user-content {
@@ -216,7 +367,8 @@
     width: fit-content;
     padding: 11px 14px;
     border-radius: 4px 14px 14px 14px;
-    background: var(--secondary-color);
+    background: var(--agent-bg);
+    border: 1px solid var(--input-border);
 }
 
 .thinking-bubble span {
@@ -323,6 +475,35 @@
     border-right-color: transparent;
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
+}
+
+.scroll-button {
+    position: absolute;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    color: var(--text-color);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0.9;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-button:hover {
+    opacity: 1;
+}
+
+.scroll-to-top {
+    top: 12px;
+}
+
+.scroll-to-bottom {
+    bottom: 12px;
 }
 
 @keyframes spin {

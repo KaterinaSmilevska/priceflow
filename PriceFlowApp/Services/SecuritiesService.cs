@@ -36,7 +36,6 @@ namespace PriceFlowApp.Services
             return MapToSecurity(security);
         }
 
-
         public IEnumerable<Security> FindAll()
         {
             IEnumerable<HartiiOdVrednost> securities = _securitiesRepository.GetAll();
@@ -157,6 +156,29 @@ namespace PriceFlowApp.Services
             return securities
                 .Select(MapToSecurity)
                 .ToList();
+        }
+
+
+        public SecurityDailyMarketData GetDailyMarketData(string securityCode, DateTime date)
+        {
+            DnevenPromet? dailyTurnover = _dailyTurnoverRepository.GetBySecurityCode(securityCode, date).FirstOrDefault();
+
+            if (dailyTurnover == null)
+                return null;
+
+            return new SecurityDailyMarketData
+            {
+                SecurityCode = securityCode,
+                Date = dailyTurnover.Datum,
+                LatestTransactionPrice = dailyTurnover.CenaPoslednaTransakcija,
+                MinPrice = dailyTurnover.MinCena,
+                MaxPrice = dailyTurnover.MaxCena,
+                AveragePrice = dailyTurnover.ProsecnaCena,
+                ChangePercent = dailyTurnover.ProcentPromena,
+                TradedQuantity = dailyTurnover.KolicinaIstrguvaniAkcii,
+                TurnoverBESTDenars = dailyTurnover.PrometBestdenari,
+                TotalTurnoverDenars = dailyTurnover.VkupenPrometDenari
+            };
         }
 
         private HartiiOdVrednost GetSecurityById(int securityId)
