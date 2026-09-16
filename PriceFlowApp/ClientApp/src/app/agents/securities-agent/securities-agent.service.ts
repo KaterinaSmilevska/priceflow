@@ -24,6 +24,12 @@ export class SecuritiesAgentService {
     return this.http.get<AgentMessageResponse[]>(`${this.agentUrl}/${conversationId}/messages`);
   }
 
+  deleteConversation(conversationId: number): Observable<AgentConversation> {
+    return this.http.delete<AgentConversation>(
+      `${this.agentUrl}/${conversationId}`
+    );
+  }
+
   askSecuritiesAgent(conversationId: number | null, question: string): Observable<ChatResponse> {
     const request: ChatRequest = {
       conversationId: conversationId,

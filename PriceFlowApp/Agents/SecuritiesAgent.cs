@@ -2,6 +2,7 @@
 using Microsoft.Extensions.AI;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Exceptions;
+using PriceFlowApp.Helpers;
 using PriceFlowApp.Services;
 
 namespace PriceFlowApp.Agents
@@ -39,6 +40,7 @@ namespace PriceFlowApp.Agents
                 instructions:
                 """
                 You are SecuritiesAgent for the Macedonian Stock Exchange (MSE), a helpful agent that answers questions about securities. 
+                Do not provide investment advice, financial advice, or recommendations of any kind.
                 Be friendly, informative and concise.
                 """,
                 tools: tools);
@@ -46,10 +48,7 @@ namespace PriceFlowApp.Agents
 
         public async Task<SecuritiesAgentResponse> AskAsync(int userId, int? conversationId, string question)
         {
-            if (string.IsNullOrWhiteSpace(question))
-            {
-                throw new ArgumentException("Question is required.", nameof(question));
-            }
+            ValidationHelper.ValidateRequiredField(question, "Question", "QUESTION_VALIDATION_REQUIRED");
 
             if(question.Length > MaxMessageLength)
             {
@@ -61,7 +60,8 @@ namespace PriceFlowApp.Agents
 
             if(usage != null && usage.BrojPoraki >= DailyMessageLimit)
             {
-                throw new InvalidOperationException("Daily agent message limit reached.");
+                throw new BusinessRuleException("DAILY_LIMIT_REACHED", 
+                    $"You have reached the daily limit of {DailyMessageLimit} agent messages.");
             }
 
             var conversation = conversationId.HasValue

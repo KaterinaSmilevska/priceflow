@@ -64,15 +64,24 @@
            class="conversation-loading">
         {{ 'AGENTS.LOADING_CONVERSATIONS' | translate }}
       </div>
-      <button *ngFor="let conversation of conversations"
-              type="button"
-              class="conversation-item"
-              [class.active-conversation]="conversation.id === conversationId"
-              (click)="openConversation(conversation)">
-        <span class="conversation-title">
-          {{ conversation.title }}
-        </span>
-      </button>
+
+      <div *ngFor="let conversation of conversations"
+           class="conversation-item"
+           [class.active-conversation]="conversation.id === conversationId">
+        <button type="button"
+                class="conversation-select"
+                (click)="openConversation(conversation)">
+          <span class="conversation-title">
+            {{ conversation.title }}
+          </span>
+        </button>
+        <button type="button"
+                class="conversation-delete"
+                (click)="deleteConversation(conversation); $event.stopPropagation()"
+                [attr.aria-label]="'AGENTS.DELETE_CONVERSATION' | translate">
+          🗑
+        </button>
+      </div>
 
       <div *ngIf="!loadingConversations && conversations.length === 0"
            class="no-conversations">

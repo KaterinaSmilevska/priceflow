@@ -86,7 +86,7 @@ export class SecuritiesAgentComponent implements AfterViewChecked {
   }
 
   loadConversations(): void {
-    this.loadingConversations = false;
+    this.loadingConversations = true;
 
     this.securitiesAgentService.getConversations().subscribe({
       next: (conversations) => {
@@ -127,6 +127,26 @@ export class SecuritiesAgentComponent implements AfterViewChecked {
           this.loading = false;
         }
       });
+  }
+
+  deleteConversation(conversation: AgentConversation): void {
+    if (this.loading) {
+      return;
+    }
+
+    this.securitiesAgentService.deleteConversation(conversation.id)
+      .subscribe({
+        next: () => {
+          this.conversations = this.conversations.filter(item => item.id !== conversation.id);
+
+          if (this.conversationId == conversation.id) {
+            this.newConversation();
+          }
+        },
+        error: (err) => {
+          this.errorMessage = err.error?.code || err.error?.error || 'ERRORS.GENERAL_ERROR';
+        }
+      })
   }
 
   askAgent(): void {

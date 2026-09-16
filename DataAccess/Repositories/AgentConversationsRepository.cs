@@ -50,5 +50,14 @@ namespace DataAccess.Repositories
 
             return conversation;
         }
+
+        public AgentRazgovori Delete(AgentRazgovori conversation)
+        {
+            _dbContext.RemoveRange(conversation.AgentPoraki);
+            _dbContext.Remove(conversation);
+            _dbContext.SaveChanges();
+
+            return conversation;
+        }
     }
 }

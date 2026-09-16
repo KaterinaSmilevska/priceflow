@@ -13,5 +13,7 @@ namespace DataAccess.Repositories
         AgentRazgovori Add(AgentRazgovori conversation);
 
         AgentRazgovori Update(AgentRazgovori conversation);
+
+        AgentRazgovori Delete(AgentRazgovori conversation);
     }
 }

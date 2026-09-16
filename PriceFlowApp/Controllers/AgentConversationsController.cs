@@ -34,5 +34,13 @@ namespace PriceFlowApp.Controllers
 
             return Execute(() => _agentMessagesService.FindByConversationIdAndUserId(conversationId, userId));
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult<AgentConversationResponse> Delete(int id)
+        {
+            int userId = User.GetUserId();
+
+            return Execute(() => _agentConversationsService.Delete(id, userId));
+        }
     }
 }

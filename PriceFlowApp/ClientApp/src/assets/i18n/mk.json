@@ -293,6 +293,7 @@
     "LOADING_CONVERSATIONS": "Разговорите се вчитуваат...",
     "NO_CONVERSATIONS": "Нема разговори",
     "STATUS": "Активен",
+    "QUESTION_VALIDATION_REQUIRED": "Прашањето е задолжително.",
     "DAILY_LIMIT_REACHED": "Ја достигнавте дневната граница за пораки. Ве молиме обидете се повторно утре.",
     "MESSAGE_LENGTH_INVALID": "Пораката не може да надмине 1000 карактери.",
     "FOOTER": "PriceFlow агентот може да прави грешки.",

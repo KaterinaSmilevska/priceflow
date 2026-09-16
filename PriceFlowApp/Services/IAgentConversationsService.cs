@@ -14,5 +14,7 @@ namespace PriceFlowApp.Services
         AgentRazgovori Add(int userId);
 
         AgentRazgovori Update(AgentRazgovori conversation);
+
+        AgentConversationResponse Delete(int id, int userId);
     }
 }

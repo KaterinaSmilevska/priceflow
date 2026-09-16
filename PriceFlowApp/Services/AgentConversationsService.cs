@@ -52,6 +52,15 @@ namespace PriceFlowApp.Services
             return _agentConversationsRepository.Update(conversation);
         }
 
+
+        public AgentConversationResponse Delete(int id, int userId)
+        {
+            AgentRazgovori conversation = _agentConversationsRepository.GetByIdAndUserId(id, userId);
+            AgentRazgovori deletedConversation = _agentConversationsRepository.Delete(conversation);
+
+            return MapToAgentConversation(deletedConversation);
+        }
+
         private AgentRazgovori GetById(int id)
         {
             AgentRazgovori? conversation = _agentConversationsRepository.GetById(id);
@@ -77,6 +86,13 @@ namespace PriceFlowApp.Services
                 .Where(message => message.Uloga == "user")
                 .OrderBy(message => message.CreatedAt)
                 .FirstOrDefault();
+
+            string title = firstMessage?.Sodrzina ?? "New conversation";
+
+            if(title.Length > 60)
+            {
+                title = title[..60].TrimEnd() + "...";
+            }
 
             return new AgentConversationResponse
             {

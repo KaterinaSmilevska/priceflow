@@ -293,6 +293,7 @@
     "LOADING_CONVERSATIONS": "Loading conversations...",
     "NO_CONVERSATIONS": "No conversations",
     "STATUS": "Active",
+    "QUESTION_VALIDATION_REQUIRED": "Question is required.",
     "DAILY_LIMIT_REACHED": "You have reached your daily limit. Please try again tomorrow.",
     "MESSAGE_LENGTH_INVALID": "Message cannot exceed 1000 characters.",
     "FOOTER": "PriceFlow agent can make mistakes.",
