@@ -79,6 +79,14 @@ export class LoginService {
     return this.userRoles.value.includes(role);
   }
 
+  canUseAgent(): boolean {
+    return (
+      this.hasRole('Администратор') ||
+      this.hasRole('Инвеститор') ||
+      this.hasRole('Аналитичар')
+    );
+  }
+
   verifyEmail(token: string) {
     return this.http.get(`${this.apiUrl}/verify-email?token=${encodeURIComponent(token)}`);
   }

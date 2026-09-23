@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SecuritiesAgentService } from './securities-agent.service';
 import { AgentMessage } from '../AgentMessage';
 import { AgentConversation } from '../AgentConversation';
+import { LoginService } from '../../auth/login/login.service';
 
 @Component({
   selector: 'app-securities-agent',
@@ -13,7 +14,7 @@ import { AgentConversation } from '../AgentConversation';
   templateUrl: './securities-agent.component.html',
   styleUrl: './securities-agent.component.css',
 })
-export class SecuritiesAgentComponent implements AfterViewChecked {
+export class SecuritiesAgentComponent implements AfterViewChecked, OnInit {
   @ViewChild('agentChat')
   private agentChat!: ElementRef<HTMLDivElement>
   conversationId: number | null = null;
@@ -25,6 +26,8 @@ export class SecuritiesAgentComponent implements AfterViewChecked {
   isOpen = false;
   dailyLimitReached = false;
   copiedMessageIndex: number | null = null;
+
+  canUseAgent = false;
 
   private shouldScroll = false;
 
@@ -41,7 +44,14 @@ export class SecuritiesAgentComponent implements AfterViewChecked {
     }
   ];
 
-  constructor(private securitiesAgentService: SecuritiesAgentService, private translateService: TranslateService) { }
+  constructor(private securitiesAgentService: SecuritiesAgentService, private translateService: TranslateService,
+    private loginService: LoginService) { }
+
+  ngOnInit(): void {
+    this.loginService.authReady().subscribe(() => {
+      this.canUseAgent = this.loginService.canUseAgent();
+    });
+  }
 
   ngAfterViewChecked(): void {
     if (this.shouldScroll) {
@@ -51,6 +61,10 @@ export class SecuritiesAgentComponent implements AfterViewChecked {
   }
 
   toggleAgent(): void {
+    if (!this.canUseAgent) {
+      return;
+    }
+
     this.isOpen = !this.isOpen;
 
     if (this.isOpen) {
@@ -122,7 +136,7 @@ export class SecuritiesAgentComponent implements AfterViewChecked {
           this.shouldScroll = true;
         },
         error: (err) => {
-          this.errorMessage = err.error?.message || err.error?.error || 'ERRORS.GENERAL_ERROR';
+          this.errorMessage = err.error?.code ? `AGENTS.${err.error.code}` : 'ERRORS.GENERAL_ERROR';
 
           this.loading = false;
         }
@@ -144,12 +158,16 @@ export class SecuritiesAgentComponent implements AfterViewChecked {
           }
         },
         error: (err) => {
-          this.errorMessage = err.error?.code || err.error?.error || 'ERRORS.GENERAL_ERROR';
+          this.errorMessage = err.error?.code ? `AGENTS.${err.error.code}` : 'ERRORS.GENERAL_ERROR';
         }
       })
   }
 
   askAgent(): void {
+    if (!this.canUseAgent) {
+      return;
+    }
+
     const question = this.question?.trim();
 
     if (!question || this.loading || this.dailyLimitReached) {
@@ -191,7 +209,7 @@ export class SecuritiesAgentComponent implements AfterViewChecked {
           } else if (err.error?.code === 'MESSAGE_LENGTH_INVALID') {
             this.errorMessage = 'AGENTS.MESSAGE_LENGTH_INVALID';
           } else {
-            this.errorMessage =`AGENTS.${err.error.code}`;
+            this.errorMessage = err.error?.code ? `AGENTS.${err.error.code}` : 'ERRORS.GENERAL_ERROR';
           }
           this.loading = false;
         }

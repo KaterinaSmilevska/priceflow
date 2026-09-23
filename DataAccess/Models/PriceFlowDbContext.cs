@@ -80,7 +80,6 @@ public partial class PriceFlowDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Sodrzina).HasMaxLength(1000);
             entity.Property(e => e.Uloga).HasMaxLength(20);
 
             entity.HasOne(d => d.Razgovor).WithMany(p => p.AgentPoraki)

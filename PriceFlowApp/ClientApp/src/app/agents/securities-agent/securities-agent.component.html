@@ -1,5 +1,5 @@
 <button
-        *ngIf="!isOpen"
+        *ngIf="!isOpen && canUseAgent"
         type="button"
         class="agent-launcher"
         (click)="toggleAgent()"
@@ -11,7 +11,7 @@
   </span>
 </button>
 
-<div *ngIf="isOpen" class="agent-window">
+<div *ngIf="isOpen && canUseAgent" class="agent-window">
   <div class="agent-header">
     <div class="agent-title-section">
       <div class="agent-avatar">
@@ -59,7 +59,7 @@
       </span>
     </button>
     <div *ngIf="showConversations"
-         class="conversation-list">
+         class="conversations-list">
       <div *ngIf="loadingConversations"
            class="conversation-loading">
         {{ 'AGENTS.LOADING_CONVERSATIONS' | translate }}
@@ -169,7 +169,8 @@
                 [disabled]="loading"
                 [placeholder]="'AGENTS.SECURITIES_AGENT.PLACEHOLDER' | translate"
                 rows="1"
-                (keydown.enter)="onEnter($event)">
+                (keydown.enter)="onEnter($event)"
+                maxlength="1000">
       </textarea>
       <button
               type="button"

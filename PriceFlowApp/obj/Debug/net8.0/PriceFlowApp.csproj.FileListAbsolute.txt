@@ -249,3 +249,5 @@ C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i pri
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\System.Net.ServerSentEvents.dll
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\System.Numerics.Tensors.dll
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\System.Threading.Channels.dll
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\Microsoft.Agents.AI.Workflows.dll
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\OpenTelemetry.Api.dll

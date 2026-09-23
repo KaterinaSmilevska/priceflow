@@ -228,6 +228,36 @@
           }
         }
       },
+      "Microsoft.Agents.AI.Workflows/1.20.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Agents.AI": "1.20.0",
+          "Microsoft.Agents.AI.Abstractions": "1.20.0",
+          "Microsoft.Extensions.AI": "10.9.0",
+          "Microsoft.Extensions.AI.Abstractions": "10.9.0",
+          "Microsoft.Extensions.AI.Evaluation": "10.9.0",
+          "Microsoft.Extensions.Compliance.Abstractions": "10.5.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.11",
+          "Microsoft.Extensions.FileSystemGlobbing": "10.0.11",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.11",
+          "Microsoft.Extensions.VectorData.Abstractions": "10.8.2",
+          "Microsoft.ML.Tokenizers": "2.0.0",
+          "OpenTelemetry.Api": "1.15.3",
+          "System.Diagnostics.DiagnosticSource": "10.0.11",
+          "System.Text.Json": "10.0.11",
+          "System.Threading.Channels": "10.0.11"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.Agents.AI.Workflows.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Agents.AI.Workflows.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Cryptography.Internal/9.0.8": {
         "type": "package",
         "compile": {
@@ -1579,6 +1609,22 @@
           "buildTransitive/netstandard2.0/OpenAI.targets": {}
         }
       },
+      "OpenTelemetry.Api/1.15.3": {
+        "type": "package",
+        "dependencies": {
+          "System.Diagnostics.DiagnosticSource": "10.0.0"
+        },
+        "compile": {
+          "lib/net8.0/OpenTelemetry.Api.dll": {
+            "related": ".dll.sigstore.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/OpenTelemetry.Api.dll": {
+            "related": ".dll.sigstore.json;.xml"
+          }
+        }
+      },
       "QuestPDF/2026.2.1": {
         "type": "package",
         "compile": {
@@ -2706,6 +2752,29 @@
         "lib/netstandard2.0/Microsoft.Agents.AI.OpenAI.xml",
         "microsoft.agents.ai.openai.1.20.0.nupkg.sha512",
         "microsoft.agents.ai.openai.nuspec"
+      ]
+    },
+    "Microsoft.Agents.AI.Workflows/1.20.0": {
+      "sha512": "LJI88XYg4cLMWYhuDwWPTb27z0dnWNlrVoYgnBUKETDbrpP2uzuXP7r/K1z3a8LVCa96D/U2RmdIv5gCGPJDWg==",
+      "type": "package",
+      "path": "microsoft.agents.ai.workflows/1.20.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NUGET.md",
+        "icon.png",
+        "lib/net10.0/Microsoft.Agents.AI.Workflows.dll",
+        "lib/net10.0/Microsoft.Agents.AI.Workflows.xml",
+        "lib/net472/Microsoft.Agents.AI.Workflows.dll",
+        "lib/net472/Microsoft.Agents.AI.Workflows.xml",
+        "lib/net8.0/Microsoft.Agents.AI.Workflows.dll",
+        "lib/net8.0/Microsoft.Agents.AI.Workflows.xml",
+        "lib/net9.0/Microsoft.Agents.AI.Workflows.dll",
+        "lib/net9.0/Microsoft.Agents.AI.Workflows.xml",
+        "lib/netstandard2.0/Microsoft.Agents.AI.Workflows.dll",
+        "lib/netstandard2.0/Microsoft.Agents.AI.Workflows.xml",
+        "microsoft.agents.ai.workflows.1.20.0.nupkg.sha512",
+        "microsoft.agents.ai.workflows.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Cryptography.Internal/9.0.8": {
@@ -5043,6 +5112,36 @@
         "openai.nuspec"
       ]
     },
+    "OpenTelemetry.Api/1.15.3": {
+      "sha512": "fX+fkCysfPut+qCcT3bKqyX4QN9Saf4CgX8HLOHywEVD+Xr7sULtfuypITpoDysjx8R59dn/3mWhgimMH8cm/g==",
+      "type": "package",
+      "path": "opentelemetry.api/1.15.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "README.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net10.0/OpenTelemetry.Api.dll",
+        "lib/net10.0/OpenTelemetry.Api.dll.sigstore.json",
+        "lib/net10.0/OpenTelemetry.Api.xml",
+        "lib/net462/OpenTelemetry.Api.dll",
+        "lib/net462/OpenTelemetry.Api.dll.sigstore.json",
+        "lib/net462/OpenTelemetry.Api.xml",
+        "lib/net8.0/OpenTelemetry.Api.dll",
+        "lib/net8.0/OpenTelemetry.Api.dll.sigstore.json",
+        "lib/net8.0/OpenTelemetry.Api.xml",
+        "lib/net9.0/OpenTelemetry.Api.dll",
+        "lib/net9.0/OpenTelemetry.Api.dll.sigstore.json",
+        "lib/net9.0/OpenTelemetry.Api.xml",
+        "lib/netstandard2.0/OpenTelemetry.Api.dll",
+        "lib/netstandard2.0/OpenTelemetry.Api.dll.sigstore.json",
+        "lib/netstandard2.0/OpenTelemetry.Api.xml",
+        "opentelemetry-icon-color.png",
+        "opentelemetry.api.1.15.3.nupkg.sha512",
+        "opentelemetry.api.nuspec"
+      ]
+    },
     "QuestPDF/2026.2.1": {
       "sha512": "MSAvKf6bM6hxwmvitSFUaKq9VI+yt/s9l79va8++igRt8UMDdai7XFaSLZNbCiJ6hnl375bCpqcrjM9YgrqBDQ==",
       "type": "package",
@@ -6558,6 +6657,7 @@
       "DataAccess >= 1.0.0",
       "Microsoft.Agents.AI >= 1.20.0",
       "Microsoft.Agents.AI.OpenAI >= 1.20.0",
+      "Microsoft.Agents.AI.Workflows >= 1.20.0",
       "Microsoft.AspNetCore.Http.Abstractions >= 2.3.9",
       "Microsoft.AspNetCore.Session >= 2.3.9",
       "Microsoft.AspNetCore.SpaProxy >= 8.0.0-preview.6.23329.11",
@@ -6635,6 +6735,10 @@
             "version": "[1.20.0, )"
           },
           "Microsoft.Agents.AI.OpenAI": {
+            "target": "Package",
+            "version": "[1.20.0, )"
+          },
+          "Microsoft.Agents.AI.Workflows": {
             "target": "Package",
             "version": "[1.20.0, )"
           },

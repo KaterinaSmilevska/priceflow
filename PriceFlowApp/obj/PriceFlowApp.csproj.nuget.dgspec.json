@@ -156,6 +156,10 @@
               "target": "Package",
               "version": "[1.20.0, )"
             },
+            "Microsoft.Agents.AI.Workflows": {
+              "target": "Package",
+              "version": "[1.20.0, )"
+            },
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
               "version": "[2.3.9, )"

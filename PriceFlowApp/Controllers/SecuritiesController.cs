@@ -11,12 +11,12 @@ namespace PriceFlowApp.Controllers
     public class SecuritiesController: PriceFlowController
     {
         private readonly ISecuritiesService _securitiesService;
-        private readonly SecuritiesAgent _securitiesAgent;
+        private readonly OrchestratorAgent _orchestratorAgent;
 
-        public SecuritiesController(ISecuritiesService securitiesService, SecuritiesAgent securitiesAgent)
+        public SecuritiesController(ISecuritiesService securitiesService, OrchestratorAgent orchestratorAgent)
         {
             _securitiesService = securitiesService;
-            _securitiesAgent = securitiesAgent;
+            _orchestratorAgent = orchestratorAgent;
         }
 
         [HttpGet("{id:int}")]
@@ -82,7 +82,7 @@ namespace PriceFlowApp.Controllers
             return Execute(() => _securitiesService.SearchByCode(searchTerm));
         }
 
-        [Authorize]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Investor + "," + Roles.Analyst)]
         [HttpPost("agent")]
         public async Task<IActionResult> AskSecuritiesAgent([FromBody] ChatRequest request)
         {
@@ -94,7 +94,7 @@ namespace PriceFlowApp.Controllers
 
             try
             {
-                SecuritiesAgentResponse response = await _securitiesAgent.AskAsync(userId, request.ConversationId, request.Question);
+                SecuritiesAgentResponse response = await _orchestratorAgent.AskAsync(userId, request.ConversationId, request.Question);
                 return Ok(new
                 {
                     conversationId = response.ConversationId,

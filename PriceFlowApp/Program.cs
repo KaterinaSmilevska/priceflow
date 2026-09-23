@@ -78,6 +78,9 @@ builder.Services.AddScoped<IAgentUsageRepository, AgentUsageRepository>();
 builder.Services.AddScoped<IAgentUsageService, AgentUsageService>();
 
 builder.Services.AddScoped<SecuritiesAgent>();
+builder.Services.AddScoped<MarketDataAgent>();
+builder.Services.AddScoped<AnalysisAgent>();
+builder.Services.AddScoped<OrchestratorAgent>();
 builder.Services.AddScoped<SecuritiesTools>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -141,28 +144,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints => endpoints.MapControllers());
-
-//app.UseExceptionHandler(appError =>
-//{
-//    app.Run(async context =>
-//    {
-//        var exception = context.Features
-//        .Get<IExceptionHandlerFeature>()?.Error;
-
-//        if (exception is BusinessRuleException bre)
-//        {
-//            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-//            await context.Response.WriteAsJsonAsync(new
-//            {
-//                message = bre.Message,
-//                code = bre.SecurityCode
-//            });
-//            return;
-//        }
-//        throw exception!;
-//    });
-//});
 
 app.MapFallbackToFile("index.html");
 
