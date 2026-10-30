@@ -94,7 +94,7 @@ namespace PriceFlowApp.Services
                 .ToList();
         }
 
-        public IEnumerable<SecurityPerformance> GetMostTrade(int count)
+        public IEnumerable<SecurityPerformance> GetMostTraded(int count)
         {
             DateTime latestDate = FindLatestDate();
 

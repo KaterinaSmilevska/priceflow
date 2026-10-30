@@ -80,7 +80,7 @@ builder.Services.AddScoped<IAgentUsageService, AgentUsageService>();
 builder.Services.AddScoped<SecuritiesAgent>();
 builder.Services.AddScoped<MarketDataAgent>();
 builder.Services.AddScoped<AnalysisAgent>();
-builder.Services.AddScoped<OrchestratorAgent>();
+builder.Services.AddScoped<IOrchestratorAgent, OrchestratorAgent>();
 builder.Services.AddScoped<SecuritiesTools>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();

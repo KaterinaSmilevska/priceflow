@@ -121,7 +121,7 @@ namespace PriceFlowApp.Services
             {
                 _usersRolesRepository.Add(new KorisniciUlogi
                 {
-                    KorisnikId = user.Id,
+                    KorisnikId = addedUser.Id,
                     UlogaId = roleId
                 });
             }

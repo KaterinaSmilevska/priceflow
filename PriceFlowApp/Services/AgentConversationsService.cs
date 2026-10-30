@@ -99,7 +99,7 @@ namespace PriceFlowApp.Services
                 Id = conversation.Id,
                 CreatedAt = conversation.CreatedAt,
                 UpdatedAt = conversation.UpdatedAt,
-                Title = firstMessage?.Sodrzina ?? "New conversation"
+                Title = title
             };
         }
     }

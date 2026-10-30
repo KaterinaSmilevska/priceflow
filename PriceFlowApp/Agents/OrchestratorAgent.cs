@@ -7,7 +7,7 @@ using PriceFlowApp.Services;
 
 namespace PriceFlowApp.Agents
 {
-    public class OrchestratorAgent
+    public class OrchestratorAgent: IOrchestratorAgent
     {
         private readonly AIAgent _agent;
 

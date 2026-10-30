@@ -36,7 +36,7 @@ namespace PriceFlowApp.Controllers
         [HttpGet("most-traded")]
         public ActionResult<IEnumerable<SecurityPerformance>> GetMostTraded([FromQuery] int count)
         {
-            return Execute(() => _marketOverviewService.GetMostTrade(count));
+            return Execute(() => _marketOverviewService.GetMostTraded(count));
         }
 
         [HttpGet("liquidity")]

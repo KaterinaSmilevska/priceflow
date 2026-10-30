@@ -11,9 +11,9 @@ namespace PriceFlowApp.Controllers
     public class SecuritiesController: PriceFlowController
     {
         private readonly ISecuritiesService _securitiesService;
-        private readonly OrchestratorAgent _orchestratorAgent;
+        private readonly IOrchestratorAgent _orchestratorAgent;
 
-        public SecuritiesController(ISecuritiesService securitiesService, OrchestratorAgent orchestratorAgent)
+        public SecuritiesController(ISecuritiesService securitiesService, IOrchestratorAgent orchestratorAgent)
         {
             _securitiesService = securitiesService;
             _orchestratorAgent = orchestratorAgent;

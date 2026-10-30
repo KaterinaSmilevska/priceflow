@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PriceFlowApp.DTOs;
-using PriceFlowApp.Exceptions;
 using PriceFlowApp.Services;
 
 namespace PriceFlowApp.Controllers

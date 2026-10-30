@@ -8,9 +8,9 @@ namespace PriceFlowApp.Controllers
     [Route("api/[controller]")]
     public class RolesController : PriceFlowController
     {
-        private readonly RolesService _rolesService;
+        private readonly IRolesService _rolesService;
 
-        public RolesController(RolesService roleService)
+        public RolesController(IRolesService roleService)
         {
             _rolesService = roleService;
         }

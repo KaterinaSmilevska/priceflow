@@ -89,6 +89,7 @@ namespace PriceFlowApp.Services
             ValidateShares(portfolioId, security, transaction, id);
 
             existingTransaction.Hvid = security.Id;
+            existingTransaction.Hv = security;
             existingTransaction.KolicinaAkcii = transaction.SharesQuantity;
             existingTransaction.EdinecnaCenaAkcija = transaction.SharesUnitPrice;
             existingTransaction.TipTransakcija = transaction.TypeTransaction;

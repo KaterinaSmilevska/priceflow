@@ -12,7 +12,8 @@ namespace PriceFlowApp.Services
         private readonly IUsersRepository _usersRepository;
         private readonly IEmailService _emailService;
 
-        public PortfoliosNotificationsService(IPortfoliosNotificationsRepository portfoliosNotificationsRepository, ITransactionsService transactionsService, IUsersRepository usersRepository, IEmailService emailService)
+        public PortfoliosNotificationsService(IPortfoliosNotificationsRepository portfoliosNotificationsRepository, ITransactionsService transactionsService,
+            IUsersRepository usersRepository, IEmailService emailService)
         {
             _portfoliosNotificationsRepository = portfoliosNotificationsRepository;
             _transactionsService = transactionsService;
