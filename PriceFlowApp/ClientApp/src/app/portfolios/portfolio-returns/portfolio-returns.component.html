@@ -15,9 +15,9 @@
       <div class="mb-3">
         <label class="form-label">{{ 'SECURITIES.TITLE' | translate }}</label>
         <select class="form-select"
-                formControlName="hvId">
+                formControlName="securityId">
           <option [ngValue]="null">{{ 'SELECT' | translate }} {{ 'SECURITIES.TITLE' | translate }}</option>
-          <option *ngFor="let s of securities" [value]="s.id">
+          <option *ngFor="let s of securities" [ngValue]="s.id">
             {{ s.code }}
           </option>
         </select>

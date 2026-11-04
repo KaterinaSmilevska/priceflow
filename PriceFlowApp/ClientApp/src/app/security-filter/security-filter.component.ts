@@ -147,8 +147,19 @@ export class SecurityFilterComponent implements OnInit, OnDestroy {
   prepareChart() {
     const values = this.data.map(x => x.value ?? x.totalValue);
 
-    this.chartData.labels = this.data.map(x => x.securityCode ||
-      this.translateService.instant(this.sectorsTranslatePipe.transform(x.sectorName)));
+    this.chartData.labels = this.data.map(x => {
+      if (x.securityCode) {
+        return x.securityCode;
+      }
+
+      const sectorKey = this.sectorsTranslatePipe.transform(x.sectorName);
+
+      if (!sectorKey) {
+        return '';
+      }
+
+      return this.translateService.instant(sectorKey);
+    });
 
     this.chartData.datasets[0].data = values;
 

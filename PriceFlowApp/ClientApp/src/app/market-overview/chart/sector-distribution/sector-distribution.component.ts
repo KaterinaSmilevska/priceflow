@@ -82,9 +82,13 @@ export class SectorDistributionComponent implements OnInit, OnChanges, OnDestroy
         const values = res.map((x) => x.marketCap);
         const colors = this.chartService.generateColors(values.length);
         this.data = {
-          labels: res.map((x) =>
-            this.translateService.instant(this.sectorsTranslatePipe.transform(x.sectorName))
-          ),
+          labels: res.map((x) => {
+            const sectorKey = this.sectorsTranslatePipe.transform(x.sectorName);
+
+            return sectorKey
+              ? this.translateService.instant(sectorKey)
+              : (x.sectorName ?? '');
+          }),
           datasets: [
             {
               data: values,

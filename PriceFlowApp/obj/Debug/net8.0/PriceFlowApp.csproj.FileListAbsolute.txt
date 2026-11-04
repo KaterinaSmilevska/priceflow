@@ -55,6 +55,7 @@ C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i pri
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\Microsoft.Extensions.AI.dll
@@ -251,4 +252,3 @@ C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i pri
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\PriceFlowApp.pdb
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\PriceFlowApp.genruntimeconfig.cache
 C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\obj\Debug\net8.0\ref\PriceFlowApp.dll
-C:\Users\DELL\Desktop\FINKI\Postdiplomski studii\Devetti semestar\Koncepti i primena na golemi podatoci\PriceFlow\PriceFlowApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll

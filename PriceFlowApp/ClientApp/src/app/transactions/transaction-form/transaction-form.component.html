@@ -6,7 +6,7 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
       <label>{{ 'SECURITIES.TITLE' | translate }}</label>
-      <select formControlName="hvCode" class="form-select">
+      <select formControlName="securityCode" class="form-select">
         <option [ngValue]="null">
           {{ 'SELECT' | translate }}
           {{ 'SECURITIES.TITLE' | translate }}
