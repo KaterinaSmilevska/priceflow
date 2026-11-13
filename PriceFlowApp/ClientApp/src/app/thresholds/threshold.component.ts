@@ -81,10 +81,15 @@ export class ThresholdComponent implements OnInit {
   confirmDelete() {
     if (!this.thresholdToDelete) return;
 
+    const deletedId = this.thresholdToDelete.id;
+
     this.thresholdService
-      .delete(this.thresholdToDelete.id)
+      .delete(deletedId)
       .subscribe({
         next: () => {
+          this.thresholds = this.thresholds.filter(
+            threshold => threshold.id !== deletedId
+          );
           this.closeDeleteModal();
           this.successMessage = 'THRESHOLD.DELETE_SUCCESS';
           setTimeout(() => this.successMessage = null, 800);

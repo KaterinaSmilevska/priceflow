@@ -10,7 +10,7 @@ namespace PriceFlowApp.Services
 
         IEnumerable<SecurityPerformance> GetTopLosers(int count);
 
-        IEnumerable<SecurityPerformance> GetMostTrade(int count);
+        IEnumerable<SecurityPerformance> GetMostTraded(int count);
 
         LiquidityOverview FindLiquidity(int userId, int monthsBack, bool onlyOwned);
     }

@@ -53,7 +53,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      hvCode: [null, Validators.required],
+      securityCode: [null, Validators.required],
       sharesQuantity: [1, [Validators.required, Validators.min(1)]],
       sharesUnitPrice: [0, [Validators.required, Validators.min(0.01)]],
       typeTransaction: [null, Validators.required],
@@ -73,7 +73,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
       this.loadTransactionData();
     }
 
-    this.form.get('hvCode')?.valueChanges.subscribe(() => {
+    this.form.get('securityCode')?.valueChanges.subscribe(() => {
       this.updateShares();
       this.loadPrices();
     });
@@ -173,7 +173,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
   loadTransactionData(): void {
     if (!this.transaction || !this.form) return;
     this.form.patchValue({
-      hvCode: this.transaction.securityCode,
+      securityCode: this.transaction.securityCode,
       sharesQuantity: this.transaction.sharesQuantity,
       sharesUnitPrice: this.transaction.sharesUnitPrice,
       typeTransaction: this.transaction.typeTransaction,
@@ -191,7 +191,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
   }
 
   private updateShares(): void {
-    const code = this.form.get('hvCode')?.value;
+    const code = this.form.get('securityCode')?.value;
 
     if (!code) return;
 
@@ -257,12 +257,12 @@ export class TransactionFormComponent implements OnInit, OnChanges {
   private validateSellDate(): void {
     const raw = this.form.getRawValue();
 
-    if (raw.typeTransaction !== 'Продавање' || !raw.hvCode) {
+    if (raw.typeTransaction !== 'Продавање' || !raw.securityCode) {
       this.dateSellInvalid = false;
       return;
     }
 
-    this.transactionsService.getOwnedSharesAtDate(this.portfolioId, raw.hvCode, raw.isReal, raw.date, this.transaction?.id)
+    this.transactionsService.getOwnedSharesAtDate(this.portfolioId, raw.securityCode, raw.isReal, raw.date, this.transaction?.id)
       .subscribe(owned => {
         this.ownedSharesAtDate = owned;
         this.dateSellInvalid = raw.sharesQuantity > owned;
@@ -270,7 +270,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
   }
 
   private loadPrices(): void {
-    const code = this.form.get('hvCode')?.value;
+    const code = this.form.get('securityCode')?.value;
     const date = this.form.get('date')?.value;
 
     if (!code) return;
@@ -325,7 +325,7 @@ export class TransactionFormComponent implements OnInit, OnChanges {
 
     const payload = {
       id: this.transaction?.id,
-      hvCode: raw.hvCode,
+      securityCode: raw.securityCode,
       sharesQuantity: raw.sharesQuantity,
       sharesUnitPrice: raw.sharesUnitPrice,
       typeTransaction: raw.typeTransaction,

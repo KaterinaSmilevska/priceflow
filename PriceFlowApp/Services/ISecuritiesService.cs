@@ -25,5 +25,7 @@ namespace PriceFlowApp.Services
         SecurityDailyPrices GetLatestPrices(string securityCode, DateTime date);
 
         IEnumerable<Security> SearchByCode(string searchTerm);
+
+        SecurityDailyMarketData GetDailyMarketData(string securityCode, DateTime date);
     }
 }

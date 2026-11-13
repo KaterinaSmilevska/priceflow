@@ -28,7 +28,7 @@ export class PortfolioReturnsComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       date: [new Date().toISOString().substring(0, 10), Validators.required],
-      hvId: [null, Validators.required],
+      securityId: [null, Validators.required],
       netAmount: [0, [Validators.required, Validators.min(0)]],
       tax: [0, [Validators.required, Validators.min(0)]]
     });
@@ -40,14 +40,17 @@ export class PortfolioReturnsComponent implements OnInit {
   save(): void {
     if (this.form.invalid) return;
 
-    this.portfolioReturnsService.add({
+    const payload = {
       ...this.form.value,
       portfolioId: this.portfolioId
-    }).subscribe(() => {
-      this.loadSummary();
-      this.updated.emit();
-      this.form.patchValue({netAmount: 0, tax: 0})
-    });
+    };
+
+    this.portfolioReturnsService.add(payload)
+      .subscribe(() => {
+        this.loadSummary();
+        this.updated.emit();
+        this.form.patchValue({ netAmount: 0, tax: 0 })
+      });
   }
 
   loadSummary(): void {

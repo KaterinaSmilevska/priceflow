@@ -18,13 +18,13 @@ namespace PriceFlowApp.Controllers
         }
 
         [HttpGet("securities/most-profitable/by-dividend-yield")]
-        public ActionResult<IEnumerable<FilteredSecurity>> GetMostPriftableSecuritiesByDividendYield()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetMostProfitableSecuritiesByDividendYield()
         {
             return Execute(() => _securityFilterService.FindMostProfitableSecuritiesByDividendYield());
         }
 
         [HttpGet("securities/most-profitable/by-dividend-per-share")]
-        public ActionResult<IEnumerable<FilteredSecurity>> GetMostPriftableSecuritiesByDividendPerShare()
+        public ActionResult<IEnumerable<FilteredSecurity>> GetMostProfitableSecuritiesByDividendPerShare()
         {
             return Execute(() => _securityFilterService.FindMostProfitableSecuritiesByDividendPerShare());
         }

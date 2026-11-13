@@ -148,6 +148,18 @@
               "target": "Package",
               "version": "[0.105.0, )"
             },
+            "Microsoft.Agents.AI": {
+              "target": "Package",
+              "version": "[1.20.0, )"
+            },
+            "Microsoft.Agents.AI.OpenAI": {
+              "target": "Package",
+              "version": "[1.20.0, )"
+            },
+            "Microsoft.Agents.AI.Workflows": {
+              "target": "Package",
+              "version": "[1.20.0, )"
+            },
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
               "version": "[2.3.9, )"
@@ -165,6 +177,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[8.0.32, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",

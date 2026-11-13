@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using PriceFlowApp.Agents;
 using PriceFlowApp.DTOs;
 using PriceFlowApp.Services;
 
@@ -9,16 +11,24 @@ namespace PriceFlowApp.Controllers
     public class SecuritiesController: PriceFlowController
     {
         private readonly ISecuritiesService _securitiesService;
+        private readonly IOrchestratorAgent _orchestratorAgent;
 
-        public SecuritiesController(ISecuritiesService securitiesService)
+        public SecuritiesController(ISecuritiesService securitiesService, IOrchestratorAgent orchestratorAgent)
         {
             _securitiesService = securitiesService;
+            _orchestratorAgent = orchestratorAgent;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public ActionResult<Security> GetById(int id)
         {
             return Execute(() => _securitiesService.FindById(id));
+        }
+
+        [HttpGet("{code}")]
+        public ActionResult<Security> GetByCode(string code)
+        {
+            return Execute(() => _securitiesService.FindByCode(code));
         }
 
         [HttpGet]
@@ -71,5 +81,35 @@ namespace PriceFlowApp.Controllers
         {
             return Execute(() => _securitiesService.SearchByCode(searchTerm));
         }
+
+        [Authorize(Roles = Roles.Admin + "," + Roles.Investor + "," + Roles.Analyst)]
+        [HttpPost("agent")]
+        public async Task<IActionResult> AskSecuritiesAgent([FromBody] ChatRequest request)
+        {
+            int userId = User.GetUserId();
+            if(string.IsNullOrWhiteSpace(request.Question))
+            {
+                return BadRequest(new { error = "Question is required." });
+            }
+
+            try
+            {
+                SecuritiesAgentResponse response = await _orchestratorAgent.AskAsync(userId, request.ConversationId, request.Question);
+                return Ok(new
+                {
+                    conversationId = response.ConversationId,
+                    answer = response.Answer
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status429TooManyRequests, new
+                {
+                    code = "DAILY_LIMIT_REACHED",
+                    message = ex.Message
+                });
+            }
+        }
+        public record ChatRequest(int? ConversationId, string Question);
     }
 }

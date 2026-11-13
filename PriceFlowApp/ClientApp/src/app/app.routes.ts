@@ -20,6 +20,7 @@ import { SecurityFilterComponent } from './security-filter/security-filter.compo
 import { AnalystGuard } from './security-filter/analyst.guard';
 import { AdminGuard } from './admin/admin.guard';
 import { ServerErrorComponent } from './error/server-error/server-error.component';
+import { SecuritiesAgentComponent } from './agents/securities-agent/securities-agent.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -38,6 +39,7 @@ export const routes: Routes = [
   { path: 'portfolios/:id', component: PortfolioDetailsComponent, canActivate: [InvestorGuard] },
   { path: 'price-alerts', component: ThresholdComponent, canActivate: [InvestorGuard] },
   { path: 'security-filter', component: SecurityFilterComponent, canActivate: [AnalystGuard] },
+  //{ path: 'securities/agent', component: SecuritiesAgentComponent, canActivate: [AuthGuard] },
   { path: 'server-error', component: ServerErrorComponent },
   { path: '**', redirectTo: '' },
 ];

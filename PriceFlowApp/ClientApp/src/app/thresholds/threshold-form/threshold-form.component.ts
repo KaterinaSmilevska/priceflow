@@ -31,6 +31,8 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
   upperThresholdError: string | null = null;
   thresholdRangeError: string | null = null;
 
+  submitted = false;
+
   constructor(private fb: FormBuilder, private thresholdService: ThresholdService) { }
 
   ngOnInit(): void {
@@ -141,6 +143,7 @@ export class ThresholdFormComponent implements OnInit, OnChanges {
   }
 
   saveThreshold(): void {
+    this.submitted = true;
     this.successMessage = null;
     this.errorMessage = null;
 

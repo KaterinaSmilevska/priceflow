@@ -34,6 +34,7 @@
   --liquidity-hover: #fff1c7;
   --success-bg-light: rgba(34, 197, 94, 0.12);
   --error-bg-light: rgba(220, 38, 38, 0.12);
+  --agent-bg: #e5e7eb;
 }
 
 .dark-theme {
@@ -73,6 +74,7 @@
   --liquidity-hover: #3f4b5c;
   --success-bg-light: rgba(34, 197, 94, 0.18);
   --error-bg-light: rgba(248, 113, 113, 0.18);
+  --agent-bg: #2f3542;
 }
 
 body {

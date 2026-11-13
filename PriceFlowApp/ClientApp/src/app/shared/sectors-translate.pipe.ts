@@ -8,7 +8,10 @@ import { Injectable, Pipe, PipeTransform } from "@angular/core";
   standalone: true
 })
 export class SectorsTranslatePipe implements PipeTransform {
-  transform(value: string | null | undefined): string {
+  transform(value: string | null | undefined): string | null {
+    if (!value?.trim()) {
+      return null;
+    }
 
     switch (value) {
       case 'Банкарство':
@@ -30,7 +33,7 @@ export class SectorsTranslatePipe implements PipeTransform {
         return 'SECTORS.HOSPITALITY'
 
       default:
-        return value ?? '';
+        return value;
     }
   }
 }

@@ -6,7 +6,7 @@ namespace PriceFlowApp.Helpers
     {
         public static void ValidateRequiredField(string value, string fieldName, string errorCode)
         {
-            if (string.IsNullOrWhiteSpace(fieldName))
+            if (string.IsNullOrWhiteSpace(value))
                 throw new ValidationException(errorCode, $"{fieldName} cannot be null or empty.");
         }
     }
