@@ -24,3 +24,6 @@ publish/
 
 # Miscellaneous
 PriceFlowApp/ClientApp/.angular/cache
+
+Datavault/DataVault.dbmdl
+Database/Database.dbmdl
